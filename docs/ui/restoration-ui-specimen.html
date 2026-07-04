@@ -1,0 +1,838 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RESTORATION · UI Specimen Book · WGLD Engineering</title>
+<style>
+  :root{
+    --void:#0c0a07; --void-2:#14100b;
+    --paper:#e9e1cd; --paper-2:#ddd2b8; --paper-edge:#c9bc9e;
+    --ink:#2b2620; --ink-soft:#57503f;
+    --sodium:#c98a3d; --amber:#e2a33c; --amber-glow:rgba(226,163,60,.55);
+    --tally:#c23b2e; --phosphor:#d9ecc4; --phosphor-dim:#93a67f;
+    --leland:#2e7d4f;
+    --mustard:#c9a227; --avocado:#6b7d3a; --burnt:#b3592b;
+    --ease-out:cubic-bezier(0.23,1,0.32,1);
+    --ease-in-out:cubic-bezier(0.77,0,0.175,1);
+    --mono:'Courier New','IBM Plex Mono',monospace;
+    --cg:'Haettenschweiler','Impact','Arial Black',sans-serif;
+    --hand:'Bradley Hand','Segoe Script','Comic Sans MS',cursive;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--void); color:var(--ink); font-family:var(--mono);
+    background-image:radial-gradient(1200px 700px at 70% -10%, #1a140c 0%, var(--void) 60%);
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--amber);color:var(--void)}
+  :focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+
+  /* ---------- LAYOUT: the binder ---------- */
+  .book{display:grid;grid-template-columns:190px 1fr;min-height:100vh;max-width:1240px;margin:0 auto;padding:28px 20px 60px}
+  header.masthead{grid-column:1/-1;color:var(--phosphor-dim);font-size:12px;letter-spacing:.18em;
+    display:flex;justify-content:space-between;align-items:baseline;padding:0 6px 18px}
+  header.masthead b{color:var(--phosphor);font-weight:400}
+  header.masthead .beacon{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--tally);
+    margin-right:8px;vertical-align:1px;animation:beacon 2.4s linear infinite}
+  @keyframes beacon{0%,8%{opacity:1}12%,100%{opacity:.15}}
+
+  /* tab rail: physical index tabs */
+  nav.rail{position:sticky;top:24px;align-self:start;display:flex;flex-direction:column;gap:6px;padding-right:14px}
+  .tab{
+    font-family:var(--mono);text-align:left;font-size:12px;letter-spacing:.08em;color:var(--ink);
+    background:var(--paper-2);border:1px solid var(--paper-edge);border-right-width:0;
+    border-radius:6px 0 0 6px;padding:10px 12px 10px 14px;cursor:pointer;
+    transform:translateX(6px);transition:transform 160ms var(--ease-out), background 160ms ease;
+    box-shadow:inset -8px 0 12px -10px rgba(0,0,0,.45);
+  }
+  @media (hover:hover) and (pointer:fine){ .tab:hover{transform:translateX(0)} }
+  .tab:active{transform:translateX(0) scale(.985)}
+  .tab[aria-selected="true"]{background:var(--paper);transform:translateX(0);font-weight:700}
+  .tab small{display:block;color:var(--ink-soft);letter-spacing:.14em;font-size:9px}
+  /* casting drift: later tabs carry the show palette */
+  .tab[data-drift="1"]{border-left:5px solid var(--mustard)}
+  .tab[data-drift="2"]{border-left:5px solid var(--avocado)}
+  .tab[data-drift="3"]{border-left:5px solid var(--burnt);background:linear-gradient(90deg,#efe3c2,var(--paper-2))}
+
+  main{min-width:0}
+  section.page{display:none}
+  section.page.on{display:block;animation:pageIn 220ms var(--ease-out)}
+  @keyframes pageIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+  /* paper sheet */
+  .sheet{
+    background:var(--paper);border:1px solid var(--paper-edge);border-radius:4px;
+    padding:34px 38px 40px 66px;position:relative;
+    box-shadow:0 20px 50px rgba(0,0,0,.55), inset 0 0 60px rgba(120,100,60,.12);
+  }
+  .sheet::before{ /* binder holes */
+    content:"";position:absolute;left:22px;top:40px;bottom:40px;width:14px;
+    background:radial-gradient(circle 7px at 7px 10px, var(--void) 6px, transparent 7px) repeat-y;
+    background-size:14px 120px;opacity:.85;
+  }
+  .rule{border:0;border-top:1px solid var(--paper-edge);margin:22px 0}
+  h1.formhead{font-size:13px;letter-spacing:.22em;border-bottom:2px solid var(--ink);padding-bottom:8px;margin-bottom:6px}
+  .formsub{font-size:11px;color:var(--ink-soft);letter-spacing:.12em;margin-bottom:22px}
+  .stampline{position:absolute;top:26px;right:30px;font-size:10px;letter-spacing:.2em;color:var(--ink-soft);text-align:right}
+  .green{font-family:var(--hand);color:var(--leland);font-size:15px}
+
+  /* ---------- TITLE SCREEN (CRT) ---------- */
+  .crt-room{display:grid;place-items:center;padding:20px 0 8px}
+  .crt{
+    width:min(760px,100%);aspect-ratio:4/3;background:#050604;border-radius:18px;position:relative;overflow:hidden;
+    border:14px solid #171310;box-shadow:0 30px 70px rgba(0,0,0,.7), inset 0 0 120px rgba(0,0,0,.9);
+  }
+  .crt .glass{position:absolute;inset:0;border-radius:8px;
+    background:radial-gradient(120% 90% at 50% 40%, rgba(217,236,196,.05), transparent 60%);}
+  .scan{position:absolute;inset:0;pointer-events:none;mix-blend-mode:overlay;opacity:.5;
+    background:repeating-linear-gradient(0deg, rgba(255,255,255,.06) 0 1px, transparent 1px 3px);}
+  .flicker{position:absolute;inset:0;pointer-events:none;background:rgba(217,236,196,.03);animation:flick 3.7s steps(2) infinite}
+  @keyframes flick{0%,94%{opacity:.25}95%{opacity:.6}96%{opacity:.1}100%{opacity:.25}}
+  body.tbc .flicker,{animation:none;opacity:.15}
+  body.tbc .flicker{animation:none;opacity:.12}
+  .vignette{position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 140px 40px rgba(0,0,0,.85);border-radius:8px}
+  .bars{position:absolute;inset:0;display:flex}
+  .bars i{flex:1}
+  .titlecard{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;color:var(--phosphor)}
+  .titlecard .id{font-size:11px;letter-spacing:.5em;color:var(--phosphor-dim)}
+  .logo{font-family:var(--cg);font-size:clamp(44px,9vw,86px);letter-spacing:.14em;line-height:.95;
+    color:var(--phosphor);text-shadow:0 0 14px rgba(217,236,196,.55),2px 0 0 rgba(255,60,60,.28),-2px 0 0 rgba(80,140,255,.28);}
+  body.tbc .logo{text-shadow:0 0 10px rgba(217,236,196,.4)}
+  .menu{list-style:none;margin-top:10px;display:flex;flex-direction:column;gap:6px;align-items:center}
+  .menu button{
+    font-family:var(--cg);letter-spacing:.28em;font-size:20px;background:none;border:0;color:var(--phosphor-dim);
+    cursor:pointer;padding:4px 14px;text-transform:uppercase;
+    transition:color 140ms ease;
+  }
+  .menu button[aria-current="true"]{color:var(--phosphor);text-shadow:0 0 10px rgba(217,236,196,.6)}
+  .menu button[aria-current="true"]::before{content:"▸ ";color:var(--amber)}
+  .menu button:disabled{color:#3c4636;cursor:not-allowed}
+  .crt-foot{position:absolute;left:0;right:0;bottom:8px;display:flex;justify-content:space-between;
+    padding:0 16px;font-size:10px;letter-spacing:.3em;color:var(--phosphor-dim)}
+  .titlenote{margin-top:16px;font-size:11px;color:var(--phosphor-dim);letter-spacing:.1em;text-align:center}
+  .switchrow{display:flex;gap:14px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+  .toggle{font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--phosphor-dim);
+    background:#11150e;border:1px solid #2c3324;border-radius:4px;padding:8px 12px;cursor:pointer;
+    transition:transform 120ms var(--ease-out), border-color 140ms ease}
+  .toggle:active{transform:scale(.97)}
+  .toggle[aria-pressed="true"]{color:var(--amber);border-color:var(--amber)}
+
+  /* ---------- CONTROLS / FORM WIDGETS ---------- */
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:26px}
+  @media(max-width:860px){.grid2{grid-template-columns:1fr}.book{grid-template-columns:1fr}nav.rail{flex-direction:row;flex-wrap:wrap;position:static;padding:0 0 16px}.tab{border-radius:6px;border-right-width:1px;transform:none}}
+  fieldset{border:1px solid var(--paper-edge);padding:16px 18px;margin-bottom:18px}
+  legend{font-size:11px;letter-spacing:.2em;padding:0 8px}
+  .row{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:9px 2px;border-bottom:1px dotted var(--paper-edge);font-size:13px}
+  .row:last-child{border-bottom:0}
+  .switch{appearance:none;width:46px;height:22px;background:var(--paper-2);border:1px solid var(--ink-soft);border-radius:3px;position:relative;cursor:pointer;transition:background 160ms ease}
+  .switch::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;background:var(--ink);transition:transform 160ms var(--ease-out)}
+  .switch:checked{background:var(--amber)}
+  .switch:checked::after{transform:translateX(24px)}
+  .fader{appearance:none;width:170px;height:4px;background:var(--ink-soft);border-radius:2px}
+  .fader::-webkit-slider-thumb{appearance:none;width:12px;height:24px;background:var(--ink);border:1px solid var(--paper);cursor:grab}
+  .radio-set{display:flex;gap:8px}
+  .radio-set label{border:1px solid var(--ink-soft);padding:6px 12px;font-size:11px;letter-spacing:.12em;cursor:pointer;transition:background 140ms ease}
+  .radio-set input{position:absolute;opacity:0}
+  .radio-set input:checked + span{background:var(--ink);color:var(--paper);display:block;margin:-6px -12px;padding:6px 12px}
+  .radio-set input:focus-visible + span{outline:3px solid var(--amber)}
+  .btn{font-family:var(--mono);font-size:12px;letter-spacing:.14em;background:var(--ink);color:var(--paper);
+    border:1px solid var(--ink);padding:10px 16px;cursor:pointer;border-radius:2px;
+    transition:transform 120ms var(--ease-out), background 140ms ease}
+  .btn:active{transform:scale(.97)}
+  .btn.ghost{background:transparent;color:var(--ink)}
+  .btn.tally{background:var(--tally);border-color:var(--tally)}
+  .note{font-size:11px;color:var(--ink-soft);line-height:1.6;margin-top:10px}
+  .badge{display:inline-block;font-size:9px;letter-spacing:.18em;border:1px solid var(--ink-soft);padding:2px 7px;border-radius:2px;vertical-align:2px;margin-left:8px;color:var(--ink-soft)}
+  .badge.g1{border-color:var(--leland);color:var(--leland)}
+  .badge.g2{border-color:var(--sodium);color:var(--sodium)}
+  .badge.g3{border-color:var(--ink-soft)}
+
+  /* ---------- CUE SIGNS ---------- */
+  .signwall{display:flex;gap:24px;justify-content:center;padding:26px 0;background:var(--void-2);border-radius:6px;border:1px solid #241d13}
+  .cuesign{font-family:var(--cg);letter-spacing:.3em;font-size:26px;color:#4a3a1c;border:2px solid #241d13;
+    padding:14px 30px;border-radius:6px;background:#171208;text-transform:uppercase;transition:color 200ms ease, box-shadow 200ms ease}
+  .cuesign.lit{color:var(--amber);box-shadow:0 0 34px var(--amber-glow), inset 0 0 18px rgba(226,163,60,.35);animation:pulse 1.2s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 0 18px var(--amber-glow)}50%{box-shadow:0 0 44px var(--amber-glow)}}
+  body.tbc .cuesign.lit{animation:none;box-shadow:0 0 26px var(--amber-glow)}
+  .beatlane{position:relative;height:46px;background:var(--void-2);border:1px solid #241d13;border-radius:4px;margin:18px 0 8px;overflow:hidden}
+  .beatwin{position:absolute;top:0;bottom:0;left:42%;width:16%;background:rgba(226,163,60,.16);border-left:1px solid var(--amber);border-right:1px solid var(--amber)}
+  .beatdot{position:absolute;top:8px;width:12px;height:30px;background:var(--phosphor);left:0}
+  .verdict{font-size:12px;letter-spacing:.12em;min-height:18px;margin-top:6px}
+  .verdict.good{color:var(--leland)} .verdict.bad{color:var(--tally)}
+
+  /* ---------- CASTING SHEET ---------- */
+  .castsheet{background:#efe7d2;border:1px solid var(--paper-edge);padding:26px 30px;max-width:560px;margin:0 auto;
+    box-shadow:6px 8px 0 rgba(0,0,0,.15);transform:rotate(-.4deg)}
+  .castsheet h3{font-size:12px;letter-spacing:.26em;text-align:center;margin-bottom:4px}
+  .castsheet .sub{font-size:10px;letter-spacing:.2em;text-align:center;color:var(--ink-soft);margin-bottom:20px}
+  .castline{font-size:14px;letter-spacing:.08em;border-bottom:1px solid var(--ink-soft);padding:9px 2px;min-height:32px}
+  .castline.typed{font-weight:700}
+  .castline.rita{color:var(--tally)}
+  .castline .role{float:right;font-size:10px;color:var(--ink-soft);letter-spacing:.16em}
+  .introducing{margin-top:14px;font-size:12px;letter-spacing:.2em}
+  .introducing u{text-decoration:none;border-bottom:2px solid var(--ink);padding:0 60px}
+
+  /* ---------- BENCH ---------- */
+  .benchwrap{display:grid;grid-template-columns:1.3fr 1fr;gap:24px}
+  @media(max-width:860px){.benchwrap{grid-template-columns:1fr}}
+  .monitor{background:#060705;border:10px solid #171310;border-radius:10px;aspect-ratio:4/3;position:relative;overflow:hidden}
+  .frame{position:absolute;inset:0}
+  .artifact-noise{position:absolute;inset:0;pointer-events:none;opacity:.12;mix-blend-mode:screen;
+    background:repeating-linear-gradient(0deg,rgba(255,255,255,.5) 0 1px,transparent 1px 2px),
+               repeating-linear-gradient(90deg,rgba(255,255,255,.18) 0 1px,transparent 1px 3px);
+    animation:noise .35s steps(3) infinite}
+  @keyframes noise{0%{transform:translate(0,0)}33%{transform:translate(-2px,1px)}66%{transform:translate(2px,-1px)}100%{transform:translate(0,0)}}
+  body.tbc .artifact-noise{animation:none}
+  .trackbar{position:absolute;left:0;right:0;height:14px;background:rgba(255,255,255,.18);filter:blur(1px);
+    mix-blend-mode:screen;top:70%;animation:track 5s linear infinite}
+  @keyframes track{0%{top:96%}100%{top:-8%}}
+  body.tbc .trackbar{animation-duration:14s;opacity:.4}
+  .headswitch{position:absolute;left:0;right:0;bottom:0;height:7px;
+    background:repeating-linear-gradient(90deg,#cfd8bf 0 9px,#20241c 9px 15px);opacity:.8}
+  .vu{display:flex;gap:10px;align-items:flex-end;height:70px;margin:14px 0}
+  .vu i{width:14px;background:linear-gradient(180deg,var(--tally),var(--amber) 30%,var(--avocado));
+    animation:vu 900ms ease-in-out infinite alternate;transform-origin:bottom}
+  .vu i:nth-child(2){animation-duration:730ms}.vu i:nth-child(3){animation-duration:610ms}.vu i:nth-child(4){animation-duration:840ms}
+  @keyframes vu{from{transform:scaleY(.25)}to{transform:scaleY(.95)}}
+  @media (prefers-reduced-motion:reduce){.vu i{animation:none;transform:scaleY(.5)}}
+
+  /* ---------- CAST / CHARACTERS ---------- */
+  .castgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:18px;margin-top:8px}
+  .card{border:1px solid var(--paper-edge);background:var(--paper-2);padding:16px 16px 14px;font-size:12px;line-height:1.65}
+  .card h4{font-size:13px;letter-spacing:.18em;margin-bottom:2px}
+  .card .role{font-size:10px;color:var(--ink-soft);letter-spacing:.14em;margin-bottom:10px}
+  .chips{display:flex;gap:6px;margin:8px 0}
+  .chips i{width:20px;height:20px;border:1px solid rgba(0,0,0,.3);border-radius:2px}
+  .drift{height:7px;background:var(--paper);border:1px solid var(--paper-edge);margin-top:8px;position:relative}
+  .drift b{position:absolute;inset:0;background:linear-gradient(90deg,var(--mustard),var(--avocado),var(--burnt));width:0}
+  .drift-label{font-size:9px;letter-spacing:.16em;color:var(--ink-soft);margin-top:4px}
+  .rulechip{font-size:10px;background:var(--paper);border:1px dashed var(--ink-soft);padding:3px 7px;display:inline-block;margin:3px 3px 0 0}
+  .eras{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+  .tells{font-size:12px;line-height:1.7;border-left:3px solid var(--sodium);padding-left:12px;margin-top:12px}
+  .signalgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px}
+  .sig{border:1px solid var(--paper-edge);padding:14px;text-align:center;background:var(--paper-2)}
+  .sig svg{display:block;margin:0 auto 8px}
+  .sig h5{font-size:11px;letter-spacing:.18em}
+  .sig p{font-size:11px;color:var(--ink-soft);margin-top:5px;line-height:1.5}
+  .sig.seventh{border:1px solid var(--sodium);background:#efe3c2}
+  footer.specfoot{grid-column:1/-1;color:var(--phosphor-dim);font-size:10px;letter-spacing:.14em;padding:26px 6px 0;line-height:1.9}
+  @media (prefers-reduced-motion:reduce){
+    .beacon,.flicker,.cuesign.lit{animation:none}
+    .page.on{animation:none}
+    .trackbar{animation-duration:20s}
+  }
+</style>
+</head>
+<body>
+<div class="book">
+  <header class="masthead">
+    <span><span class="beacon" aria-hidden="true"></span><b>WGLD ENGINEERING</b> · UI SPECIMEN BOOK · REV 1.0</span>
+    <span>PLATFORM: PC · PROJECT: RESTORATION</span>
+  </header>
+
+  <nav class="rail" role="tablist" aria-label="Specimen sections">
+    <button class="tab" role="tab" aria-selected="true" data-page="p-title">01 TITLE SCREEN<small>CRT · BOOT · MENU</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-page="p-binder">02 THE BINDER<small>PAUSE · PRESENTATION FORM</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-page="p-ledger">03 ACCESSION LEDGER<small>SAVE · GEN · CONDUCT</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-page="p-cue" data-drift="1">04 CUE + RESPONSE<small>SIGNS · BEAT WINDOW</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-page="p-cast" data-drift="1">05 CASTING SHEET<small>STRIKES · THE WALL</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-page="p-bench" data-drift="2">06 THE BENCH<small>ARTIFACTS · GENERATIONS</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-page="p-chars" data-drift="2">07 CHARACTER DESIGN<small>CHUM · THE CLUB</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-page="p-signals" data-drift="3">08 SIGNAL GLOSSARY<small>THE SEVEN HANDS</small></button>
+  </nav>
+
+  <main>
+    <!-- 01 TITLE -->
+    <section class="page on" id="p-title" role="tabpanel">
+      <div class="crt-room">
+        <div class="crt" id="crt">
+          <div class="bars" id="bars" aria-hidden="true">
+            <i style="background:#b8b8a4"></i><i style="background:#b0a223"></i><i style="background:#2f8f86"></i>
+            <i style="background:#3d7d33"></i><i style="background:#7d3d76"></i><i style="background:#a03428"></i><i style="background:#28336e"></i>
+          </div>
+          <div class="titlecard" id="titlecard" style="opacity:0">
+            <div class="id">WGLD · CHANNEL 58 · PRESENTS</div>
+            <div class="logo">RESTORATION</div>
+            <ul class="menu" id="menu">
+              <li><button type="button" aria-current="true" data-act="new">New Game</button></li>
+              <li><button type="button" aria-current="false" data-act="cont" disabled>Continue · no log on file</button></li>
+              <li><button type="button" aria-current="false" data-act="opts">Options</button></li>
+              <li><button type="button" aria-current="false" data-act="quit">Quit</button></li>
+            </ul>
+          </div>
+          <div class="scan" aria-hidden="true"></div>
+          <div class="flicker" aria-hidden="true"></div>
+          <div class="glass" aria-hidden="true"></div>
+          <div class="vignette" aria-hidden="true"></div>
+          <div class="crt-foot"><span>CH 58</span><span id="crtclock">TAPE 1 · 00:00:00:00</span></div>
+        </div>
+      </div>
+      <p class="titlenote">Boot: bars, static breath, card. Arrow keys move the caret with no animation. Enter selects.
+      The Continue slot reads from the transmitter log; post-credits of ending 2 is the only build state where this menu is permitted to differ.</p>
+      <div class="switchrow">
+        <button class="toggle" id="tbcBtn" aria-pressed="false" type="button">TBC · TIME BASE CORRECTOR: OFF</button>
+        <button class="toggle" id="sndBtn" aria-pressed="false" type="button">SOUND: OFF</button>
+        <button class="toggle" id="rebootBtn" type="button">REPLAY BOOT</button>
+      </div>
+    </section>
+
+    <!-- 02 BINDER -->
+    <section class="page" id="p-binder" role="tabpanel">
+      <div class="sheet">
+        <div class="stampline">FORM 58-P · REV C<br>KEEP WITH SET</div>
+        <h1 class="formhead">WGLD STAFF BINDER · PRESENTATION FORM</h1>
+        <p class="formsub">Pause, options, and saves live in this binder. Paper first. Nothing floats.</p>
+        <div class="grid2">
+          <div>
+            <fieldset><legend>MODE</legend>
+              <div class="row"><span>Broadcast schedule</span>
+                <span class="radio-set" role="radiogroup" aria-label="Difficulty">
+                  <label><input type="radio" name="mode" checked><span>MATINEE</span></label>
+                  <label><input type="radio" name="mode"><span>LATE NIGHT</span></label>
+                  <label><input type="radio" name="mode"><span>ONE TAKE</span></label>
+                </span>
+              </div>
+              <p class="note">Matinee: seven casting lines, unlimited log paper, halved wear. Late Night: four lines, three log lines per station per tape. One Take: any capture is final.</p>
+            </fieldset>
+            <fieldset><legend>PICTURE</legend>
+              <div class="row"><span>Time base corrector (photosensitivity)</span><input class="switch" type="checkbox" id="tbcForm" aria-label="Time base corrector"></div>
+              <div class="row"><span>Screen shake</span><input class="switch" type="checkbox" checked aria-label="Screen shake"></div>
+              <div class="row"><span>Brightness</span><input class="fader" type="range" min="0" max="100" value="55" aria-label="Brightness"></div>
+            </fieldset>
+          </div>
+          <div>
+            <fieldset><legend>SOUND &amp; CAPTIONS</legend>
+              <div class="row"><span>Captions</span><input class="switch" type="checkbox" checked aria-label="Captions"></div>
+              <div class="row"><span>Directional sound captions</span><input class="switch" type="checkbox" checked aria-label="Directional captions"></div>
+              <div class="row"><span>Caption size</span><input class="fader" type="range" min="0" max="100" value="40" aria-label="Caption size"></div>
+              <div class="row"><span>Microphone features <span class="badge">OPTIONAL</span></span><input class="switch" type="checkbox" aria-label="Microphone features"></div>
+              <p class="note">Every microphone verb has a button twin of equal function. The Quiet Game never requires hardware.</p>
+            </fieldset>
+            <fieldset><legend>ANNOTATION</legend>
+              <p class="green">Found a note in the margin? That ink is mine. Read them cheap. · L.M.</p>
+              <p class="note">Leland's green fine-liner is the binder's third voice: typewriter, character generator, hand.</p>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 03 LEDGER -->
+    <section class="page" id="p-ledger" role="tabpanel">
+      <div class="sheet">
+        <div class="stampline">ACCESSION LEDGER<br>CONSERVATOR: R. IVORI</div>
+        <h1 class="formhead">ACCESSION ENTRY · TAPE 1 · "A CLEAN SIGNAL"</h1>
+        <p class="formsub">The ledger is journal, conduct record, and save file at once. The GEN stamp is the player's claim about the truth.</p>
+        <div class="grid2">
+          <div>
+            <fieldset><legend>ITEM</legend>
+              <div class="row"><span>Format</span><span>2" quad, third-generation dub (claimed)</span></div>
+              <div class="row"><span>Runtime</span><span>24:12 · slate says 26:40</span></div>
+              <div class="row"><span>Condition</span><span>No generational loss. None.</span></div>
+              <div class="row"><span>Generation stamp</span>
+                <span class="radio-set" role="radiogroup" aria-label="Generation">
+                  <label><input type="radio" name="gen"><span>G1 MASTER</span></label>
+                  <label><input type="radio" name="gen" checked><span>G2 DUB</span></label>
+                  <label><input type="radio" name="gen"><span>G3 BROADCAST</span></label>
+                </span>
+              </div>
+            </fieldset>
+            <button class="btn" id="truthBtn" type="button">Log the truth</button>
+            <button class="btn ghost" id="coverBtn" type="button">Write a cover</button>
+            <p class="note" id="ledgerNote">The club reads this ledger. Both entries are saves; only one is testimony.</p>
+          </div>
+          <div>
+            <fieldset><legend>TRANSMITTER LOG · S1 LIBRARY LANDING</legend>
+              <div class="row"><span>Blank lines remaining (Late Night)</span><b id="paperCount">3</b></div>
+              <div class="row"><span>Last signature</span><span class="green" id="lastSig">·</span></div>
+              <button class="btn" id="signBtn" type="button" style="margin-top:12px">Sign the log · save</button>
+              <p class="note">Saving is spending paper. The one pre-signed page in the game belongs to Tape 3, and to nobody's hand but hers.</p>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 04 CUE + RESPONSE -->
+    <section class="page" id="p-cue" role="tabpanel">
+      <div class="sheet">
+        <div class="stampline">STUDIO SIGNAGE<br>AUDIENCE FACING</div>
+        <h1 class="formhead">CUE SIGNS &amp; THE BEAT WINDOW</h1>
+        <p class="formsub">The dialogue system's whole UI: two signs and a pulse. Responses land inside the window or they land on you.</p>
+        <div class="signwall">
+          <div class="cuesign lit" id="respondSign">Respond</div>
+          <div class="cuesign" id="holdSign">Hold</div>
+        </div>
+        <div class="beatlane" aria-hidden="true"><div class="beatwin"></div><div class="beatdot" id="beatdot"></div></div>
+        <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+          <button class="btn" id="beatBtn" type="button">Respond (Space)</button>
+          <span class="radio-set" role="radiogroup" aria-label="Stance">
+            <label><input type="radio" name="stance" checked><span>AUDIENCE</span></label>
+            <label><input type="radio" name="stance"><span>QUIET</span></label>
+            <label><input type="radio" name="stance"><span>IMPROVISE</span></label>
+          </span>
+          <span class="verdict" id="beatVerdict" aria-live="polite"></span>
+        </div>
+        <p class="note">AUDIENCE on the beat: safe, advances nothing. QUIET: the absence is the line. IMPROVISE: interesting answers are auditions; the sign burns a shade warmer and the Producer Track remembers.</p>
+      </div>
+    </section>
+
+    <!-- 05 CASTING SHEET -->
+    <section class="page" id="p-cast" role="tabpanel">
+      <div class="sheet">
+        <div class="stampline">POSTED · STUDIO A WALL<br>THE CLUB DUSTS IT</div>
+        <h1 class="formhead">THE CASTING SHEET</h1>
+        <p class="formsub">The death counter as a physical object. Every capture types her onto a line. When it fills, the rewind will not stop.</p>
+        <div class="castsheet" aria-live="polite">
+          <h3>THE GLADHOUSE · FINAL EPISODE</h3>
+          <div class="sub">CAST, IN ORDER OF APPEARANCE</div>
+          <div class="castline typed">TOMMY ALDER <span class="role">PLAYMATE · 1972</span></div>
+          <div class="castline typed">IRIS BELL <span class="role">PLAYMATE · 1974</span></div>
+          <div class="castline typed">WENDELL PRICE <span class="role">PLAYMATE · 1976</span></div>
+          <div class="castline typed">LELAND MERRICK <span class="role">ARCHIVIST · RECENT</span></div>
+          <div class="castline" id="line1"><span class="role">GUEST</span></div>
+          <div class="castline" id="line2"><span class="role">GUEST</span></div>
+          <div class="castline" id="line3"><span class="role">GUEST</span></div>
+          <div class="introducing">AND INTRODUCING <u id="lineFinal">&nbsp;</u></div>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center;margin-top:20px">
+          <button class="btn tally" id="captureBtn" type="button">Simulate capture</button>
+          <button class="btn ghost" id="burnBtn" type="button">Burn dailies · remove last strike</button>
+          <button class="btn ghost" id="resetSheet" type="button">Reset</button>
+        </div>
+        <p class="note" style="text-align:center" id="sheetNote">Late Night default: four survivable captures. The typewriter does the scaring.</p>
+      </div>
+    </section>
+    <!-- 06 BENCH -->
+    <section class="page" id="p-bench" role="tabpanel">
+      <div class="sheet">
+        <div class="stampline">RESTORATION BENCH<br>ARTIFACTS ARE DIEGETIC</div>
+        <h1 class="formhead">THE BENCH · GENERATION PIPELINE DEMO</h1>
+        <p class="formsub">Shoot clean, degrade per generation in the shader, never bake artifacts into masters. The player's tools move these layers.</p>
+        <div class="benchwrap">
+          <div>
+            <div class="monitor" id="benchMon">
+              <svg class="frame" viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" aria-label="Gladhouse still: Chum on the carpet before the cubby wall">
+                <rect width="400" height="300" fill="#20281e"/>
+                <rect y="200" width="400" height="100" fill="#5b4d2c"/>
+                <g opacity=".9">
+                  <rect x="40" y="60" width="90" height="120" fill="#31402c"/><rect x="52" y="72" width="28" height="28" fill="#141a12"/><rect x="90" y="72" width="28" height="28" fill="#141a12"/>
+                  <rect x="52" y="112" width="28" height="28" fill="#141a12"/><rect x="90" y="112" width="28" height="28" fill="#141a12"/>
+                  <rect x="270" y="50" width="100" height="150" fill="#6b3f26"/><rect x="300" y="120" width="40" height="80" fill="#2a1a10"/>
+                </g>
+                <g transform="translate(165,116)">
+                  <path d="M14 12 L26 -12 L34 14 Z" fill="#4a3826"/><path d="M56 14 L64 -12 L76 12 Z" fill="#4a3826"/>
+                  <circle cx="45" cy="40" r="32" fill="#5a4630"/>
+                  <rect x="24" y="66" width="42" height="58" rx="18" fill="#5a4630"/>
+                  <circle cx="45" cy="102" r="15" fill="#c9b285"/>
+                  <circle cx="34" cy="36" r="6" fill="#c9a227"/><circle cx="56" cy="36" r="6" fill="#171512"/>
+                  <path d="M32 52 Q45 60 58 52" stroke="#cbb98f" stroke-width="2.5" fill="none"/>
+                  <line x1="20" y1="44" x2="4" y2="40" stroke="#cbb98f" stroke-width="1.5"/><line x1="70" y1="44" x2="86" y2="40" stroke="#cbb98f" stroke-width="1.5"/>
+                </g>
+                <text x="14" y="286" font-family="Impact,Arial Black" font-size="16" fill="#dfeccd" letter-spacing="3">THE GLADHOUSE · EP 12</text>
+              </svg>
+              <div class="artifact-noise" id="fxNoise" aria-hidden="true"></div>
+              <div class="trackbar" id="fxTrack" aria-hidden="true"></div>
+              <div class="headswitch" aria-hidden="true"></div>
+              <div class="scan" aria-hidden="true"></div>
+              <div class="vignette" aria-hidden="true"></div>
+            </div>
+            <div class="vu" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+          </div>
+          <div>
+            <fieldset><legend>GENERATION</legend>
+              <span class="radio-set" role="radiogroup" aria-label="Generation state">
+                <label><input type="radio" name="genfx" value="0"><span>MASTER</span></label>
+                <label><input type="radio" name="genfx" value="1" checked><span>1ST DUB</span></label>
+                <label><input type="radio" name="genfx" value="2"><span>3RD GEN</span></label>
+              </span>
+              <p class="note">The inciting anomaly only reads if this pipeline is honest: a claimed 3rd gen arriving in MASTER state is the plot.</p>
+            </fieldset>
+            <fieldset><legend>TOOLS</legend>
+              <div class="row"><span>Tracking</span><input class="fader" type="range" id="trackCtl" min="0" max="100" value="35" aria-label="Tracking"></div>
+              <div class="row"><span>TBC (bench)</span><input class="switch" type="checkbox" id="tbcBench" aria-label="Bench TBC"></div>
+              <div class="row"><span>Capture</span><button class="btn" type="button" id="capNote">Runs real time. No skip.</button></div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 07 CHARACTERS -->
+    <section class="page" id="p-chars" role="tabpanel">
+      <div class="sheet">
+        <div class="stampline">CHARACTER DESIGN<br>SHEET 1 OF 1 · CANON</div>
+        <h1 class="formhead">CHUM · ERA VARIANT PLATE</h1>
+        <p class="formsub">Built for maximum plush conversion; horror carried entirely in the deltas. The community will catalog these frame by frame.</p>
+        <div class="benchwrap">
+          <div style="background:var(--void-2);border-radius:8px;padding:20px;display:grid;place-items:center">
+            <svg id="chum" viewBox="0 0 320 420" width="min(340px,100%)" aria-label="Chum, a handmade patchwork cat with one amber glass eye and one button eye">
+              <defs>
+                <radialGradient id="amberEye" cx=".38" cy=".35" r=".8"><stop offset="0" stop-color="#f2c65a"/><stop offset=".55" stop-color="#c9891f"/><stop offset="1" stop-color="#7a4d10"/></radialGradient>
+                <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".26"/><stop offset=".55" stop-color="#fff" stop-opacity="0"/></linearGradient>
+              </defs>
+              <g id="chumRoot">
+                <!-- tail -->
+                <path d="M226 300 Q292 296 288 244 Q286 214 262 212" fill="none" stroke="#4f3d29" stroke-width="26" stroke-linecap="round"/>
+                <ellipse id="tailPatch" cx="278" cy="252" rx="14" ry="18" fill="#3b4a63" stroke="#8a6d3f" stroke-width="1.6" stroke-dasharray="4 3"/>
+                <path id="tailChar" d="M282 232 Q296 236 288 250 Q300 252 290 262 L276 252 Z" fill="#171310" opacity="0"/>
+                <!-- head group (tilt target) -->
+                <g id="headG">
+                  <!-- ears -->
+                  <path d="M84 96 L110 26 L142 88 Z" fill="#4f3d29" stroke="#3a2d1e" stroke-width="2.5"/>
+                  <path d="M178 88 L210 26 L236 96 Z" fill="#4f3d29" stroke="#3a2d1e" stroke-width="2.5"/>
+                  <path id="earPatchL" d="M100 78 L112 46 L126 76 Z" fill="#c9a227" stroke="#8a6d3f" stroke-width="1.6" stroke-dasharray="4 3"/>
+                  <path id="earPatchR" d="M194 76 L208 46 L220 78 Z" fill="#3b4a63" stroke="#8a6d3f" stroke-width="1.6" stroke-dasharray="4 3"/>
+                  <path id="earChar" d="M210 26 L236 96 L214 90 Q228 60 210 26 Z" fill="#171310" opacity="0"/>
+                  <path id="earCupStitch" d="M100 78 L112 46 L126 76 Z" fill="none" stroke="#171310" stroke-width="2.2" stroke-dasharray="2 3" opacity="0"/>
+                  <!-- head -->
+                  <circle cx="160" cy="128" r="70" fill="#5a4630" stroke="#3a2d1e" stroke-width="3"/>
+                  <path d="M160 60 V196" stroke="#3a2d1e" stroke-width="1.8" stroke-dasharray="5 4" opacity=".7"/>
+                  <!-- eyes -->
+                  <g id="eyeL"><circle cx="130" cy="118" r="15" fill="url(#amberEye)" stroke="#5d420e" stroke-width="2"/><ellipse id="pupilL" cx="130" cy="118" rx="6.5" ry="6.5" fill="#1c1206"/><circle cx="125" cy="112" r="2.6" fill="#fff" opacity=".85"/></g>
+                  <g id="eyeR"><circle id="btnR" cx="192" cy="118" r="13" fill="#14161c" stroke="#000" stroke-width="2"/><ellipse id="pupilR" cx="192" cy="118" rx="5" ry="2.4" fill="#1c1206" opacity="0" transform="rotate(25 192 118)"/><circle id="glintR" cx="187" cy="112" r="2.4" fill="#fff" opacity="0"/><circle cx="187" cy="114" r="1.8" fill="#c9c2ae"/><circle cx="197" cy="114" r="1.8" fill="#c9c2ae"/><circle cx="187" cy="123" r="1.8" fill="#c9c2ae"/><circle cx="197" cy="123" r="1.8" fill="#c9c2ae"/>
+                    <g id="threadWrap" stroke="#171310" stroke-width="1.6" opacity="0"><line x1="177" y1="106" x2="207" y2="130"/><line x1="177" y1="130" x2="207" y2="106"/><line x1="180" y1="102" x2="204" y2="134"/><line x1="180" y1="134" x2="204" y2="102"/><line x1="192" y1="101" x2="192" y2="135"/></g></g>
+                  <!-- nose -->
+                  <path id="nose" d="M152 140 L168 140 L160 150 Z" fill="#1e1712"/>
+                  <!-- whiskers -->
+                  <g id="whiskL" stroke="#d9cba4" stroke-width="2.4" stroke-linecap="round"><path d="M108 134 Q80 128 58 122"/><path d="M108 142 Q78 142 56 144"/><path d="M108 150 Q80 156 60 164"/></g>
+                  <g id="whiskR" stroke="#d9cba4" stroke-width="2.4" stroke-linecap="round"><path d="M212 134 Q240 128 262 122"/><path d="M212 142 Q242 142 264 144"/><path d="M212 150 Q240 156 260 164"/></g>
+                  <g id="whiskStubs" stroke="#171310" stroke-width="2.6" stroke-linecap="round" opacity="0"><line x1="108" y1="136" x2="94" y2="133"/><line x1="108" y1="144" x2="92" y2="144"/><line x1="108" y1="152" x2="95" y2="156"/></g>
+                  <g id="whiskWire" stroke="#20242b" stroke-width="1.3" opacity="0"><line x1="212" y1="138" x2="292" y2="130"/><line x1="212" y1="148" x2="290" y2="156"/></g>
+                  <!-- grin: base + scar + overgrin -->
+                  <g id="grinBase"><path d="M118 162 Q160 180 202 162" stroke="#cbb98f" stroke-width="3" fill="none"/>
+                    <g stroke="#cbb98f" stroke-width="2.6" stroke-linecap="round"><line x1="128" y1="160" x2="132" y2="172"/><line x1="132" y1="172" x2="128" y2="160"/><line x1="144" y1="167" x2="148" y2="178"/><line x1="148" y1="167" x2="144" y2="178"/><line x1="158" y1="170" x2="162" y2="181"/><line x1="162" y1="170" x2="158" y2="181"/><line x1="172" y1="167" x2="176" y2="178"/><line x1="176" y1="167" x2="172" y2="178"/><line x1="188" y1="160" x2="192" y2="172"/><line x1="192" y1="160" x2="188" y2="172"/></g></g>
+                  <g id="grinScar" opacity="0"><path d="M118 162 Q160 180 202 162" stroke="#3a2d1e" stroke-width="2" fill="none" stroke-dasharray="3 3"/></g>
+                  <g id="overGrin" opacity="0"><path d="M100 160 Q160 190 220 160" stroke="#12100c" stroke-width="4" fill="none" stroke-linecap="round"/>
+                    <g stroke="#12100c" stroke-width="2.4"><line x1="106" y1="156" x2="106" y2="170"/><line x1="116" y1="161" x2="116" y2="175"/><line x1="126" y1="165" x2="126" y2="179"/><line x1="136" y1="169" x2="136" y2="182"/><line x1="146" y1="171" x2="146" y2="184"/><line x1="156" y1="173" x2="156" y2="186"/><line x1="166" y1="173" x2="166" y2="186"/><line x1="176" y1="171" x2="176" y2="184"/><line x1="186" y1="169" x2="186" y2="182"/><line x1="196" y1="165" x2="196" y2="179"/><line x1="206" y1="161" x2="206" y2="175"/><line x1="214" y1="156" x2="214" y2="170"/></g></g>
+                </g>
+                <!-- body -->
+                <path d="M110 190 Q160 214 210 190 L236 320 Q160 356 84 320 Z" fill="#5a4630" stroke="#3a2d1e" stroke-width="3"/>
+                <!-- arms -->
+                <path d="M104 200 Q64 236 76 286 Q84 306 102 300 Q114 268 118 224 Z" fill="#5a4630" stroke="#3a2d1e" stroke-width="2.5"/>
+                <path id="armR" d="M216 200 Q256 236 244 286 Q236 306 218 300 Q206 268 202 224 Z" fill="#5a4630" stroke="#3a2d1e" stroke-width="2.5"/>
+                <ellipse id="pawPatch" cx="230" cy="284" rx="13" ry="16" fill="#c2ad7c" stroke="#8a6d3f" stroke-width="1.6" stroke-dasharray="4 3"/>
+                <!-- legs/feet -->
+                <g id="feet"><ellipse cx="128" cy="352" rx="30" ry="22" fill="#5a4630" stroke="#3a2d1e" stroke-width="2.5"/><ellipse id="footR" cx="196" cy="352" rx="30" ry="22" fill="#5a4630" stroke="#3a2d1e" stroke-width="2.5"/>
+                <ellipse cx="128" cy="360" rx="16" ry="10" fill="#c9a227" stroke="#8a6d3f" stroke-width="1.4" stroke-dasharray="3 3"/><ellipse id="toeR" cx="196" cy="360" rx="16" ry="10" fill="#c9a227" stroke="#8a6d3f" stroke-width="1.4" stroke-dasharray="3 3"/></g>
+                <!-- body patches -->
+                <ellipse cx="130" cy="228" rx="20" ry="26" fill="#a5502a" stroke="#8a6d3f" stroke-width="1.8" stroke-dasharray="4 3"/>
+                <ellipse cx="196" cy="244" rx="18" ry="26" fill="#5d6b33" stroke="#8a6d3f" stroke-width="1.8" stroke-dasharray="4 3"/>
+                <ellipse id="armPatch" cx="92" cy="252" rx="12" ry="18" fill="#3b4a63" stroke="#8a6d3f" stroke-width="1.6" stroke-dasharray="4 3"/>
+                <ellipse id="thighPatch" cx="136" cy="312" rx="15" ry="19" fill="#6b3f5a" stroke="#8a6d3f" stroke-width="1.6" stroke-dasharray="4 3"/>
+                <g id="belly"><circle cx="162" cy="278" r="34" fill="#c2ad7c" stroke="#8a6d3f" stroke-width="2" stroke-dasharray="5 4"/></g>
+                <g id="bellyWrong" opacity="0"><circle cx="162" cy="278" r="34" fill="#4a3a24" stroke="#171310" stroke-width="2" stroke-dasharray="5 4"/>
+                  <path d="M162 248 V308" stroke="#171310" stroke-width="2.4"/>
+                  <g stroke="#171310" stroke-width="1.8"><line x1="156" y1="254" x2="168" y2="254"/><line x1="155" y1="261" x2="169" y2="261"/><line x1="156" y1="268" x2="168" y2="268"/><line x1="154" y1="275" x2="170" y2="275"/><line x1="156" y1="282" x2="168" y2="282"/><line x1="155" y1="289" x2="169" y2="289"/><line x1="156" y1="296" x2="168" y2="296"/><line x1="155" y1="302" x2="169" y2="302"/></g></g>
+                <g id="wrongPatches" opacity="0">
+                  <rect x="176" y="206" width="26" height="20" fill="#8d8f93" stroke="#171310" stroke-width="1.8" stroke-dasharray="3 3"/>
+                  <ellipse cx="196" cy="316" rx="13" ry="17" fill="#241d16" stroke="#0c0a07" stroke-width="1.8"/><ellipse cx="192" cy="311" rx="4" ry="6" fill="#4a3d30" opacity=".8"/>
+                </g>
+                <!-- collar + bell -->
+                <g id="collarG"><path d="M124 194 Q160 212 196 194" stroke="#6b4a26" stroke-width="7" fill="none"/>
+                  <g id="bell"><circle cx="160" cy="216" r="10" fill="#c9a24a" stroke="#7a5c14" stroke-width="2"/><rect x="158.5" y="216" width="3" height="8" fill="#7a5c14"/><circle cx="160" cy="214" r="1.6" fill="#7a5c14"/></g>
+                  <path id="bellPry" d="M152 212 L168 210" stroke="#f2e2a0" stroke-width="1.6" opacity="0"/></g>
+                <g id="charSoot" opacity="0"><ellipse cx="160" cy="240" rx="120" ry="150" fill="#0c0a07" opacity=".16"/></g>
+                <rect id="sheenLayer" x="60" y="30" width="200" height="340" fill="url(#sheen)" opacity="0" pointer-events="none"/>
+              </g>
+              <text x="160" y="408" text-anchor="middle" font-family="Courier New" font-size="12" fill="#93a67f" letter-spacing="4" id="eraLabel">1974 · PEAK</text>
+            </svg>
+          </div>
+          <div>
+            <div class="eras" role="radiogroup" aria-label="Era">
+              <button class="btn ghost eraBtn" data-era="1971" type="button">1971 PILOT</button>
+              <button class="btn eraBtn" data-era="1974" type="button" aria-pressed="true">1974 PEAK</button>
+              <button class="btn ghost eraBtn" data-era="post" type="button">POST-FIRE</button>
+              <button class="btn ghost eraBtn" data-era="4k" type="button">4K PREMIERE</button>
+            </div>
+            <div class="tells" id="tellBox">
+              <b>THE TELLS · 1974:</b> symmetric grin, horizontal stitch ticks, amber eye RIGHT, 11 patches, bell present and forever silent.
+            </div>
+            <p class="note">The bell rings once in the entire game, in Tape 5, live. Fifty years of footage establish the silence first.</p>
+          </div>
+        </div>
+        <hr class="rule">
+        <h1 class="formhead">THE CLUB &amp; CREW · DESIGN CARDS</h1>
+        <div class="castgrid">
+          <div class="card"><h4>RITA IVORI</h4><div class="role">PLAYER · CONSERVATOR</div>
+            <div class="chips"><i style="background:#e8e0cf"></i><i style="background:#4d453a"></i><i style="background:#2e7d4f"></i><i style="background:#8f9aa3"></i></div>
+            First person: she is hands, tools, and rationed reflections. White cotton gloves are the identity; the loupe swings into frame on commitment. From Tape 3, her reflections compose better: centered, correct headroom. Nobody comments.
+            <div><span class="rulechip">gloves = the face</span><span class="rulechip">reflection budget scripted</span><span class="rulechip">speaks only in formats + ledger</span></div>
+            <div class="drift"><b style="width:4%"></b></div><div class="drift-label">CASTING DRIFT · minimal, and that is the point</div></div>
+          <div class="card"><h4>MERLE COTTRY</h4><div class="role">CLUB PRESIDENT</div>
+            <div class="chips"><i style="background:#c9a227"></i><i style="background:#6b7d3a"></i><i style="background:#b3592b"></i><i style="background:#e9e1cd"></i></div>
+            Cardigans, enamel pin polished daily, hands never idle: towel, kettle, plate. When the hands stop, listen. Presenter cadence grows: she narrates herself in third person, gently. By Tape 4 she dresses like a woman about to walk on set.
+            <div><span class="rulechip">warm-genuine, never warm-sinister</span><span class="rulechip">hands are the tell</span></div>
+            <div class="drift"><b style="width:88%"></b></div><div class="drift-label">CASTING DRIFT · the showcase</div></div>
+          <div class="card"><h4>VESS CARDONA</h4><div class="role">TAPE HUNTER</div>
+            <div class="chips"><i style="background:#7a5a33"></i><i style="background:#a8956d"></i><i style="background:#43506b"></i><i style="background:#d8d2c2"></i></div>
+            Thrift-store seventies shirts worn as devotion cosplay. Label maker at the belt (touched when nervous), plastic pin where the others wear enamel (touched when hurt). He is what the fandom looks like when it is not chosen.
+            <div><span class="rulechip">plastic pin = the arc</span><span class="rulechip">sympathetic threat</span></div>
+            <div class="drift"><b style="width:34%"></b></div><div class="drift-label">CASTING DRIFT · trying, rejected</div></div>
+          <div class="card"><h4>HARRIET LUND</h4><div class="role">SENIOR MEMBER</div>
+            <div class="chips"><i style="background:#d9d3c6"></i><i style="background:#6b7d3a"></i><i style="background:#4d453a"></i></div>
+            Immaculate. Speaks in transitions: And now. But first. When we come back. Freezes mid-motion during break windows and resumes on the return cue; the pauses lengthen by act. Her teacup has been rising since Tape 1.
+            <div><span class="rulechip">holding-pattern behavior system</span><span class="rulechip">background, never cutscene</span></div>
+            <div class="drift"><b style="width:72%"></b></div><div class="drift-label">CASTING DRIFT · long since fitted</div></div>
+          <div class="card"><h4>THE FLOOR MANAGER</h4><div class="role">THE CONSTANT</div>
+            <div class="chips"><i style="background:#1a1712"></i><i style="background:#4d453a"></i><i style="background:#e2a33c"></i></div>
+            Never named, face never fully lit. Headphones with a coiled cable connected to nothing; laminated run sheet. Complete spoken inventory: "In five, four..." Everything else is hands, and the hands are the threat UI.
+            <div><span class="rulechip">counts only</span><span class="rulechip">signals = telegraph system</span></div>
+            <div class="drift"><b style="width:100%"></b></div><div class="drift-label">CASTING DRIFT · was never anything else</div></div>
+          <div class="card"><h4>LELAND MERRICK</h4><div class="role">PREVIOUS ARCHIVIST · IN FRAME</div>
+            <div class="chips"><i style="background:#2e7d4f"></i><i style="background:#8f8a7c"></i><i style="background:#3a3630"></i></div>
+            Exists only inside the tapes: mid-forties, cardigan, always cropped by the frame edge as if the composition refuses him. A legal pad answers across frames. In the world, he is green ink in margins: a handwriting known before the man.
+            <div><span class="rulechip">text-only, no VO</span><span class="rulechip">wear is his mortality</span></div>
+            <div class="drift"><b style="width:100%"></b></div><div class="drift-label">CAST · recoverable, at cost</div></div>
+          <div class="card"><h4>ANSEL CRAIK</h4><div class="role">CREATOR · ARCHIVAL ONLY</div>
+            <div class="chips"><i style="background:#5b4d2c"></i><i style="background:#20281e"></i><i style="background:#d8cdb0"></i></div>
+            Seventies crew look, big glasses, puppeteer's black sleeves. One late episode shows both his hands accounted for while Chum performs in the same shot. The game never zooms. The community will.
+            <div><span class="rulechip">footage + paper only</span><span class="rulechip">met in reverse: ending, fight, boy</span></div>
+            <div class="drift"><b style="width:0%"></b></div><div class="drift-label">GONE · 1977</div></div>
+          <div class="card"><h4>THE UNDERSTUDY</h4><div class="role">IT PERFORMS CHUM</div>
+            <div class="chips"><i style="background:#0c0a07"></i><i style="background:#3f6fae"></i><i style="background:#8c2a2a"></i></div>
+            No canonical off-camera body, and the game never spends that mystery. Partials only: a felt hand at human scale, a proscenium shadow it carries like a stage edge. One glimpse, ever: a puppeteer missing a puppet, or the reverse, undecidable by design.
+            <div><span class="rulechip">on monitors: Chum, correct</span><span class="rulechip">grammar-bound, always fair</span></div>
+            <div class="drift"><b style="width:0%"></b></div><div class="drift-label">N/A · IT IS THE PALETTE</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 08 SIGNALS -->
+    <section class="page" id="p-signals" role="tabpanel">
+      <div class="sheet">
+        <div class="stampline">STAFF ORIENTATION 1971<br>+ ONE ADDED LATER</div>
+        <h1 class="formhead">SIGNAL GLOSSARY · THE SEVEN HANDS</h1>
+        <p class="formsub">Taught once by an instructional film, trusted forever. Six are on the film. The seventh is Harriet's, and it is the only warning the unscripted seek ever gives.</p>
+        <div class="signalgrid">
+          <div class="sig"><svg width="54" height="54" viewBox="0 0 54 54"><path d="M8 27 H38 M30 17 L44 27 L30 37" stroke="#2b2620" stroke-width="4" fill="none" stroke-linecap="round"/></svg><h5>YOU'RE ON</h5><p>The point. Freeze: you are performance now.</p></div>
+          <div class="sig"><svg width="54" height="54" viewBox="0 0 54 54"><line x1="12" y1="42" x2="42" y2="12" stroke="#2b2620" stroke-width="5" stroke-linecap="round"/></svg><h5>CUT</h5><p>A scene is being ended. Somewhere.</p></div>
+          <div class="sig"><svg width="54" height="54" viewBox="0 0 54 54"><path d="M20 27 H8 M12 21 L6 27 L12 33 M34 27 H46 M42 21 L48 27 L42 33" stroke="#2b2620" stroke-width="4" fill="none" stroke-linecap="round"/></svg><h5>STRETCH</h5><p>The break window extends. Breathe.</p></div>
+          <div class="sig"><svg width="54" height="54" viewBox="0 0 54 54"><path d="M27 10 A17 17 0 1 1 10 27 M10 27 L4 21 M10 27 L17 24" stroke="#2b2620" stroke-width="4" fill="none" stroke-linecap="round"/></svg><h5>WRAP IT UP</h5><p>The window closes early. Move.</p></div>
+          <div class="sig"><svg width="54" height="54" viewBox="0 0 54 54"><text x="27" y="35" text-anchor="middle" font-family="Impact" font-size="22" fill="#2b2620">0:30</text></svg><h5>THIRTY SECONDS</h5><p>Exactly that.</p></div>
+          <div class="sig"><svg width="54" height="54" viewBox="0 0 54 54"><circle cx="27" cy="27" r="15" stroke="#2b2620" stroke-width="4" fill="none"/><circle cx="27" cy="27" r="4" fill="#2b2620"/></svg><h5>ON TIME</h5><p>The nose touch. Traversal on schedule; a mercy.</p></div>
+          <div class="sig seventh"><svg width="54" height="54" viewBox="0 0 54 54"><g id="applause"><rect x="10" y="16" width="34" height="6" rx="3" fill="#2b2620"/><rect x="10" y="30" width="34" height="6" rx="3" fill="#2b2620"/><path d="M14 8 L14 12 M27 6 L27 10 M40 8 L40 12" stroke="#b3592b" stroke-width="3" stroke-linecap="round"/></g></svg><h5>HOLD YOUR APPLAUSE <span class="badge g2">G2 · HARRIET</span></h5><p>Both hands pressed down, twice. Unscripted seek incoming. Three seconds. Not on any film.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="specfoot">
+    SPEC NOTES · Shipping type to license: a genuine Selectric-era mono (paperwork) and a Vidifont-class CG face (tape overlays); system stacks stand in here. ·
+    TBC toggle in this book is functional: it stabilizes flicker, tracking, and pulse animations globally, mirroring the shipped photosensitivity behavior. Auto-engages under prefers-reduced-motion. ·
+    Interface-lie discipline: nothing in this specimen book deceives; ending 2's post-credit menu state is documented, never demonstrated. ·
+    PC platform: mouse and keyboard first-class alongside gamepad; all beat inputs keyboard-operable here (Space).
+  </footer>
+</div>
+<script>
+(function(){
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ---------- tabs ---------- */
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab'));
+  var pages = Array.prototype.slice.call(document.querySelectorAll('.page'));
+  function openPage(id){
+    tabs.forEach(function(t){ t.setAttribute('aria-selected', t.dataset.page===id ? 'true':'false'); });
+    pages.forEach(function(p){ p.classList.toggle('on', p.id===id); });
+  }
+  tabs.forEach(function(t,i){
+    t.addEventListener('click', function(){ openPage(t.dataset.page); tick(); });
+    t.addEventListener('keydown', function(e){
+      if(e.key==='ArrowDown'||e.key==='ArrowRight'){ e.preventDefault(); tabs[(i+1)%tabs.length].focus(); }
+      if(e.key==='ArrowUp'||e.key==='ArrowLeft'){ e.preventDefault(); tabs[(i-1+tabs.length)%tabs.length].focus(); }
+    });
+  });
+
+  /* ---------- sound (synth, default off) ---------- */
+  var ac=null, hum=null, humGain=null, soundOn=false;
+  function ensureAudio(){ if(!ac){ ac = new (window.AudioContext||window.webkitAudioContext)(); } }
+  function setSound(on){
+    soundOn = on; sndBtn.setAttribute('aria-pressed', on?'true':'false');
+    sndBtn.textContent = 'SOUND: ' + (on?'ON':'OFF');
+    ensureAudio();
+    if(on){ hum = ac.createOscillator(); humGain = ac.createGain();
+      hum.frequency.value = 55; humGain.gain.value = 0.015;
+      hum.connect(humGain); humGain.connect(ac.destination); hum.start(); }
+    else if(hum){ try{hum.stop();}catch(e){} hum=null; }
+  }
+  function tick(){ if(!soundOn||!ac) return; var o=ac.createOscillator(), g=ac.createGain();
+    o.frequency.value=1400; g.gain.setValueAtTime(0.03, ac.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime+0.05);
+    o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+0.06); }
+  var sndBtn = document.getElementById('sndBtn');
+  sndBtn.addEventListener('click', function(){ setSound(!soundOn); });
+
+  /* ---------- TBC (global) ---------- */
+  var tbcBtn = document.getElementById('tbcBtn'), tbcForm = document.getElementById('tbcForm'), tbcBench = document.getElementById('tbcBench');
+  function setTBC(on){
+    document.body.classList.toggle('tbc', on);
+    tbcBtn.setAttribute('aria-pressed', on?'true':'false');
+    tbcBtn.textContent = 'TBC · TIME BASE CORRECTOR: ' + (on?'ON':'OFF');
+    tbcForm.checked = on; tbcBench.checked = on;
+  }
+  tbcBtn.addEventListener('click', function(){ setTBC(!document.body.classList.contains('tbc')); tick(); });
+  tbcForm.addEventListener('change', function(){ setTBC(tbcForm.checked); });
+  tbcBench.addEventListener('change', function(){ setTBC(tbcBench.checked); });
+  if(reduced) setTBC(true);
+
+  /* ---------- title boot + menu ---------- */
+  var bars=document.getElementById('bars'), card=document.getElementById('titlecard');
+  function boot(){
+    if(reduced){ bars.style.opacity=0; card.style.opacity=1; return; }
+    bars.style.opacity=1; card.style.opacity=0;
+    setTimeout(function(){ bars.style.transition='opacity 120ms linear'; bars.style.opacity=0; }, 900);
+    setTimeout(function(){ card.style.transition='opacity 400ms cubic-bezier(0.23,1,0.32,1)'; card.style.opacity=1; }, 1150);
+  }
+  document.getElementById('rebootBtn').addEventListener('click', function(){ bars.style.transition='none'; boot(); });
+  boot();
+  var items = Array.prototype.slice.call(document.querySelectorAll('#menu button'));
+  var mi = 0;
+  function setMenu(n){
+    mi=(n+items.length)%items.length;
+    if(items[mi].disabled){ setMenu(n + (n>=mi?1:-1)); return; }
+    items.forEach(function(b,j){ b.setAttribute('aria-current', j===mi?'true':'false'); });
+  }
+  document.addEventListener('keydown', function(e){
+    if(!document.getElementById('p-title').classList.contains('on')) return;
+    if(e.key==='ArrowDown'){ setMenu(mi+1); tick(); }
+    if(e.key==='ArrowUp'){ setMenu(mi-1); tick(); }
+    if(e.key==='Enter' && document.activeElement.tagName!=='BUTTON'){ items[mi].click(); }
+  });
+  items.forEach(function(b,j){ b.addEventListener('mouseenter', function(){ if(!b.disabled) setMenu(j); });
+    b.addEventListener('click', function(){ if(b.dataset.act==='opts'){ openPage('p-binder'); openTabState('p-binder'); } tick(); }); });
+  function openTabState(id){ tabs.forEach(function(t){ t.setAttribute('aria-selected', t.dataset.page===id?'true':'false'); }); }
+
+  /* ---------- CRT timecode ---------- */
+  var f=0, clock=document.getElementById('crtclock');
+  setInterval(function(){ f=(f+1)%30; var s=Math.floor(Date.now()/1000);
+    clock.textContent='TAPE 1 · 00:'+String(Math.floor(s/60)%60).padStart(2,'0')+':'+String(s%60).padStart(2,'0')+':'+String(f).padStart(2,'0'); }, 33);
+
+  /* ---------- ledger ---------- */
+  var paper=3, paperCount=document.getElementById('paperCount'), lastSig=document.getElementById('lastSig'), ledgerNote=document.getElementById('ledgerNote');
+  document.getElementById('signBtn').addEventListener('click', function(){
+    if(paper<=0){ lastSig.textContent='no paper. walk to S2.'; return; }
+    paper--; paperCount.textContent=paper; lastSig.textContent='R. Ivori · tonight'; tick();
+  });
+  document.getElementById('truthBtn').addEventListener('click', function(){ ledgerNote.textContent='Logged as testimony. The club will read it. Vess-credit lines live in entries like this one.'; tick(); });
+  document.getElementById('coverBtn').addEventListener('click', function(){ ledgerNote.textContent='Cover written: exceptional storage conditions. A save either way. Only one was true.'; tick(); });
+
+  /* ---------- beat window ---------- */
+  var dot=document.getElementById('beatdot'), lane=dot.parentElement, verdict=document.getElementById('beatVerdict');
+  var pos=0, dir=1, raf;
+  function sweep(ts){ pos+= dir * (reduced? 0.6 : 1.4); if(pos>96||pos<0) dir*=-1; dot.style.left=pos+'%'; raf=requestAnimationFrame(sweep); }
+  requestAnimationFrame(sweep);
+  function judge(){
+    var inWin = pos>=42 && pos<=58;
+    var stance = document.querySelector('input[name="stance"]:checked').closest('label').textContent.trim();
+    if(stance==='QUIET'){ verdict.textContent='(stillness. the pause stretches. the episode resumes.)'; verdict.className='verdict'; }
+    else if(inWin){ verdict.textContent = stance==='IMPROVISE' ? 'ON THE BEAT · "Ohhh, I LIKE her." · PT +10' : 'ON THE BEAT · the room exhales'; verdict.className='verdict good'; }
+    else { verdict.textContent='OFF THE BEAT · the room turns, all of it, one motion'; verdict.className='verdict bad'; }
+    tick();
+  }
+  document.getElementById('beatBtn').addEventListener('click', judge);
+  document.addEventListener('keydown', function(e){ if(e.code==='Space' && document.getElementById('p-cue').classList.contains('on')){ e.preventDefault(); judge(); } });
+
+  /* ---------- casting sheet ---------- */
+  var lines=[document.getElementById('line1'),document.getElementById('line2'),document.getElementById('line3')];
+  var finalLine=document.getElementById('lineFinal'), strikes=0, sheetNote=document.getElementById('sheetNote');
+  function typeInto(el, text, cls){
+    el.classList.add('typed'); if(cls) el.classList.add(cls);
+    var i=0; el.insertAdjacentHTML('afterbegin','<span class="tw"></span>');
+    var tw=el.querySelector('.tw');
+    (function step(){ if(i<text.length){ tw.textContent+=text[i++]; if(!reduced){ setTimeout(step,55);} else { tw.textContent=text; } if(soundOn && i%2) tick(); } })();
+  }
+  document.getElementById('captureBtn').addEventListener('click', function(){
+    if(strikes<3){ typeInto(lines[strikes],'RITA IVORI','rita'); strikes++; sheetNote.textContent = (4-strikes)+' survivable capture'+(4-strikes===1?'':'s')+' remain. A dailies canister just appeared in the stacks.'; }
+    else if(strikes===3){ typeInto({classList:finalLine.classList, insertAdjacentHTML:finalLine.insertAdjacentHTML.bind(finalLine), querySelector:finalLine.querySelector.bind(finalLine)},'RITA IVORI','rita'); finalLine.classList.add('rita'); strikes++; sheetNote.textContent='The sheet is full. The next rewind will not stop.'; }
+  });
+  document.getElementById('burnBtn').addEventListener('click', function(){
+    if(strikes>0 && strikes<=3){ strikes--; var el=lines[strikes]; el.classList.remove('typed','rita'); var tw=el.querySelector('.tw'); if(tw) tw.remove();
+      sheetNote.textContent='Dailies burned. Her name fades from the line, and its read on you resets.'; tick(); }
+  });
+  document.getElementById('resetSheet').addEventListener('click', function(){
+    strikes=0; lines.forEach(function(el){ el.classList.remove('typed','rita'); var tw=el.querySelector('.tw'); if(tw) tw.remove(); });
+    finalLine.classList.remove('rita'); var ftw=finalLine.querySelector('.tw'); if(ftw) ftw.remove(); finalLine.innerHTML='&nbsp;';
+    sheetNote.textContent='Late Night default: four survivable captures. The typewriter does the scaring.';
+  });
+
+  /* ---------- bench generation pipeline ---------- */
+  var noise=document.getElementById('fxNoise'), track=document.getElementById('fxTrack'), trackCtl=document.getElementById('trackCtl');
+  function setGen(v){
+    var g=Number(v);
+    noise.style.opacity = [0.03, 0.12, 0.28][g];
+    track.style.opacity = [0, 0.6, 1][g];
+    track.style.height = [8, 14, 26][g] + 'px';
+  }
+  Array.prototype.forEach.call(document.getElementsByName('genfx'), function(r){ r.addEventListener('change', function(){ setGen(r.value); tick(); }); });
+  setGen(1);
+  trackCtl.addEventListener('input', function(){ track.style.filter='blur('+(0.5 + trackCtl.value/40)+'px)'; track.style.opacity = Math.min(1, 0.2 + trackCtl.value/80); });
+  document.getElementById('capNote').addEventListener('click', function(){ this.textContent='Still running. Sit with it.'; });
+
+  /* ---------- Chum eras ---------- */
+  var tellText = {
+    '1971': '<b>THE TELLS · 1971 PILOT:</b> 9 hand-cut patches, no bell yet, frayed yarn whiskers, faintly uneven grin, amber eye viewer-left. Crude and endearing; the horror has not been invented.',
+    '1974': '<b>THE TELLS · 1974 PEAK:</b> 12 patches, collar and silent brass bell added, symmetric cross-stitch grin, amber glass eye viewer-left, black button viewer-right. The icon.',
+    'post': '<b>THE TELLS · POST-FIRE (repaired, not burned):</b> over-grin sewn past the cheeks over the scarred original; oversized wrong coat button, over-attached; amber eye swapped viewer-right, pupil off-axis (it repaired itself from its own footage, and footage lies about left and right); whisker stubs one side, wire the other; bell blackened, pried, recrimped; belly patch replaced and repeatedly resewn; 14 patches, two in materials no toy should have (school-gray flannel, dark leather); head restitched 2.5 degrees off true; weight on the wrong foot.',
+    '4k':   '<b>THE TELLS · 4K PREMIERE:</b> the 1974 configuration in impossible fidelity: rendered fur sheen, moisture in the glass eye, detail no puppet could carry. The uncanny is resolution itself.'
+  };
+  function show(id,on){ document.getElementById(id).style.opacity = on?1:0; }
+  var headG=document.getElementById('headG'), pupilL=document.getElementById('pupilL'), btnR=document.getElementById('btnR');
+  var eyeLc=document.querySelector('#eyeL circle');
+  function setEra(era){
+    var pf = era==='post';
+    // tilt + soot + sheen
+    headG.setAttribute('transform', pf ? 'rotate(2.5 160 128)' : '');
+    show('charSoot', pf); show('sheenLayer', era==='4k');
+    // grin stack
+    show('grinScar', pf); show('overGrin', pf);
+    document.getElementById('grinBase').style.opacity = pf ? 0 : 1;
+    // eyes: swap amber side for post-fire; wrong button + wraps
+    if(pf){ eyeLc.setAttribute('fill','#14161c'); eyeLc.setAttribute('stroke','#000'); pupilL.setAttribute('fill','#c9c2ae'); pupilL.setAttribute('rx','2'); pupilL.setAttribute('ry','2');
+      btnR.setAttribute('fill','url(#amberEye)'); btnR.setAttribute('stroke','#5d420e'); btnR.setAttribute('r','15');
+      document.getElementById('eyeR').querySelectorAll('circle').forEach(function(c,i){ if(i>1) c.style.opacity=0; });
+      show('pupilR', true); show('glintR', true);
+      // left socket becomes the oversized wrong button
+      eyeLc.setAttribute('r','17'); show('threadWrap', true);
+      document.getElementById('threadWrap').setAttribute('transform','translate(-62 0)');
+      pupilL.setAttribute('transform','rotate(25 130 118)'); pupilL.setAttribute('rx','5'); pupilL.setAttribute('ry','2.4'); pupilL.setAttribute('fill','#3a3d44');
+    } else {
+      eyeLc.setAttribute('fill','url(#amberEye)'); eyeLc.setAttribute('stroke','#5d420e'); eyeLc.setAttribute('r','15');
+      pupilL.setAttribute('fill','#1c1206'); pupilL.removeAttribute('transform'); pupilL.setAttribute('rx','6.5'); pupilL.setAttribute('ry','6.5');
+      btnR.setAttribute('fill','#14161c'); btnR.setAttribute('stroke','#000'); btnR.setAttribute('r','13');
+      document.getElementById('eyeR').querySelectorAll('circle').forEach(function(c,i){ if(i>1){ c.style.opacity=1; c.setAttribute('fill','#c9c2ae'); } });
+      show('pupilR', false); show('glintR', false);
+      show('threadWrap', false); document.getElementById('threadWrap').removeAttribute('transform');
+    }
+    // whiskers
+    document.getElementById('whiskL').style.opacity = pf ? 0 : 1;
+    document.getElementById('whiskR').style.opacity = pf ? 0 : 1;
+    show('whiskStubs', pf); show('whiskWire', pf);
+    // char, cup, wrong materials, belly
+    show('earChar', pf); show('tailChar', pf); show('earCupStitch', pf);
+    show('wrongPatches', pf); show('bellyWrong', pf);
+    document.getElementById('belly').style.opacity = pf ? 0 : 1;
+    show('bellPry', pf);
+    // bell + collar by era
+    var hasBell = era!=='1971';
+    document.getElementById('collarG').style.opacity = hasBell ? 1 : 0;
+    document.getElementById('bell').querySelector('circle').setAttribute('fill', pf ? '#3a3226' : '#c9a24a');
+    // 1971: fewer patches + frayed whiskers
+    document.getElementById('armPatch').style.opacity = era==='1971' ? 0 : 1;
+    document.getElementById('tailPatch').style.opacity = (era==='1971'||pf) ? (pf?1:0) : 1;
+    document.getElementById('thighPatch').style.opacity = era==='1971' ? 0 : 1;
+    ['whiskL','whiskR'].forEach(function(id){ document.getElementById(id).setAttribute('stroke-dasharray', era==='1971' ? '6 3' : ''); });
+    // footage tell: weight on the wrong foot
+    document.getElementById('footR').setAttribute('transform', pf ? 'translate(8 0)' : '');
+    document.getElementById('toeR').setAttribute('transform', pf ? 'translate(8 0)' : '');
+    document.getElementById('eraLabel').textContent = {'1971':'1971 · PILOT','1974':'1974 · PEAK','post':'POST-FIRE · REPAIRED, NOT BURNED','4k':'4K · THE PREMIERE'}[era];
+    document.getElementById('tellBox').innerHTML = tellText[era];
+    document.querySelectorAll('.eraBtn').forEach(function(b){ b.classList.toggle('ghost', b.dataset.era!==era); b.setAttribute('aria-pressed', b.dataset.era===era?'true':'false'); });
+    tick();
+  }
+  document.querySelectorAll('.eraBtn').forEach(function(b){ b.addEventListener('click', function(){ setEra(b.dataset.era); }); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+[gd_scene load_steps=6 format=3 uid="uid://c58wgldmain001"]
+
+[ext_resource type="Script" path="res://scripts/world_builder.gd" id="1_world"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="2_player"]
+[ext_resource type="Script" path="res://scripts/hud.gd" id="3_hud"]
+
+[sub_resource type="CapsuleShape3D" id="cap_1"]
+radius = 0.35
+height = 1.75
+
+[sub_resource type="Environment" id="env_1"]
+background_mode = 1
+background_color = Color(0.047, 0.039, 0.027, 1)
+ambient_light_source = 2
+ambient_light_color = Color(0.35, 0.32, 0.27, 1)
+ambient_light_energy = 0.35
+fog_enabled = true
+fog_light_color = Color(0.09, 0.08, 0.06, 1)
+fog_density = 0.012
+
+[node name="Main" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("env_1")
+
+[node name="World" type="Node3D" parent="."]
+script = ExtResource("1_world")
+
+[node name="Sun" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.866, -0.353, 0.353, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 8, 0)
+light_color = Color(0.75, 0.72, 0.66, 1)
+light_energy = 0.25
+shadow_enabled = true
+
+[node name="SodiumRec" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
+light_color = Color(0.98, 0.68, 0.32, 1)
+light_energy = 2.2
+omni_range = 9.0
+shadow_enabled = true
+
+[node name="SodiumLib" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, -16)
+light_color = Color(0.98, 0.68, 0.32, 1)
+light_energy = 2.0
+omni_range = 10.0
+shadow_enabled = true
+
+[node name="Player" type="CharacterBody3D" parent="." groups=["player"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.0, 2.5)
+script = ExtResource("2_player")
+
+[node name="Collider" type="CollisionShape3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.875, 0)
+shape = SubResource("cap_1")
+
+[node name="Camera3D" type="Camera3D" parent="Player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.6, 0)
+fov = 70.0
+
+[node name="RayCast3D" type="RayCast3D" parent="Player/Camera3D"]
+target_position = Vector3(0, 0, -2.6)
+
+[node name="HUD" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+script = ExtResource("3_hud")
+
+[node name="Prompt" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -420.0
+offset_top = -110.0
+offset_right = 420.0
+offset_bottom = -80.0
+theme_override_colors/font_color = Color(0.91, 0.88, 0.8, 1)
+horizontal_alignment = 1
+
+[node name="Toast" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -420.0
+offset_top = 40.0
+offset_right = 420.0
+offset_bottom = 70.0
+theme_override_colors/font_color = Color(0.89, 0.64, 0.24, 1)
+horizontal_alignment = 1
+
+[node name="TBC" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 16.0
+offset_right = -20.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.58, 0.65, 0.5, 1)
+horizontal_alignment = 2
+
+[node name="Capture" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -420.0
+offset_top = 80.0
+offset_right = 420.0
+offset_bottom = 112.0
+theme_override_colors/font_color = Color(0.76, 0.23, 0.18, 1)
+horizontal_alignment = 1
+
+[node name="Clock" type="Label" parent="HUD"]
+layout_mode = 1
+offset_left = 20.0
+offset_top = 16.0
+offset_right = 360.0
+offset_bottom = 44.0
+theme_override_colors/font_color = Color(0.89, 0.64, 0.24, 1)
+
+[node name="Sheet" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 48.0
+offset_right = -20.0
+offset_bottom = 76.0
+theme_override_colors/font_color = Color(0.76, 0.23, 0.18, 1)
+horizontal_alignment = 2
+
+[node name="Binder" type="Label" parent="HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -300.0
+offset_top = -200.0
+offset_right = 300.0
+offset_bottom = 200.0
+theme_override_colors/font_color = Color(0.91, 0.88, 0.8, 1)
+theme_override_font_sizes/font_size = 20
+
+[node name="Objective" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -460.0
+offset_top = 118.0
+offset_right = 460.0
+offset_bottom = 146.0
+theme_override_colors/font_color = Color(0.58, 0.65, 0.5, 1)
+theme_override_font_sizes/font_size = 15
+horizontal_alignment = 1
+
+[node name="Retake" type="Control" parent="HUD"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Blackout" type="ColorRect" parent="HUD/Retake"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.02, 0.018, 0.012, 1)
+
+[node name="Line1" type="Label" parent="HUD/Retake"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = -60.0
+theme_override_colors/font_color = Color(0.85, 0.93, 0.77, 1)
+theme_override_font_sizes/font_size = 40
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Line2" type="Label" parent="HUD/Retake"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 40.0
+theme_override_colors/font_color = Color(0.58, 0.65, 0.5, 1)
+theme_override_font_sizes/font_size = 24
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Crosshair" type="Label" parent="HUD"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -8.0
+offset_top = -14.0
+offset_right = 8.0
+offset_bottom = 14.0
+theme_override_colors/font_color = Color(0.91, 0.88, 0.8, 0.5)
+text = "·"
+horizontal_alignment = 1
