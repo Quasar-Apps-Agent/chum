@@ -26,8 +26,11 @@ through Phase 0.)
       PASSED fur/lens/hardware/whiskers and CAUGHT the un-rebuilt body:
       belly+patches read as faceted clay, hands/feet as wax — findings
       filed against units 1.1 / 1.4 / 1.5
-- [ ] 0.4 Quixel/Fab hookup (owner Epic sign-in; starter Megascans set;
-      documented import path)
+- [x] 0.4 Quixel/Fab hookup: owner signed in; Fab plugin enabled in the
+      project; import doctrine + starter shopping list at ue/FAB-IMPORT.md;
+      credits ledger at ue/CREDITS-FAB.md. The physical pull is editor-UI
+      only (no API) — batched into Phase 3's first room unit, or any time
+      the owner spends 5 min in Window→Fab per the doc
 - [x] 0.5 Data extraction (tools/extract_data.py, deterministic):
       ue/Restoration/Data/ = Rooms(20) Doors(20, locked reasons intact)
       Stations(5) Monitors(2) DemoOpen(7) Timings(32 constants w/ homes)

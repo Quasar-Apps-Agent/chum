@@ -849,3 +849,15 @@ stamps it in Godot — which is unit 0.6. (Landmarks have no single
 source table; they spawn in code and port with the interactables.)
 Two regex bugs caught by counting: the block matcher over-captured
 DEMO_OPEN into STATIONS (17 ≠ 7 — arithmetic is a fine tripwire).
+
+## Commit 078 · UNIT 0.4 · THE MEGASCANS DOOR IS OPEN
+The owner signed the machine into Epic; the engine turns out to ship
+all three access plugins (Fab, legacy Bridge, MegascansPlugin) and Fab
+is now enabled in Restoration.uproject. ue/FAB-IMPORT.md is the
+doctrine: the five-minute pull path, the Room-Bible-derived starter
+shopping list (parquet, aged plaster, acoustic tile, soot decals, the
+lot), the 2K quality law, the wear pass, and the credits ledger every
+asset must sign. The one honest limit: Fab has no scripted-download
+API — the pull itself is editor-UI, so it rides with Phase 3's first
+room instead of blocking the port. Foundation phase rolls on: 0.6,
+stamping the studio from the CSVs.
