@@ -13,10 +13,13 @@ through Phase 0.)
       → headless import (naming law enforced; 1m cube = 100.0uu exactly,
       recorded) → staged Lumen capture via gated init_unreal.py, one
       command, unattended (LOOP-COMPLETE 2026-09-03)
-- [ ] 0.3 Chum head imported (FBX, sockets, ORM) + look-dev level v1
-      (Lumen, locked EV, practicals w/ true bulbs) + ACCEPTANCE BASELINE
-      capture vs the dossier plate; git LFS for ue Content when first
-      .uasset lands
+- [x] 0.3 Chum imported (full puppet FBX, 3.08m scale-true, all 30
+      materials wired via manifest + direct texture import, MawBlack unlit
+      + FurCards masked rebuilt natively) + dark locked-EV capture rig +
+      ACCEPTANCE BASELINE archived (docs/telemetry/ue-baselines/). Known
+      deltas for 1.8+: tally not yet emissive in UE, fur mottle vs plate,
+      hardware tier. LFS deferred: no .uasset tracked in git yet (Content
+      generated dirs ignored; revisit when Content assets need versioning)
 - [ ] 0.3b SODIUM CHECK lookdev scene in Blender (permanent material gate:
       sodium lamp, neutral floor; wired into the factory verification loop)
 - [ ] 0.4 Quixel/Fab hookup (owner Epic sign-in; starter Megascans set;

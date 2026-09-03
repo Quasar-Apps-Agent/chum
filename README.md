@@ -801,3 +801,22 @@ session: the first scheduled cloud run correctly no-opped in a
 toolless container, so the plan gained rule 0 and [CLOUD-OK] units —
 remote sessions now extract CSVs instead of bowing out. Next: 0.3,
 the head under Lumen — the first true acceptance baseline.
+
+## Commit 075 · UNIT 0.3 · CHUM STANDS IN UNREAL (acceptance baseline set)
+The whole puppet crossed the bridge: 78MB FBX out of the live blend
+(jaw at rest per canon), 3.08m tall at exactly meters-times-100, every
+bake on his body wired and rendering. The war stories are the unit's
+real yield, all now structural fixes in the pipeline: packed images
+are invisible to FBX (export unpacks all 64 maps to disk first); the
+FBX importer silently reuses existing textureless materials on
+re-import (fixup imports the PNGs directly and wires all 30 instances
+from the Blender-written manifest); parent empties do not survive the
+combine (export flattens with KEEP_TRANSFORM); auto-exposure
+ghost-whites a dark scene (the capture rig now locks manual EV, as the
+lighting bible commands); and iteration overwrote a keeper frame once
+(accepted frames now archive to docs/telemetry/ue-baselines on the
+spot). Two baselines stand: the daylight full-body (textures true) and
+the dark locked-EV head portrait — burnt patchwork out of blackness,
+the lens a pale blind eye — which is the frame every future Chum unit
+must beat. Deltas honestly held for 1.8+: emissive tally, fur mottle
+density, hardware tier per the realism bar.
