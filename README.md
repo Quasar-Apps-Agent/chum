@@ -939,3 +939,27 @@ feeding 0.8b, and the Phase 4 mechanic enumeration), __pycache__
 ignored and untracked, and the plan gained rule 4b: tracker edits are
 code — assert your anchors, preserve the tags. The arithmetic-tripwire
 lesson from the CSV extractor, relearned in markdown.
+
+## Commit 084 · UNIT 0.8b-spec · THE LOG, READ BACK LINE BY LINE (cloud)
+A cloud session, so rule 0: the first CLOUD-OK box, and pure text. The
+v16 transmitter log is now transcribed into ue/PORT-NOTES-STATE.md from
+game_state.gd itself — fifty-five keys with their JSON types, load
+coercions, defaults and record shapes (a signature is station/tape/
+signed, and the S4 one says TOMORROW), the value domains the code
+actually writes (three keys, four assets, ten documents, seven signals,
+nine causes of death), every toast string a mutator speaks, the twenty
+signals with their listeners, the forty-seven public functions, and
+the eight saved fields that deliberately survive a new game (the lie,
+the fire, the accessibility toggle). Then the notes were held against
+the 0.8a C++: thirty-two of fifty-five keys not yet in the SaveGame,
+paper/signatures/captures/leland_answers/seance_wear typed as ints
+where the log has maps, arrays and a float, two defaults off (MATINEE
+for LATE NIGHT, tape 0 for 1), and Strike's item cap at six where the
+dresser holds seven. None of it a 0.8a regression — all of it now the
+ordered 0.8b checklist in §8. Verification by inspection plus a
+tripwire, per rule 4b: tools/check_port_notes_state.py asserts every
+save key, var, signal and public func in the source appears in the
+notes and computes the missing-key count from the header rather than
+trusting the prose (it caught my own 31-for-32 the first time). No
+Blender, no Unreal, no renders in this environment: the image loop and
+the Desktop copies do not apply to a text unit and were not faked.
