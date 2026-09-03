@@ -135,6 +135,41 @@ a 2020s horror title's store page?* If no — iterate before ticking.
   rule, never-stated ledger — naming a ledger truth in text is an S0
   defect). Consequence is exposition.
 
+**Motion & sound law — CANON: `restoration-chum-motion-and-sound.md`**
+- PRE-FIRE Chum = the operated body: full puppet grammar (anticipation,
+  overshoot, settle, secondary everywhere, 15° head-tilt stops, jaw a
+  half-beat off phonemes). In-game the stage body never animates (L1 drift
+  only). All pre-fire sound is band-limited (≈50Hz–8kHz, tape wow).
+- AFTER-FIRE Chum = the unoperated body: puppet grammar DELETED. No
+  anticipation, no overshoot, no settle, NO SECONDARY MOTION EVER. He POURS
+  (single-axis, head leads, linear-dominant curves with ≤2-frame ease caps)
+  or he is PARKED (statue-still, zero idle sway, no breathing) while the eye
+  alone tracks, servo-smooth. He faces PATHS, not people.
+- Three authored exceptions only: THE FOLD (2.2s doorway montage — shoulder
+  first, head late on an impossible hinge), THE WITHDRAWAL (reverse along
+  the exact approach path, motion played backward), THE PERFORMANCE QUOTE
+  (at 1.2m under a burning tally: fully frontal broadcast stance + one clean
+  15° head tilt — the tally turns him back into a performer).
+- HARD RULES: the jaw NEVER opens. The bell NEVER sounds (clapperless). NO
+  vocalizations — no growl, no breath. Timings as built: 0.8 m/s approach,
+  1.2m loom, 2.0s cool, 2.2s fold, 1.6 m/s crossing.
+- AUDIO LAW: band-limited is memory, full-range is present; his sounds are
+  wrong sources doing honest labor (wood-through-floor sub footfall,
+  wet-felt groan, hull-tick armature — never servo-whine); under 3m he
+  OCCLUDES the room (reverb ducks, 200Hz bloom); the strike is nearly
+  silent. Rig note: AF rig ships with physics secondaries DISABLED, wool
+  baked stiff, root-motion clips, fold as authored montage per door width,
+  eye on its own always-on track layer.
+- CAPTURE CANON: After-Fire renders/captures pose the jaw SHUT (current
+  beauty/preview jaw-open poses are canon-wrong; fix at next asset touch).
+
+**Interaction & systems law — controls map, accessibility matrix, reaction
+matrix (all in docs/canon/)**: stable inputs, holds mean commitment, real
+binding glyphs; accessibility never breaks canon (dark readable by doctrine,
+the one startle disclosable, safety never color alone); THE WEB LAW — every
+significant player action echoes in ≥2 systems or people, in character, at
+the right time.
+
 **The reference implementation (Godot, in place)**
 - `scripts/rundown.gd` = Chum's whole AI + procedural animation brain.
 - `scripts/player.gd`, interactables, `world_builder.gd` (whole studio
@@ -227,9 +262,13 @@ Disk check every session start (see doctrine).
 speaker asset) · 1.3 Collar & dead bell · 1.4 Arms & articulated hands ·
 1.5 Legs & control rods · 1.6 Tail · 1.7 Full-figure unification + budget ·
 1.8 Head realism retrofit per §R (staples→maps, sculpted teeth, beveled
-metals, fur density) · 1.9 Gait anim (UE anim BP) · 1.10 Strike/fold ·
-1.11 Jaw+lever sync · 1.12 Secondary motion & tally states · 1.13 GATE:
-gallery + long soak test.
+metals, fur density; jaw posed SHUT per motion canon) · 1.9 The POUR
+(locomotion per motion doctrine: linear curves, head-leads arc, absolute
+stops, parked-statue idle, servo eye layer) · 1.10 The FOLD + THE
+WITHDRAWAL (2.2s doorway montage per door width; reverse-path retreat) ·
+1.11 THE PERFORMANCE QUOTE (1.2m loom: frontal square-up + the one 15°
+tilt, tally-synced) · 1.12 Tally states & eye tracking wired to AI ·
+1.13 GATE: gallery + long soak test.
 
 ### PHASE 2 — THE CAST
 2.1 Human pipeline v2 (Blender template; consider MetaHuman for the humans

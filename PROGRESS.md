@@ -38,11 +38,16 @@ through Phase 0.)
 - [ ] 1.6 Tail: segmented core, fur, rust tip
 - [ ] 1.7 Full-figure unification + texture/size budget
 - [ ] 1.8 Head realism retrofit per §R (staples→maps, sculpted teeth,
-      beveled metals, fur density/anisotropy)
-- [ ] 1.9 Gait animation (anim BP: weight, hips, counter-rotation, head lag)
-- [ ] 1.10 Strike & fold (anticipation/recovery, no pops)
-- [ ] 1.11 Jaw + mouth-lever sync
-- [ ] 1.12 Secondary motion + tally flicker states wired to AI
+      beveled metals, fur density/anisotropy; AF jaw posed SHUT per canon)
+- [ ] 1.9 THE POUR: AF locomotion per motion doctrine (linear-dominant
+      curves, head-leads single arc, absolute stops, parked-statue idle,
+      NO secondary motion, servo eye on its own layer)
+- [ ] 1.10 THE FOLD + THE WITHDRAWAL (2.2s doorway montage per door width;
+      reverse-exact-path retreat)
+- [ ] 1.11 THE PERFORMANCE QUOTE (1.2m loom: frontal broadcast square-up +
+      the one 15° head tilt, synced to tally state)
+- [ ] 1.12 Tally states & eye tracking wired to AI (jaw NEVER opens; bell
+      NEVER sounds; no vocalizations)
 - [ ] 1.13 PHASE GATE: 10-shot gallery + long soak, reviewed
 
 ## PHASE 2 — The Cast
@@ -63,6 +68,8 @@ through Phase 0.)
 
 ## PHASE 4 — Puzzles & Functionality
 - [ ] 4.0 ENUMERATE mechanics from the 13 canon docs into boxes here
+- [ ] 4.WEB reaction-matrix wiring audit (every action echoes in ≥2
+      systems/people, per the QUEUE order in the canon doc)
 - [ ] 4.SAVE integrity pass
 - [ ] 4.ENCOUNTERS choreography per room
 - [ ] 4.FINALE premiere sequence
@@ -71,8 +78,11 @@ through Phase 0.)
 - [ ] 4.FINAL PHASE GATE: deep soaks, invariants extended
 
 ## PHASE 5 — Polish
-- [ ] 5.1 Audio bed + foley on anim events (MetaSounds)
-- [ ] 5.2 UI/menus/accessibility
+- [ ] 5.1 Audio bed + foley on anim events (MetaSounds; AUDIO LAW:
+      band-limited=memory / full-range=present; S17 footfall, S18 fold,
+      occlusion bloom <3m, the wake's band-step-down cut)
+- [ ] 5.2 UI/menus/accessibility (controls map: stable inputs, hold=commit,
+      real binding glyphs; accessibility matrix R1-R7+ full target)
 - [ ] 5.3 Post & atmosphere per room
 - [ ] 5.4 Performance to 60fps on M1 Pro
 - [ ] 5.5 Packaging (macOS) + 60-min packaged soak
