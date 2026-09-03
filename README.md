@@ -953,3 +953,30 @@ dependency lesson (AIController lives in AIModule) and zero drama —
 the pipeline is starting to feel like a pipeline. Next: 0.8b-2, the
 loop around her — paper, the bench, the recording windows that make
 the tally mean something, and the clock that makes night real.
+
+## Commit 085 · UNIT 0.8b-spec · THE LOG, READ BACK TO ITSELF
+Cloud session, no Blender, no Unreal: the CLOUD-OK lane's first unit.
+game_state.gd read line by line into ue/PORT-NOTES-STATE.md — the v16
+transmitter log's fifty-five keys with type, default, load coercion,
+who resets them and who doesn't, the fifteen the demo build strips, and
+which script writes each one behind the autoload's back; the eighteen
+runtime-only fields and the second file (settings.cfg); twenty signals
+with their emitters and consumers; fifty-three methods with the rule
+each one keeps, toast strings included. Because a transcription that
+drifts is worse than none, tools/check_port_notes_state.py parses the
+GDScript and the 0.8a header and refuses the notes if any key, var,
+signal, or method is unnamed, or if a quoted count was typed rather
+than computed — it caught the author's 31 that was really 32, and the
+writer grep that missed map_points' append. Findings for 0.8b-2, all
+from the diff between the skeleton and the spec: Mode defaults to
+MATINEE where Godot says LATE NIGHT, CurrentTape to 0 where Godot says
+1, paper/signatures/captures/leland_answers are int32 placeholders,
+seance_wear lost its fraction, the item economy stops at six of seven,
+and af_active/af_taught are live in C++ but never saved — the fire's
+state would not survive a reload. Eight fields survive NEW GAME on
+purpose (mode, tbc, photo_safe, lie_pending, the AF pair, signoff,
+deadroom_seen) and ng_relic carries the dying run's last lost item
+into the next; the notes name all nine so the port keeps them.
+Verification: checker green; no renders this unit (text), so no
+Desktop copies. Repo green. Next cloud unit: 4.0, the mechanic
+enumeration. Next Mac unit: 0.8b-2, now with its checklist.
