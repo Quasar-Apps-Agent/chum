@@ -65,7 +65,10 @@ through Phase 0.)
 ## PHASE 3 — The Studio (enumerated from docs/canon/restoration-room-bible.md;
 per room: light family per lighting bible, I/L/D object budget, drift hooks,
 web tie, Megascans surfaces + Fab/PolyHaven props + bespoke pieces, Lumen
-pass, collision/nav, capture review. Taxonomy QA each room: QA-55 prompt
+pass, collision/nav, capture review. Dressing is authored FROM
+docs/canon/restoration-ambient-lore-ledger.md — the room's ambient lore
+details are placed FIRST, then dressing around them; every one promptless,
+static, three-reads compliant. Taxonomy QA each room: QA-55 prompt
 discipline, QA-56 drift=dressing-only, QA-57 one hero object max.)
 - [x] 3.0 ENUMERATE — done by the Room Bible (all twenty below)
 - [ ] 3.1 ENTRY (threshold; coat pegs drift ground zero; 1/0/8)
