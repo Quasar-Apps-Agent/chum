@@ -783,3 +783,25 @@ ran our Python: RESTORATION-PY-OK engine=5.8.0. The automation seam that
 made the Godot loop work (script in, evidence out) exists in Unreal from
 day one. The Godot game stays runnable as the reference spec per the
 rewritten charter. Next: 0.2, the import/capture loop.
+
+## Commit 074 · THE CONTRACT, WITNESSED (unit 0.2a)
+The session fired in a Linux container with no Unreal and no Mac, so
+unit 0.2 split per the charter's own rule — finish the first sub-box.
+What a container CAN witness is the factory side of the loop, and now
+it has: export_ue.py ran headless (Blender 4.0.2, apt) and rebuilt
+SM_UnitCube.fbx clean, and the new tools/verify_fbx.py stands as the
+pre-engine contract gate. It reads the binary's UnitScaleFactor
+(1.0 — a cm-unit file with geometry pre-scaled x100, which IS the
+1m=100uu law; a 100.0 there would mean double-scaling), round-trips
+the file and measures 1.000m on all axes, enforces SM_/SK_ naming,
+and counts the UCX_ collision child through the trip. The gate was
+proven BOTH ways — fed a wrong expectation it exits 1, fed the truth
+it exits 0 — because a gate that can't fail isn't a gate. Cycles
+evidence frame reviewed: the cube re-imports as clean geometry,
+grounded, UCX excluded from render. The reference implementation
+stays green on this box too: Godot 4.3 (Linux) full import 0 errors,
+fail soak I01/I02/I22/I06 PASS. Importer hash churn from the Linux
+import was reverted, not committed — the Mac's state stands.
+Remaining as 0.2b, first box for a Mac session: the engine-side
+runs — import_fbx.py's IMPORT-OK size_uu=100 (must agree with this
+gate), the capture PNG, and ue_loop.sh end-to-end unattended.
