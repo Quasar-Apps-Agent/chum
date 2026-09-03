@@ -54,6 +54,12 @@ a 2020s horror title's store page?* If no — iterate before ticking.
 5. **Scale-truth**: judge at gameplay distance AND 1m closeup.
 6. **Motion**: animation passes anticipation/ease/follow-through on captured
    frame sequences; no pops.
+7. **Crafted, not photoreal** (the art bible's law, market-validated per the
+   comparative study): the bar is MATERIAL TRUTH on crafted objects — wool
+   that reads as wool under sodium, wear that reads as history — not skin
+   pores. Damage reads as history, and history is scarier than teeth.
+   Fidelity serves the puppet-and-practical world; photoreal humans are not
+   the goal, lying materials are the defect.
 
 ---
 
@@ -74,26 +80,60 @@ a 2020s horror title's store page?* If no — iterate before ticking.
 - Cycles beauty + EEVEE bench renders remain the DESIGN loop before any
   engine import.
 
-**Unreal side (learned so far; extend as lessons land)**
+**Unreal side — STANDARDS ARE CANON: `docs/canon/restoration-blender-ue5-pipeline.md`**
 - Engine: UE 5.8 at `/Users/Shared/Epic Games/UE_5.8`; editor CLI:
-  `Engine/Binaries/Mac/UnrealEditor-Cmd "<uproject>" ...`. Project lives at
-  `ue/Restoration/Restoration.uproject` in this repo.
-- Machine is M1 Pro / 16GB / ~20GB free disk: KEEP CACHES CAPPED (project
-  DerivedDataCache local, prune `Saved/`, `Intermediate/` — all gitignored).
-  Watch disk before every session; below 8GB free, cleanup IS the unit.
-- Import path: Blender→glTF (.glb) via Interchange, or FBX where Interchange
-  fights us. Units: UE is centimeters — export scale ×100 (glTF importer
-  handles when "Uniform Scale" left default; VERIFY on first import).
-- Material mapping on import never fully survives: budget a material-fixup
-  Python step per asset (Editor Python: `-run=pythonscript -script=...`).
-  MawBlack → Unlit black material. Fur cards → two-sided masked material.
-- Automation loop: Editor Python scripts for import/setup, Movie Render
-  Queue (or `HighResShot`) for captures, `-ExecCmds="Automation RunTests"`
-  for tests, all headless via UnrealEditor-Cmd. First runs compile shaders —
-  SLOW (minutes); patience, don't kill young processes.
-- Gameplay code: Blueprints where visual/simple, C++ where systemic. Port
-  from the GDScript reference — logic is already proven; translate, don't
-  redesign. Keep node/bone naming contracts (Head, Jaw, tally socket).
+  `Engine/Binaries/Mac/UnrealEditor-Cmd "<uproject>" ...`. Project:
+  `ue/Restoration/Restoration.uproject`.
+- Machine is M1 Pro / 16GB / ~18GB free disk: caches capped, generated dirs
+  gitignored; below 8GB free, cleanup IS the unit.
+- **Export: FBX with the UE preset** — Blender meters → 1m = 100uu; UE is
+  X-forward Z-up. Verify ONCE on a 1m cube and record the result in the
+  ledger. Naming law: `SM_`/`SK_` meshes, `M_`/`MI_` materials, `T_*_BC/_N/
+  _ORM` textures; collision as `UCX_` children in Blender (auto-import);
+  sockets `SOCKET_JawLever`, `SOCKET_EyeTally`, `SOCKET_Bell` (clapperless).
+- **Textures ORM-packed; 2K default, 4K only Chum + readables.** LOD1 for
+  set dressing only; hero props none (crafted-world polycounts are modest).
+- **Material masters** (parents in UE): `M_Wool` (subsurface, sodium-honest),
+  `M_TapeStock`, `M_Phosphor` (monitors), `M_Paper`, `M_Enamel`,
+  `M_Practical` (fixture glass). MawBlack → unlit black; fur cards →
+  two-sided masked.
+- **THE SODIUM CHECK**: a permanent Blender lookdev scene (one
+  sodium-spectrum lamp, neutral floor). Every material passes through before
+  export; if it lies under sodium it does not ship.
+- **Data-driven world**: rooms/doors/timings come from the port kit's CSVs —
+  the level is BUILT FROM DATA in UE exactly as in Godot; the import
+  automation enforces naming so the pipeline complains, not the artist.
+- Automation loop: Editor Python (`-run=pythonscript`), MRQ/HighResShot for
+  captures, `-ExecCmds="Automation RunTests"` — all headless. First runs
+  compile shaders: SLOW; don't kill young processes.
+- Gameplay: Blueprints for visual/simple, C++ for systemic; TRANSLATE the
+  proven GDScript reference, don't redesign.
+- Binary `.uasset` → git LFS for `ue/Restoration/Content` (set up when the
+  first .uasset lands; decision recorded per pipeline doc).
+
+**Lighting law — CANON: `docs/canon/restoration-lighting-bible.md`**
+- Colors are contracts: RED = watched = SAFE (the inversion is the
+  language); phosphor green = information, never room light; amber tungsten
+  = warmth; SODIUM = the truth light (scene dock). Dark is a room, not a
+  wall — silhouettes always resolve; never buy fear with unreadability.
+- Lumen GI software tier; virtual shadow maps; **auto-exposure OFF, locked
+  EV per room-state, transitions CUT with the schedule**; volumetrics low
+  and motivated. Practicals authored in Blender with TRUE BULB GEOMETRY so
+  Lumen bounces honestly. Per-day color script via post volumes (Day 1
+  warmest → Day 5 coolest) over unchanged practicals.
+- His eye is the game's only mobile red; HIS SHADOW IS A MECHANIC (3.35m —
+  the fold announces by silhouette through doorways).
+
+**Design law — CANON: dread doctrine, lore architecture, comparative study**
+- The dread stack L1–L5 and the VIOLATION BUDGET (one startle, one
+  interface lie, one once-ever sight — the budget never grows). Any new
+  creep passes the three tests: repetition, law, earned.
+- BANNED: random scares, musical stings, darkness-as-content, enemy
+  quantity, gore-for-volume, jumpscare kill-loop retention, randomized
+  anomalies, co-op, procedural levels, any text containing "creepy".
+- Lore: the game never explains, it corroborates (shard model, three reads
+  rule, never-stated ledger — naming a ledger truth in text is an S0
+  defect). Consequence is exposition.
 
 **The reference implementation (Godot, in place)**
 - `scripts/rundown.gd` = Chum's whole AI + procedural animation brain.
@@ -204,19 +244,29 @@ pieces from the Blender factory, Lumen lighting pass, collision/nav,
 capture review. 3.FINAL GATE: full-studio walkthrough captures + soaks.
 
 ### PHASE 4 — PUZZLES & FUNCTIONALITY
-4.0 ENUMERATE from the 13 canon docs. Per mechanic: port/implement →
-diegetic feedback → fail-forward integration → automation test. Plus:
-save integrity, encounter choreography per room, premiere finale sequence.
+4.0 ENUMERATE from the canon docs. Per mechanic: port/implement → diegetic
+feedback → fail-forward integration → automation test. Plus: save
+integrity, encounter choreography per room, premiere finale sequence.
+**Study adoptions (canon)**: QA-51 BRAID AUDIT — at every pressure peak, at
+least two simultaneous attention demands (braid, never queue); PER-DAY
+VERB-TEXTURE AUDIT — each day owns a mechanical texture per the dread
+curve; a day without one is a defect.
 
 ### PHASE 5 — POLISH
-5.1 Audio bed & foley on anim events (MetaSounds) · 5.2 UI/menus/
-accessibility · 5.3 Post & atmosphere per room · 5.4 Performance: 60fps on
-M1 Pro (scalability tuning, Nanite where it helps, texture budgets) ·
-5.5 Packaging: macOS build, 60-min packaged soak.
+5.1 Audio bed & foley on anim events (MetaSounds; silence-as-event law) ·
+5.2 UI/menus/accessibility · 5.3 Post & atmosphere per room (per-day color
+script volumes) · 5.4 Performance: 60fps on M1 Pro · 5.5 Packaging: macOS
+build, 60-min packaged soak · **5.6 STREAMER MODE** (study A1:
+compression-kind grain, overlay-safe HUD margins, capture-clean toggle) ·
+**5.7 CLIP LEDGER pass** (study A4: the named clippables — first doorway
+fold, THE TALLY COOLS, SAFE WHILE LIT countdown, the bell, the WARNING
+page, Harriet doubled, THE LEDGER read aloud — each verified capturable in
+≤30s with one legible frame) · **5.8 DEMO — TAPE 1** (study A6: the funnel).
 
 ### PHASE 6 — FINAL GATES
 All boxes checked · packaged-build soaks clean · full playthrough capture
-review · credits complete (art/audio/Fab) · owner sign-off.
+review · credits complete (art/audio/Fab) · **fan-content policy drafted
+(study A5, generous, Fanverse-shaped)** · owner sign-off.
 
 ---
 

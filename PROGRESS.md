@@ -9,10 +9,15 @@ through Phase 0.)
 - [x] 0.1 UE project skeleton (ue/Restoration, Lumen+VSM, git hygiene,
       headless launch proven: RESTORATION-PY-OK on UE 5.8.0; disk ~19GB —
       monitor per doctrine)
-- [ ] 0.2 Automation loop proven (pyscripts: import / material fixup /
-      capture / log-grep; one-command mesh→capture unattended)
-- [ ] 0.3 Chum head imported + look-dev level v1 + ACCEPTANCE BASELINE
-      capture vs the dossier plate
+- [ ] 0.2 Automation loop proven (pyscripts: FBX import w/ naming law /
+      material fixup / capture / log-grep; 1m-cube scale verify recorded;
+      one-command mesh→capture unattended)
+- [ ] 0.3 Chum head imported (FBX, sockets, ORM) + look-dev level v1
+      (Lumen, locked EV, practicals w/ true bulbs) + ACCEPTANCE BASELINE
+      capture vs the dossier plate; git LFS for ue Content when first
+      .uasset lands
+- [ ] 0.3b SODIUM CHECK lookdev scene in Blender (permanent material gate:
+      sodium lamp, neutral floor; wired into the factory verification loop)
 - [ ] 0.4 Quixel/Fab hookup (owner Epic sign-in; starter Megascans set;
       documented import path)
 - [ ] 0.5 Player port (movement/look/interact parity with player.gd)
@@ -61,6 +66,8 @@ through Phase 0.)
 - [ ] 4.SAVE integrity pass
 - [ ] 4.ENCOUNTERS choreography per room
 - [ ] 4.FINALE premiere sequence
+- [ ] 4.QA51 braid audit (every pressure peak: ≥2 simultaneous demands)
+- [ ] 4.VERB per-day verb-texture audit vs the dread curve
 - [ ] 4.FINAL PHASE GATE: deep soaks, invariants extended
 
 ## PHASE 5 — Polish
@@ -69,12 +76,16 @@ through Phase 0.)
 - [ ] 5.3 Post & atmosphere per room
 - [ ] 5.4 Performance to 60fps on M1 Pro
 - [ ] 5.5 Packaging (macOS) + 60-min packaged soak
+- [ ] 5.6 Streamer mode (A1: compression-kind grain, safe HUD margins)
+- [ ] 5.7 Clip ledger pass (A4: all named clippables verified capturable)
+- [ ] 5.8 Demo — Tape 1 (A6: the funnel)
 
 ## PHASE 6 — Final Gates
 - [ ] All boxes checked
 - [ ] Packaged-build soaks clean
 - [ ] Full playthrough capture review
 - [ ] Credits complete (art + audio + Fab)
+- [ ] Fan-content policy drafted (A5: generous, Fanverse-shaped)
 - [ ] Owner sign-off
 
 ---
