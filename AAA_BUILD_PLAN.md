@@ -19,9 +19,19 @@ functionality → polish/audio/perf/packaging.**
 
 ## 0 · SESSION PROTOCOL
 
+0. **KNOW WHERE YOU ARE.** The full pipeline (Blender, UE 5.8, Godot) exists
+   ONLY on the owner's Mac at `/Users/christianabowen/Desktop/
+   restoration-godot 3`. A cloud/Linux session (no `/Applications/Blender.app`,
+   no `/Users/Shared/Epic Games`) must NOT attempt tool units or fake
+   verification: instead take the first unchecked box tagged **[CLOUD-OK]**
+   in `PROGRESS.md` (pure text/data/code work: CSV extraction, doc
+   authoring, GDScript→spec transcription, credits, QA checklists), verify
+   by inspection, commit and push. If no CLOUD-OK box remains, verify green
+   and exit with a note — exactly as the first cloud session correctly did.
 1. Confirm the repo is green (last README ledger entry + `git status`).
    Broken = fixing it IS the unit. Never build on red.
-2. Take the FIRST unchecked box in `PROGRESS.md`. No skipping, no gold-plating.
+2. Take the FIRST unchecked box in `PROGRESS.md` that your environment can
+   actually run (see rule 0). No skipping beyond that, no gold-plating.
 3. Work it using the doctrine (§1), asset policy (§2), pipeline map (§3).
 4. Run the verification loop (§4). Look at every image with your own eyes.
 5. Close out: tick the box, append the README ledger entry, copy current

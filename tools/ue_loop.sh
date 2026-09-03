@@ -25,10 +25,11 @@ export UE_IMPORT_FILES="$ROOT/ue/exports/$NAME.fbx"
   -script="$ROOT/ue/pyscripts/import_fbx.py" -unattended -nop4 -nosplash 2>&1 \
   | grep -oE "IMPORT-(OK|FAIL|DONE).*" | sort -u
 
+export UE_AUTOCAPTURE=1
 export UE_CAPTURE_ASSET="/Game/Imported/$NAME"
 export UE_CAPTURE_OUT="$ROOT/renders/ue_${NAME}.png"
-"$UE/UnrealEditor" "$PROJ" \
-  -ExecutePythonScript="$ROOT/ue/pyscripts/stage_and_capture.py" \
-  -unattended -nop4 -nosplash -RenderOffscreen 2>&1 \
-  | grep -oE "STAGE-OK.*|CAPTURE-(SAVED|MISSING).*" | sort -u
+## init_unreal.py (Content/Python) picks up the env gate — survives paths
+## with spaces where -ExecCmds="py ..." cannot
+"$UE/UnrealEditor" "$PROJ" -unattended -nop4 -nosplash -RenderOffscreen \
+  > /dev/null 2>&1
 ls -la "$UE_CAPTURE_OUT" 2>/dev/null && echo "LOOP-COMPLETE $NAME"

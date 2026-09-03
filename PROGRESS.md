@@ -20,9 +20,9 @@ through Phase 0.)
       sodium lamp, neutral floor; wired into the factory verification loop)
 - [ ] 0.4 Quixel/Fab hookup (owner Epic sign-in; starter Megascans set;
       documented import path)
-- [ ] 0.5 Data extraction: Rooms/Doors/Stations/Landmarks/Timings/GameText
-      CSVs generated from world_builder.gd + game_state.gd (the port kit's
-      data deliverable, rebuilt from the same truth)
+- [ ] 0.5 [CLOUD-OK] Data extraction: Rooms/Doors/Stations/Landmarks/
+      Timings/GameText CSVs generated from world_builder.gd + game_state.gd
+      (the port kit's data deliverable, rebuilt from the same truth)
 - [ ] 0.6 P0 — boot & walk: pawn with Godot-matched feel (player.gd
       constants incl. crouch c045), world stamped FROM the CSVs, doors with
       locked reasons; acceptance: free walk of all twenty rooms
