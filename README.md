@@ -953,3 +953,25 @@ dependency lesson (AIController lives in AIModule) and zero drama —
 the pipeline is starting to feel like a pipeline. Next: 0.8b-2, the
 loop around her — paper, the bench, the recording windows that make
 the tally mean something, and the clock that makes night real.
+
+## Commit 085 · UNIT 0.8b-spec · THE LOG, READ BACK IN FULL (cloud unit)
+A cloud session, so per rule 0 the unit is text: the v16 transmitter
+log transcribed whole into ue/PORT-NOTES-STATE.md. Fifty-five keys in
+dict order with types, defaults, and exactly how load_log coerces
+each one (defaults ARE the migration — there is no upgrade code, and
+there must not be); the eighteen live fields that never touch the
+file; the eight saved fields that survive a new game on purpose; all
+twenty signals with who fires them and who listens (rundown hears
+night_changed and noise_event — the brain's two ears); the settings.cfg
+contract; what the Tape 1 demo strips. Then the part that earns the
+unit: the delta list against the 0.8a C++ skeleton. Seven fields have
+the wrong SHAPE — paper is a per-station map, not an int; signatures
+is a load-bearing array (respawn reads its last entry), not a count;
+seance_wear is a float with a 70.0 threshold; Leland's answers dedupe
+by frame — plus thirty-two keys missing outright and two wrong
+defaults (mode boots MATINEE, tape boots 0). Verification for a text
+unit is an assert script, not an eye: 55 == 55 in order, every key
+read back by load_log, 20 == 20 signals, 72 of 72 public vars
+documented, persist set 8 == 8. No renders this session (no Blender,
+no Unreal, no Desktop here) — Desktop copies skipped, honestly.
+Repo green on entry (HEAD == origin/main f79877c) and on exit.

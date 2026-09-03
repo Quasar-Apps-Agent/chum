@@ -66,10 +66,13 @@ through Phase 0.)
       STRIKE af tally-cool → hidden until the next contract. Two spec-order
       bugs caught: night gate must sit BELOW the AF layer; the visible gate
       guards cool re-arm (both exactly as rundown.gd orders them)
-- [ ] 0.8b-spec [CLOUD-OK] Transcribe the FULL v16 _save_dict schema
-      (all fields, types, defaults) + game_state.gd public field/signal
-      inventory into ue/PORT-NOTES-STATE.md — the 0.8b implementation
-      checklist, pure text work from the Godot source
+- [x] 0.8b-spec [CLOUD-OK] Transcribed the FULL v16 _save_dict schema
+      (55 keys, types, defaults, load coercions, external writers) +
+      game_state.gd public field/signal inventory (72 vars, 20 signals
+      with emitters/listeners) into ue/PORT-NOTES-STATE.md, plus the
+      settings.cfg schema, DEMO stripping, and a 0.8b delta checklist
+      against the 0.8a C++ skeleton (7 shape mismatches, 32 missing
+      keys). Verified by assert script against the source (VERIFY-OK)
 - [x] 0.8b-1 ARitaCharacter + ARestorationGameMode + input map: feel
       parity proven to the digit (walk 3.10 m/s, crouch 1.71, cam drop
       0.60m, eased at 12/delta as player.gd lerps it); interact reach ray
