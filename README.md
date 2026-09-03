@@ -801,3 +801,28 @@ session: the first scheduled cloud run correctly no-opped in a
 toolless container, so the plan gained rule 0 and [CLOUD-OK] units —
 remote sessions now extract CSVs instead of bowing out. Next: 0.3,
 the head under Lumen — the first true acceptance baseline.
+
+## Commit 075 · UNIT 0.5 · THE PORT KIT'S DATA, REBUILT (cloud session)
+The migration map's one missing deliverable — Data/*.csv — is in hand.
+tools/extract_port_data.py parses the GDScript truth (world_builder.gd,
+game_state.gd, player.gd, rundown.gd) into docs/packet/portbrief/Data/:
+Rooms.csv (20 rooms + the DEMO_OPEN flag), Doors.csv (20 gaps with kind/
+locked-reason/required-key split out of the encoded string), Stations.csv
+(the five logs), Landmarks.csv (45 interactables — readables D04–D11,
+the three keys, both monitor rigs from the MONITORS const, every dock,
+with containing room derived from the ROOMS rects and DEMO-gated spawns
+flagged), Timings.csv (28 tuning numbers with meanings — every curated
+inline value is regex-anchored against its source line and generation
+FAILS if the anchor moves), and GameText.csv (719 source-as-key strings
+for the UE StringTable, via the proven harvester). Nothing hand-typed:
+re-running after any scripts/ change refreshes the data, and a second
+run is byte-identical (verified). The review pass earned its keep: the
+first output had two phantom rows from var-name collisions across spawn
+functions (a MonitorRig wearing the yard tower's position, a DockChum
+wearing the green-room couch's) — bindings are now scoped per function.
+A .gdignore ships in Data/ so Godot's importer never eats the CSVs as
+translations, and a stray committed .pyc left the repo (ignored
+henceforth). Cloud unit per rule 0: verification by inspection — counts
+asserted (20/20/5), door endpoints checked against room names, spot
+checks against source coordinates. Next cloud unit: none remain; next
+Mac unit: 0.3, the head under Lumen.

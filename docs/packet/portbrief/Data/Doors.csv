@@ -1,0 +1,21 @@
+RoomA,RoomB,GapX,GapZ,OpeningWidth,WallAxis,Kind,LockedReason,RequiredKey
+REC ROOM,KITCHEN,5.0,0.0,1.4,z,blank,,
+REC ROOM,DORMS,-5.0,0.0,1.4,z,blank,,
+REC ROOM,ENTRY,0.0,4.0,1.6,x,door,,
+ENTRY,YARD,0.0,10.0,1.6,x,door,,
+YARD,SHED,8.5,14.0,1.2,z,locked,PADLOCKED · the tag reads EDITH · a key exists,EDITH
+REC ROOM,CORRIDOR,0.0,-4.0,1.6,x,blank,,
+CORRIDOR,TAPE LIBRARY,0.0,-11.0,1.6,x,blank,,
+TAPE LIBRARY,BENCH ROOM,6.0,-16.0,1.4,z,blank,,
+BENCH ROOM,CLIMATE,12.0,-16.0,1.4,z,blank,,
+CLIMATE,TRANSMITTER HALL,14.5,-13.0,1.4,x,blank,,
+TRANSMITTER HALL,DEAD ROOM,19.0,0.0,1.2,x,locked,LOCKED · felt-faced · the hum stops at the seam,QUIET ROOM
+TAPE LIBRARY,FIRE CORRIDOR,-6.0,-16.0,1.4,z,locked,SEALED · reopens for the anniversary (Tape 4),
+FIRE CORRIDOR,STAGE HALL,-12.0,-17.5,1.4,x,blank,,
+STAGE HALL,STUDIO A,-12.0,-24.0,1.6,x,window,,
+STUDIO A,PATCH BAY,-9.5,-29.5,1.4,z,blank,,
+CONTROL,PATCH BAY,-1.5,-27.0,1.4,z,blank,,
+CONTROL,MASTER CONTROL,1.5,-27.0,1.4,z,blank,,
+TAPE LIBRARY,CONTROL,0.0,-21.0,1.6,x,blank,,
+STUDIO A,GREEN ROOM,-21.5,-27.0,1.4,z,blank,,
+STUDIO A,SCENE DOCK,-15.5,-36.0,1.6,x,window,,

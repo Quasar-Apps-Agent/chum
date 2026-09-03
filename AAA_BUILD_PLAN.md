@@ -223,9 +223,12 @@ Consult the gap audit's rulings before re-deciding anything.
   audio → MetaSounds + submixes; harness → Gauntlet/functional-test maps
   reading THE SAME telemetry log formats. WHAT MUST NOT CHANGE: invariant
   suite, log formats, save semantics, room table, tell-table, silence
-  ledger, every knob number. (The kit's Data/*.csv + build_greybox.py
-  deliverable is not in hand — extract the CSVs from world_builder.gd,
-  which is the same truth.)
+  ledger, every knob number. (The kit's Data/*.csv deliverable is REBUILT
+  and in hand — unit 0.5: `tools/extract_port_data.py` parses
+  world_builder.gd + game_state.gd + player.gd + rundown.gd into
+  `docs/packet/portbrief/Data/`, deterministic and self-checking; re-run it
+  whenever scripts/ changes. build_greybox.py's UE equivalent arrives with
+  unit 0.6.)
 
 **The reference implementation (Godot, in place)**
 - `scripts/rundown.gd` = Chum's whole AI + procedural animation brain.

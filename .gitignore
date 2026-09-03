@@ -10,6 +10,10 @@ renders/
 *.blend2
 .DS_Store
 
+# Python bytecode
+__pycache__/
+*.pyc
+
 # Unreal Engine generated (ue/Restoration)
 ue/Restoration/Intermediate/
 ue/Restoration/Saved/
