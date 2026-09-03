@@ -801,3 +801,32 @@ session: the first scheduled cloud run correctly no-opped in a
 toolless container, so the plan gained rule 0 and [CLOUD-OK] units —
 remote sessions now extract CSVs instead of bowing out. Next: 0.3,
 the head under Lumen — the first true acceptance baseline.
+
+## Commit 075 · UNIT 0.5 · THE DATA, EXTRACTED (cloud session, per rule 0)
+The second scheduled cloud run took the first CLOUD-OK box instead of
+bowing out: the port kit's Data deliverable now exists in-repo, rebuilt
+from the same truth the kit named. tools/extract_port_data.py reads
+world_builder.gd and transcribes — never invents — into
+ue/Restoration/Data/: Rooms.csv (all 20 zones), Doors.csv (all 20
+openings, locked reasons and key ids split out of the payload strings),
+Stations.csv (the five log lecterns), Landmarks.csv (50 interactables
+and named set pieces with literal spawn positions, rooms derived by
+point-in-room lookup, the readables carrying their doc ids and day
+gates), Timings.csv (every numeric const across scripts/, 32 of them,
+with source line and comment — inline-literal tunables like the 75 s
+crossing window stay in code, where the port brief says the intent
+lives), and GameText.csv (714 Key/SourceString rows for a UE
+StringTable, from the extraction commit's strings.csv; the kit shipped
+552 — the game grew). The generator is deterministic (two runs,
+identical bytes), self-checking (counts, door-to-room referential
+integrity), and honest about what it skips (loop-computed spawns are
+reported, not guessed). Review caught one real bug before commit: vars
+leaking across function bodies let the green-room couch position claim
+a DockChum row — fixed by flushing scope at every func line, which is
+exactly the kind of lie the checks exist to catch. A .gdignore rides
+in Data/ so the Godot reference importer never eats the CSVs as
+translations (the .blend-dir trap, same medicine). Verification was by
+inspection per rule 0: no renders in a toolless container, so no
+Desktop copies this session. Next for the Mac: 0.3, the head under
+Lumen. Next for the cloud: no CLOUD-OK boxes remain — mint more or
+no-op green.

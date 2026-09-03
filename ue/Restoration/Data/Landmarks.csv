@@ -1,0 +1,51 @@
+kind,label,x,y,z,room,doc_id,asset_id,key_id,notes
+AssetRack,,9.0,2.35,-18.82,BENCH ROOM,,,,
+BenchTV,,9.0,1.55,-18.82,BENCH ROOM,,,,
+CaptureBench,THE BENCH,9.0,0.5,-17.6,BENCH ROOM,,,,
+CreditEntry,LEDGER MARGIN,7.4,0.9,-15.2,BENCH ROOM,,,,
+DecisionLedger,ACCESSION LEDGER,8.2,0.9,-16.2,BENCH ROOM,,,,
+FireTapeDock,1977 DOCK,7.8,0.9,-18.4,BENCH ROOM,,,,
+GenKnob,,10.2,1.0,-18.5,BENCH ROOM,,,,
+MonitorRig,CAM 2 · STACKS,7.2,1.7,-13.18,BENCH ROOM,,,,"cam=(0.0,2.4,-20.4);look=(0.0,1.2,-12.0);yaw_rad=0.0"
+Node3D,WOOL SPIKE 001,10.8,0.0,-14.3,BENCH ROOM,,,,
+SeanceDock,SEANCE REEL,7.8,0.9,-17.2,BENCH ROOM,,,,
+SpectroDock,SPECTROGRAM,10.6,0.9,-17.2,BENCH ROOM,,,,
+Degausser,DEGAUSSER,14.25,0.55,-17.6,CLIMATE,,,,
+ReadableProp,"FIRE MARSHAL REPORT · 1977, photocopy",0.0,0.8,-24.5,CONTROL,D09,,,needs_day=2;needs_dock=false
+WallClock,WALL CLOCK,0.0,2.3,-24.5,CONTROL,,,,
+BedProp,RITA'S BED,-9.0,0.3,1.5,DORMS,,,,
+Dresser,,-11.5,0.28,-1.8,DORMS,,,,
+ReadableProp,WELCOME PACKET · mimeograph purple,-11.9,0.9,-1.0,DORMS,D05,,,needs_day=1;needs_dock=false
+VessBinder,VESS'S ROOM,-6.5,0.6,1.8,DORMS,,,,
+CoatPegs,,2.7,1.5,7.0,ENTRY,,,,
+ImpossibleCrate,DELIVERY,0.0,0.5,6.0,ENTRY,,,,
+KeyItem,KEY BOARD,10.6,1.2,-2.3,KITCHEN,,,EDITH,"the EDITH key, felt-tagged in a child's hand"
+KeyItem,KEY BOARD,10.2,1.2,-2.3,KITCHEN,,,TRAINING,"the TRAINING key, tagged in green ink"
+Merle,MERLE,8.0,0.0,-1.0,KITCHEN,,,,
+AssetPickup,CART RACK,4.0,0.9,-31.5,MASTER CONTROL,,CART,,
+ReadableProp,PEAK ASSET DOSSIER · CHUM-AF-1974-P,2.0,0.9,-27.5,MASTER CONTROL,D11,,,needs_day=4;needs_dock=false
+WallClock,WALL CLOCK,5.5,2.3,-26.6,MASTER CONTROL,,,,
+PatchbayConsole,PATCHBAY,-5.5,0.55,-31.8,PATCH BAY,,,,
+BenchTV,THE GLADHOUSE · CLUB PRINT,-4.78,1.6,1.0,REC ROOM,,,,
+CueSign,HOLD,0.9,2.5,3.55,REC ROOM,,,,
+CueSign,RESPOND,-0.9,2.5,3.55,REC ROOM,,,,
+Harriet,,1.2,0.0,2.6,REC ROOM,,,,
+HarrietNote,,2.8,0.55,2.2,REC ROOM,,,,
+MonitorRig,CAM 1 · CORRIDOR,2.4,1.7,-3.82,REC ROOM,,,,"cam=(0.0,2.4,-10.6);look=(0.0,1.2,-4.5);yaw_rad=3.141593"
+ReadableProp,"THE CLIPPING · 1974, behind glass",-4.2,1.15,-1.5,REC ROOM,D04,,,needs_day=1;needs_dock=false
+RejectedEdit,VESS'S CUT,-2.6,0.9,1.0,REC ROOM,,,,
+ScreeningEvent,PROJECTOR,-1.4,0.55,1.0,REC ROOM,,,,
+VessProp,,-3.7,0.0,-1.2,REC ROOM,,,,
+WallClock,WALL CLOCK,0.0,2.3,0.0,REC ROOM,,,,
+AssetPickup,PROPS CRATE,-13.0,0.5,-41.5,SCENE DOCK,,CARD,,
+DockTask,CLIPBOARD,-19.5,0.7,-38.0,SCENE DOCK,,,,
+ReadableProp,"A FAN LETTER · ruled paper, careful loops",-12.2,0.5,-40.6,SCENE DOCK,D10,,,needs_day=1;needs_dock=true
+KeyItem,FOR THE QUIET ROOM,10.0,0.5,14.0,SHED,,,QUIET ROOM,the quiet room key · felt-wrapped
+CastingSheetProp,CASTING SHEET,-20.9,1.5,-30.0,STUDIO A,,,,
+CompoundDoor,THE LITTLE DOOR,-12.6,0.0,-33.35,STUDIO A,,,,"Not yet. It closes on camera, in Tape 5."
+WallClock,WALL CLOCK,-15.5,2.5,-24.6,STUDIO A,,,,
+FilmCabinet,FILM CABINET,-5.4,0.7,-19.0,TAPE LIBRARY,,,,
+FloorManager,,-4.5,0.0,-19.4,TAPE LIBRARY,,,,
+AssetPickup,CRAIK'S BOX,16.2,0.5,-10.0,TRANSMITTER HALL,D02,SCRIPT,,
+FireTapePickup,REEL · 1977,17.0,0.45,-10.0,TRANSMITTER HALL,,,,
+ToneEmitter,,16.75,1.6,-6.5,TRANSMITTER HALL,,,,
