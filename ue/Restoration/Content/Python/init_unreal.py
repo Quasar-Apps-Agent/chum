@@ -1,15 +1,21 @@
-"""Auto-run at editor startup (UE convention). Acts ONLY when the driver
-sets UE_AUTOCAPTURE=1 — otherwise a silent no-op, so commandlets and
-interactive sessions are unaffected. Exists because -ExecCmds="py <path>"
-cannot survive a repo path containing spaces (the 10-CPU-hour zombie of
-2026-09-03 taught this)."""
+"""Auto-run at editor startup (UE convention). Runs the script named in
+UE_RUN_PYSCRIPT (absolute path) when set; else the legacy UE_AUTOCAPTURE
+gate; else a silent no-op. Exists because -ExecCmds="py <path>" cannot
+survive a repo path containing spaces, and commandlets cannot author
+levels (both learned the hard way)."""
 import os
 
-if os.environ.get("UE_AUTOCAPTURE") == "1":
+
+def _run(path):
     import importlib.util
-    _p = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                      "..", "..", "..", "pyscripts", "stage_and_capture.py")
-    _p = os.path.normpath(_p)
-    spec = importlib.util.spec_from_file_location("stage_and_capture", _p)
+    spec = importlib.util.spec_from_file_location("autorun", path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
+
+
+if os.environ.get("UE_RUN_PYSCRIPT"):
+    _run(os.environ["UE_RUN_PYSCRIPT"])
+elif os.environ.get("UE_AUTOCAPTURE") == "1":
+    _p = os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                          "..", "..", "..", "pyscripts", "stage_and_capture.py"))
+    _run(_p)

@@ -861,3 +861,17 @@ asset must sign. The one honest limit: Fab has no scripted-download
 API — the pull itself is editor-UI, so it rides with Phase 3's first
 room instead of blocking the port. Foundation phase rolls on: 0.6,
 stamping the studio from the CSVs.
+
+## Commit 079 · UNIT 0.6 · WGLD STANDS IN UNREAL
+ue/pyscripts/build_greybox.py stamps the studio from Data/*.csv with
+world_builder.gd's own wall-splitting algorithm ported line for line:
+20 rooms, 119 wall segments, 7 door slabs (locked reasons floating as
+world text, per the build order), 5 station markers, a practical per
+room, PlayerStart in the REC ROOM. The top-down proof is the floor
+plan made light: the dorm block, the spine, the library cross, the
+studio wing — every gap where a door belongs. Two lessons for the
+wall: commandlets cannot author levels (full editor via the
+generalized UE_RUN_PYSCRIPT gate), and 'mobility' lives on components,
+not actors. DefaultPawn's engine-defined bindings give boot-and-walk
+free; true feel parity rides with the 0.8 pawn. Next: the twelve-feed
+wall, in MASTER CONTROL where it belongs.
