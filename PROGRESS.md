@@ -70,10 +70,14 @@ through Phase 0.)
       (all fields, types, defaults) + game_state.gd public field/signal
       inventory into ue/PORT-NOTES-STATE.md — the 0.8b implementation
       checklist, pure text work from the Godot source
-- [ ] 0.8b P2+P3 remainder: paper economy + stations, bench capture loop,
-      retake presentation, Harriet freeze, screening + assist, day/night
-      cycle driving is_night (replacing test scaffolds); pawn feel parity
-      (3.1 m/s walk, crouch c045)
+- [x] 0.8b-1 ARitaCharacter + ARestorationGameMode + input map: feel
+      parity proven to the digit (walk 3.10 m/s, crouch 1.71, cam drop
+      0.60m, eased at 12/delta as player.gd lerps it); interact reach ray
+      2.6m stubbed; WASD/mouse + Ctrl/pad-B crouch + E per controls map
+- [ ] 0.8b-2 P2+P3 remainder: paper economy + stations, bench capture
+      loop + recording windows driving the tally, retake presentation,
+      Harriet freeze, day/night cycle driving is_night (replacing test
+      scaffolds), screening + assist
 - [ ] 0.9 Harness: Gauntlet/functional-test maps, three bots, invariant
       parser reading the same logs; I01/I02/I22/I06 green in UE
 - [ ] 0.10 PHASE GATE: parity slice — one room, Chum encounter, saves,

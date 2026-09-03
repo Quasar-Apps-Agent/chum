@@ -939,3 +939,17 @@ feeding 0.8b, and the Phase 4 mechanic enumeration), __pycache__
 ignored and untracked, and the plan gained rule 4b: tracker edits are
 code — assert your anchors, preserve the tags. The arithmetic-tripwire
 lesson from the CSV extractor, relearned in markdown.
+
+## Commit 084 · UNIT 0.8b-1 · RITA WALKS, AND SHE WALKS CORRECTLY
+ARitaCharacter is the port of player.gd with its constants carried
+whole: 310uu walk on 1000uu of deliberate weight, the 2.6m reach ray,
+and crouch per ruling c045 — toggle, 0.55x, the camera easing down
+0.6m at exactly the 12-per-delta rate the GDScript lerps it.
+ARestorationGameMode makes her the default body; the input map speaks
+the controls doctrine (WASD, mouse, Ctrl and pad-B for the body verb,
+E to ask the world questions). The self-driving feel test read back
+the spec to the digit: walk 3.10, crouch 1.71, drop 0.60. One
+dependency lesson (AIController lives in AIModule) and zero drama —
+the pipeline is starting to feel like a pipeline. Next: 0.8b-2, the
+loop around her — paper, the bench, the recording windows that make
+the tally mean something, and the clock that makes night real.
