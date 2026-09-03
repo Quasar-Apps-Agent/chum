@@ -1,10 +1,20 @@
 {
-	"FileVersion": 3,
-	"EngineAssociation": "5.8",
-	"Category": "Game",
-	"Description": "RESTORATION - horror in a dead studio",
-	"Plugins": [
-		{ "Name": "PythonScriptPlugin", "Enabled": true },
-		{ "Name": "MovieRenderPipeline", "Enabled": true }
-	]
+ "FileVersion": 3,
+ "EngineAssociation": "5.8",
+ "Category": "Game",
+ "Description": "RESTORATION - horror in a dead studio",
+ "Plugins": [
+  {
+   "Name": "PythonScriptPlugin",
+   "Enabled": true
+  },
+  {
+   "Name": "MovieRenderPipeline",
+   "Enabled": true
+  },
+  {
+   "Name": "Fab",
+   "Enabled": true
+  }
+ ]
 }
