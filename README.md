@@ -891,3 +891,21 @@ The spike rig is ephemeral by design; spike_wall.py resurrects it in
 one command whenever the live monitor system (P3/P4) wants a
 reference. Phase 0 remaining: 0.7 the Rundown tick-brain, 0.8
 state/saves/loop, 0.9 the harness, 0.10 the parity gate.
+
+## Commit 081 · UNIT 0.7 · THE BRAIN CROSSES, AND IT REMEMBERS ITS LINES
+The Rundown is C++ now: a tick brain, no Behavior Tree, because the
+grammar is the point. Ported verbatim from rundown.gd: the warn-once
+latch, the strike with its savor widening after three, the
+no-strike-thru-wall ray (I02's teeth), the BREAK relocation order
+(heard noise outranks the cycle), the 2.2s door toll read from the
+same Doors.csv the walls were stamped from, and a ReportNoise entry
+point for the bus. The schedule is real: URestorationClock flips
+ON AIR 50 / BREAK 18 on timers. Telemetry appends to
+Saved/decision_log.txt in the parser's exact dialect. Three bugs paid
+for the crossing: a bare AActor has no root so SetActorLocation
+no-ops silently; GetPlayerPawn happily hands you the simulate
+SpectatorPawn (he struck the camera, repeatedly, savoring it); and
+tickable world subsystems do not tick in simulate worlds — timers do.
+The verification run reads like the spec: stand at the anchor, warn
+once at 6.1m, hold, and when the show goes to break — move. First
+C++ compile of the project: 42 seconds, clean.

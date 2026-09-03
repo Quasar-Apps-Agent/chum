@@ -16,5 +16,12 @@
    "Name": "Fab",
    "Enabled": true
   }
+ ],
+ "Modules": [
+  {
+   "Name": "Restoration",
+   "Type": "Runtime",
+   "LoadingPhase": "Default"
+  }
  ]
 }

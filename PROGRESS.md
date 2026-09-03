@@ -47,9 +47,15 @@ through Phase 0.)
       as the migration map predicted. Rig is ephemeral (ue/pyscripts/
       spike_wall.py rebuilds it on demand); numbers in the ledger are
       the engine memo's evidence
-- [ ] 0.7 P4a — the Rundown actor: TICK BRAIN (no Behavior Tree, per the
-      migration map) with the grammar verbatim; WARN/STRIKE telemetry in
-      the identical log format
+- [x] 0.7 P4a — ARundown (C++ tick brain, no Behavior Tree) + 
+      URestorationClock (ON AIR 50s / BREAK 18s, timer-driven): ON AIR hunt
+      with warn-once latch, strike + savor rule (>=3), no-strike-thru-wall
+      raycast, BREAK relocation grammar (heard-noise-first, else cycle),
+      2.2s door fold toll from Data/Doors.csv, ReportNoise API; telemetry
+      appends Saved/decision_log.txt in the parser's exact format. Verified
+      in simulate: WARN d=6.1 once, RELOCATE at the 50s flip, zero false
+      strikes. AF states (tally contract/cool/crossing/dead-room hold)
+      attach with GameState in 0.8 — marked TODO(0.8) in source
 - [ ] 0.8 P2+P3 — state/saves (v16 SaveGame mirroring _save_dict) + the
       loop (bench capture, schedule clock, Harriet freeze)
 - [ ] 0.9 Harness: Gauntlet/functional-test maps, three bots, invariant
