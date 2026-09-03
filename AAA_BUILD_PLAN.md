@@ -34,6 +34,11 @@ functionality → polish/audio/perf/packaging.**
    actually run (see rule 0). No skipping beyond that, no gold-plating.
 3. Work it using the doctrine (§1), asset policy (§2), pipeline map (§3).
 4. Run the verification loop (§4). Look at every image with your own eyes.
+4b. Tracker edits are code: every scripted PROGRESS.md/plan edit ASSERTS
+   its anchor matched (a silent no-op replace once left unit 0.6 unticked
+   and erased the CLOUD-OK lane — the cloud watchdog caught it). When
+   rewriting a unit's text, PRESERVE its [CLOUD-OK] tag. Chain shell steps
+   with && so a failed edit stops the close-out.
 5. Close out: tick the box, append the README ledger entry, copy current
    renders/captures to the Desktop (`chum-*-current.png`), `git add -A &&
    git commit && git push` (remote: github.com/Quasar-Apps-Agent/chum,
