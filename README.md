@@ -835,3 +835,17 @@ FAIL as faceted clay and wax, which is exactly right: they are the
 pre-head-era body, and their sodium verdicts are now filed against
 units 1.1, 1.4 and 1.5. The gate is wired: every future material
 pass ends under this lamp before it ships.
+
+## Commit 077 · UNIT 0.5 · THE DATA CROSSES THE BRIDGE
+tools/extract_data.py rebuilds the port kit's missing Data deliverable
+from the source that outranks every document: 20 rooms, 20 doors with
+their locked-reason strings word for word, 5 stations, 2 monitor
+rigs, the 7-room demo whitelist, 32 tuning constants each tagged with
+the file it lives in, and 714 text keys straight from the shipped
+translations table. The extraction is deterministic and re-runnable,
+so when the Godot spec moves, the CSVs move with one command. The
+world can now be STAMPED FROM DATA in Unreal exactly as world_builder
+stamps it in Godot — which is unit 0.6. (Landmarks have no single
+source table; they spawn in code and port with the interactables.)
+Two regex bugs caught by counting: the block matcher over-captured
+DEMO_OPEN into STATIONS (17 ≠ 7 — arithmetic is a fine tripwire).

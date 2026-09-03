@@ -28,9 +28,12 @@ through Phase 0.)
       filed against units 1.1 / 1.4 / 1.5
 - [ ] 0.4 Quixel/Fab hookup (owner Epic sign-in; starter Megascans set;
       documented import path)
-- [ ] 0.5 [CLOUD-OK] Data extraction: Rooms/Doors/Stations/Landmarks/
-      Timings/GameText CSVs generated from world_builder.gd + game_state.gd
-      (the port kit's data deliverable, rebuilt from the same truth)
+- [x] 0.5 Data extraction (tools/extract_data.py, deterministic):
+      ue/Restoration/Data/ = Rooms(20) Doors(20, locked reasons intact)
+      Stations(5) Monitors(2) DemoOpen(7) Timings(32 constants w/ homes)
+      GameText(714 keys from translations/strings.csv). Landmarks: no
+      single source table exists — landmarks spawn in code; extract at
+      P0 world-stamping when the interactable spawns are ported
 - [ ] 0.6 P0 — boot & walk: pawn with Godot-matched feel (player.gd
       constants incl. crouch c045), world stamped FROM the CSVs, doors with
       locked reasons; acceptance: free walk of all twenty rooms

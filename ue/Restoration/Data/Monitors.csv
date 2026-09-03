@@ -1,0 +1,3 @@
+cam_pos,look_at,monitor_pos,yaw_rad,label
+"0, 2.4, -10.6","0, 1.2, -4.5","2.4, 1.7, -3.82",PI,CAM 1 · CORRIDOR
+"0, 2.4, -20.4","0, 1.2, -12.0","7.2, 1.7, -13.18",0.0,CAM 2 · STACKS
