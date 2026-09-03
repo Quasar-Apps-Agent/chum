@@ -41,19 +41,29 @@ public:
 	// filled from Data/Doors.csv at BeginPlay (fold toll positions)
 	TArray<FVector> DoorPositions;
 
-	// TODO(0.8): these become GameState reads; for the 0.7 brain demo they
-	// are actor flags so the grammar can run and log
-	UPROPERTY(EditAnywhere, Category = "Rundown|StateStub")
-	bool bIsNight = true;
+	// Test scaffolding (harness sets these pre-simulate; BeginPlay pushes
+	// them into URestorationState — clearly not gameplay config)
+	UPROPERTY(EditAnywhere, Category = "Rundown|Test")
+	bool bTestForceNight = false;
 
-	UPROPERTY(EditAnywhere, Category = "Rundown|StateStub")
-	int32 Strikes = 0;
+	UPROPERTY(EditAnywhere, Category = "Rundown|Test")
+	bool bTestForceAF = false;
+
+	UPROPERTY(EditAnywhere, Category = "Rundown|Test")
+	bool bTestForceRecording = false;
+
+	UPROPERTY(EditAnywhere, Category = "Rundown|Test")
+	float TestRecordingOffAfter = 0.0f;
+
+	UPROPERTY(EditAnywhere, Category = "Rundown|Test")
+	bool bTestSaveRoundtrip = false;
 
 	// the hunt target: player pawn if one exists, else any actor tagged
 	// RundownTestTarget (lets the brain run under simulate/harness)
 	AActor* ResolveTarget() const;
 
 	void ReportNoise(const FVector& WorldPos); // the noise bus entry point
+	int32 StrikesNow() const;
 
 	virtual void Tick(float DeltaSeconds) override;
 
@@ -76,4 +86,10 @@ private:
 	float HeardT = -100.0f;
 	float StrikeCooldown = 0.0f;
 	bool bSpawnLogged = false;
+	// AF layer
+	class URestorationState* State = nullptr;
+	float AfCool = -100.0f;
+	bool bAfSeenOnce = false;
+	bool bDeadroomLine = false;
+	float TestClock = 0.0f;
 };

@@ -1,5 +1,7 @@
 #include "Rundown.h"
 #include "RestorationClock.h"
+#include "RestorationState.h"
+#include "Engine/GameInstance.h"
 #include "Engine/World.h"
 #include "GameFramework/Pawn.h"
 #include "GameFramework/SpectatorPawn.h"
@@ -53,6 +55,26 @@ void ARundown::BeginPlay()
 	{
 		Clock->OnPhaseChanged.AddUObject(this, &ARundown::OnPhaseChanged);
 	}
+	if (UGameInstance* GI = GetWorld()->GetGameInstance())
+	{
+		State = GI->GetSubsystem<URestorationState>();
+	}
+	if (State)
+	{
+		if (bTestForceNight) { State->bIsNight = true; }
+		if (bTestForceAF) { State->bAfActive = true; }
+		if (bTestForceRecording) { State->bRecording = true; }
+		if (bTestSaveRoundtrip)
+		{
+			State->Strikes = 7;
+			State->SaveToSlot(TEXT("roundtrip_test"));
+			State->Strikes = 0;
+			const bool bOk = State->LoadFromSlot(TEXT("roundtrip_test"));
+			LogLine(FString::Printf(TEXT("SAVE-ROUNDTRIP v16 ok=%d strikes=%d"),
+			                        bOk ? 1 : 0, State->Strikes));
+			State->Strikes = 0;
+		}
+	}
 }
 
 AActor* ARundown::ResolveTarget() const
@@ -82,7 +104,7 @@ void ARundown::OnPhaseChanged(bool bNowOnAir)
 		bWarned = false;
 		// savor rule + profile widening port with the director (TODO(0.8));
 		// the strikes>=3 widening is canon and lives here already
-		StrikeR = (Strikes >= 3) ? 2.6f : StrikeRadius;
+		StrikeR = (StrikesNow() >= 3) ? 2.6f : StrikeRadius;
 		WarnR = WarnRadius;
 		return;
 	}
@@ -134,10 +156,6 @@ bool ARundown::DoorFoldCheck(float Now)
 void ARundown::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
-	if (!bIsNight)
-	{
-		return; // day behavior arrives with GameState (TODO(0.8))
-	}
 	const float Now = GetWorld()->GetTimeSeconds();
 	if (StrikeCooldown > 0.0f)
 	{
@@ -146,6 +164,98 @@ void ARundown::Tick(float DeltaSeconds)
 	if (FoldT > 0.0f)
 	{
 		FoldT -= DeltaSeconds;
+		return;
+	}
+
+	// test scaffolding: scripted recording cutoff
+	if (TestRecordingOffAfter > 0.0f && State && State->bRecording)
+	{
+		TestClock += DeltaSeconds;
+		if (TestClock >= TestRecordingOffAfter)
+		{
+			State->bRecording = false;
+			LogLine(TEXT("TEST recording off"));
+		}
+	}
+
+	// ---- THE AF LAYER (tally contract, LAW 10) --------------------------
+	if (State && State->bAfActive)
+	{
+		AActor* Prey = ResolveTarget();
+		if (State->bRecording && Prey)
+		{
+			SetActorHiddenInGame(false); // he shows for the contract
+			const float Pd = FVector::Dist(GetActorLocation(), Prey->GetActorLocation()) / M;
+			if (State->InDeadRoom(Prey->GetActorLocation()))
+			{
+				// he holds at the felt door (LAW 11)
+				const FVector DeadDoor(1900.0f, 0.0f, 0.0f);
+				if (FVector::Dist(GetActorLocation(), DeadDoor) > 0.6f * M)
+				{
+					if (DoorFoldCheck(Now)) { return; }
+					SetActorLocation(FMath::VInterpConstantTo(GetActorLocation(), DeadDoor,
+					                                          DeltaSeconds, AfApproachSpeed * M));
+				}
+				else if (!bDeadroomLine)
+				{
+					bDeadroomLine = true;
+					LogLine(TEXT("AF holds at the felt door"));
+				}
+				return;
+			}
+			if (Pd > AfLoomDist)
+			{
+				if (DoorFoldCheck(Now)) { return; }
+				SetActorLocation(FMath::VInterpConstantTo(GetActorLocation(),
+				                                          Prey->GetActorLocation(),
+				                                          DeltaSeconds, AfApproachSpeed * M));
+			}
+			else if (!bAfSeenOnce)
+			{
+				bAfSeenOnce = true;
+				LogLine(FString::Printf(TEXT("AF loom d=%.1f (the jaw works its lever)"), Pd));
+			}
+			AfCool = -100.0f;
+			return;
+		}
+		// tally cooled: the countdown, then the arithmetic (never betrayal)
+		if (Prey && AfCool < -50.0f && !State->bRecording && !State->bIsNight
+		        && !IsHidden())
+		{
+			AfCool = State->bAfTaught ? AfCoolSeconds : 4.0f;
+			if (!State->bAfTaught)
+			{
+				State->bAfTaught = true;
+				LogLine(TEXT("AF tally cools (taught)"));
+			}
+			else
+			{
+				LogLine(TEXT("AF tally cools"));
+			}
+		}
+		if (AfCool > -50.0f && !State->bIsNight)
+		{
+			AfCool -= DeltaSeconds;
+			if (AfCool <= 0.0f)
+			{
+				if (Prey && FVector::Dist(GetActorLocation(), Prey->GetActorLocation()) / M
+				        < StrikeR + 0.4f)
+				{
+					LogLine(TEXT("STRIKE af tally-cool"));
+					State->Strike(Prey);
+				}
+				AfCool = -100.0f;
+				SetActorHiddenInGame(true); // gone until the next contract
+				SetActorLocation(SegmentAnchors[SegIdx]);
+			}
+			return;
+		}
+	}
+
+	// the night gate comes AFTER the AF layer, as the spec orders it
+	const bool bNight = State ? State->bIsNight : true;
+	if (!bNight)
+	{
 		return;
 	}
 
@@ -193,11 +303,9 @@ void ARundown::Tick(float DeltaSeconds)
 			bThru = Hit.GetActor() != Prey;
 		}
 		LogLine(FString::Printf(TEXT("STRIKE seg %d d=%.1f%s%s"), SegIdx, D,
-		                        (Strikes >= 3) ? TEXT(" savor") : TEXT(""),
+		                        (StrikesNow() >= 3) ? TEXT(" savor") : TEXT(""),
 		                        bThru ? TEXT(" THRU-WALL") : TEXT("")));
-		// TODO(0.8): GameState.strike(player). For the 0.7 brain demo:
-		// count it, reset to the anchor, rearm.
-		++Strikes;
+		if (State) { State->Strike(Prey); }
 		StrikeCooldown = 3.0f;
 		SetActorLocation(SegmentAnchors[SegIdx]);
 		bWarned = false;
@@ -206,8 +314,13 @@ void ARundown::Tick(float DeltaSeconds)
 	{
 		bWarned = true;
 		LogLine(FString::Printf(TEXT("WARN seg %d d=%.1f%s"), SegIdx, D,
-		                        (Strikes >= 3) ? TEXT(" savor") : TEXT("")));
+		                        (StrikesNow() >= 3) ? TEXT(" savor") : TEXT("")));
 	}
+}
+
+int32 ARundown::StrikesNow() const
+{
+	return State ? State->Strikes : 0;
 }
 
 void ARundown::LogLine(const FString& Text) const

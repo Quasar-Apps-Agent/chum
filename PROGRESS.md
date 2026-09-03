@@ -56,8 +56,17 @@ through Phase 0.)
       in simulate: WARN d=6.1 once, RELOCATE at the 50s flip, zero false
       strikes. AF states (tally contract/cool/crossing/dead-room hold)
       attach with GameState in 0.8 — marked TODO(0.8) in source
-- [ ] 0.8 P2+P3 — state/saves (v16 SaveGame mirroring _save_dict) + the
-      loop (bench capture, schedule clock, Harriet freeze)
+- [x] 0.8a State core: URestorationState (GameInstanceSubsystem) with the
+      brain-relevant fields, Strike() retake economy core, InDeadRoom, v16
+      URestorationSaveGame + round-trip verified; THE AF LAYER ported into
+      ARundown — full arc proven in simulate: approach 0.8 m/s → loom 1.2m
+      ("the jaw works its lever") → recording cutoff → taught 4s cool →
+      STRIKE af tally-cool → hidden until the next contract. Two spec-order
+      bugs caught: night gate must sit BELOW the AF layer; the visible gate
+      guards cool re-arm (both exactly as rundown.gd orders them)
+- [ ] 0.8b P2+P3 remainder: paper economy + stations, bench capture loop,
+      retake presentation, Harriet freeze, screening + assist, day/night
+      cycle driving is_night (replacing test scaffolds)
 - [ ] 0.9 Harness: Gauntlet/functional-test maps, three bots, invariant
       parser reading the same logs; I01/I02/I22/I06 green in UE
 - [ ] 0.10 PHASE GATE: parity slice — one room, Chum encounter, saves,

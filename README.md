@@ -909,3 +909,20 @@ tickable world subsystems do not tick in simulate worlds — timers do.
 The verification run reads like the spec: stand at the anchor, warn
 once at 6.1m, hold, and when the show goes to break — move. First
 C++ compile of the project: 42 seconds, clean.
+
+## Commit 082 · UNIT 0.8a · THE CONTRACT KEEPS ITS WORD IN C++
+URestorationState stands: the GameInstance subsystem with the brain's
+fields, the retake economy core (strikes, takes, dailies, full sheet
+at four), the dead-room rectangle, and a v16 save whose round-trip
+came back with its strikes intact. The AF layer crossed into the
+Rundown: on the tally he shows and pours to the 1.2m loom; the log
+speaks the jaw line; when the recording dies the taught cool runs
+its four seconds; and the strike that follows is arithmetic, never
+betrayal — then he is hidden until the next contract, and the log
+falls silent, which is the correct sound. Porting taught twice more
+why the code is the spec: the night gate belongs BELOW the AF layer
+(my tidier order silently killed the whole branch), and Godot's
+visible flag is load-bearing (without it the cool re-armed forever).
+Both fixed by putting the lines back where rundown.gd always had
+them. Remaining in 0.8b: paper, stations, the bench loop, Harriet's
+freeze, the real day/night driver.
