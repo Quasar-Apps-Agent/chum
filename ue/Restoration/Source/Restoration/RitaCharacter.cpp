@@ -1,4 +1,5 @@
 #include "RitaCharacter.h"
+#include "RestorationInteractable.h"
 #include "AIController.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -95,7 +96,16 @@ void ARitaCharacter::Interact()
 	Q.AddIgnoredActor(this);
 	if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_Visibility, Q))
 	{
-		LogLine(FString::Printf(TEXT("INTERACT hit %s"), *GetNameSafe(Hit.GetActor())));
+		if (IRestorationInteractable* I = Cast<IRestorationInteractable>(Hit.GetActor()))
+		{
+			LogLine(FString::Printf(TEXT("INTERACT %s :: %s"),
+			                        *GetNameSafe(Hit.GetActor()), *I->GetPrompt()));
+			I->Interact(this);
+		}
+		else
+		{
+			LogLine(FString::Printf(TEXT("INTERACT hit %s"), *GetNameSafe(Hit.GetActor())));
+		}
 	}
 }
 
@@ -137,7 +147,7 @@ void ARitaCharacter::LogLine(const FString& Text) const
 {
 	const FString Path = FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("decision_log.txt"));
 	FFileHelper::SaveStringToFile(Text + LINE_TERMINATOR, *Path,
-	                              FFileHelper::EEncodingOptions::AutoDetect,
+	                              FFileHelper::EEncodingOptions::ForceUTF8WithoutBOM,
 	                              &IFileManager::Get(), FILEWRITE_Append);
 	UE_LOG(LogTemp, Log, TEXT("%s"), *Text);
 }

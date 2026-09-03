@@ -328,7 +328,7 @@ void ARundown::LogLine(const FString& Text) const
 	// the append-only decision log, exactly as the parser reads it
 	const FString Path = FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("decision_log.txt"));
 	FFileHelper::SaveStringToFile(Text + LINE_TERMINATOR, *Path,
-	                              FFileHelper::EEncodingOptions::AutoDetect,
+	                              FFileHelper::EEncodingOptions::ForceUTF8WithoutBOM,
 	                              &IFileManager::Get(), FILEWRITE_Append);
 	UE_LOG(LogRundown, Log, TEXT("%s"), *Text);
 }

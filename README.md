@@ -975,3 +975,19 @@ read back by load_log, 20 == 20 signals, 72 of 72 public vars
 documented, persist set 8 == 8. No renders this session (no Blender,
 no Unreal, no Desktop here) — Desktop copies skipped, honestly.
 Repo green on entry (HEAD == origin/main f79877c) and on exit.
+
+## Commit 086 · UNIT 0.8b-2 · THE BENCH KEEPS NO HALF-TRUTHS
+The game's core verb runs in C++: ABenchCapture, the first
+IRestorationInteractable, holds a 12-second capture in forced real
+time and drives State->bRecording — which is the switch that ARMS the
+tally contract, so the bench and the hunter are now wired to the same
+truth. The two-bench trial proved both halves in one simulate: a still
+Rita rode it to TAPE 1 · A CLEAN SIGNAL; a walking Rita crossed the
+4-metre tether and got CAPTURE ABORTED · the take is lost. Rita's
+reach ray casts the interface and speaks the prompt before it acts.
+One infrastructure lesson: the decision log picked up a UTF-16 byte
+somewhere and crashed the Python reader mid-parse; all telemetry now
+writes ForceUTF8WithoutBOM. The cloud lane's PR #7 merged the same
+day, and its §6 delta audit — 7 shape mismatches and 32 missing keys
+against my own 0.8a SaveGame — is now unit 0.8b-3, a worklist I did
+not have to write myself. Two hands, one main.

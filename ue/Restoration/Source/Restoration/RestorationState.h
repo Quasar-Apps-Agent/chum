@@ -72,11 +72,23 @@ public:
 	bool bInRetake = false;
 	int32 Strikes = 0;
 	int32 ItemsLost = 0;
+	int32 CurrentTape = 1;
+	int32 Captures = 0;
 	int32 DailySeq = 0;
 	TArray<FRestorationDaily> Dailies;
 
 	FOnRunEnded OnRunEnded;
 	FOnSheetChanged OnSheetChanged;
+	FOnSheetChanged OnNightChanged; // bool-as-int; dedicated type with 0.8b-3
+
+	void SetNight(bool bOn)
+	{
+		if (bIsNight != bOn)
+		{
+			bIsNight = bOn;
+			OnNightChanged.Broadcast(bOn ? 1 : 0);
+		}
+	}
 
 	// the dead room rect, canon: |x-19| <= 2.2 && |z-2.5| <= 2.7 (Godot
 	// meters; UE y carries Godot z per the stamping)

@@ -77,10 +77,18 @@ through Phase 0.)
       parity proven to the digit (walk 3.10 m/s, crouch 1.71, cam drop
       0.60m, eased at 12/delta as player.gd lerps it); interact reach ray
       2.6m stubbed; WASD/mouse + Ctrl/pad-B crouch + E per controls map
-- [ ] 0.8b-2 P2+P3 remainder: paper economy + stations, bench capture
-      loop + recording windows driving the tally, retake presentation,
-      Harriet freeze, day/night cycle driving is_night (replacing test
-      scaffolds), screening + assist
+- [x] 0.8b-2 The bench loop: ABenchCapture (IRestorationInteractable),
+      12s forced-real-time capture driving State->bRecording (which arms
+      the tally contract), 4m tether abort — both proven (TAPE 1 A CLEAN
+      SIGNAL + CAPTURE ABORTED); Rita's reach ray dispatches the interface;
+      SetNight broadcast added. Logging forced UTF-8 (0xff BOM crashed the
+      py reader). CurrentTape/Captures in state
+- [ ] 0.8b-3 State parity: apply ue/PORT-NOTES-STATE.md §6 deltas to the
+      v16 SaveGame (7 shape mismatches inc. Paper->TMap, Signatures->array;
+      32 missing keys; Mode/CurrentTape defaults) — the save's semantic
+      fields must match the spec exactly
+- [ ] 0.8b-4 P3 remainder: paper economy + stations + respawn, retake
+      presentation, Harriet freeze, real day/night cycle, screening + assist
 - [ ] 0.9 Harness: Gauntlet/functional-test maps, three bots, invariant
       parser reading the same logs; I01/I02/I22/I06 green in UE
 - [ ] 0.10 PHASE GATE: parity slice — one room, Chum encounter, saves,

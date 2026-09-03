@@ -12,7 +12,8 @@ eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 les.load_level("/Game/Greybox")
 
 ## clear any previous decision log so the read is this run's evidence
-LOG = os.path.join(unreal.Paths.project_saved_dir(), "decision_log.txt")
+import os as _o
+LOG = _o.path.join(_o.path.dirname(_o.path.dirname(_o.path.abspath(__file__))), "Restoration", "Saved", "decision_log.txt")
 if os.path.exists(LOG):
     os.remove(LOG)
 
