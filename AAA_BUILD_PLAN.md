@@ -28,8 +28,10 @@ polish, audio, performance, packaging.**
 5. Close out: tick the box in `PROGRESS.md`, append a commit-style entry to
    `README.md` (what, why, what broke, what's proven), copy current renders to
    `~/Desktop/chum-head-current.png` / `chum-ingame-current.png` (or the
-   subject-appropriate names), and stop. Small, verified, shippable increments
-   beat heroic half-done rewrites every time.
+   subject-appropriate names), then `git add -A && git commit` (message = the
+   unit name + one-line result) and `git push` to
+   `https://github.com/Quasar-Apps-Agent/chum` (auth is in the keychain).
+   Small, verified, shippable increments beat heroic half-done rewrites.
 
 Session budget: ONE unit. If a unit turns out to be >2 hours of work, split it
 into sub-boxes in `PROGRESS.md`, finish the first sub-box, and stop clean.
