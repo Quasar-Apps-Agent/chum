@@ -1,0 +1,26 @@
+# RESTORATION · COMPARATIVE STUDY (FNAF, TJOC, and the viral wave)
+Method: what each did RIGHT, distilled to transferable principles, then sorted into ADOPTIONS (with build actions) and REFUSALS (with the law each protects). Sources: current pages and coverage of the titles named, checked this week.
+
+## I · FNAF, THE ORGAN BANK
+What it did right, precisely: 1) THE ATTENTION ECONOMY. Scarce senses, scarce power, one chair: the game is deciding what you can afford to look at, on a clock. Fear lives in the allocation, not the animatronic. 2) READABLE ESCALATION. Each threat has a temperament and tells; mastery is learnable, nights are ritual escalation. 3) THE INTERFACE IS THE GAME. Diegetic cameras, doors, and meters; no abstract HUD between the player and dread. 4) LORE BY SCARCITY. Fragments in minigames and newspapers fed a decade of communal theorycraft; the community's assembly WAS the marketing. 5) CHARACTER AS ENGINE. Designs strong enough to carry theory, art, and merch. 6) FREE-FIRST ENTRY and short runtimes made every streamer a distributor.
+What we refuse from it: the jumpscare kill-loop as the retention engine. Repetition-by-death is a startle economy; our budget holds one. Our retention is obligation plus compounding dread interest, and our deaths are authored choices, never resets.
+
+## II · THE JOY OF CREATION (the closest cousin, now in our exact engine)
+TJOC began as the fan game widely held to be the scariest of them all and is now an official Fanverse release, rebuilt in UNREAL ENGINE 5, five levels each a distinct blend of free-roam and sit-and-survive, with a siege built on braided resources (fuses, per-camera battery, flashlight, mains). Lessons: 1) PER-LEVEL MECHANICAL IDENTITY: every level owns a verb-texture. Our five days already converge on this via the dread curve; it is now an audit requirement, not a hope. 2) THE RESOURCE BRAID: peak pressure comes from two or more attention demands sharing one clock. Our premiere incidents must be tuned to braid, never queue. 3) BLESS THE FANS: the Fanverse pipeline turned the community's best into canon; our ARG and shard-map policy should be drafted expecting fan works, early and warmly. 4) STREAMER CARE AS A FEATURE: TJOC shipped a bitrate-friendly setting in a DEMO. Grain and CRT mash under compression; we add a streamer mode (compression-kind grain, overlay-safe HUD margins) to the booth backlog. 5) The burned mascot's power validates the After-Fire body: damage reads as history, and history is scarier than teeth.
+
+## III · THE MEDIATED-EYE CLUSTER (our nearest lineage, and it is hot)
+Content Warning made FILMING THE HORROR the core verb, engineered explicitly to go viral: the footage is the score. The Exit 8 made the NOTICING GAME the entire product: one corridor, spot the anomaly, built in nine months, spawned a genre and a feature film. Iron Lung made seeing-only-through-instruments the whole terror. Amanda the Adventurer made the tape itself answer back. RESTORATION's bench capture, tell-table, loupe, and scope are this cluster's grammar, executed with authored rigor instead of randomness. Marketing should say the lineage out loud: YOU WATCH THROUGH MACHINES, AND THE MACHINES ARE HONEST.
+
+## IV · THE SLOW-BURN PROOFS
+Mouthwashing: low-poly, narrative-first, its darkest truths living between the lines, and it went viral on exactly that restraint: the Shard Model at market scale. The PS1 wave and Chilla's Art prove aesthetic COMMITMENT outsells fidelity: our crafted-not-photoreal bible is commercially validated, not a compromise.
+
+## V · THE CLIP ECONOMY (how virality actually works now)
+Thirty seconds, one frame legible, arc complete: that is the unit of spread. Exit 8's single hallway is clip-perfect by design. Our engineered clippables, named so trailers and creators find them: the first doorway fold; THE TALLY COOLS with him standing in it; the countdown expiring at SAFE WHILE LIT; the bell; the dossier's WARNING page; Harriet doubled at the break; THE LEDGER, READ ALOUD. Demo-first (Tape 1) is the FNAF-proven top of funnel and stands.
+
+## ADOPTIONS (build actions)
+A1 Streamer mode to booth backlog (compression-kind grain, HUD safe margins, capture-clean toggle). A2 Premiere braid audit: at each pressure peak, at least two simultaneous demands; add to QA as QA-51. A3 Per-day verb-texture audit against the dread curve; any day without a new texture is a defect. A4 Clip ledger adopted into trailer beats (this section is the source of record). A5 Fan-content policy drafted before launch, generous by default, Fanverse-shaped. A6 Demo scope reaffirmed as the funnel.
+
+## REFUSALS (and the law each protects)
+Jumpscare kill-loop retention (the violation budget; deaths are authored). Randomized anomalies (the noticing game requires the player to be RIGHT; drift stays authored and monotonic). Co-op (solitude is load-bearing; the presence spec). Procedural levels (the building is a character; geography is memory). Gore-forward marketing (the broadcast-body idiom; graves are not previews).
+
+One line to keep: the market just spent two years proving that our exact instincts, mediated seeing, noticing, restraint, and community assembly, are not niche. They are the current shape of viral. We are not chasing this wave; we are already standing in it, with laws.

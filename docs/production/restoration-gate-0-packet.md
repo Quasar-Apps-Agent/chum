@@ -22,3 +22,6 @@ DECISION: FABRICATE (issue the RFQ) · IN-ENGINE FOOTAGE · signed ________ date
 
 ## ON SIGNING
 Signed memos go in docs/ as gate-0-signed.md. M0's remaining exit items then read: Spike 2 result, the soak scorecards, puppet quotes requested, Merle breakdown released, and the greybox walk, which v0.9 already exceeds. Week one of the plan's first thirty days is, as of this packet, complete on paper.
+
+## ANNOTATION (Session 67)
+Memo 2 is decided by the author's word: UNREAL 5, assets in BLENDER; the Godot prototype stands as executable specification (first boot clean, see docs/telemetry). The signature line remains for the record. Spike 2 reframes as routine perf validation. Memos 1, 3, and 4 remain open.

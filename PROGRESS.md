@@ -62,8 +62,32 @@ through Phase 0.)
 - [ ] 2.9 Cast animation sets
 - [ ] 2.10 PHASE GATE: lineup renders + captures
 
-## PHASE 3 — The Studio
-- [ ] 3.0 ENUMERATE rooms from world_builder.gd + canon docs into boxes here
+## PHASE 3 — The Studio (enumerated from docs/canon/restoration-room-bible.md;
+per room: light family per lighting bible, I/L/D object budget, drift hooks,
+web tie, Megascans surfaces + Fab/PolyHaven props + bespoke pieces, Lumen
+pass, collision/nav, capture review. Taxonomy QA each room: QA-55 prompt
+discipline, QA-56 drift=dressing-only, QA-57 one hero object max.)
+- [x] 3.0 ENUMERATE — done by the Room Bible (all twenty below)
+- [ ] 3.1 ENTRY (threshold; coat pegs drift ground zero; 1/0/8)
+- [ ] 3.2 REC ROOM (the hearth; warmest light in the game; 2/1/14)
+- [ ] 3.3 KITCHEN (Merle's nation; kettle is a real light; 1/1/12)
+- [ ] 3.4 DORMS (five doors, three slept-in; blank name card; 1/1/10)
+- [ ] 3.5 YARD (the only sky; tower light; 0/1/8)
+- [ ] 3.6 SHED (tools that predate everyone; 1/1/6)
+- [ ] 3.7 CORRIDOR (the spine; authored light gaps; 1/0/6)
+- [ ] 3.8 TAPE LIBRARY (chapel of holdings; skip cluster; 2/2/16)
+- [ ] 3.9 BENCH ROOM (Rita's altar; drift FORBIDDEN; 3/1/8)
+- [ ] 3.10 CLIMATE (the lungs; gauge glow; 1/1/6)
+- [ ] 3.11 TRANSMITTER HALL (the plant; mains organ note; 2/1/10)
+- [ ] 3.12 DEAD ROOM (the one dark hide; mattest room; 1/1/3)
+- [ ] 3.13 FIRE CORRIDOR (the scar; the wake begins here; 1/1/5)
+- [ ] 3.14 STAGE HALL (anticipation as architecture; 0/1/6)
+- [ ] 3.15 STUDIO A (the church; Chum's mark; little door; 3/2/18)
+- [ ] 3.16 PATCH BAY (Vess country; the cascade panel; 3/2/12)
+- [ ] 3.17 CONTROL (the marshal's corridor of record; 1/2/6)
+- [ ] 3.18 MASTER CONTROL (the show's eye; monitor wall; 3/2/12)
+- [ ] 3.19 GREEN ROOM (Harriet's parlor; two dead bulbs, always; 2/2/10)
+- [ ] 3.20 SCENE DOCK (the confessional; THE SODIUM LIGHT lives here; 3/3/14)
 - [ ] 3.FINAL PHASE GATE: full-studio walkthrough captures + soaks
 
 ## PHASE 4 — Puzzles & Functionality

@@ -59,3 +59,6 @@ Fire tape ends without a sting. The glimpse carries no sting. The warm unit make
 
 ## ADDENDUM · SLOTS S17-S19 (c043)
 S17 AF FOOTFALL: sub-heavy single hit, wood-through-floor, interval-driven; the current thunk stands in. S18 THE FOLD: dry frame creak, 2.2 s envelope, no sting. S19 THE CROSSING BED: the sign-off playing through wall filters, phase-drifting by room; his footfalls at doubled cadence layer over it. Silence ledger extension: every death scene ends in at least 1.5 s of authored silence before the next toast; the ledger reading at credits is unscored.
+
+## ADDENDUM · THE TWO VOICES (S20-S24, per the motion-and-sound doctrine)
+S20 AF WOOL GROAN: wet felt under load, leather-adjacent, pitched down; plays on direction commits, never on stops. S21 AF ARMATURE: deep metal flex, hull-tick spacing; interior only. S22 OCCLUSION PRESENCE: under 3 m, reverb sends duck and a 200 Hz bloom rises; the room loses a him-shaped space. S23 REC SYNC HUM: faint mains alignment while the tally burns. S24 THE WAKE BLEED: the game's first full-range audio emerging from a band-limited source at the fire tape's end; one use, ever. Governing law restated for the mix chair: BAND-LIMITED IS MEMORY, FULL-RANGE IS PRESENT; no pre-fire asset may ship full-range, no After-Fire asset may ship band-limited, and the strike remains nearly silent under the death-silence rule.

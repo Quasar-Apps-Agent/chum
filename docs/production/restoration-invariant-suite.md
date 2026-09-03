@@ -46,3 +46,5 @@ I27 DEATHS ARE IDEMPOTENT · law: mark_casualty for a taken name is a no-op; no 
 I28 THE LEDGER NEVER LIES · law: every epilogue reading matches the binder page exactly, names and causes · test: string-compare at credits.
 I29 CLEAN HANDS ARE SILENT · law: zero casualties and zero rows produce no reading and file A27 once · S0 if any reading text appears on a clean run.
 I30 META-SILENCE HOLDS AT SCALE · law: no death, ending 0 included, produces a mid-play achievement toast; the once-ever moment still has no entry anywhere new · build check extended over the casualty files.
+
+I31 CROUCH DOES NOT HIDE. Law: no hunter or director code path reads player posture; no footstep channel exists to muffle. Test: grep-level audit plus a soak with a crouch-walking bot showing identical coverage response. Crouch is a body verb; concealment remains the two hides only.

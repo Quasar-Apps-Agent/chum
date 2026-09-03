@@ -72,3 +72,11 @@ QA-47 Every ending's credits open with THE LEDGER, READ ALOUD when anything is i
 QA-48 Demo build: no death is reachable, no casualty field survives in the save, achievements stay dark.
 QA-49 H2: after the rejected viewing, the block offers the splice with the label disclosed; performing it mints a daily immediately and the NEXT break doubles her; she persists on set as scenery with one line forever; the double rebuilds after save and load.
 QA-50 Seance grief: with Harriet dead, frame 14 reads PAUSED PROPERLY; with Merle dead, frame 28 reads SHE'S HERE NOW; every reading that names Harriet also carries TRANSITION UNRESOLVED.
+QA-51 Braid audit: at every premiere pressure peak, at least two simultaneous attention demands share the clock; single-threaded peaks are filed as tuning defects.
+QA-52 The fold is one authored montage timed at 2.2 s per door width; head arrives last; no procedural blending.
+QA-53 After-Fire zero-secondary sweep: no jiggle, cloth, or idle sway on the AF body in any state; the eye is the only articulation during stillness; the performance quote (frontal square plus fifteen-degree tilt) occurs only while the tally burns.
+QA-54 The audio law holds: every pre-fire source band-limited, every AF source full-range, the jaw never opens, the bell never sounds, no vocalization exists in any AF event, and the wake bleed occurs exactly once per save.
+QA-55 Prompt discipline: nothing ambient prompts; everything that prompts is stable across the run.
+QA-56 Drift audit: every drift instance resolves to the dressing tier; interactables and lore never move.
+QA-57 Hero census: no room carries more than one hero interactable.
+QA-58 Crouch honesty: toggling crouch changes camera height and speed only; hunter coverage, relocation, and noise attribution are byte-identical between a walking and a crouch-walking soak; no prompt, hint, or text ever implies crouch conceals.

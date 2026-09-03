@@ -5,9 +5,14 @@ const SPEED := 3.1
 const ACCEL := 10.0
 const MOUSE_SENS := 0.0022
 const REACH := 2.6
+## crouch per gap-audit ruling c045: a body verb, useless against him by
+## architecture — quieter only because slower; camera drops 0.6, speed 0.55x
+const CROUCH_MULT := 0.55
 
 var _pitch := 0.0
 var locked := false
+var crouching := false
+var _cam_base := 0.0
 
 @onready var cam: Camera3D = $Camera3D
 @onready var ray: RayCast3D = $Camera3D/RayCast3D
@@ -16,6 +21,7 @@ var locked := false
 func _ready() -> void:
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 	ray.target_position = Vector3(0, 0, -REACH)
+	_cam_base = cam.position.y
 
 
 func _input(event: InputEvent) -> void:
@@ -47,8 +53,11 @@ func _physics_process(delta: float) -> void:
 		return
 	if not is_on_floor():
 		velocity.y -= 12.0 * delta
+	if Input.is_action_just_pressed("crouch"):
+		crouching = not crouching
+	cam.position.y = lerpf(cam.position.y, _cam_base - (0.6 if crouching else 0.0), 12.0 * delta)
 	var input_dir := Input.get_vector("ui_left", "ui_right", "ui_up", "ui_down")
-	var wish := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized() * SPEED
+	var wish := (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized() * SPEED * (CROUCH_MULT if crouching else 1.0)
 	velocity.x = move_toward(velocity.x, wish.x, ACCEL * delta)
 	velocity.z = move_toward(velocity.z, wish.z, ACCEL * delta)
 	move_and_slide()
