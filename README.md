@@ -939,3 +939,26 @@ feeding 0.8b, and the Phase 4 mechanic enumeration), __pycache__
 ignored and untracked, and the plan gained rule 4b: tracker edits are
 code — assert your anchors, preserve the tags. The arithmetic-tripwire
 lesson from the CSV extractor, relearned in markdown.
+
+## Commit 084 · UNIT 0.8b-spec · THE LOG, READ ALOUD (cloud unit)
+A Linux session, so the CLOUD-OK lane per rule 0: no Blender, no Unreal,
+no captures — the unit was the transcription. game_state.gd is now
+spelled out in ue/PORT-NOTES-STATE.md: the v16 _save_dict as a 55-key
+table in written order (type, default, NEW GAME outcome), the four
+record shapes (a signature can say TOMORROW; a daily's take can be -1;
+a casualty's epitaph is stored under `line`), the 15 keys the demo
+scrubs, the per-key paper merge on load, and the settings.cfg store
+that is not the log. Twenty signals with their emitters and every
+connector, including the three raw emits from other scripts that the
+delegates must allow. Section 8 is the honest part: eighteen deltas
+between 0.8a's C++ skeleton and the schema — Paper, Signatures,
+Captures and LelandAnswers typed as counts where the spec keeps
+records and membership; Mode defaulting to MATINEE; items_lost capped
+at 6 where the code says 7 (LOUPE unreachable, ng_relic off by one);
+thirty-two keys not yet declared; the round-trip that compared strikes
+alone. Verification was a script, not a reading: the doc's key set is
+asserted equal to _save_dict's in order, load_log reads all 55, the
+signal set is the 20 declared, and the carry audit is derived from
+reset_new_game — which caught my own misread (presigned_seen and
+dock_done DO reset) before the tick. Desktop copies: none to make; no
+renders were produced. Repo green in and out.

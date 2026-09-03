@@ -66,10 +66,13 @@ through Phase 0.)
       STRIKE af tally-cool → hidden until the next contract. Two spec-order
       bugs caught: night gate must sit BELOW the AF layer; the visible gate
       guards cool re-arm (both exactly as rundown.gd orders them)
-- [ ] 0.8b-spec [CLOUD-OK] Transcribe the FULL v16 _save_dict schema
-      (all fields, types, defaults) + game_state.gd public field/signal
-      inventory into ue/PORT-NOTES-STATE.md — the 0.8b implementation
-      checklist, pure text work from the Godot source
+- [x] 0.8b-spec [CLOUD-OK] v16 _save_dict schema (55 keys, types, defaults,
+      NEW GAME carry audit, 4 record schemas, 15-key demo scrub) + full
+      game_state.gd inventory (15 runtime fields, settings.cfg, 45 methods,
+      20 signals w/ emitters+consumers) in ue/PORT-NOTES-STATE.md; §8 is the
+      0.8b delta list vs 0.8a C++ (18 items — Paper/Signatures/Captures/
+      LelandAnswers typed as counts, 32 keys missing, items_lost cap 6 vs 7,
+      Mode/tape defaults). Script-verified: doc key set == _save_dict
 - [ ] 0.8b P2+P3 remainder: paper economy + stations, bench capture loop,
       retake presentation, Harriet freeze, screening + assist, day/night
       cycle driving is_night (replacing test scaffolds); pawn feel parity
