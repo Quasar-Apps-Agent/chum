@@ -36,3 +36,13 @@ I22 Heard noise is attributable. LAW: every relocation-toward-noise names its ca
 ## F · THE HARNESS PLAN (machine-side)
 Headless Godot runner with three bots: WANDERER (random legal movement), CHECKER-BOT (monitor camping), FAIL-BOT (premiere: ignores every incident, fails every cue thrice). Runs: 4-hour night soak (I01, I02, I21), full-run matrix per ending (I13, I16 to I19), premiere soak (I03, I05, I06). Parsers over coverage_log, liveness_log, premiere_log emit a single INVARIANTS.txt scorecard per build. CI cadence: every zip before it is handed to a tester; the scorecard staples to the milestone gates (3.7 / 4.0 / 4.2) alongside the Dread Ledger.
 Filing: violations use the protocol's severity language; S0 (scarcity contracts, save corruption) stops the line.
+
+## ADDENDUM · INVARIANTS I23-I30 (the after-fire and the ledger)
+I23 NO STRIKE WHILE LIT · law: recording true forbids GameState.strike from the hunter · test: soak bot captures with him adjacent for 10 minutes · telemetry: any AF strike log line during recording is S0.
+I24 THE FOLD IS PAID · law: no AF door transit without the 2.2 s hold · test: position-delta audit across door radii in the coverage log.
+I25 DEAF TO THE DEAD ROOM · law: noise events originating inside the bounds never alter his heard-state · test: bot signs and slams inside; his target must not move.
+I26 ONE COOL TEACHES · law: the 4.0 s cool occurs at most once per save · telemetry: grep the teaching line count.
+I27 DEATHS ARE IDEMPOTENT · law: mark_casualty for a taken name is a no-op; no double entries, no double toasts · test: force both Vess triggers in sequence.
+I28 THE LEDGER NEVER LIES · law: every epilogue reading matches the binder page exactly, names and causes · test: string-compare at credits.
+I29 CLEAN HANDS ARE SILENT · law: zero casualties and zero rows produce no reading and file A27 once · S0 if any reading text appears on a clean run.
+I30 META-SILENCE HOLDS AT SCALE · law: no death, ending 0 included, produces a mid-play achievement toast; the once-ever moment still has no entry anywhere new · build check extended over the casualty files.

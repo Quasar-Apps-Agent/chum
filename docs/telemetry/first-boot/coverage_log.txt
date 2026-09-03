@@ -1,0 +1,4 @@
+[day 1 day] SESSION OPEN · restored counters m=0.0 mv=0.0 st=0.0
+[day 1 night] RELOCATE sprinter-bias -> segment 0
+[day 1 day] SESSION OPEN · restored counters m=0.0 mv=15.1 st=0.0
+[day 1 night] RELOCATE toward heard noise at (5, 0, -4) -> segment 0

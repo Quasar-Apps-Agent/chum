@@ -24,16 +24,10 @@ func _ready() -> void:
 	_mat.set_shader_parameter("tbc_on", 1.0 if GameState.tbc_enabled else 0.0)
 	quad.material = _mat
 	screen.mesh = quad
+	screen.position.z = 0.02  ## just proud of the bezel plane: inset glass
 	add_child(screen)
-	var frame := MeshInstance3D.new()
-	var fbox := BoxMesh.new()
-	fbox.size = Vector3(1.9, 1.46, 0.14)
-	var fmat := StandardMaterial3D.new()
-	fmat.albedo_color = Color(0.09, 0.08, 0.06)
-	fbox.material = fmat
-	frame.mesh = fbox
-	frame.position = Vector3(0, 0, -0.08)
-	add_child(frame)
+	## the cabinet: a real CRT shell — bezel, knobs, power lamp (prop_kit.gd)
+	add_child(PropKit.crt_shell(quad.size.x, quad.size.y))
 	var slate := Label3D.new()
 	slate.text = slate_text
 	slate.font_size = 22

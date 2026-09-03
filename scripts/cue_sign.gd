@@ -18,6 +18,23 @@ func _ready() -> void:
 	box.material = _mat
 	mesh.mesh = box
 	add_child(mesh)
+	## the housing: a metal surround and a hood, like every studio sign
+	var frame_mat := PropKit.metal("signframe", Color(0.2, 0.2, 0.22))
+	var surround := MeshInstance3D.new()
+	var sb := BoxMesh.new()
+	sb.size = Vector3(1.62, 0.67, 0.1)
+	sb.material = frame_mat
+	surround.mesh = sb
+	surround.position = Vector3(0, 0, -0.03)
+	add_child(surround)
+	var hood := MeshInstance3D.new()
+	var hb := BoxMesh.new()
+	hb.size = Vector3(1.66, 0.06, 0.3)
+	hb.material = frame_mat
+	hood.mesh = hb
+	hood.position = Vector3(0, 0.36, 0.06)
+	hood.rotation.x = -0.15
+	add_child(hood)
 	_label = Label3D.new()
 	_label.text = sign_text
 	_label.font_size = 44

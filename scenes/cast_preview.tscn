@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c6fna2tojuh5e"]
+
+[ext_resource type="Script" path="res://scripts/cast_preview.gd" id="1_cast"]
+
+[node name="CastPreview" type="Node3D"]
+script = ExtResource("1_cast")

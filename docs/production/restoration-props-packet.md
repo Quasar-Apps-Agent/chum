@@ -20,7 +20,7 @@ LAST ENTRY, undated: "If the truth doesn't finish leaving my mouth tonight, then
 
 ## D03 · ACCESSION LEDGER · sample spread
 Spec: green-columned bookkeeping stock, multiple hands across decades. Placement: bench, always. Function: the paper economy's altar and the decision point's stage.
-Entries: "0117, GLADHOUSE 22, 2in master, GOOD, M.C." · "0118 through 0121 [absent; the numbers simply do not occur]" · "0122, GLADHOUSE 23, dub, VG, per V. Cardona the skip cluster begins here" · in green ink, older, small: "0299, UNLABELED, DO NOT BENCH, L.M." · the final printed line before blank stock: authored to be the presigned page's site.
+Entries: "0117, GLADHOUSE 22, 2in master, GOOD, M.C." · "0118 through 0121 [absent; the numbers simply do not occur]" · "0122, GLADHOUSE 23, dub, VG, per V. Keys the skip cluster begins here" · in green ink, older, small: "0299, UNLABELED, DO NOT BENCH, L.M." · the final printed line before blank stock: authored to be the presigned page's site.
 
 ## D04 · THE CLIPPING · Chillicothe Courier, October 1974
 Spec: newsprint, sun-yellowed, one fold, kept behind shrine glass in REC. Function: Merle's monologue, corroborated by a document that almost fits.

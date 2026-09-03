@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dfjf453hdtxmq"]
+
+[ext_resource type="Script" path="res://scripts/arm_preview.gd" id="1_arm"]
+
+[node name="ArmPreview" type="Node3D"]
+script = ExtResource("1_arm")

@@ -69,3 +69,6 @@ One tuning decision you are ready to make today. One question for the next build
 
 ## 9 · DREAD LEDGER QUICK PASS (optional, end of session)
 Score 1 to 5 per domain from the rubric: Fear Architecture, Player Truth, World Coherence, Systemic Honesty, Craft Surface, Sound, Performance Feel, Endings Weight. The prototype gates at 3.7 average for M-milestone purposes; note the two lowest and stop there.
+
+## ADDENDUM · PROBES P17-P26 (the after-fire and the ledger)
+P17 During your first lit approach, what did you look at: the countdown, the eye, or him? P18 Did the fold read as fair counterplay or as leash? P19 First cool: did the teaching line change your next capture's setup? P20 Did you find the dead room before or after you needed it? P21 Which Vess kindness did you perform, and did you feel the other grave open? P22 At the fader: whose hand, and how long did you hesitate? P23 The crossing: reached, caught, or late, and was late's consequence legible? P24 Did any death feel unauthored (random) rather than signed? Name it if so; that is a design failure by Law 7. P25 Did the ledger reading at credits land as accounting or as accusation? P26 If you got A27: did clean hands feel chosen or accidental?

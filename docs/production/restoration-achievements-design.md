@@ -40,3 +40,6 @@ A01 to A05 are the first hour and should sit near 90 percent. A18 will out-earn 
 
 ## ENGINE DELTA (Commit 030 candidate)
 achievements.gd autoload: unlock(id) idempotent, user://achievements.cfg, deferral queue with the two flush gates, a plain signal for the eventual GodotSteam setAchievement bridge (id table above is the API names), disabled under DEMO. Prop read-flags for A26. Estimated one commit, no new systems.
+
+## ADDENDUM (c043)
+A27 EVERYONE GOES HOME · "The reading was silence." · any ending, empty ledger, zero rows · hidden. A28 A ONE-WOMAN SHOW · "Every part, one performer." · ending 0 · hidden, and its icon is the only card in the set with a name on it. Ruling: ending 4c carries no achievement by design; peace is not a trophy. Ruling: A26 FULL ACCESSION remains at ten documents; the Peak dossier (D11) is extra credit, because completionism should not require waking him.

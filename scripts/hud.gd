@@ -44,6 +44,16 @@ func _ready() -> void:
 	_caption.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
 	_caption.modulate.a = 0.0
 	add_child(_caption)
+	_tally = Label.new()
+	_tally.add_theme_color_override("font_color", Color(0.86, 0.27, 0.2))
+	_tally.add_theme_font_size_override("font_size", 16)
+	_tally.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	_tally.offset_left = -340.0
+	_tally.offset_top = 46.0
+	_tally.offset_right = -16.0
+	_tally.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	_tally.visible = false
+	add_child(_tally)
 	_apply_text_prefs()
 	add_child(MapView.new())
 	_blackout = ColorRect.new()
@@ -71,6 +81,7 @@ func _on_blackout(alpha: float) -> void:
 var _options: OptionsPanel
 var _caption: Label
 var _pause: Control
+var _tally: Label
 
 
 func _toggle_pause() -> void:
@@ -148,6 +159,23 @@ func _walk_labels(node: Node) -> void:
 		_walk_labels(c)
 
 
+var _pl: Node3D
+
+
+func _process_tally() -> void:
+	if _pl == null:
+		_pl = get_tree().get_first_node_in_group("player")
+	if _pl and not GameState.deadroom_seen and GameState.in_dead_room(_pl.global_position):
+		GameState.deadroom_seen = true
+		GameState.toast("The room eats every sound you make. The radio, somehow, keeps its own.")
+		GameState.show_caption("[NO ECHO]")
+	if GameState.af_active and GameState.recording:
+		_tally.visible = true
+		_tally.text = "● REC · SAFE WHILE LIT · %04.1f" % GameState.recording_left
+	elif _tally.visible:
+		_tally.visible = false
+
+
 func _on_caption(text: String) -> void:
 	_caption.text = text
 	if not _base_sizes.has(_caption):
@@ -216,6 +244,12 @@ func _fill_binder() -> void:
 		"",
 		"MODE: LATE NIGHT · TBC: %s" % ("ON" if GameState.tbc_enabled else "OFF"),
 		"SIGNATURES ON FILE: %d" % GameState.signatures.size(),
+		"",
+		"CASUALTY LEDGER · %s" % ("NO ENTRIES. KEEP IT SO." if GameState.casualties.is_empty() else ""),
+	]
+	for c in GameState.casualties:
+		lines.append("  %s · %s · Day %d · %s" % [c.get("who", "?"), c.get("cause", "?"), int(c.get("day", 0)), c.get("line", "")])
+	lines += [
 		"CASTING SHEET: %d of 4 guest lines" % GameState.strikes,
 		"PRODUCER TRACK: %d" % GameState.pt,
 		"KEYS: %s" % (", ".join(GameState.keys) if GameState.keys.size() > 0 else "none"),
@@ -312,6 +346,14 @@ func _await_choice(a: String, b: String) -> String:
 
 func _roll_credits(label: String) -> void:
 	await _say("ENDING · " + label, "RESTORATION", 2.6)
+	if not GameState.casualties.is_empty() or GameState.row_casualties > 0:
+		await _say("THE LEDGER, READ ALOUD, because that is what ledgers are for:", "", 2.4)
+		for c in GameState.casualties:
+			await _say("%s · %s" % [c.get("who", "?"), c.get("cause", "?")], str(c.get("line", "")), 2.6)
+			if c.get("who", "") == "HARRIET":
+				await _say("HER CARD, HER OWN STAMP REGISTER:", "TRANSITION UNRESOLVED.", 2.4)
+		if GameState.row_casualties > 0:
+			await _say("THE 58 CLUB:", "fifty-eight, minus %d." % GameState.row_casualties, 2.6)
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	get_tree().change_scene_to_file("res://scenes/credits.tscn")
 
@@ -353,20 +395,32 @@ func _on_finale(decision: String) -> void:
 func _end_burn() -> void:
 	await _say("You work through the night.", "Reel by reel. Entry by entry.", 2.6)
 	await _say("Your hands know no other way to touch tape.", "", 2.2)
-	await _say("MERLE, in the doorway.", "No anger anywhere on her, which is the worst available outcome.", 2.8)
-	await _say("'Oh, honey. We have copies.'", "'Everyone has copies. That's what love is now.'", 3.0)
-	await _say("'There's cobbler.'", "", 2.4)
-	await _say("EPILOGUE", "The ledger, weeks later, a new hand: M. OYELARAN, INCOMING CONSERVATOR.", 3.0)
+	if GameState.is_dead("MERLE"):
+		await _say("No one comes to the doorway.", "You keep working because the alternative is the doorway.", 2.8)
+		await _say("In the kitchen, later: cobbler, cold on the counter,", "plated for two.", 3.0)
+		await _say("EPILOGUE", "The ledger, weeks later, a new hand: M. OYELARAN, INCOMING CONSERVATOR. Beneath it, smaller: THE KITCHEN LIGHT WAS ON. NOBODY HAD EATEN.", 3.4)
+	else:
+		await _say("MERLE, in the doorway.", "No anger anywhere on her, which is the worst available outcome.", 2.8)
+		await _say("'Oh, honey. We have copies.'", "'Everyone has copies. That's what love is now.'", 3.0)
+		await _say("'There's cobbler.'", "", 2.4)
+		await _say("EPILOGUE", "The ledger, weeks later, a new hand: M. OYELARAN, INCOMING CONSERVATOR.", 3.0)
 	GameState.mark_ending("THE BURN")
 	await _roll_credits("3 · THE BURN")
 
 
 func _end_producer() -> void:
 	await _say("The premiere goes out clean.", "The club weeps with joy, in rows.", 2.6)
+	if GameState.is_dead("VESS"):
+		await _say("In the office you inherit: a chair, still warm,", "facing the monitor wall. You do not move it.", 2.8)
+	if GameState.is_dead("FLOOR MANAGER"):
+		await _say("At the first staff meeting: an empty headset on the table,", "channel open. Nobody closes it.", 2.8)
 	await _say("In resolution the puppet was never built to survive,", "it leans to the lens.", 2.6)
 	await _say("CHUM · 'There she is. Our new friend.'", "'Say it with me, everyone.'", 2.8)
 	await _say("'WELCOME HOME.'", "", 2.6)
-	await _say("MERLE · 'Now Merle is just going to watch it again.'", "", 2.6)
+	if GameState.is_dead("MERLE"):
+		await _say("No one says the welcome twice.", "It is administered by the room itself, which is worse.", 2.6)
+	else:
+		await _say("MERLE · 'Now Merle is just going to watch it again.'", "", 2.6)
 	GameState.mark_ending("THE NEW PRODUCER", true)
 	await _roll_credits("2 · THE NEW PRODUCER")
 
@@ -384,6 +438,14 @@ func _end_perform() -> void:
 	if player:
 		player.locked = true
 	retake.visible = true
+	if outcome == "caught":
+		return
+	if outcome == "one_woman":
+		await _end_zero()
+		return
+	if outcome == "signoff_4c":
+		await _end_4c()
+		return
 	if outcome == "dead_air":
 		await _end_dead_air()
 		return
@@ -395,7 +457,7 @@ func _end_perform() -> void:
 	await _say("'That's our show. That was always our show.'", "", 2.6)
 	await _say("'There's no one at home anymore. The lights are off.'", "'The children grew up. You can stop looking for them.'", 3.2)
 	await _say("'Say goodnight, Chum.'", "", 2.6)
-	if GameState.leland_answers.size() >= 5 and GameState.seance_wear <= 70.0:
+	if GameState.leland_answers.size() >= 5 and GameState.seance_wear <= 70.0 and not GameState.is_dead("LELAND"):
 		await _say("On every screen at once, inside the frame he was cropped from,", "he steps to center and is allowed to be whole.", 3.0)
 		await _say("LELAND · 'Goodnight, everyone.'", "'It's okay. Nobody's watching.'", 3.0)
 		await _say("CHUM, small, the performance finally allowed to end:", "'Goodnight, Gladhouse.'", 2.8)
@@ -407,8 +469,29 @@ func _end_perform() -> void:
 		await _say("Someone must close the house from inside.", "", 2.4)
 		await _say("RITA · 'I'll close up.'", "'Goodnight, everyone.'", 2.8)
 		await _say("The ledger's last line is in green ink, not hers:", "SHE CLOSED IT PROPERLY. FILE UNDER: SAINTS.", 3.2)
+		if GameState.is_dead("VESS"):
+			await _say("Beneath it, the same green ink, smaller:", "FILE UNDER: STAFF.", 2.8)
+		if GameState.is_dead("LELAND"):
+			await _say("Beneath everything, in pencil, because the green ink is gone from the world:", "AND THE READER, UNFILED.", 2.8)
 		GameState.mark_ending("SIGN-OFF · RITA CLOSES")
 		await _roll_credits("1B · SIGN-OFF")
+
+
+func _end_4c() -> void:
+	await _say("Every light in the building goes down in reverse order", "of the tour you walked on Day 1. Entry last.", 3.0)
+	await _say("From every speaker at once, a reading voice, patient:", "'There's no one at home anymore. The lights are off in the little house.'", 3.2)
+	await _say("'Say goodnight, Chum.'", "Fifty years late, and exactly on time.", 3.0)
+	await _say("The transmitter unclenches. The tower light, for the first time,", "goes out, and it reads as rest.", 3.0)
+	GameState.mark_ending("THE COMPLETED SIGN-OFF")
+	await _roll_credits("4c · THE COMPLETED SIGN-OFF")
+
+
+func _end_zero() -> void:
+	await _say("The show runs whole. Every part, one performer.", "The rows applaud on the mark you taught them by dying politely near it.", 3.2)
+	await _say("At sign-off, the card:", "STARRING RITA IVORI. And beneath it: AND RITA IVORI. AND RITA IVORI.", 3.2)
+	await _say("The ledger's last page is full,", "and every line of it is a casting decision you made.", 3.0)
+	GameState.mark_ending("A ONE-WOMAN SHOW")
+	await _roll_credits("0 · A ONE-WOMAN SHOW")
 
 
 func _end_dead_air() -> void:
@@ -417,9 +500,19 @@ func _end_dead_air() -> void:
 	await _say("'The show is over.'", "'You can put the toys away.'", 2.8)
 	await _say("The erase loop propagates outward like weather.", "", 2.6)
 	await _say("You watch the archive die, reel by reel,", "your hands folded, because there is nothing left for them to save.", 3.2)
-	await _say("FINAL LEDGER LINE, steady:", "'Signed off.'", 2.8)
-	GameState.mark_ending("DEAD AIR")
-	await _roll_credits("4 · DEAD AIR")
+	if GameState.fader_self:
+		await _say("Your right arm answers slowly now, and will from here on.", "The ledger states it flatly, because that is how the ledger states things.", 3.0)
+		await _say("FINAL LEDGER LINE, steady, left-handed:", "'Signed off.'", 2.8)
+		GameState.mark_ending("DEAD AIR")
+		await _roll_credits("4b · DEAD AIR · HER HAND")
+	else:
+		if not GameState.is_dead("FLOOR MANAGER"):
+			await _say("In master control, after: the Floor Manager, headset still cued,", "arm locked in a YOU'RE ON point at a camera that faces nothing.", 3.2)
+			GameState.mark_casualty("FLOOR MANAGER", "F1 · THE FADER", "held it through sign-off; finished the way a gesture is finished")
+		await _say("FINAL LEDGER LINE, steady:", "'Signed off.'", 2.8)
+		await _say("Beneath it, another hand, block capitals:", "CUE GIVEN.", 2.6)
+		GameState.mark_ending("DEAD AIR")
+		await _roll_credits("4a · DEAD AIR · HIS HAND")
 
 
 func _wait(t: float) -> void:
@@ -434,6 +527,7 @@ func _process(delta: float) -> void:
 	if _player and _player.has_method("current_target"):
 		var t: Interactable = _player.current_target()
 		prompt.text = GameState.glyphs(tr(t.get_prompt())) if t else ""
+	_process_tally()
 	var prefix := "NIGHT · " if GameState.is_night else "DAY %d · " % GameState.day
 	clock.text = prefix + Broadcast.phase_text()
 	objective.text = GameState.objective_text()

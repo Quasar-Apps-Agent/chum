@@ -33,8 +33,23 @@ func _any_killed() -> bool:
 	return false
 
 
+var _vess_offered := false
+
+
 func interact(_player: Node3D) -> void:
 	if cascade_stage == 1:
+		if GameState.vess_insight and not GameState.vess_credited and not GameState.is_dead("VESS") and not _vess_offered:
+			_vess_offered = true
+			GameState.set_capture_status("E · restore circuit B yourself · Q · GET VESS, he knows the order")
+			while true:
+				await get_tree().process_frame
+				if Input.is_action_just_pressed("interact"):
+					break
+				if Input.is_action_just_pressed("improvise"):
+					GameState.set_capture_status("")
+					await _v2_taken()
+					return
+			GameState.set_capture_status("")
 		cascade_stage = 2
 		GameState.set_blackout(0.55)
 		GameState.toast("CIRCUIT B RESTORED · half the dark stands down. B before C, the way the panel is labeled.")
@@ -62,3 +77,17 @@ func _apply() -> void:
 		l.visible = not _control_live
 	if control_rig:
 		control_rig.set_powered(_control_live)
+
+
+func _v2_taken() -> void:
+	GameState.toast("You call down the dark corridor. He comes because someone finally asked.")
+	await get_tree().create_timer(2.8).timeout
+	GameState.toast("'B before C,' he says, 'obviously,' and both circuits close under his hands in eleven seconds.")
+	cascade_stage = 0
+	GameState.set_blackout(0.0)
+	await get_tree().create_timer(2.8).timeout
+	GameState.toast("Then he keeps walking. Past B. Past C. To circuit F, the one with the marshal's tie, bare-handed, to prove the theory.")
+	await get_tree().create_timer(3.2).timeout
+	GameState.toast("The transmitter that could not be de-energized includes him now. His outline refreshes at sixty fields a second.")
+	GameState.show_caption("[MAINS HUM, SHAPED LIKE A STANDING PERSON]")
+	GameState.mark_casualty("VESS", "V2 · THE UNCREDITED FIX", "interlaced at circuit F; nobody thanked her first")

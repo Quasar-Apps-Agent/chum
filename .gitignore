@@ -1,3 +1,11 @@
+# Godot import cache
 .godot/
-*.tmp
-export_presets.cfg.orig
+
+# Regenerable outputs — rebuild with tools/build_*.py and tools/render_*.py
+blend/*.blend
+renders/
+
+# Blender autosaves / OS noise
+*.blend1
+*.blend2
+.DS_Store

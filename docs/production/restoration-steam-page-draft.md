@@ -25,3 +25,6 @@ CONTENT NOTES: psychological horror, implied harm to prior adults, no gore, no j
 EARLY ACCESS: no. LANGUAGES AT LAUNCH: English, more per M6 scope.
 SYSTEM REQUIREMENTS: placeholder pending Spike 2 results on target hardware.
 PRESS LINE: From the maker of the Dread Ledger rubric it is scored against: a horror game about restoring something carefully, built the same way.
+
+## ADDENDUM · ASSETS NOW EXIST (c043)
+The dossier art (After-Fire Chum) is capsule-candidate as shipped and obeys scarcity: a document about him is not him. Four cast sheets are press-kit ready. New sellable truths for the copy, all implementation-backed: the tally contract (recording pins and shields), he does not fit through doors, the dead room, ten deaths that are all your signature, and the line WHAT OTHERS DISCARD, SHE RESTORES adopted from Rita's sheet. The one-startle promise stands and now coexists with a chase, which is the marketing sentence: one jump scare, and it is not the scary part.

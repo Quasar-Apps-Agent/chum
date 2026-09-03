@@ -18,16 +18,24 @@ func _ready() -> void:
 	ray.target_position = Vector3(0, 0, -REACH)
 
 
-func _unhandled_input(event: InputEvent) -> void:
+func _input(event: InputEvent) -> void:
+	## Mouse look lives in _input: no Control in the tree can eat the motion
+	## event before it reaches us. (The HUD's full-rect Control was doing
+	## exactly that — the camera never turned on any interactive run.)
 	if locked:
 		return
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		rotate_y(-event.relative.x * MOUSE_SENS * GameState.mouse_sens)
-		_pitch = clampf(_pitch - event.relative.y * MOUSE_SENS * GameState.mouse_sens, -1.3, 1.3)
+		var sens := MOUSE_SENS * clampf(GameState.mouse_sens, 0.2, 3.0)
+		rotate_y(-event.relative.x * sens)
+		_pitch = clampf(_pitch - event.relative.y * sens, -1.3, 1.3)
 		cam.rotation.x = _pitch
+
+
+func _unhandled_input(event: InputEvent) -> void:
+	if locked:
+		return
 	if event.is_action_pressed("ui_cancel"):
-		if not locked:
-			GameState.pause_requested.emit()
+		GameState.pause_requested.emit()
 	if event.is_action_pressed("toggle_tbc"):
 		GameState.set_tbc(not GameState.tbc_enabled)
 	if event.is_action_pressed("interact"):

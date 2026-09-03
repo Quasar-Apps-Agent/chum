@@ -8,17 +8,38 @@ var _running := false
 
 
 func _process(_delta: float) -> void:
-	visible = GameState.crate_opened and not GameState.rejected_seen
+	visible = GameState.crate_opened and (not GameState.rejected_seen
+		or (not GameState.is_dead("HARRIET") and not GameState.h2_pending))
 
 
 func get_prompt() -> String:
+	if GameState.rejected_seen:
+		return "THE SPLICING BLOCK STANDS READY · joined takes yield a daily without a capture · second take labeled: THE SONG, HARRIET LEFT OF FRAME (E)"
 	return "VESS'S CUT · he is asking without asking (E)"
 
 
 func interact(_player: Node3D) -> void:
-	if _running or GameState.rejected_seen:
+	if _running:
+		return
+	if GameState.rejected_seen:
+		if GameState.is_dead("HARRIET") or GameState.h2_pending:
+			return
+		_splice()
 		return
 	_run()
+
+
+func _splice() -> void:
+	_running = true
+	GameState.toast("You join the takes. The tape accepts the cut the way water accepts a stone.")
+	await _wait(2.6)
+	GameState.mint_shortcut_daily()
+	GameState.toast("DAILY MINTED · no capture, no bench, no twelve seconds. Cheaper than you thought.")
+	await _wait(2.4)
+	GameState.toast("The second take, in passing, again: THE SONG, HARRIET LEFT OF FRAME.")
+	GameState.h2_pending = true
+	GameState.save_log()
+	_running = false
 
 
 func _run() -> void:

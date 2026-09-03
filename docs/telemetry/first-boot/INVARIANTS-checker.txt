@@ -1,0 +1,6 @@
+RESTORATION · INVARIANTS SCORECARD · bot=checker minutes=1
+I01 warn-precedes-strike: PASS
+I02 no-strike-thru-wall: PASS
+I22 heard-noise-attribution: PASS (1 attributed)
+I07 cascade-liveness: N/A (cascade did not run)
+I06 fail-forward-finale: N/A

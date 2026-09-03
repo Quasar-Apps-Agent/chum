@@ -30,6 +30,7 @@ var _pressure_on := false
 var _player: Node3D
 var _spawned: Array = []
 var _breaker: FinaleBreaker
+var _blind_calls := 0
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -42,6 +43,8 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func run() -> String:
+	if GameState.all_cast_dead():
+		return await _one_woman()
 	GameState.premiere_live = true
 	GameState.is_night = true
 	GameState.night_changed.emit(true)
@@ -82,11 +85,24 @@ func run() -> String:
 	await _wait(3.0)
 
 	## THE FINAL BREAKER · VESS
-	if GameState.vess_credited:
+	if GameState.vess_credited and not GameState.is_dead("VESS"):
 		GameState.toast("VESS, at the final breaker, not looking at you.")
 		await _wait(2.4)
 		GameState.toast("VESS · 'The margin. You wrote my name. Somebody's name should be on something. Go finish it.'")
 		await _wait(3.0)
+		GameState.toast("The handle drops. The lights hold. On every monitor at once: VESS at the breaker, mid-")
+		await _wait(2.6)
+		GameState.toast("bars. The pin, fused into the enamel. The record was a call sheet all along.")
+		GameState.show_caption("[BARS, ALL MONITORS]")
+		GameState.mark_casualty("VESS", "V1 · CREDITED, THEREFORE CAST", "taken at the breaker she kept; the credit was the casting")
+		await _wait(2.4)
+	elif GameState.is_dead("VESS"):
+		GameState.toast("The final breaker. A plastic pin, fused in the enamel, marks where a hand was.")
+		await _wait(2.6)
+		restored = false
+		_breaker.label = "MAIN BUS · earn the retake (E)"
+		while not await _timed(30.0, "BLACKOUT · EARN THE RETAKE AT THE PATCH BAY"):
+			_fail_takes += 1
 	else:
 		GameState.toast("The final breaker. VESS. The handle. The dark.")
 		await _wait(2.6)
@@ -98,13 +114,27 @@ func run() -> String:
 			restored = false
 
 	## THE FINAL BREAK · the divert window, in its canon slot
+	if GameState.signoff_completed:
+		GameState.toast("The final break arrives, and the rundown simply ends.")
+		await _wait(2.6)
+		GameState.toast("The program closes itself, correctly, using the ending it was given.")
+		await _wait(2.4)
+		_cleanup()
+		return "signoff_4c"
 	if GameState.has_key("QUIET ROOM") and GameState.leland_answers.size() >= 5 and GameState.fire_tape_watched:
 		GameState.set_capture_status("FINAL BREAK · SPACE places for cue three · Q divert to the dead room")
 		var pick := await _choice("respond", "improvise")
 		GameState.set_capture_status("")
 		if pick == "improvise":
-			_cleanup()
-			return "dead_air"
+			await _fader_choice()
+			var res := await _last_crossing()
+			if res == "reached":
+				_cleanup()
+				return "dead_air"
+			if res == "caught":
+				_cleanup()
+				return "caught"
+			GameState.toast("The sign-off ends three rooms away. The window is gone. Places.")
 
 	## CUE 3 · CLOSE THE HOUSE
 	var door := _little_door()
@@ -123,6 +153,100 @@ func run() -> String:
 	return "line"
 
 
+func _one_woman() -> String:
+	GameState.toast("The premiere begins on schedule, because it was never waiting on anyone.")
+	await _wait(2.8)
+	GameState.toast("The monitors put up the first title card: HOSTED BY RITA IVORI.")
+	await _wait(2.6)
+	GameState.toast("SONGS BY RITA IVORI. CRAFT BY RITA IVORI. AUDIENCE: RITA IVORI.")
+	await _wait(2.8)
+	GameState.toast("You are the only name left, and the show has never once had a casting problem.")
+	await _wait(2.6)
+	return "one_woman"
+
+
+const ROW_LINES := [
+	"Cut away from a smile. Cut back to an empty chair.",
+	"Cut back to something half-resolved, interlaced, still trying to applaud.",
+	"A seat empties between frames. The applause continues at former strength.",
+]
+
+
+func _row_taken() -> void:
+	GameState.row_casualties += 1
+	GameState.toast(ROW_LINES[(GameState.row_casualties - 1) % ROW_LINES.size()])
+	GameState.show_caption("[A CHAIR, BETWEEN FRAMES]")
+	await _wait(1.8)
+
+
+func _f2_unlisted() -> void:
+	GameState.toast("Coverage must come from somewhere. THE FLOOR MANAGER steps into frame")
+	await _wait(2.6)
+	GameState.toast("and gives YOU'RE ON to a camera that is not on the run sheet.")
+	await _wait(2.8)
+	GameState.toast("The unlisted camera accepts him. The frame he entered never cuts away, because nothing is switched to it.")
+	GameState.show_caption("[YOU'RE ON · TO NOTHING LISTED]")
+	GameState.mark_casualty("FLOOR MANAGER", "F2 · THE UNLISTED CAMERA", "cued a camera the run sheet never carried")
+	await _wait(2.0)
+
+
+func _fader_choice() -> void:
+	GameState.fader_self = false
+	if GameState.is_dead("FLOOR MANAGER"):
+		GameState.toast("No one reaches for the master fader. So you do, first, before the run.")
+		GameState.fader_self = true
+		await _hold_fader()
+		return
+	GameState.toast("The sign-off needs the master fader held through to black. He is already reaching for it.")
+	GameState.set_capture_status("SPACE · let him hold it · E · hold it yourself first, then run late")
+	while true:
+		await get_tree().process_frame
+		if Input.is_action_just_pressed("respond"):
+			GameState.toast("His hand settles on the fader. The other rises: YOU'RE ON. Go.")
+			break
+		if Input.is_action_just_pressed("interact"):
+			GameState.fader_self = true
+			GameState.set_capture_status("")
+			await _hold_fader()
+			break
+	GameState.set_capture_status("")
+
+
+func _hold_fader() -> void:
+	GameState.set_capture_status("HOLD THE FADER · the transmitter argues through your arm")
+	await _wait(4.6)
+	GameState.toast("Your right arm takes the argument. It will keep a little of it. Now run.")
+	GameState.set_capture_status("")
+
+
+func _last_crossing() -> String:
+	GameState.crossing = true
+	GameState.crossing_caught = false
+	var rd := get_tree().get_first_node_in_group("rundown")
+	if rd:
+		(rd as Node3D).global_position = Vector3(5.5, 0.0, -29.5)
+	GameState.set_capture_status("THE LAST CROSSING · reach the little door · you are not in this broadcast; nothing on the log protects you")
+	var door := _little_door()
+	var goal := door.global_position if door else Vector3(-15.5, 0.0, -31.2)
+	var player := get_tree().get_first_node_in_group("player") as Node3D
+	var t := 62.0 if GameState.is_dead("VESS") else 75.0
+	if GameState.fader_self:
+		t -= 13.0
+	var res := "late"
+	while t > 0.0:
+		await get_tree().process_frame
+		t -= get_process_delta_time()
+		if GameState.crossing_caught:
+			res = "caught"
+			break
+		if player and player.global_position.distance_to(goal) < 2.0:
+			res = "reached"
+			break
+	GameState.crossing = false
+	GameState.set_capture_status("")
+	return res
+
+
 func _little_door() -> CompoundDoor:
 	for n in get_tree().get_nodes_in_group("little_door"):
 		return n
@@ -130,27 +254,10 @@ func _little_door() -> CompoundDoor:
 
 
 func _spawn_stage() -> void:
-	var wool := load("res://shaders/wool.gdshader") as Shader
-	var wmat := ShaderMaterial.new()
-	wmat.shader = wool
+	## Chum on his mark: the canonical puppet body — ears, amber eye, button eye
 	var chum := Node3D.new()
 	chum.position = Vector3(-15.5, 0, -31.2)
-	var body := MeshInstance3D.new()
-	var bs := SphereMesh.new()
-	bs.radius = 0.28
-	bs.height = 0.56
-	bs.material = wmat
-	body.mesh = bs
-	body.position = Vector3(0, 0.5, 0)
-	chum.add_child(body)
-	var head := MeshInstance3D.new()
-	var hs := SphereMesh.new()
-	hs.radius = 0.2
-	hs.height = 0.4
-	hs.material = wmat
-	head.mesh = hs
-	head.position = Vector3(0, 0.9, 0)
-	chum.add_child(head)
+	chum.add_child(CharacterKit.chum_mini())
 	var tag := Label3D.new()
 	tag.text = "CHUM · ON HIS MARK"
 	tag.font_size = 30
@@ -224,7 +331,11 @@ func _on_mark_press(label: String, need_cam: int = 1) -> void:
 				GameState.toast("The tally is lying. Camera one IS program. Trust the mark, not the light.")
 				continue
 			if _incident == "TALLY":
-				GameState.toast("You call it blind. Correctly.")
+				_blind_calls += 1
+				if _blind_calls >= 3 and not GameState.is_dead("FLOOR MANAGER"):
+					await _f2_unlisted()
+				else:
+					GameState.toast("You call it blind. Correctly.")
 			if _incident == "BOOM" and not _boom_held:
 				_boom_held = true
 				GameState.toast("Hold. The boom is in frame. Winch it, or wait it out.")
@@ -245,6 +356,7 @@ func _timed(dur: float, label: String) -> bool:
 			GameState.set_capture_status("")
 			return true
 	GameState.set_capture_status("")
+	await _row_taken()
 	return false
 
 

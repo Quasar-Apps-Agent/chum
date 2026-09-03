@@ -38,20 +38,17 @@ func _ready() -> void:
 	quad.material = mat
 	_screen_mat = mat
 	screen.mesh = quad
-	screen.position = monitor_position
+	# seat the live feed just proud of the bezel plane so it reads as inset glass
+	var facing := Vector3(sin(monitor_yaw), 0, cos(monitor_yaw))
+	screen.position = monitor_position + facing * 0.011
 	screen.rotation.y = monitor_yaw
 	add_child(screen)
 
-	var frame := MeshInstance3D.new()
-	var frame_box := BoxMesh.new()
-	frame_box.size = Vector3(1.8, 1.4, 0.12)
-	var frame_mat := StandardMaterial3D.new()
-	frame_mat.albedo_color = Color(0.09, 0.08, 0.06)
-	frame_box.material = frame_mat
-	frame.mesh = frame_box
-	frame.position = monitor_position + Vector3(sin(monitor_yaw), 0, cos(monitor_yaw)) * -0.08
-	frame.rotation.y = monitor_yaw
-	add_child(frame)
+	# the cabinet: a deep period CRT shell with bezel, knobs, and a power lamp
+	var shell := PropKit.crt_shell(quad.size.x, quad.size.y)
+	shell.position = monitor_position
+	shell.rotation.y = monitor_yaw
+	add_child(shell)
 
 	_no_signal = Label3D.new()
 	_no_signal.text = "NO SIGNAL"

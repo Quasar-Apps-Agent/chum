@@ -80,10 +80,12 @@ var _door_mat := StandardMaterial3D.new()
 
 
 func _ready() -> void:
-	_floor_mat.albedo_color = Color(0.26, 0.22, 0.16)
-	_wall_mat.albedo_color = Color(0.42, 0.38, 0.30)
-	_station_mat.albedo_color = Color(0.79, 0.64, 0.24)
-	_door_mat.albedo_color = Color(0.32, 0.24, 0.15)
+	## Art pass: flat greybox colors give way to procedural PBR surfaces with
+	## real relief. Same palette, textured. (See scripts/prop_kit.gd.)
+	_floor_mat = PropKit.concrete()
+	_wall_mat = PropKit.plaster()
+	_station_mat = PropKit.metal("station", Color(0.79, 0.64, 0.24))
+	_door_mat = PropKit.wood("door", Color(0.32, 0.24, 0.15))
 	for room_name in ROOMS.keys():
 		_build_room(room_name, ROOMS[room_name])
 	for d in DOORS:
@@ -95,6 +97,16 @@ func _ready() -> void:
 		_spawn_monitor(m)
 	_spawn_bench()
 	_spawn_wool_spike()
+	_spawn_library_stacks()
+	_spawn_transmitter_hall()
+	_spawn_yard_dressing()
+	_spawn_yard_ground()
+	_spawn_dead_room_felt()
+	_spawn_kitchen()
+	_spawn_green_room()
+	_spawn_scene_dock_dressing()
+	_spawn_dorms_extra()
+	_spawn_shed_interior()
 	_build_studio_dressing()
 	_build_catwalks()
 	_spawn_wall_clocks()
@@ -143,13 +155,19 @@ func _build_room(room_name: String, r: Array) -> void:
 	_wall_run(Vector3(cx, 0, cz + sz / 2.0), sx, "x")
 	_wall_run(Vector3(cx - sx / 2.0, 0, cz), sz, "z")
 	_wall_run(Vector3(cx + sx / 2.0, 0, cz), sz, "z")
-	var label := Label3D.new()
-	label.text = room_name
-	label.font_size = 96
-	label.position = Vector3(cx, 2.5, cz)
-	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	label.modulate = Color(0.85, 0.93, 0.77)
-	add_child(label)
+	PropKit.baseboard(cx, cz, sx, sz, self)
+	## The floating room names retired with the art pass; the map (M) names
+	## rooms now. (room_name still keys ROOMS for systems that need it.)
+	## One dim practical per room: Merle keeps the lights on. Barely.
+	if room_name != "YARD":
+		var prac := OmniLight3D.new()
+		prac.position = Vector3(cx, 2.75, cz)
+		prac.light_color = Color(0.95, 0.72, 0.45)
+		prac.light_energy = 0.5
+		prac.omni_range = maxf(sx, sz) * 0.75
+		prac.shadow_enabled = false
+		prac.add_to_group("practical")
+		add_child(prac)
 
 
 func _wall_run(center: Vector3, length: float, axis: String) -> void:
@@ -258,13 +276,7 @@ func _spawn_door(d: Array) -> void:
 	leaf_col.shape = leaf_shape
 	leaf_col.position = Vector3(gw / 2.0, 1.1, 0)
 	door.add_child(leaf_col)
-	var leaf := MeshInstance3D.new()
-	var leaf_mesh := BoxMesh.new()
-	leaf_mesh.size = Vector3(gw, 2.2, 0.09)
-	leaf_mesh.material = _door_mat
-	leaf.mesh = leaf_mesh
-	leaf.position = Vector3(gw / 2.0, 1.1, 0)
-	door.add_child(leaf)
+	PropKit.door_leaf(gw, 2.2, _door_mat, door)
 	add_child(door)
 
 
@@ -279,16 +291,12 @@ func _spawn_station(id: String, station_name: String, pos: Vector3) -> void:
 	shape.size = Vector3(0.5, 1.1, 0.4)
 	col.shape = shape
 	st.add_child(col)
-	var mesh := MeshInstance3D.new()
-	var box := BoxMesh.new()
-	box.size = Vector3(0.5, 1.1, 0.4)
-	box.material = _station_mat
-	mesh.mesh = box
-	st.add_child(mesh)
+	## the transmitter log, physical: a lectern, its binder, its chained pen
+	st.add_child(PropKit.lectern())
 	GameState.register_station(id, st.position)
 	var label := Label3D.new()
 	label.text = id + " LOG"
-	label.font_size = 48
+	label.font_size = 26
 	label.position = Vector3(0, 0.85, 0)
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.modulate = Color(0.89, 0.64, 0.24)
@@ -324,17 +332,33 @@ func _spawn_bench() -> void:
 	shape.size = Vector3(1.8, 1.0, 0.8)
 	col.shape = shape
 	bench.add_child(col)
-	var mesh := MeshInstance3D.new()
-	var box := BoxMesh.new()
-	box.size = Vector3(1.8, 1.0, 0.8)
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.18, 0.17, 0.15)
-	box.material = mat
-	mesh.mesh = box
-	bench.add_child(mesh)
+	## the workbench: top slab on legs, the reel deck standing on it
+	var top_mat := PropKit.wood("benchtop", Color(0.24, 0.20, 0.15))
+	var leg_mat := PropKit.metal("benchleg", Color(0.2, 0.2, 0.22))
+	var bmesh := MeshInstance3D.new()
+	var bbox := BoxMesh.new()
+	bbox.size = Vector3(1.8, 0.08, 0.8)
+	bbox.material = top_mat
+	bmesh.mesh = bbox
+	bmesh.position = Vector3(0, 0.46, 0)
+	bench.add_child(bmesh)
+	for lx in [-0.8, 0.8]:
+		for lz in [-0.3, 0.3]:
+			var leg := MeshInstance3D.new()
+			var lb := BoxMesh.new()
+			lb.size = Vector3(0.08, 0.92, 0.08)
+			lb.material = leg_mat
+			leg.mesh = lb
+			leg.position = Vector3(lx, -0.04, lz)
+			bench.add_child(leg)
+	var deck: Dictionary = PropKit.reel_deck()
+	var deck_rig := deck["rig"] as Node3D
+	deck_rig.position = Vector3(-0.45, 0.78, -0.2)
+	bench.add_child(deck_rig)
+	bench.deck_reels = deck["reels"]
 	var label := Label3D.new()
 	label.text = "THE BENCH"
-	label.font_size = 48
+	label.font_size = 26
 	label.position = Vector3(0, 1.1, 0)
 	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	label.modulate = Color(0.85, 0.93, 0.77)
@@ -415,7 +439,7 @@ func _spawn_wool_spike() -> void:
 	root.add_child(head)
 	var tag := Label3D.new()
 	tag.text = "WOOL SPIKE 001"
-	tag.font_size = 40
+	tag.font_size = 24
 	tag.position = Vector3(0, 1.65, 0)
 	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	tag.modulate = Color(0.89, 0.64, 0.24)
@@ -426,12 +450,12 @@ func _spawn_wool_spike() -> void:
 func _build_studio_dressing() -> void:
 	## The rebuilt Gladhouse set, greyboxed: carpet, cubby wall, painted house,
 	## the little door (held until Tape 5), Chum's mark, three camera pedestals.
-	var carpet_mat := StandardMaterial3D.new()
-	carpet_mat.albedo_color = Color(0.35, 0.42, 0.24)
-	_box(Vector3(-15.5, 0.02, -31.5), Vector3(6.0, 0.06, 5.0), carpet_mat)
-	var cubby_mat := StandardMaterial3D.new()
-	cubby_mat.albedo_color = Color(0.3, 0.36, 0.26)
-	_box(Vector3(-19.0, 1.0, -33.5), Vector3(3.2, 2.0, 0.5), cubby_mat)
+	_box(Vector3(-15.5, 0.02, -31.5), Vector3(6.0, 0.06, 5.0), PropKit.carpet())
+	## the cubby wall, cell by cell, some cells still holding their toys
+	var cubbies := PropKit.cubby_wall(3.2, 2.0, 4, 3, 301)
+	cubbies.position = Vector3(-19.0, 0, -33.7)
+	add_child(cubbies)
+	_collider(Vector3(-19.0, 1.0, -33.7), Vector3(3.2, 2.0, 0.5))
 	var house_mat := StandardMaterial3D.new()
 	house_mat.albedo_color = Color(0.45, 0.3, 0.2)
 	_box(Vector3(-12.2, 1.2, -33.6), Vector3(2.6, 2.4, 0.4), house_mat)
@@ -446,13 +470,7 @@ func _build_studio_dressing() -> void:
 	lc.shape = lcs
 	lc.position = Vector3(0.4, 0.6, 0)
 	little.add_child(lc)
-	var lm := MeshInstance3D.new()
-	var lmb := BoxMesh.new()
-	lmb.size = Vector3(0.8, 1.2, 0.08)
-	lmb.material = _door_mat
-	lm.mesh = lmb
-	lm.position = Vector3(0.4, 0.6, 0)
-	little.add_child(lm)
+	PropKit.door_leaf(0.8, 1.2, _door_mat, little)
 	add_child(little)
 	var mark_mat := StandardMaterial3D.new()
 	mark_mat.albedo_color = Color(0.8, 0.75, 0.6)
@@ -464,22 +482,19 @@ func _build_studio_dressing() -> void:
 	mark_label.position = Vector3(-15.5, 0.6, -31.2)
 	mark_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	add_child(mark_label)
-	var ped_mat := StandardMaterial3D.new()
-	ped_mat.albedo_color = Color(0.16, 0.16, 0.17)
+	## three cameras on their marks, every lens on Chum's mark
 	var cam_spots := [Vector3(-15.5, 0, -26.5), Vector3(-19.5, 0, -27.5), Vector3(-11.5, 0, -27.5)]
+	var chums_mark := Vector3(-15.5, 0, -31.2)
 	for i in cam_spots.size():
-		var ped := MeshInstance3D.new()
-		var cyl := CylinderMesh.new()
-		cyl.height = 1.5
-		cyl.top_radius = 0.18
-		cyl.bottom_radius = 0.3
-		cyl.material = ped_mat
-		ped.mesh = cyl
-		ped.position = cam_spots[i] + Vector3(0, 0.75, 0)
+		var ped := PropKit.camera_pedestal()
+		ped.position = cam_spots[i]
+		var aim: Vector3 = chums_mark - cam_spots[i]
+		ped.rotation.y = atan2(aim.x, aim.z)
 		add_child(ped)
+		_collider(cam_spots[i] + Vector3(0, 0.75, 0), Vector3(0.6, 1.5, 0.6))
 		var tag := Label3D.new()
 		tag.text = "CAM %d" % (i + 1)
-		tag.font_size = 32
+		tag.font_size = 24
 		tag.position = cam_spots[i] + Vector3(0, 1.8, 0)
 		tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 		tag.modulate = Color(0.89, 0.64, 0.24)
@@ -517,13 +532,6 @@ func _build_catwalks() -> void:
 	add_child(ramp)
 	_box(Vector3(-12.0, y, -25.2), Vector3(1.4, 0.1, 2.4), walk_mat)
 	_box(Vector3(-13.4, y, -27.6), Vector3(4.0, 0.1, 1.2), walk_mat)
-	var tag := Label3D.new()
-	tag.text = "CATWALKS"
-	tag.font_size = 64
-	tag.position = Vector3(-15.5, y + 1.6, -30.0)
-	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	tag.modulate = Color(0.85, 0.93, 0.77)
-	add_child(tag)
 
 
 func _spawn_wall_clocks() -> void:
@@ -552,7 +560,7 @@ func _spawn_casting_sheet() -> void:
 	sheet.add_child(mesh)
 	var tag := Label3D.new()
 	tag.text = "CASTING SHEET"
-	tag.font_size = 36
+	tag.font_size = 24
 	tag.position = Vector3(0, 0.85, 0)
 	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	tag.modulate = Color(0.76, 0.23, 0.18)
@@ -567,7 +575,10 @@ func _spawn_rundown() -> void:
 	cd.rigs = _rigs
 	add_child(cd)
 	var r := Rundown.new()
+	r.add_to_group("rundown")
 	r.rooms = ROOMS
+	for d in DOORS:
+		r.doors.append(Vector3(d[2], 0.0, d[3]))
 	r.rigs = _rigs
 	r.director = cd
 	add_child(r)
@@ -581,17 +592,46 @@ func _spawn_bed_and_dresser() -> void:
 	bcs.size = Vector3(2.0, 0.6, 1.1)
 	bc.shape = bcs
 	bed.add_child(bc)
+	## frame, mattress, blanket tucked hard, one pillow: made every morning
+	var frame_mat := PropKit.wood("bedframe", Color(0.3, 0.22, 0.14))
 	var bm := MeshInstance3D.new()
 	var bmb := BoxMesh.new()
-	bmb.size = Vector3(2.0, 0.6, 1.1)
-	var bmat := StandardMaterial3D.new()
-	bmat.albedo_color = Color(0.55, 0.5, 0.42)
-	bmb.material = bmat
+	bmb.size = Vector3(2.0, 0.24, 1.1)
+	bmb.material = frame_mat
 	bm.mesh = bmb
+	bm.position = Vector3(0, -0.14, 0)
 	bed.add_child(bm)
+	var matt := MeshInstance3D.new()
+	var mb := BoxMesh.new()
+	mb.size = Vector3(1.94, 0.2, 1.04)
+	mb.material = PropKit.fabric("mattress", Color(0.62, 0.58, 0.5))
+	matt.mesh = mb
+	matt.position = Vector3(0, 0.08, 0)
+	bed.add_child(matt)
+	var blanket := MeshInstance3D.new()
+	var blb := BoxMesh.new()
+	blb.size = Vector3(1.4, 0.06, 1.06)
+	blb.material = PropKit.fabric("blanket", Color(0.42, 0.34, 0.26))
+	blanket.mesh = blb
+	blanket.position = Vector3(0.28, 0.2, 0)
+	bed.add_child(blanket)
+	var pillow := MeshInstance3D.new()
+	var plb := BoxMesh.new()
+	plb.size = Vector3(0.4, 0.1, 0.6)
+	plb.material = PropKit.fabric("pillow", Color(0.8, 0.77, 0.7))
+	pillow.mesh = plb
+	pillow.position = Vector3(-0.72, 0.22, 0)
+	bed.add_child(pillow)
+	var headboard := MeshInstance3D.new()
+	var hbb := BoxMesh.new()
+	hbb.size = Vector3(0.06, 0.7, 1.1)
+	hbb.material = frame_mat
+	headboard.mesh = hbb
+	headboard.position = Vector3(-1.0, 0.2, 0)
+	bed.add_child(headboard)
 	var btag := Label3D.new()
 	btag.text = "RITA'S BED"
-	btag.font_size = 36
+	btag.font_size = 24
 	btag.position = Vector3(0, 0.9, 0)
 	btag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	btag.modulate = Color(0.85, 0.93, 0.77)
@@ -638,17 +678,13 @@ func _spawn_patchbay_circuits() -> void:
 	ccs.size = Vector3(1.6, 1.1, 0.6)
 	cc.shape = ccs
 	console.add_child(cc)
-	var cm := MeshInstance3D.new()
-	var cmb := BoxMesh.new()
-	cmb.size = Vector3(1.6, 1.1, 0.6)
-	var cmat := StandardMaterial3D.new()
-	cmat.albedo_color = Color(0.15, 0.16, 0.18)
-	cmb.material = cmat
-	cm.mesh = cmb
-	console.add_child(cm)
+	## the patchbay proper: cabinet, angled fascia, knobs, faders
+	var desk := PropKit.console(Vector3(1.6, 0.85, 0.6), 2, 6)
+	desk.position = Vector3(0, -0.55, 0)
+	console.add_child(desk)
 	var ctag := Label3D.new()
 	ctag.text = "PATCHBAY"
-	ctag.font_size = 44
+	ctag.font_size = 26
 	ctag.position = Vector3(0, 1.1, 0)
 	ctag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	ctag.modulate = Color(0.89, 0.64, 0.24)
@@ -664,10 +700,13 @@ func _spawn_patchbay_circuits() -> void:
 func _on_night_lighting(now_night: bool) -> void:
 	var sun := get_node_or_null("../Sun") as DirectionalLight3D
 	if sun:
-		sun.light_energy = 0.02 if now_night else 0.25
+		sun.light_energy = 0.005 if now_night else 0.07
 	var we := get_node_or_null("../WorldEnvironment") as WorldEnvironment
 	if we and we.environment:
-		we.environment.ambient_light_energy = 0.1 if now_night else 0.35
+		we.environment.ambient_light_energy = 0.03 if now_night else 0.09
+	## nights, the practicals brown out: pools shrink, corners win
+	for pr in get_tree().get_nodes_in_group("practical"):
+		(pr as OmniLight3D).light_energy = 0.28 if now_night else 0.5
 
 
 func _spawn_screening() -> void:
@@ -695,17 +734,38 @@ func _spawn_screening() -> void:
 	pcs.size = Vector3(0.6, 0.5, 0.9)
 	pc.shape = pcs
 	projector.add_child(pc)
+	## the club print's projector: body, lens toward the screen, two reels up top
 	var pm := MeshInstance3D.new()
 	var pmb := BoxMesh.new()
-	pmb.size = Vector3(0.6, 0.5, 0.9)
-	var pmat := StandardMaterial3D.new()
-	pmat.albedo_color = Color(0.2, 0.2, 0.22)
-	pmb.material = pmat
+	pmb.size = Vector3(0.5, 0.4, 0.7)
+	pmb.material = PropKit.metal("projector", Color(0.2, 0.2, 0.22))
 	pm.mesh = pmb
 	projector.add_child(pm)
+	var lens := MeshInstance3D.new()
+	var lc := CylinderMesh.new()
+	lc.top_radius = 0.06
+	lc.bottom_radius = 0.08
+	lc.height = 0.22
+	lc.material = PropKit.dark_plastic()
+	lens.mesh = lc
+	lens.rotation.z = PI / 2.0
+	lens.position = Vector3(-0.33, 0.08, 0)
+	projector.add_child(lens)
+	for rz in [-0.18, 0.18]:
+		var reel := MeshInstance3D.new()
+		var rc := CylinderMesh.new()
+		rc.top_radius = 0.16
+		rc.bottom_radius = 0.16
+		rc.height = 0.03
+		rc.radial_segments = 16
+		rc.material = PropKit.metal("filmreel", Color(0.45, 0.44, 0.4))
+		reel.mesh = rc
+		reel.rotation.z = PI / 2.0
+		reel.position = Vector3(0.05, 0.36, rz)
+		projector.add_child(reel)
 	var ptag := Label3D.new()
 	ptag.text = "PROJECTOR"
-	ptag.font_size = 36
+	ptag.font_size = 24
 	ptag.position = Vector3(0, 0.7, 0)
 	ptag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	ptag.modulate = Color(0.85, 0.93, 0.77)
@@ -732,14 +792,10 @@ func _spawn_key(id: String, display: String, pos: Vector3, label_text: String) -
 	shape.size = Vector3(0.4, 0.4, 0.4)
 	col.shape = shape
 	k.add_child(col)
-	var mesh := MeshInstance3D.new()
-	var box := BoxMesh.new()
-	box.size = Vector3(0.22, 0.1, 0.34)
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.79, 0.64, 0.24)
-	box.material = mat
-	mesh.mesh = box
-	k.add_child(mesh)
+	## a key that reads as a key, tag and all
+	var key_body := PropKit.key_prop(Color(0.79, 0.64, 0.24))
+	key_body.rotation.y = randf() * TAU
+	k.add_child(key_body)
 	var tag := Label3D.new()
 	tag.text = label_text
 	tag.font_size = 30
@@ -759,17 +815,32 @@ func _spawn_burn_loop() -> void:
 	shape.size = Vector3(1.2, 1.1, 0.8)
 	col.shape = shape
 	d.add_child(col)
+	## the erasure machine: housing, exposed coil ring, hazard stripe
 	var mesh := MeshInstance3D.new()
 	var box := BoxMesh.new()
-	box.size = Vector3(1.2, 1.1, 0.8)
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.22, 0.24, 0.28)
-	box.material = mat
+	box.size = Vector3(1.2, 0.9, 0.8)
+	box.material = PropKit.metal("degausser", Color(0.22, 0.24, 0.28))
 	mesh.mesh = box
+	mesh.position = Vector3(0, -0.1, 0)
 	d.add_child(mesh)
+	var coil_mesh := MeshInstance3D.new()
+	var ring := TorusMesh.new()
+	ring.inner_radius = 0.18
+	ring.outer_radius = 0.3
+	ring.material = PropKit.metal("coil", Color(0.5, 0.32, 0.18))
+	coil_mesh.mesh = ring
+	coil_mesh.position = Vector3(0, 0.42, 0)
+	d.add_child(coil_mesh)
+	var stripe := MeshInstance3D.new()
+	var sb := BoxMesh.new()
+	sb.size = Vector3(1.22, 0.1, 0.82)
+	sb.material = PropKit.OCHRE_MAT()
+	stripe.mesh = sb
+	stripe.position = Vector3(0, 0.15, 0)
+	d.add_child(stripe)
 	var tag := Label3D.new()
 	tag.text = "DEGAUSSER"
-	tag.font_size = 40
+	tag.font_size = 24
 	tag.position = Vector3(0, 1.05, 0)
 	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	tag.modulate = Color(0.89, 0.64, 0.24)
@@ -792,17 +863,33 @@ func _spawn_film_and_note() -> void:
 	shape.size = Vector3(0.7, 1.4, 0.7)
 	col.shape = shape
 	cab.add_child(col)
+	## flat file: body plus four drawer faces, one not quite closed
 	var mesh := MeshInstance3D.new()
 	var box := BoxMesh.new()
 	box.size = Vector3(0.7, 1.4, 0.7)
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.33, 0.3, 0.24)
-	box.material = mat
+	box.material = PropKit.metal("cabinet", Color(0.33, 0.3, 0.24))
 	mesh.mesh = box
 	cab.add_child(mesh)
+	var face_mat := PropKit.metal("drawer", Color(0.38, 0.34, 0.27))
+	for i in 4:
+		var face := MeshInstance3D.new()
+		var fb := BoxMesh.new()
+		fb.size = Vector3(0.62, 0.28, 0.03)
+		fb.material = face_mat
+		face.mesh = fb
+		## the second drawer sits proud: it will not fully close
+		face.position = Vector3(0, 0.5 - 0.33 * float(i), 0.36 + (0.03 if i == 1 else 0.0))
+		cab.add_child(face)
+		var pull := MeshInstance3D.new()
+		var pb := BoxMesh.new()
+		pb.size = Vector3(0.14, 0.03, 0.03)
+		pb.material = PropKit.dark_plastic()
+		pull.mesh = pb
+		pull.position = face.position + Vector3(0, 0, 0.03)
+		cab.add_child(pull)
 	var tag := Label3D.new()
 	tag.text = "FILM CABINET"
-	tag.font_size = 36
+	tag.font_size = 24
 	tag.position = Vector3(0, 1.1, 0)
 	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	tag.modulate = Color(0.85, 0.93, 0.77)
@@ -845,14 +932,37 @@ func _dock_body(node: Node3D, text: String, color: Color) -> void:
 	shape.size = Vector3(0.5, 0.5, 0.5)
 	col.shape = shape
 	node.add_child(col)
+	## every dock reads as equipment now: plinth, cased body, rim, brass plaque
 	var mesh := MeshInstance3D.new()
 	var box := BoxMesh.new()
 	box.size = Vector3(0.45, 0.4, 0.45)
 	var mat := StandardMaterial3D.new()
 	mat.albedo_color = color
+	mat.roughness = 0.8
 	box.material = mat
 	mesh.mesh = box
 	node.add_child(mesh)
+	var plinth := MeshInstance3D.new()
+	var pb := BoxMesh.new()
+	pb.size = Vector3(0.55, 0.07, 0.55)
+	pb.material = PropKit.dark_plastic()
+	plinth.mesh = pb
+	plinth.position = Vector3(0, -0.235, 0)
+	node.add_child(plinth)
+	var rim := MeshInstance3D.new()
+	var rb := BoxMesh.new()
+	rb.size = Vector3(0.49, 0.03, 0.49)
+	rb.material = PropKit.wood("dockrim", Color(0.3, 0.24, 0.17))
+	rim.mesh = rb
+	rim.position = Vector3(0, 0.21, 0)
+	node.add_child(rim)
+	var plaque := MeshInstance3D.new()
+	var qb := BoxMesh.new()
+	qb.size = Vector3(0.18, 0.07, 0.012)
+	qb.material = PropKit.metal("plaque", Color(0.65, 0.55, 0.35))
+	plaque.mesh = qb
+	plaque.position = Vector3(0, -0.05, 0.23)
+	node.add_child(plaque)
 	var tag := Label3D.new()
 	tag.text = text
 	tag.font_size = 28
@@ -869,9 +979,6 @@ func _spawn_dock_task() -> void:
 	task.position = Vector3(-19.5, 0.7, -38.0)
 	_dock_body(task, "CLIPBOARD", Color(0.87, 0.83, 0.72))
 	add_child(task)
-	var wool := load("res://shaders/wool.gdshader") as Shader
-	var wmat := ShaderMaterial.new()
-	wmat.shader = wool
 	for i in 6:
 		var c := DockChum.new()
 		c.idx = i + 1
@@ -884,22 +991,9 @@ func _spawn_dock_task() -> void:
 		col.shape = shape
 		col.position = Vector3(0, 0.7, 0)
 		c.add_child(col)
-		var body := MeshInstance3D.new()
-		var bs := SphereMesh.new()
-		bs.radius = 0.25
-		bs.height = 0.5
-		bs.material = wmat
-		body.mesh = bs
-		body.position = Vector3(0, 0.45, 0)
-		c.add_child(body)
-		var head := MeshInstance3D.new()
-		var hs := SphereMesh.new()
-		hs.radius = 0.18
-		hs.height = 0.36
-		hs.material = wmat
-		head.mesh = hs
-		head.position = Vector3(0, 0.82, 0)
-		c.add_child(head)
+		## generations of him, fur going gray in order: the first two units
+		## are the 1971 pilot, the rest the 1974 rebuild
+		c.add_child(CharacterKit.chum_pilot() if i < 2 else CharacterKit.chum_mini())
 		var tag := Label3D.new()
 		tag.text = "UNIT %d" % (i + 1)
 		tag.font_size = 26
@@ -972,37 +1066,11 @@ func _spawn_club() -> void:
 	col.shape = shape
 	col.position = Vector3(0, 0.8, 0)
 	m.add_child(col)
-	var wool := load("res://shaders/wool.gdshader") as Shader
-	var wmat := ShaderMaterial.new()
-	wmat.shader = wool
-	var body := MeshInstance3D.new()
-	var bs := CapsuleMesh.new()
-	bs.radius = 0.28
-	bs.height = 1.1
-	bs.material = wmat
-	body.mesh = bs
-	body.position = Vector3(0, 0.72, 0)
-	m.add_child(body)
-	var head := MeshInstance3D.new()
-	var hs := SphereMesh.new()
-	hs.radius = 0.17
-	hs.height = 0.34
-	hs.material = wmat
-	head.mesh = hs
-	head.position = Vector3(0, 1.42, 0)
-	m.add_child(head)
-	var apron := MeshInstance3D.new()
-	var ab := BoxMesh.new()
-	ab.size = Vector3(0.4, 0.5, 0.06)
-	var amat := StandardMaterial3D.new()
-	amat.albedo_color = Color(0.79, 0.64, 0.24)
-	ab.material = amat
-	apron.mesh = ab
-	apron.position = Vector3(0, 0.85, 0.26)
-	m.add_child(apron)
+	## Merle Cottry, plate-accurate: the full build lives in character_kit.gd
+	m.add_child(CharacterKit.merle())
 	var tag := Label3D.new()
 	tag.text = "MERLE"
-	tag.font_size = 34
+	tag.font_size = 26
 	tag.position = Vector3(0, 1.8, 0)
 	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	tag.modulate = Color(0.85, 0.93, 0.77)
@@ -1014,6 +1082,11 @@ func _spawn_details() -> void:
 	var h := Harriet.new()
 	h.position = Vector3(1.2, 0.0, 2.6)
 	add_child(h)
+	## Vess, at the shrine wall, cataloguing what he was never thanked for
+	var v := VessProp.new()
+	v.position = Vector3(-3.7, 0.0, -1.2)
+	v.rotation.y = -PI / 2.0
+	add_child(v)
 	var pegs := CoatPegs.new()
 	pegs.position = Vector3(2.7, 1.5, 7.0)
 	add_child(pegs)
@@ -1098,6 +1171,11 @@ func _spawn_readables() -> void:
 			["Please wave at camera one on my birthday which is the 9th. Your friend, Iris Bell, age 8 and one quarter.", 3.4],
 		]],
 	]
+	defs.append(["D11", "PEAK ASSET DOSSIER · CHUM-AF-1974-P", Vector3(2.0, 0.9, -27.5), 4, false, Color(0.6, 0.55, 0.5), [
+		["PEAK PRODUCTION ASSET DOSSIER. FILE CHUM-AF-1974-P (REV.). STATUS: ACTIVE / HAZARDOUS.", 3.2],
+		["Rebuilt from the 1974 mascot body and salvaged studio materials. Entirely manually operated. Requires minimum three puppeteers for full performance.", 3.6],
+		["Handwritten beneath: he works his own jaw. Count the hands. Report all sightings to Peak Security. HE REMEMBERS THE AUDIENCE.", 3.6],
+	]])
 	for d in defs:
 		var rp := ReadableProp.new()
 		rp.doc_id = d[0]
@@ -1108,3 +1186,261 @@ func _spawn_readables() -> void:
 		rp.lines = d[6]
 		_dock_body(rp, d[1].split(" · ")[0], d[5])
 		add_child(rp)
+
+
+func _collider(pos: Vector3, size: Vector3) -> void:
+	## invisible static collision for dressed props (meshes come from PropKit)
+	var body := StaticBody3D.new()
+	body.position = pos
+	var col := CollisionShape3D.new()
+	var shape := BoxShape3D.new()
+	shape.size = size
+	col.shape = shape
+	body.add_child(col)
+	add_child(body)
+
+
+func _spawn_library_stacks() -> void:
+	## The stacks the room was named for: four used archives, aisles honest,
+	## every lane to a door kept clear. Spines are seeded stable per shelf.
+	var spots := [
+		[Vector3(-3.2, 0, -13.2), PI, 101], [Vector3(3.2, 0, -13.2), PI, 102],
+		[Vector3(-3.2, 0, -18.8), 0.0, 103], [Vector3(3.2, 0, -18.8), 0.0, 104],
+	]
+	for s in spots:
+		var shelf := PropKit.tape_shelf(3.0, 2.2, 4, s[2])
+		shelf.position = s[0]
+		shelf.rotation.y = s[1]
+		add_child(shelf)
+		_collider(s[0] + Vector3(0, 1.1, 0), Vector3(3.0, 2.2, 0.5))
+
+
+func _spawn_transmitter_hall() -> void:
+	## The loudest room gets its furniture: rack cabinets along the east wall,
+	## gauges disagreeing, one lamp per cabinet still warm.
+	for i in 4:
+		var z := -2.0 - 2.5 * float(i)
+		var cab := PropKit.transmitter_cabinet(2.4, 200 + i)
+		cab.position = Vector3(20.4, 0, z)
+		cab.rotation.y = -PI / 2.0
+		add_child(cab)
+		_collider(Vector3(20.4, 1.2, z), Vector3(0.7, 2.4, 0.9))
+
+
+func _spawn_yard_dressing() -> void:
+	## The tower. Its light is the one the completed sign-off puts out.
+	var t: Dictionary = PropKit.tower(7.5)
+	var rig := t["rig"] as Node3D
+	rig.position = Vector3(-9.0, 0, 14.5)
+	rig.add_to_group("tower")
+	add_child(rig)
+	_collider(Vector3(-9.0, 1.2, 14.5), Vector3(1.5, 2.4, 1.5))
+	GameState.ending_marked.connect(func(ending_name: String) -> void:
+		if ending_name == "THE COMPLETED SIGN-OFF":
+			var bm := t["beacon_mat"] as StandardMaterial3D
+			bm.emission_enabled = false
+			bm.albedo_color = Color(0.25, 0.1, 0.08)
+	)
+	## pallets by the base, the kind every yard accumulates
+	var pallet_mat := PropKit.wood("pallet", Color(0.45, 0.38, 0.28))
+	for p in [Vector3(-6.5, 0.06, 13.0), Vector3(-6.2, 0.06, 15.6)]:
+		for i in 3:
+			var slat := MeshInstance3D.new()
+			var sb := BoxMesh.new()
+			sb.size = Vector3(1.1, 0.05, 0.24)
+			sb.material = pallet_mat
+			slat.mesh = sb
+			slat.position = p + Vector3(0, 0, -0.35 + 0.35 * float(i))
+			add_child(slat)
+
+
+func _spawn_dead_room_felt() -> void:
+	## The lining: felt panels on the quiet room's inner faces. The hum stops
+	## at the seam; the felt is why.
+	PropKit.felt_run(3.6, self, Vector3(19.0, 0, 4.8), PI)
+	PropKit.felt_run(4.4, self, Vector3(17.2, 0, 2.5), PI / 2.0)
+	PropKit.felt_run(4.4, self, Vector3(20.8, 0, 2.5), -PI / 2.0)
+
+
+func _spawn_kitchen() -> void:
+	## The kitchen earns its name: counter run on the north wall, the sink,
+	## and the kettle — the one that clicks off two rooms away, eventually.
+	var block := PropKit.kitchen_block(5.0)
+	block.position = Vector3(8.0, 0, -2.15)
+	add_child(block)
+	_collider(Vector3(8.0, 0.45, -2.15), Vector3(5.0, 0.95, 0.62))
+	var kettle := PropKit.kettle()
+	kettle.position = Vector3(9.4, 0.91, -2.1)
+	kettle.rotation.y = 0.6
+	add_child(kettle)
+	## two mugs nobody collected
+	for m in [Vector3(8.4, 0.91, -2.2), Vector3(8.62, 0.91, -2.05)]:
+		var mug := MeshInstance3D.new()
+		var mc := CylinderMesh.new()
+		mc.top_radius = 0.04
+		mc.bottom_radius = 0.035
+		mc.height = 0.09
+		mc.radial_segments = 10
+		mc.material = PropKit.OCHRE_MAT()
+		mug.mesh = mc
+		mug.position = m + Vector3(0, 0.045, 0)
+		add_child(mug)
+	## a small table where the club took its breaks
+	var table_mat := PropKit.wood("ktable", Color(0.4, 0.32, 0.22))
+	var table := MeshInstance3D.new()
+	var tb := BoxMesh.new()
+	tb.size = Vector3(0.9, 0.05, 0.9)
+	tb.material = table_mat
+	table.mesh = tb
+	table.position = Vector3(9.6, 0.74, 1.0)
+	add_child(table)
+	var t_leg := MeshInstance3D.new()
+	var tlc := CylinderMesh.new()
+	tlc.top_radius = 0.05
+	tlc.bottom_radius = 0.09
+	tlc.height = 0.72
+	tlc.material = table_mat
+	t_leg.mesh = tlc
+	t_leg.position = Vector3(9.6, 0.36, 1.0)
+	add_child(t_leg)
+	_collider(Vector3(9.6, 0.4, 1.0), Vector3(0.9, 0.8, 0.9))
+
+
+func _spawn_yard_ground() -> void:
+	## the yard underfoot: packed dirt, and the path everyone actually walked
+	var dirt := MeshInstance3D.new()
+	var db := BoxMesh.new()
+	db.size = Vector3(29.6, 0.03, 7.6)
+	db.material = PropKit._surface("dirt", Color(0.3, 0.25, 0.18), 0.98, 0.0, 131, 2.0, 0.8, 4.0)
+	dirt.mesh = db
+	dirt.position = Vector3(0, 0.015, 14.0)
+	add_child(dirt)
+	var path_mat := PropKit._surface("path", Color(0.38, 0.32, 0.24), 0.99, 0.0, 137, 2.6, 0.5, 4.0)
+	## entry door north to the shed door, two worn legs
+	var leg1 := MeshInstance3D.new()
+	var l1 := BoxMesh.new()
+	l1.size = Vector3(1.1, 0.035, 4.2)
+	l1.material = path_mat
+	leg1.mesh = l1
+	leg1.position = Vector3(0, 0.02, 12.4)
+	add_child(leg1)
+	var leg2 := MeshInstance3D.new()
+	var l2 := BoxMesh.new()
+	l2.size = Vector3(8.6, 0.035, 1.1)
+	l2.material = path_mat
+	leg2.mesh = l2
+	leg2.position = Vector3(4.2, 0.02, 14.0)
+	add_child(leg2)
+
+
+func _spawn_green_room() -> void:
+	## Where the cast waited: vanity with its two-of-three bulbs, the couch,
+	## the low table. Ending 2 inherits a warm chair here; it should look sat-in.
+	var v := PropKit.vanity()
+	v.position = Vector3(-27.1, 0, -27.0)
+	v.rotation.y = PI / 2.0
+	add_child(v)
+	_collider(Vector3(-27.1, 0.8, -27.0), Vector3(0.55, 1.6, 1.5))
+	var c := PropKit.couch(Color(0.45, 0.38, 0.3))
+	c.position = Vector3(-25.0, 0, -29.4)
+	add_child(c)
+	_collider(Vector3(-25.0, 0.4, -29.4), Vector3(1.9, 0.8, 0.75))
+	var table := MeshInstance3D.new()
+	var tb := BoxMesh.new()
+	tb.size = Vector3(0.8, 0.06, 0.5)
+	tb.material = PropKit.wood("greentable", Color(0.36, 0.28, 0.19))
+	table.mesh = tb
+	table.position = Vector3(-25.2, 0.4, -28.3)
+	add_child(table)
+	for lx in [-0.3, 0.3]:
+		for lz in [-0.18, 0.18]:
+			var leg := MeshInstance3D.new()
+			var lb := BoxMesh.new()
+			lb.size = Vector3(0.05, 0.4, 0.05)
+			lb.material = PropKit.wood("greentable", Color(0.36, 0.28, 0.19))
+			leg.mesh = lb
+			leg.position = Vector3(-25.2 + lx, 0.2, -28.3 + lz)
+			add_child(leg)
+	_collider(Vector3(-25.2, 0.25, -28.3), Vector3(0.8, 0.5, 0.5))
+
+
+func _spawn_scene_dock_dressing() -> void:
+	## The dock holds what the show retired: flats leaning in ranks, crates
+	## that were always about to ship somewhere.
+	var flat_tints := [Color(0.35, 0.42, 0.24), Color(0.45, 0.3, 0.2), Color(0.43, 0.5, 0.67)]
+	for i in 3:
+		var f := PropKit.scene_flat(flat_tints[i], 2.0 - 0.3 * float(i), 2.4 - 0.2 * float(i))
+		f.position = Vector3(-20.1 + 0.14 * float(i), 0, -38.2 - 1.4 * float(i))
+		f.rotation.y = PI / 2.0
+		f.rotation.z = -0.12 - 0.02 * float(i)  ## the lean
+		add_child(f)
+	_collider(Vector3(-19.9, 1.1, -39.6), Vector3(0.7, 2.2, 4.2))
+	var crate_mat := PropKit.wood("crate", Color(0.45, 0.38, 0.28))
+	var crate_spots := [
+		[Vector3(-11.3, 0.35, -42.0), Vector3(0.7, 0.7, 0.7)],
+		[Vector3(-11.3, 1.0, -42.0), Vector3(0.6, 0.6, 0.6)],
+		[Vector3(-12.3, 0.3, -42.2), Vector3(0.6, 0.6, 0.8)],
+	]
+	for cs in crate_spots:
+		var crate := MeshInstance3D.new()
+		var cb := BoxMesh.new()
+		cb.size = cs[1]
+		cb.material = crate_mat
+		crate.mesh = cb
+		crate.position = cs[0]
+		add_child(crate)
+	_collider(Vector3(-11.7, 0.7, -42.1), Vector3(1.8, 1.4, 1.0))
+
+
+func _spawn_dorms_extra() -> void:
+	## The other beds. The club sleeps here, or stands where sleeping goes.
+	var bed_a := PropKit.dorm_bed(Color(0.36, 0.4, 0.32))
+	bed_a.position = Vector3(-12.0, 0, 1.6)
+	add_child(bed_a)
+	_collider(Vector3(-12.0, 0.3, 1.6), Vector3(2.0, 0.6, 1.0))
+	var bed_b := PropKit.dorm_bed(Color(0.42, 0.34, 0.26))
+	bed_b.position = Vector3(-6.2, 0, 1.6)
+	add_child(bed_b)
+	_collider(Vector3(-6.2, 0.3, 1.6), Vector3(2.0, 0.6, 1.0))
+	var lockers := PropKit.locker_run(4)
+	lockers.position = Vector3(-7.2, 0, -2.2)
+	add_child(lockers)
+	_collider(Vector3(-7.2, 0.95, -2.2), Vector3(1.8, 1.9, 0.55))
+
+
+func _spawn_shed_interior() -> void:
+	## Behind the EDITH padlock: a shelf of cans, a broom, and the reason
+	## you came. The key sits where it always sat.
+	var shelf := MeshInstance3D.new()
+	var sb := BoxMesh.new()
+	sb.size = Vector3(0.3, 0.04, 2.4)
+	sb.material = PropKit.wood("shedshelf", Color(0.4, 0.33, 0.24))
+	shelf.mesh = sb
+	shelf.position = Vector3(11.2, 1.2, 14.0)
+	add_child(shelf)
+	for i in 3:
+		var can := MeshInstance3D.new()
+		var cc := CylinderMesh.new()
+		cc.top_radius = 0.08
+		cc.bottom_radius = 0.08
+		cc.height = 0.2
+		cc.radial_segments = 10
+		cc.material = PropKit.metal("paintcan", Color(0.5, 0.47, 0.42))
+		can.mesh = cc
+		can.position = Vector3(11.2, 1.32, 13.4 + 0.6 * float(i))
+		add_child(can)
+	var broom := MeshInstance3D.new()
+	var bb := BoxMesh.new()
+	bb.size = Vector3(0.04, 1.5, 0.04)
+	bb.material = PropKit.wood("broom", Color(0.5, 0.4, 0.28))
+	broom.mesh = bb
+	broom.position = Vector3(8.9, 0.75, 15.1)
+	broom.rotation.z = 0.18
+	add_child(broom)
+	var head := MeshInstance3D.new()
+	var hb := BoxMesh.new()
+	hb.size = Vector3(0.3, 0.12, 0.06)
+	hb.material = PropKit.fabric("broomhead", Color(0.6, 0.52, 0.36))
+	head.mesh = hb
+	head.position = Vector3(9.03, 0.06, 15.1)
+	add_child(head)

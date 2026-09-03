@@ -6,11 +6,15 @@ const SEVENTH := "HOLD YOUR APPLAUSE"
 
 
 func _process(_delta: float) -> void:
+	if GameState.is_dead("HARRIET") and not GameState.signals_known.has(SEVENTH):
+		visible = false
+		return
 	visible = GameState.film_watched
 
 
 func get_prompt() -> String:
 	return "A FOLDED NOTE · Harriet's hand · read (E)"
+
 
 
 func interact(_player: Node3D) -> void:

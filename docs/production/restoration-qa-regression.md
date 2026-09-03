@@ -50,3 +50,25 @@ QA-29 No achievement toast ever appears between title and morning; morning shows
 QA-30 DEMO true: only the seven rooms open, doors carry demo reasons, bed declines, S1 and S5 only, card protects three seconds, completed demo save contains none of the whitelisted-out fields, funnel file has six marks.
 QA-31 Load a v15 save into this build: migration toast, nothing lost; settings file untouched.
 QA-32 Pause anywhere unlocked: world and clocks hold, audio mutes; pause during any authored sequence: refused.
+
+## J · THE AFTER-FIRE (added post-c036)
+QA-33 Watch the fire tape: the wake toast fires once; af_active persists across save and load.
+QA-34 Start a capture with him awake: he approaches at walking-dread pace, footsteps thunk on interval, and the HUD reads REC · SAFE WHILE LIT with a live countdown; at 1.2 m he stops and the first-sighting toast fires exactly once per save.
+QA-35 The eye: red glow ONLY while a capture runs; dark the instant it stops or aborts.
+QA-36 Let the tally die with him adjacent: THE TALLY COOLS, then a strike; let it die with distance: he withdraws to his segment. First cool ever runs 4.0 s with the teaching line; every later cool runs 2.0.
+QA-37 Doorways: every threshold costs him 2.2 s, captioned, in the capture approach AND the night hunt; a route through two doors buys 4.4 s, verifiably.
+QA-38 The dead room: noise made inside registers nowhere; he tracks to the felt door, holds, says his line once; first entry gives the radio toast and [NO ECHO].
+
+## K · THE CASUALTY LEDGER (added post-c043)
+QA-39 Binder page one: NO ENTRIES. KEEP IT SO. until a death; then who, cause, day, epitaph per entry.
+QA-40 M1: refusing Merle at the fire tape saves her and never re-offers; consent plays the repossession, the kettle caption, and she is absent everywhere after; THE BURN and NEW PRODUCER play their variants.
+QA-41 H1: the slip arms only Day 2+ while frozen; taking it grants exactly one paperless signature that toasts in her hand; the next break plays the absence and the cabinet; the seventh signal is unlearnable if her card was unfound; screenings judge 0.05 tighter.
+QA-42 V1: AUTHENTICATE while credited plays the all-monitors taking after the INK ripple; alternatively the credited living die at the final breaker AFTER the farewell, lights held. V2: GET VESS appears only for the uncredited who used the insight; taking it fixes both circuits then plays circuit F. Dead, the breaker is the pin plus the hard blackout, and the crossing runs 62.
+QA-43 F2: exactly the third blind tally call; the unlisted-camera beats; cue flow continues after. F1: the fader choice precedes the crossing; self-hold costs 13 s and routes 4b; his hold routes 4a with the casualty marked inside the epilogue; if he is already dead, self-hold is forced.
+QA-44 L1: offered only past five answers AND wear above 70; the ink-drain beats; the dock inert forever; 1A unreachable; 1B shows the pencil card. L2: offered whenever the fire tape is held; consumes it, empties answers, sets the completed sign-off; the final break then plays 4c with no divert prompt.
+QA-45 ENDING 0: with all four ledgered before lockdown, the premiere intercepts at entry; credits show nine cards, one name; A28 files at the next flush gate.
+QA-46 Rows: every timed incident that expires takes a seat, cycling its three lines with the caption; the count persists.
+QA-47 Every ending's credits open with THE LEDGER, READ ALOUD when anything is in it, including fifty-eight minus N; a clean run reads nothing and A27 files.
+QA-48 Demo build: no death is reachable, no casualty field survives in the save, achievements stay dark.
+QA-49 H2: after the rejected viewing, the block offers the splice with the label disclosed; performing it mints a daily immediately and the NEXT break doubles her; she persists on set as scenery with one line forever; the double rebuilds after save and load.
+QA-50 Seance grief: with Harriet dead, frame 14 reads PAUSED PROPERLY; with Merle dead, frame 28 reads SHE'S HERE NOW; every reading that names Harriet also carries TRANSITION UNRESOLVED.

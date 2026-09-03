@@ -4,22 +4,27 @@ extends Interactable
 ## Complete spoken inventory: nothing, here. The hands do the talking.
 
 var _pointed := false
+var _gone := false
 var _watch_t := 0.0
 var _label: Label3D
 var _player: Node3D
+var _arm: Node3D
+var _rig: Node3D
+
+
+func _process(_gd: float) -> void:
+	if GameState.is_dead("FLOOR MANAGER") and not _gone:
+		_gone = true
+		visible = false
 
 
 func _ready() -> void:
-	var body := MeshInstance3D.new()
-	var bs := CapsuleMesh.new()
-	bs.radius = 0.26
-	bs.height = 1.5
-	var mat := StandardMaterial3D.new()
-	mat.albedo_color = Color(0.07, 0.065, 0.06)
-	bs.material = mat
-	body.mesh = bs
-	body.position = Vector3(0, 0.85, 0)
-	add_child(body)
+	## Black-clad, headset to nothing, clipboard angled away. The right arm is
+	## the whole vocabulary: it hangs, and it points.
+	var parts := CharacterKit.floor_manager()
+	_rig = parts["rig"]
+	add_child(_rig)
+	_arm = parts["arm"]
 	var col := CollisionShape3D.new()
 	var shape := CapsuleShape3D.new()
 	shape.radius = 0.3
@@ -47,6 +52,14 @@ func _physics_process(delta: float) -> void:
 	if _player == null:
 		_player = get_tree().get_first_node_in_group("player")
 		return
+	## he watches: the whole body turns to face you, always
+	if _rig:
+		var to_p := _player.global_position - global_position
+		_rig.rotation.y = lerp_angle(_rig.rotation.y, atan2(to_p.x, to_p.z), minf(4.0 * delta, 1.0))
+	## the arm: horizontal while a take is watched, hanging otherwise
+	if _arm:
+		var target := -PI / 2.0 if _watch_t > 0.0 else 0.0
+		_arm.rotation.x = lerpf(_arm.rotation.x, target, minf(6.0 * delta, 1.0))
 	if _watch_t > 0.0:
 		_watch_t -= delta
 		var held_still := GameState.assist_on and Input.is_action_pressed("interact")
@@ -75,5 +88,7 @@ func get_prompt() -> String:
 
 
 func interact(_player_node: Node3D) -> void:
+	if GameState.is_dead("FLOOR MANAGER"):
+		return
 	GameState.mark_read("D08")
 	GameState.toast("The laminated run sheet is angled away from you. It was always going to be.")

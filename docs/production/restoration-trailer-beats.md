@@ -21,3 +21,6 @@ Doctrine: the trailer obeys the game's laws. One startle total, and it is the ga
 Engine: beats 0:18, 0:34, 0:52, 0:58 (the build already stages all four). Puppet shoot: 0:26 and 1:05 (shoot clean, degrade in the ladder per the art bible law). Plates and stills: 0:08, 0:42, 1:10. VO: Merle session three covers both lines; the breakdown's Side 1 register for the first, Side 2 register for the second.
 ## CUT LAWS
 No footage of any ending. No Leland. No glimpse. Nothing unmediated moves except people being kind. If a beat would work in any other horror trailer, cut it; the trailer's job is to be unmistakable.
+
+## ADDENDUM (c043)
+The end card gains an option: the dossier's WARNING panel as the final still before the bell-after-black. New beat available at 0:52: the countdown UI over an approach, cut on THE TALLY COOLS. The crossing is trailer-safe (chase legs, no face). Nothing from the dead room, the readings, or any death scene ships in marketing; graves are not previews.

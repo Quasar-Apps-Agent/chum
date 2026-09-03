@@ -23,12 +23,15 @@ func _ready() -> void:
 		["an accession of the 58 CLUB", 16],
 		["written, designed, and built by\nCIEL ESSEL", 20],
 		["with THE GLADHOUSE (1971 to 1977)\nappearing courtesy of the estate of A. CRAIK", 16],
-		["MERLE ······ herself\nVESS ······ herself\nHARRIET ······ mid-motion\nTHE FLOOR MANAGER ······ uncredited, by request", 16],
+		["MERLE ······ herself\nVESS ······ himself\nHARRIET ······ mid-motion\nTHE FLOOR MANAGER ······ uncredited, by request", 16],
 		["and CHUM\nas himself", 20],
 		["made with GODOT\ncaptured to tape at WGLD, channel 58", 14],
 		["for everyone who was carried", 16],
 		["WGLD signs off.", 20],
 	]
+	if GameState.ending_reached == "A ONE-WOMAN SHOW":
+		cards[4] = ["MERLE ······ RITA IVORI\nVESS ······ RITA IVORI\nHARRIET ······ RITA IVORI\nTHE FLOOR MANAGER ······ RITA IVORI", 16]
+		cards[5] = ["and CHUM\nas RITA IVORI", 20]
 	if GameState.ending_reached != "":
 		cards.insert(6, ["ENDING REACHED\n" + GameState.ending_reached, 14])
 	for c in cards:

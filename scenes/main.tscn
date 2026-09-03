@@ -12,11 +12,20 @@ height = 1.75
 background_mode = 1
 background_color = Color(0.047, 0.039, 0.027, 1)
 ambient_light_source = 2
-ambient_light_color = Color(0.35, 0.32, 0.27, 1)
-ambient_light_energy = 0.35
+ambient_light_color = Color(0.28, 0.25, 0.21, 1)
+ambient_light_energy = 0.09
+tonemap_mode = 2
+tonemap_exposure = 0.85
+ssao_enabled = true
+ssao_intensity = 2.4
+glow_enabled = true
+glow_intensity = 0.5
+glow_strength = 0.95
+glow_bloom = 0.06
+glow_hdr_threshold = 0.95
 fog_enabled = true
-fog_light_color = Color(0.09, 0.08, 0.06, 1)
-fog_density = 0.012
+fog_light_color = Color(0.05, 0.045, 0.035, 1)
+fog_density = 0.025
 
 [node name="Main" type="Node3D"]
 
@@ -28,8 +37,8 @@ script = ExtResource("1_world")
 
 [node name="Sun" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.866, -0.353, 0.353, 0, 0.707, 0.707, -0.5, -0.612, 0.612, 0, 8, 0)
-light_color = Color(0.75, 0.72, 0.66, 1)
-light_energy = 0.25
+light_color = Color(0.7, 0.66, 0.58, 1)
+light_energy = 0.07
 shadow_enabled = true
 
 [node name="SodiumRec" type="OmniLight3D" parent="."]
@@ -66,6 +75,7 @@ layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 script = ExtResource("3_hud")
 
 [node name="Prompt" type="Label" parent="HUD"]
@@ -172,12 +182,14 @@ layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 
 [node name="Blackout" type="ColorRect" parent="HUD/Retake"]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+mouse_filter = 2
 color = Color(0.02, 0.018, 0.012, 1)
 
 [node name="Line1" type="Label" parent="HUD/Retake"]

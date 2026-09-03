@@ -48,6 +48,16 @@ func _fire() -> void:
 	bar.mesh = bb
 	bar.position = Vector3(0, 2.9, 0)
 	it.add_child(bar)
+	## strings, or tendons — part of what refuses to resolve
+	for sx in [-0.8, -0.3, 0.3, 0.8]:
+		var s := MeshInstance3D.new()
+		var sb := BoxMesh.new()
+		sb.size = Vector3(0.012, 1.4, 0.012)
+		sb.material = mat
+		s.mesh = sb
+		s.position = Vector3(sx as float, 2.2, 0)
+		s.rotation.z = -(sx as float) * 0.22
+		it.add_child(s)
 	add_child(it)
 	await get_tree().create_timer(1.8).timeout
 	it.queue_free()

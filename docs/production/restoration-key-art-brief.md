@@ -13,3 +13,6 @@ The set's little door, tungsten-lit, closed, Chum's taped floor mark in the fore
 
 ## LAWS (violations are rejected comps, not notes)
 Grain, chroma error, and scanlines exist only on depicted screens. REPAIRED, NOT BURNED: post-fire Chum per the tell-table, zero char, zero horror finishing. Buttons on no face but his. No startle imagery, no open mouths, no lunging poses in any still. The glimpse figure and Leland's face are never depicted in any marketing material, ever; their scarcity is product. Warmth stays genuine: if a face would read as knowing in a thumbnail, redo the face. Title lockup in phosphor #D9EDC4 on near-black, broadcast-adjacent letterforms, no distressed horror type. No red except the slate.
+
+## ADDENDUM (c043)
+Comp 0 now exists and is the dossier itself. The one-image argument gains a stronger candidate: Rita at the bench, tally red in the dark behind her, the countdown readable, him at the light's edge at full height, cropped at the sternum. Safety is mediated, and it is expiring on screen.

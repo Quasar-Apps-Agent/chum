@@ -69,6 +69,57 @@ var ui_scale: float = 1.0
 var captions_on: bool = false
 var assist_on: bool = false
 var read_props: Array = []
+var af_active: bool = false
+var recording: bool = false
+var recording_left: float = 0.0
+var af_taught: bool = false
+var deadroom_seen: bool = false
+var crossing: bool = false
+var crossing_caught: bool = false
+var casualties: Array = []
+var harriet_slip: bool = false
+var merle_offered: bool = false
+var fader_self: bool = false
+var signoff_completed: bool = false
+var row_casualties: int = 0
+var h2_pending: bool = false
+
+
+func cause_of(who: String) -> String:
+	for c in casualties:
+		if c.get("who", "") == who:
+			return str(c.get("cause", ""))
+	return ""
+
+
+func mint_shortcut_daily() -> void:
+	daily_seq += 1
+	dailies.append({"id": daily_seq, "take": -1})
+	daily_added.emit(daily_seq, -1)
+	save_log()
+
+
+func all_cast_dead() -> bool:
+	return is_dead("MERLE") and is_dead("VESS") and is_dead("HARRIET") and is_dead("FLOOR MANAGER")
+
+
+func is_dead(who: String) -> bool:
+	for c in casualties:
+		if c.get("who", "") == who:
+			return true
+	return false
+
+
+func mark_casualty(who: String, cause: String, epitaph: String) -> void:
+	if is_dead(who):
+		return
+	casualties.append({"who": who, "cause": cause, "line": epitaph, "day": day})
+	save_log()
+	toast("THE LEDGER TAKES IT DOWN.")
+
+
+func in_dead_room(pos: Vector3) -> bool:
+	return absf(pos.x - 19.0) <= 2.2 and absf(pos.z - 2.5) <= 2.7
 
 var _glyph_re: Dictionary = {}
 const GLYPH_MAP := {"E": "interact", "SPACE": "respond", "Q": "improvise", "T": "toggle_tbc", "M": "map"}
@@ -95,6 +146,7 @@ signal ui_scale_changed(scale: float)
 signal caption(text: String)
 signal pause_requested
 signal demo_ended
+signal ending_marked(ending_name: String)
 
 
 func _ready() -> void:
@@ -111,9 +163,19 @@ func paper_for(station: String) -> int:
 func sign_log(station: String) -> bool:
 	if mode != Mode.MATINEE:
 		if paper_for(station) <= 0:
-			log_refused.emit(station)
-			return false
-		paper[station] = paper_for(station) - 1
+			if harriet_slip:
+				harriet_slip = false
+				toast("Signed. The hand on the slip is not yours, and the log accepts it anyway.")
+			else:
+				log_refused.emit(station)
+				return false
+		else:
+			paper[station] = paper_for(station) - 1
+		return _sign_finish(station)
+	return _sign_finish(station)
+
+
+func _sign_finish(station: String) -> bool:
 	signatures.append({
 		"station": station,
 		"tape": current_tape,
@@ -249,7 +311,7 @@ func load_settings() -> void:
 		return
 	var vol: float = cfg.get_value("audio", "master", 1.0)
 	AudioServer.set_bus_volume_db(0, linear_to_db(maxf(vol, 0.001)))
-	mouse_sens = cfg.get_value("input", "sensitivity", 1.0)
+	mouse_sens = clampf(cfg.get_value("input", "sensitivity", 1.0), 0.2, 3.0)
 	ui_scale = cfg.get_value("access", "ui_scale", 1.0)
 	captions_on = cfg.get_value("access", "captions", false)
 	assist_on = cfg.get_value("access", "assist", false)
@@ -363,6 +425,7 @@ func mark_ending(name: String, lie: bool = false) -> void:
 	premiere_live = false
 	finale_done = true
 	ending_reached = name
+	ending_marked.emit(name)
 	Achievements.on_ending(name)
 	if lie:
 		lie_pending = true
@@ -456,7 +519,7 @@ func save_log() -> void:
 			for k in ["decision", "assets", "leland_answers", "lockdown_done",
 				"finale_done", "ending_reached", "lie_pending", "seance_wear",
 				"has_fire_tape", "fire_tape_watched", "dock_done", "crate_opened",
-				"presigned_seen", "cascade_done"]:
+				"presigned_seen", "cascade_done", "casualties"]:
 				data.erase(k)
 		f.store_string(JSON.stringify(data, "\t"))
 		f.close()
@@ -507,6 +570,14 @@ func _save_dict() -> Dictionary:
 			"photo_safe": photo_safe,
 			"cascade_done": cascade_done,
 			"read_props": read_props,
+			"af_active": af_active,
+			"af_taught": af_taught,
+			"casualties": casualties,
+			"merle_offered": merle_offered,
+			"signoff_completed": signoff_completed,
+			"row_casualties": row_casualties,
+			"h2_pending": h2_pending,
+			"deadroom_seen": deadroom_seen,
 			"rejected_seen": rejected_seen,
 			"glimpse_seen": glimpse_seen,
 			"merle_1974": merle_1974,
@@ -581,6 +652,16 @@ func load_log() -> void:
 	cov_still = float(data.get("cov_still", 0.0))
 	photo_safe = bool(data.get("photo_safe", false))
 	cascade_done = bool(data.get("cascade_done", false))
+	af_active = bool(data.get("af_active", false))
+	af_taught = bool(data.get("af_taught", false))
+	var cz: Variant = data.get("casualties", [])
+	if typeof(cz) == TYPE_ARRAY:
+		casualties = cz
+	merle_offered = bool(data.get("merle_offered", false))
+	signoff_completed = bool(data.get("signoff_completed", false))
+	row_casualties = int(data.get("row_casualties", 0))
+	h2_pending = bool(data.get("h2_pending", false))
+	deadroom_seen = bool(data.get("deadroom_seen", false))
 	var rp: Variant = data.get("read_props", [])
 	if typeof(rp) == TYPE_ARRAY:
 		read_props = rp
@@ -680,6 +761,11 @@ func reset_new_game() -> void:
 	cascade_done = false
 	cascade_active = false
 	read_props = []
+	casualties = []
+	row_casualties = 0
+	h2_pending = false
+	harriet_slip = false
+	merle_offered = false
 	save_log()
 
 

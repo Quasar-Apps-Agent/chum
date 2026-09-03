@@ -69,7 +69,7 @@ static func _premiere(bot: String) -> String:
 		elif l.begins_with("RESOLVED"):
 			if "club auto-fix" in l:
 				auto += 1
-			var ti := l.find("t=")
+			var ti: int = l.find("t=")
 			if ti != -1:
 				var t := float(l.substr(ti + 2))
 				if t > 41.0:

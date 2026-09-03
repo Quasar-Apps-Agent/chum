@@ -88,6 +88,8 @@ func _process(delta: float) -> void:
 
 func _on_beat() -> bool:
 	var tol := 0.35 if GameState.assist_on else 0.2
+	if GameState.is_dead("HARRIET"):
+		tol = maxf(0.1, tol - 0.05)
 	var phase := fmod(_welapsed, BEAT)
 	return phase < tol or phase > BEAT - tol
 

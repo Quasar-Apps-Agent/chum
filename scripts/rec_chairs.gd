@@ -21,25 +21,18 @@ var _arranged := false
 func _ready() -> void:
 	var colors := [Color(0.5, 0.36, 0.24), Color(0.42, 0.44, 0.3), Color(0.55, 0.42, 0.28), Color(0.38, 0.4, 0.34), Color(0.48, 0.38, 0.3)]
 	for i in 5:
-		var c := Node3D.new()
-		var seat := MeshInstance3D.new()
-		var sb := BoxMesh.new()
-		sb.size = Vector3(0.6, 0.35, 0.6)
-		var mat := StandardMaterial3D.new()
-		mat.albedo_color = colors[i]
-		sb.material = mat
-		seat.mesh = sb
-		seat.position = Vector3(0, 0.35, 0)
-		c.add_child(seat)
-		var back := MeshInstance3D.new()
-		var bb := BoxMesh.new()
-		bb.size = Vector3(0.6, 0.6, 0.1)
-		bb.material = mat
-		back.mesh = bb
-		back.position = Vector3(0, 0.75, -0.26)
-		c.add_child(back)
+		var c := PropKit.club_chair(colors[i])
 		c.position = CASUAL[i][0]
 		c.rotation.y = CASUAL[i][1]
+		## solid: you cannot walk through an armchair, before or after the rows
+		var body := StaticBody3D.new()
+		var col := CollisionShape3D.new()
+		var shape := BoxShape3D.new()
+		shape.size = Vector3(0.66, 0.95, 0.66)
+		col.shape = shape
+		col.position = Vector3(0, 0.48, 0)
+		body.add_child(col)
+		c.add_child(body)
 		add_child(c)
 		_chairs.append(c)
 	if GameState.lockdown_done:

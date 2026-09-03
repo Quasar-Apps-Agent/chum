@@ -36,7 +36,14 @@ func get_prompt() -> String:
 	return "MERLE · %s (E)" % where
 
 
+func _process(_d: float) -> void:
+	if GameState.is_dead("MERLE"):
+		visible = false
+
+
 func interact(_player: Node3D) -> void:
+	if GameState.is_dead("MERLE"):
+		return
 	if _pen_up():
 		GameState.toast("She says nothing. Her hands are empty and open, watching the pen.")
 		return

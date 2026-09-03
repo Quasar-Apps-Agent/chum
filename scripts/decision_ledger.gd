@@ -48,6 +48,19 @@ func _unhandled_input(event: InputEvent) -> void:
 		GameState.save_log()
 		GameState.toast(COMMIT_LINES[choice])
 		_hover = -1
+		if choice == "AUTHENTICATE" and GameState.vess_credited and not GameState.is_dead("VESS"):
+			await _v1_taken()
+
+
+func _v1_taken() -> void:
+	await get_tree().create_timer(2.6).timeout
+	GameState.toast("INK · the record now includes one name you added.")
+	await get_tree().create_timer(2.4).timeout
+	GameState.toast("Across the building, every monitor cuts to the patch bay. VESS, mid-sentence about slate clusters,")
+	await get_tree().create_timer(2.8).timeout
+	GameState.toast("holds one frame too long. Then bars. His plastic pin is fused into the panel enamel, still warm.")
+	GameState.show_caption("[BARS, ALL MONITORS]")
+	GameState.mark_casualty("VESS", "V1 · CREDITED, THEREFORE CAST", "cut mid-sentence; the record includes one name you added")
 
 
 func _is_targeted() -> bool:

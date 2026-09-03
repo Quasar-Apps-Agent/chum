@@ -12,17 +12,19 @@ const TITLES := {
 	"A01": "FIRST SIGNATURE", "A02": "CAREFUL HANDS", "A03": "THE SCOPE READS MASTER",
 	"A04": "ON THE BEAT", "A05": "STILLNESS, HELD WHOLE", "A06": "MID-MOTION",
 	"A07": "HOLD YOUR APPLAUSE", "A08": "YOU WERE NOT QUIET", "A09": "TOMORROW'S DATE",
-	"A10": "THE ROWS KEEP THEIR ORDER", "A11": "PER V. CARDONA", "A12": "NO SEARCHER SINGS",
+	"A10": "THE ROWS KEEP THEIR ORDER", "A11": "PER V. KEYS", "A12": "NO SEARCHER SINGS",
 	"A13": "THE UNFINISHED LINE", "A14": "I'VE READ THE ENDING", "A15": "ORDER MATTERS",
 	"A16": "THE LONG WAY AROUND", "A17": "INK", "A18": "NEXT WEEK'S EPISODE",
 	"A19": "EMPTY DRAWER", "A20": "SEALED FOR BROADCAST", "A21": "THERE'S COBBLER",
 	"A22": "WELCOME HOME", "A23": "FILE UNDER: SAINTS", "A24": "IT'S OKAY. NOBODY'S WATCHING.",
 	"A25": "SIGNED OFF", "A26": "FULL ACCESSION",
+	"A27": "EVERYONE GOES HOME", "A28": "A ONE-WOMAN SHOW",
 }
 const ENDING_MAP := {
 	"THE BURN": "A21", "THE NEW PRODUCER": "A22",
 	"SIGN-OFF · RITA CLOSES": "A23", "SIGN-OFF · LELAND CLOSES": "A24",
 	"DEAD AIR": "A25",
+	"A ONE-WOMAN SHOW": "A28",
 }
 
 var _unlocked: Dictionary = {}
@@ -49,6 +51,8 @@ func unlock(id: String) -> void:
 
 
 func on_ending(name: String) -> void:
+	if GameState.casualties.is_empty() and GameState.row_casualties == 0:
+		unlock("A27")
 	unlock(ENDING_MAP.get(name, ""))
 
 

@@ -52,8 +52,8 @@ func _draw() -> void:
 	var font := ThemeDB.fallback_font
 	for name in rooms:
 		var r: Array = rooms[name]
-		var px := off.x + (r[0] - r[2] / 2.0 - minx) * s
-		var py := off.y + (r[1] - r[3] / 2.0 - minz) * s
+		var px: float = off.x + (r[0] - r[2] / 2.0 - minx) * s
+		var py: float = off.y + (r[1] - r[3] / 2.0 - minz) * s
 		var rect := Rect2(px, py, r[2] * s, r[3] * s)
 		draw_rect(rect, Color(0.08, 0.09, 0.07, 0.9))
 		draw_rect(rect, Color(0.35, 0.42, 0.32), false, 1.5)

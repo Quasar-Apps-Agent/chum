@@ -10,11 +10,30 @@ var _last := -1.0
 
 
 func _ready() -> void:
+	## the rail the coats hang from, pegs and all
+	var rail := MeshInstance3D.new()
+	var rb := BoxMesh.new()
+	rb.size = Vector3(0.08, 0.08, 2.2)
+	rb.material = PropKit.wood("pegrail", Color(0.3, 0.23, 0.16))
+	rail.mesh = rb
+	rail.position = Vector3(0, 0.05, 0)
+	add_child(rail)
 	for i in 5:
+		var peg := MeshInstance3D.new()
+		var pc := CylinderMesh.new()
+		pc.top_radius = 0.018
+		pc.bottom_radius = 0.022
+		pc.height = 0.1
+		pc.material = PropKit.metal("peg", Color(0.5, 0.46, 0.38))
+		peg.mesh = pc
+		peg.rotation.x = PI / 2.0
+		peg.position = Vector3(0, 0.02, -0.9 + 0.45 * float(i))
+		add_child(peg)
 		var coat := MeshInstance3D.new()
 		var box := BoxMesh.new()
 		box.size = Vector3(0.34, 0.8, 0.1)
 		var mat := StandardMaterial3D.new()
+		mat.roughness = 0.95
 		box.material = mat
 		coat.mesh = box
 		coat.position = Vector3(0, -0.45, -0.9 + 0.45 * float(i))

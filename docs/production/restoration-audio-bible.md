@@ -56,3 +56,6 @@ P2: S15 treatment pass, S16 detail set, Craik archival build, Rita breath librar
 
 ## 8 · THE SILENCE LEDGER (contracts; violations are S1 bugs)
 Fire tape ends without a sting. The glimpse carries no sting. The warm unit makes no sound. The chairs make no nameable sound. The Floor Manager is never heard moving. Ending 1A closes on four seconds of true digital silence before the title.
+
+## ADDENDUM · SLOTS S17-S19 (c043)
+S17 AF FOOTFALL: sub-heavy single hit, wood-through-floor, interval-driven; the current thunk stands in. S18 THE FOLD: dry frame creak, 2.2 s envelope, no sting. S19 THE CROSSING BED: the sign-off playing through wall filters, phase-drifting by room; his footfalls at doubled cadence layer over it. Silence ledger extension: every death scene ends in at least 1.5 s of authored silence before the next toast; the ledger reading at credits is unscored.
