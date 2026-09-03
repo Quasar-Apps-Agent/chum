@@ -150,9 +150,16 @@ a 2020s horror title's store page?* If no — iterate before ticking.
   the exact approach path, motion played backward), THE PERFORMANCE QUOTE
   (at 1.2m under a burning tally: fully frontal broadcast stance + one clean
   15° head tilt — the tally turns him back into a performer).
-- HARD RULES: the jaw NEVER opens. The bell NEVER sounds (clapperless). NO
-  vocalizations — no growl, no breath. Timings as built: 0.8 m/s approach,
-  1.2m loom, 2.0s cool, 2.2s fold, 1.6 m/s crossing.
+- HARD RULES (corrected per canon rev): THE JAW OPENS ONLY BY HIS OWN HAND
+  — the mouth lever, pulled to open, pushed to close; every opening is a
+  two-beat act (hand rises, one dry click, the jaw). Exactly two grammar
+  entries: under the tally during the performance quote (worked open and
+  closed at no rhythm a song would keep), and ONCE before a strike. The jaw
+  never syncs to sound, never flaps. The bell NEVER sounds (clapperless).
+  NO vocalizations — the THROAT SPEAKER is not a voice: under the tally it
+  breathes band-limited room tone (presence wearing memory, always); more
+  than room tone is a canon event the author signs first. Timings as built:
+  0.8 m/s approach, 1.2m loom, 2.0s cool, 2.2s fold, 1.6 m/s crossing.
 - AUDIO LAW: band-limited is memory, full-range is present; his sounds are
   wrong sources doing honest labor (wood-through-floor sub footfall,
   wet-felt groan, hull-tick armature — never servo-whine); under 3m he
@@ -160,8 +167,9 @@ a 2020s horror title's store page?* If no — iterate before ticking.
   silent. Rig note: AF rig ships with physics secondaries DISABLED, wool
   baked stiff, root-motion clips, fold as authored montage per door width,
   eye on its own always-on track layer.
-- CAPTURE CANON: After-Fire renders/captures pose the jaw SHUT (current
-  beauty/preview jaw-open poses are canon-wrong; fix at next asset touch).
+- CAPTURE CANON: After-Fire poses show the jaw open ONLY with his hand at
+  the lever (the two-beat act); a jaw hanging open with no hand at work is
+  canon-wrong. Default resting pose: jaw closed, hand down.
 
 **Interaction & systems law — controls map, accessibility matrix, reaction
 matrix (all in docs/canon/)**: stable inputs, holds mean commitment, real

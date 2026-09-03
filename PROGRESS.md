@@ -44,10 +44,11 @@ through Phase 0.)
       NO secondary motion, servo eye on its own layer)
 - [ ] 1.10 THE FOLD + THE WITHDRAWAL (2.2s doorway montage per door width;
       reverse-exact-path retreat)
-- [ ] 1.11 THE PERFORMANCE QUOTE (1.2m loom: frontal broadcast square-up +
-      the one 15° head tilt, synced to tally state)
-- [ ] 1.12 Tally states & eye tracking wired to AI (jaw NEVER opens; bell
-      NEVER sounds; no vocalizations)
+- [ ] 1.11 THE PERFORMANCE QUOTE (1.2m loom: frontal square-up + the one
+      15° tilt + the jaw worked by his own hand at the lever, arrhythmic —
+      and the once-only pre-strike jaw beat: hand, click, open, silence)
+- [ ] 1.12 Tally states, eye tracking, throat-speaker room tone wired to AI
+      (bell never sounds; no vocalizations; jaw never syncs to sound)
 - [ ] 1.13 PHASE GATE: 10-shot gallery + long soak, reviewed
 
 ## PHASE 2 — The Cast
