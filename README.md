@@ -875,3 +875,19 @@ generalized UE_RUN_PYSCRIPT gate), and 'mobility' lives on components,
 not actors. DefaultPawn's engine-defined bindings give boot-and-walk
 free; true feel parity rides with the 0.8 pawn. Next: the twelve-feed
 wall, in MASTER CONTROL where it belongs.
+
+## Commit 080 · UNIT 0.6b · SPIKE 2: THE WALL HOLDS
+The port brief called this the one technical question Godot never
+answered on hardware, and the reason UE5 was being tested at all:
+twelve simultaneous video feeds at 60fps. Answered: twelve
+SceneCapture2D components, capture_every_frame, 256px targets, fed
+from twelve canon rooms of the stamped greybox onto a 4x3 unlit
+render-target wall standing in MASTER CONTROL where the canon puts
+it. Six hundred and one PIE frames on the M1 Pro: 8.61ms average
+(116 fps), 10.42ms at p95 (96 fps), against a 60fps pass line — and
+PIE is HEAVIER than a packaged build, so the margin is conservative.
+verdict=PASS, written into the record as the engine memo demands.
+The spike rig is ephemeral by design; spike_wall.py resurrects it in
+one command whenever the live monitor system (P3/P4) wants a
+reference. Phase 0 remaining: 0.7 the Rundown tick-brain, 0.8
+state/saves/loop, 0.9 the harness, 0.10 the parity gate.

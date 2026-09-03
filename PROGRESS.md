@@ -40,8 +40,13 @@ through Phase 0.)
 - [ ] 0.6 P0 — boot & walk: pawn with Godot-matched feel (player.gd
       constants incl. crouch c045), world stamped FROM the CSVs, doors with
       locked reasons; acceptance: free walk of all twenty rooms
-- [ ] 0.6b P1 — SPIKE 2: twelve SceneCapture2D feeds on the monitor wall,
-      60fps sustained on this machine, written into the engine memo
+- [x] 0.6b P1 — SPIKE 2 PASS: twelve SceneCapture2D feeds (256px,
+      capture_every_frame) from twelve canon rooms onto a 4x3 unlit-RT
+      wall in MASTER CONTROL; 601 PIE frames measured on the M1 Pro:
+      avg 116.1 fps, p95 96.0 fps vs the 60 line — native territory,
+      as the migration map predicted. Rig is ephemeral (ue/pyscripts/
+      spike_wall.py rebuilds it on demand); numbers in the ledger are
+      the engine memo's evidence
 - [ ] 0.7 P4a — the Rundown actor: TICK BRAIN (no Behavior Tree, per the
       migration map) with the grammar verbatim; WARN/STRIKE telemetry in
       the identical log format
