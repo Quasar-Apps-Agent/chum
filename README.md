@@ -953,3 +953,29 @@ dependency lesson (AIController lives in AIModule) and zero drama —
 the pipeline is starting to feel like a pipeline. Next: 0.8b-2, the
 loop around her — paper, the bench, the recording windows that make
 the tally mean something, and the clock that makes night real.
+
+## Commit 085 · UNIT 0.8b-spec · THE LOG, READ BACK LINE BY LINE (cloud)
+A cloud session, so per rule 0 the unit was the first CLOUD-OK box:
+the v16 save schema and the whole of game_state.gd, transcribed into
+ue/PORT-NOTES-STATE.md as the 0.8b implementation checklist. Not
+typed — extracted: a scratch parser pulled _save_dict (55 keys, in
+order), every load_log coercion, the var defaults, the reset_new_game
+set, the DEMO whitelist (15), the 20 signals and 47 funcs, and a grep
+sweep mapped writers and readers for every field across scripts/.
+Then the notes were ASSERTED against that extraction, rule 4b style,
+and the assert paid for itself twice: it caught a method hidden in a
+combined row, and it caught my own count (32 missing keys, not 33).
+The document's real yield is §9, the cross-check against the 0.8a
+C++: five save fields declared with the wrong type (paper, signatures,
+captures as int32; seance_wear an int; leland_answers an int), 32 of
+55 keys absent from the USaveGame, Mode and CurrentTape defaulting to
+0 where the spec says LATE_NIGHT and tape 1, and Strike() capping
+items_lost at 6 where ITEM_ORDER has seven names — under that cap the
+LOUPE could never become a New Game+ relic. Also on the record now:
+the eight saved keys NEW GAME deliberately keeps, paper's merge-not-
+replace load, the four signals emitted from outside the autoload, and
+that signing a log is a 4.0 noise at the station (the web law's echo).
+Ten boxes, 9.1–9.10, wait for 0.8b-2 on the Mac. Verification loop:
+no Blender, UE or Godot here, so no rebuild/render/import/capture/soak
+were run and none are claimed; Desktop copies N/A (no renders this
+unit). Inspection + scripted assert only — VERIFY-OK. Repo green.
