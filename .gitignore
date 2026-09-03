@@ -9,3 +9,10 @@ renders/
 *.blend1
 *.blend2
 .DS_Store
+
+# Unreal Engine generated (ue/Restoration)
+ue/Restoration/Intermediate/
+ue/Restoration/Saved/
+ue/Restoration/DerivedDataCache/
+ue/Restoration/Binaries/
+ue/Restoration/.vs/

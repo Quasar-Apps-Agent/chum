@@ -774,3 +774,12 @@ brightened it into cream pickets) and pushed deep as shadow
 machinery. The in-game capture is the money shot: staple rows lining
 both lips, teeth descending into black, the grin curling up into the
 cheeks. Import 0 errors; fail soak I01/I02/I06 PASS.
+
+## Commit 073 · UNREAL: FIRST LIGHT (unit 0.1)
+The pivot is real. ue/Restoration exists — Lumen + virtual shadow maps
+configured, Python and Movie Render Pipeline plugins on, Metal SM5,
+generated dirs gitignored — and UnrealEditor-Cmd loaded it headless and
+ran our Python: RESTORATION-PY-OK engine=5.8.0. The automation seam that
+made the Godot loop work (script in, evidence out) exists in Unreal from
+day one. The Godot game stays runnable as the reference spec per the
+rewritten charter. Next: 0.2, the import/capture loop.

@@ -6,8 +6,9 @@ bottom — the Godot game is the reference implementation, kept runnable
 through Phase 0.)
 
 ## PHASE 0 — Unreal Foundation & Core Port
-- [ ] 0.1 UE project skeleton (ue/Restoration, Lumen+VSM, git hygiene,
-      headless launch proven, disk audit + cache caps)
+- [x] 0.1 UE project skeleton (ue/Restoration, Lumen+VSM, git hygiene,
+      headless launch proven: RESTORATION-PY-OK on UE 5.8.0; disk ~19GB —
+      monitor per doctrine)
 - [ ] 0.2 Automation loop proven (pyscripts: import / material fixup /
       capture / log-grep; one-command mesh→capture unattended)
 - [ ] 0.3 Chum head imported + look-dev level v1 + ACCEPTANCE BASELINE
