@@ -38,6 +38,37 @@ into sub-boxes in `PROGRESS.md`, finish the first sub-box, and stop clean.
 
 ---
 
+## R · THE REALISM BAR (what "AAA" means here — checkably)
+
+**The ACCEPTANCE VIEW is the in-game Godot capture.** Cycles renders are
+design tools only; if it only looks good in Cycles, it does not exist. Every
+visual unit ends with its in-game capture placed next to the relevant canon
+plate at matching framing, and the question: *same league? Would this frame
+pass in a 2020s horror title's store-page captures?* If no — iterate before
+ticking the box.
+
+Hard rules, every one verifiable in a capture:
+1. **No naked primitives.** Nothing ships as a raw cylinder/cube/sphere/
+   torus. Everything visible is (a) a real sourced asset, (b) merged +
+   remeshed + sculpt-noised geometry, or (c) beveled/subdivided with edge
+   wear. Raw primitive caps and perfect circles read instantly as
+   programmer art — the old staple bricks are the cautionary tale.
+2. **Small detail lives in MAPS, not geometry.** Stitches, staples, seams,
+   engravings under ~2cm belong on normal/roughness/albedo maps baked onto
+   the parent surface; separate geometry only where the silhouette needs it
+   (teeth yes, stitch threads no).
+3. **Every surface breaks up light three ways**: albedo variation, roughness
+   variation, normal detail. Flat color + uniform roughness = rejected.
+4. **Lighting is part of the asset.** Every capture scene uses the standard
+   look-dev environment (unit 1.0b): SSAO + SSIL, SDFGI (or VoxelGI),
+   volumetric fog, soft shadows, AgX/filmic tonemap, tuned exposure. A model
+   is not done until the ENGINE can show it.
+5. **Scale-truth**: judge at gameplay distance AND at 1m closeup; both hold.
+6. **Motion**: animation units pass the classic principles — anticipation,
+   ease-in/out, follow-through, no pops — verified on captured frames.
+
+---
+
 ## 1 · DOCTRINE (paid for in blood — do not relearn these)
 
 **Views & verification**

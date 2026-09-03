@@ -4,8 +4,19 @@ Tick a box only after the full verification loop passes. Add sub-boxes freely;
 never delete history. Enumeration units (3.0, 4.0) expand this file in place.
 
 ## PHASE 1 — After-Fire Chum
-- [x] 1.0 Head complete (Commits 060–072: face, eyes w/ real lens, ears HD,
-      mouth rebuilt, fur cards + in-file hair, asset pipeline proven)
+- [x] 1.0 Head design complete in Cycles (Commits 060–072: face, eyes w/ real
+      lens, ears HD, mouth rebuilt, fur cards + in-file hair, pipeline proven)
+- [ ] 1.0b GODOT LOOK-DEV (jumps the queue — the realism bar's foundation):
+      WorldEnvironment upgrade in preview scenes AND the game — SDFGI/VoxelGI,
+      SSAO, SSIL, volumetric fog, soft shadows, AgX tonemap, exposure tuning;
+      material import audit (normal/roughness actually wired in-engine);
+      re-capture the head as the new acceptance baseline vs the plate
+- [ ] 1.0c HEAD REALISM RETROFIT to the bar: staples/stitches moved into
+      baked normal+albedo detail on lips/seams (geometry only where
+      silhouette demands); button eye rebuilt from a donor gear/button asset
+      or sculpted mesh (no flat rings); teeth resculpted as merged uneven
+      bone with baked grime; fur card density/anisotropy pass; every metal
+      beveled; side-by-side plate comparison passes
 - [ ] 1.1 Torso: quilted patchwork, seams, char zones, 2048 bake
 - [ ] 1.2 Throat speaker (sourced speaker/radio driver, chest mount, cabling)
 - [ ] 1.3 Collar & leather strap & dead brass bell
