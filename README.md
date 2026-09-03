@@ -820,3 +820,18 @@ the dark locked-EV head portrait — burnt patchwork out of blackness,
 the lens a pale blind eye — which is the frame every future Chum unit
 must beat. Deltas honestly held for 1.8+: emissive tally, fur mottle
 density, hardware tier per the realism bar.
+
+## Commit 076 · UNIT 0.3b · THE SODIUM LIGHT COMES ON
+tools/sodium_check.py is the pipeline doc's material gate, permanent
+and headless: a near-monochrome sodium lamp, a neutral floor, and no
+place for a material to hide behind hue. Two modes, because the first
+contact sheet taught an immediate lesson: baked per-object materials
+on generic shader balls read as black glass (empty bake margins), so
+balls are for MASTERS and --subject puts the real asset under the
+lamp. Chum's first subject pass is the honest audit: fur, lens,
+mouth hardware, whiskers, ear panels PASS — they read as fiber,
+machined metal, straw, felt. The belly, chest patches, hands and feet
+FAIL as faceted clay and wax, which is exactly right: they are the
+pre-head-era body, and their sodium verdicts are now filed against
+units 1.1, 1.4 and 1.5. The gate is wired: every future material
+pass ends under this lamp before it ships.

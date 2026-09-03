@@ -20,8 +20,12 @@ through Phase 0.)
       deltas for 1.8+: tally not yet emissive in UE, fur mottle vs plate,
       hardware tier. LFS deferred: no .uasset tracked in git yet (Content
       generated dirs ignored; revisit when Content assets need versioning)
-- [ ] 0.3b SODIUM CHECK lookdev scene in Blender (permanent material gate:
-      sodium lamp, neutral floor; wired into the factory verification loop)
+- [x] 0.3b SODIUM CHECK built (tools/sodium_check.py): contact-sheet mode
+      for master materials + --subject mode for baked assets (ball UVs lie
+      on bakes — their own mesh tells the truth). First gate run on Chum
+      PASSED fur/lens/hardware/whiskers and CAUGHT the un-rebuilt body:
+      belly+patches read as faceted clay, hands/feet as wax — findings
+      filed against units 1.1 / 1.4 / 1.5
 - [ ] 0.4 Quixel/Fab hookup (owner Epic sign-in; starter Megascans set;
       documented import path)
 - [ ] 0.5 [CLOUD-OK] Data extraction: Rooms/Doors/Stations/Landmarks/
