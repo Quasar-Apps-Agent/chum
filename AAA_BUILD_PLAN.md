@@ -1,310 +1,227 @@
-# RESTORATION · AAA BUILD PLAN
+# RESTORATION · AAA BUILD PLAN — BLENDER + UNREAL ENGINE 5.8
 
-**The charter for the recurring build routine.** Every session that opens this
-repo to do build work MUST read this file and `PROGRESS.md` first, do exactly
-one unit of work (two only if the first comes up trivially green), verify it
-through the full check loop, mark it off, and leave the repo green. The game is
-done when every box in `PROGRESS.md` is checked and the Phase 6 exit gates pass.
+**The charter for the recurring build routine.** Every session MUST read this
+file and `PROGRESS.md` first, do exactly one unit, verify it through the full
+check loop, mark it off, commit, push, and leave the repo green.
 
-Mission: take the fully-coded game in this repo from greybox-with-a-hero-head
-to a smooth, cohesive, AAA-looking horror experience — piece by piece, asset
-by asset, verified at every step. Order of campaign: **Chum → the rest of the
-cast → every room and prop in the studio → puzzle & game functionality →
-polish, audio, performance, packaging.**
+**THE STACK (owner decision, 2026-09):** assets are built in **Blender**
+(the factory in `tools/` — unchanged); the game runs in **Unreal Engine 5.8**
+(`/Users/Shared/Epic Games/UE_5.8`). The Godot implementation in this repo is
+now the **REFERENCE IMPLEMENTATION**: it holds the proven gameplay, AI,
+puzzle logic, and invariants. It is the SPEC for the port — keep it runnable,
+mine it constantly, delete none of it until Phase 0's parity gate passes.
 
----
-
-## 0 · SESSION PROTOCOL (read this, then work)
-
-1. `git status` if repo is a git repo, else check `README.md` tail — confirm
-   the last session left things green. If something is broken, FIXING IT IS
-   THE UNIT. Never build on red.
-2. Open `PROGRESS.md`. Find the first unchecked box in the earliest unfinished
-   phase. That is the unit. Do not skip ahead; do not gold-plate finished units.
-3. Work the unit using the doctrine (§1), the asset policy (§2), and the
-   pipeline (§3).
-4. Run the FULL verification loop (§4). A unit is not done until every
-   applicable check passes AND the images have actually been looked at.
-5. Close out: tick the box in `PROGRESS.md`, append a commit-style entry to
-   `README.md` (what, why, what broke, what's proven), copy current renders to
-   `~/Desktop/chum-head-current.png` / `chum-ingame-current.png` (or the
-   subject-appropriate names), then `git add -A && git commit` (message = the
-   unit name + one-line result) and `git push` to
-   `https://github.com/Quasar-Apps-Agent/chum` (auth is in the keychain).
-   Small, verified, shippable increments beat heroic half-done rewrites.
-
-Session budget: ONE unit. If a unit turns out to be >2 hours of work, split it
-into sub-boxes in `PROGRESS.md`, finish the first sub-box, and stop clean.
+Mission: a smooth, cohesive, AAA-looking horror game. Campaign order:
+**Unreal foundation & port → Chum → cast → studio rooms & props → puzzles &
+functionality → polish/audio/perf/packaging.**
 
 ---
 
-## R · THE REALISM BAR (what "AAA" means here — checkably)
+## 0 · SESSION PROTOCOL
 
-**The ACCEPTANCE VIEW is the in-game Godot capture.** Cycles renders are
-design tools only; if it only looks good in Cycles, it does not exist. Every
-visual unit ends with its in-game capture placed next to the relevant canon
-plate at matching framing, and the question: *same league? Would this frame
-pass in a 2020s horror title's store-page captures?* If no — iterate before
-ticking the box.
-
-Hard rules, every one verifiable in a capture:
-1. **No naked primitives.** Nothing ships as a raw cylinder/cube/sphere/
-   torus. Everything visible is (a) a real sourced asset, (b) merged +
-   remeshed + sculpt-noised geometry, or (c) beveled/subdivided with edge
-   wear. Raw primitive caps and perfect circles read instantly as
-   programmer art — the old staple bricks are the cautionary tale.
-2. **Small detail lives in MAPS, not geometry.** Stitches, staples, seams,
-   engravings under ~2cm belong on normal/roughness/albedo maps baked onto
-   the parent surface; separate geometry only where the silhouette needs it
-   (teeth yes, stitch threads no).
-3. **Every surface breaks up light three ways**: albedo variation, roughness
-   variation, normal detail. Flat color + uniform roughness = rejected.
-4. **Lighting is part of the asset.** Every capture scene uses the standard
-   look-dev environment (unit 1.0b): SSAO + SSIL, SDFGI (or VoxelGI),
-   volumetric fog, soft shadows, AgX/filmic tonemap, tuned exposure. A model
-   is not done until the ENGINE can show it.
-5. **Scale-truth**: judge at gameplay distance AND at 1m closeup; both hold.
-6. **Motion**: animation units pass the classic principles — anticipation,
-   ease-in/out, follow-through, no pops — verified on captured frames.
+1. Confirm the repo is green (last README ledger entry + `git status`).
+   Broken = fixing it IS the unit. Never build on red.
+2. Take the FIRST unchecked box in `PROGRESS.md`. No skipping, no gold-plating.
+3. Work it using the doctrine (§1), asset policy (§2), pipeline map (§3).
+4. Run the verification loop (§4). Look at every image with your own eyes.
+5. Close out: tick the box, append the README ledger entry, copy current
+   renders/captures to the Desktop (`chum-*-current.png`), `git add -A &&
+   git commit && git push` (remote: github.com/Quasar-Apps-Agent/chum,
+   auth in keychain). One unit per session; split oversized units into
+   sub-boxes and finish the first.
 
 ---
 
-## 1 · DOCTRINE (paid for in blood — do not relearn these)
+## R · THE REALISM BAR (what "AAA" means — checkably)
 
-**Views & verification**
-- There is ONE model per subject (e.g. `blend/chum_af.blend`) and THREE honest
-  views: Cycles beauty (`tools/render_chum_af_beauty.py`), EEVEE bench check,
-  and the real-renderer Godot capture (`--write-movie`, WITHOUT `--headless` —
-  headless uses the dummy renderer and crashes on texture reads). Judge in all
-  three. The user works in the Blender APP — what File→Open shows matters:
-  save .blends with Material Preview shading + relationship lines off.
-- **Measure the texel, not the render.** When a surface "renders wrong," raycast
-  it (`scene.ray_cast` from the camera) and sample the actual baked pixels via
-  UV lookup before touching materials. Three multiplier "fixes" once chased a
-  lighting problem.
-- AgX + hot lights desaturate dark albedos to grey. If it looks washed out,
-  check the light rig before the material. The plate look is a DIM portrait.
-- Blender on Metal occasionally SIGABRTs mid-render. Retry once before
-  investigating anything.
+**The ACCEPTANCE VIEW is the in-engine Unreal capture** (Movie Render Queue
+or high-res screenshot from the look-dev level). Blender Cycles renders are
+design tools only. Every visual unit ends with its in-engine capture next to
+the canon plate at matching framing: *same league? Would this frame pass on
+a 2020s horror title's store page?* If no — iterate before ticking.
 
-**Geometry & materials**
-- Author colors in sRGB and convert with `srgb_to_linear()` — glTF
-  baseColorFactor is linear. This bug has bitten at least three times.
-- NEVER shrinkwrap a thin plane/shell onto geometry and bake or rely on it —
-  it collapses into slivers (the "giraffe artifact"). Panels and patches are
-  SOLID remeshed geometry.
-- Cycles' Principled has a ~4% specular floor: near-black + close light = grey.
-  Lightproof black = zero-strength Emission (`void_black`) in Cycles, and the
-  game paints any `MawBlack`-named surface unshaded black in
-  `scripts/character_kit.gd` (glTF exports emission-black with a WHITE base).
-- Bake pipeline: `organic()` remesh → smart UV → scan-based Cycles nodes →
-  bake DIFFUSE(COLOR)/NORMAL/ROUGHNESS → simple Principled with baked maps.
-  **Pack every generated image** (`img.pack()`) or reopening loses the bakes.
-- Principled Hair BSDF needs `parametrization="MELANIN"` — Color input alone
-  renders blond.
-- Every directory that ever contains a `.blend` inside the project tree gets a
-  `.gdignore` (`blend/`, `tools/texsrc/`, `tools/modelsrc/`) or the Godot
-  importer hangs for minutes.
-- Fur: particle hair lives IN the .blend (grown post-bake — `bake_all()`
-  clears material slots) for viewport/Cycles; the GAME gets textured fur
-  CARDS wearing `tools/texsrc/fur_tuft_atlas.png` (regenerate with
-  `tools/make_fur_cards.py`). glTF ignores particle hair — that's the design.
-- Metals/leathers get `scan_dress()` (box-projected scan × tint multiply).
-  Watch the value multiplier: 2.2 turned the mouth grille into cream pickets;
-  shadow-machinery parts want ~0.7.
-
-**Game contract (do not break; verify after every model change)**
-- `chum_af.glb` must contain nodes `Head` and `Jaw`; `rundown.gd` finds gait
-  pivots by name (`_hip_l/_hip_r/_shoulder_l/_shoulder_r/_tail_pivot`).
-- Runtime tally dot: head-local `(0.13, 0.06, 0.39)` r≈0.027 (rundown.gd +
-  head_preview.gd). If the lens moves, move the dot.
-- BASE_HEIGHT 2.6 / AF_HEIGHT 3.35; rig scaled by rundown.gd.
-- Coordinates: Blender Z-up/−Y-front → Godot Y-up/+Z-front; head-local Godot
-  z = −(Blender y).
-- Character kit passthrough: materials WITH albedo textures pass through;
-  bare wool/patch names get triplanar fabric; `MawBlack` goes unshaded black.
-
-**Checks that gate everything**
-- `Godot --headless --import` → 0 errors.
-- Fail-bot soak: `Godot --headless res://scenes/soak.tscn -- --bot=fail
-  --minutes=2` → I01/I02/I22/I06 PASS. Longer wanderer/checker soaks at phase
-  gates.
-- Real-renderer capture for anything visual:
-  `Godot res://scenes/head_preview.tscn --write-movie renders/x.png
-  --fixed-fps 30 --quit-after 3` (build a preview scene per subject as needed).
-- For ANIMATION units: capture 60–120 frames (`--quit-after N`), read several
-  spread across the motion, and judge arcs/timing/contact like a reviewer —
-  smooth ease-in/out, no pops, no foot-slide, secondary motion follows through.
+1. **No naked primitives.** Everything visible is a sourced asset, a merged/
+   remeshed/sculpted mesh, or beveled with edge wear. Raw cylinder caps and
+   perfect circles = programmer art = rejected.
+2. **Small detail lives in MAPS.** Stitches/staples/seams/engravings <2cm go
+   in normal+roughness+albedo maps baked onto parent surfaces; separate
+   geometry only where silhouette demands (teeth yes, threads no).
+3. **Every surface breaks light three ways**: albedo variation, roughness
+   variation, normal detail.
+4. **Lighting is part of the asset**: Lumen GI + virtual shadow maps, fog
+   volumes, tuned exposure in the standard look-dev level. A model is done
+   only when the ENGINE shows it well.
+5. **Scale-truth**: judge at gameplay distance AND 1m closeup.
+6. **Motion**: animation passes anticipation/ease/follow-through on captured
+   frame sequences; no pops.
 
 ---
 
-## 2 · ASSET POLICY (use the world's assets; never build what exists)
+## 1 · DOCTRINE
 
-- **Sources (all CC0, no auth):** Poly Haven (`api.polyhaven.com` — models,
-  HDRIs, textures), AmbientCG (`ambientcg.com` — needs a User-Agent header,
-  e.g. `curl -A "restoration-build/1.0"`). Model downloads: prefer the
-  `.blend` @1k with its texture includes into `tools/modelsrc/<Asset>/`.
-- Every import gets: a line in `tools/texsrc/CREDITS.md`; textures packed;
-  a **soot/wear pass** (multiply toward char, roughness up) so nothing looks
-  showroom-new — this also kills any legible donor branding (the lens
-  engraving precedent); scale/orientation fitted in the build script so
-  rebuilds are deterministic. Cut donors down with bmesh by material index
-  (the Camera_01 → TallyLens precedent).
-- Search the library FIRST for: speakers, radios, bells, clocks, lamps, tools,
-  furniture, crates, cables, pipes, doors, switches, tape machines, chairs,
-  desks, kitchenware. Build procedurally only what cannot be sourced (the
-  puppets themselves, bespoke set pieces).
-- Audio (Phase 6): freesound.org CC0 and sonniss GDC packs; credit everything
-  in `assets/audio/CREDITS.md`.
-- License rule: CC0 only. No CC-BY unless the user approves the attribution;
-  nothing NC/ND; no ripped game assets, ever.
+**Blender asset factory (unchanged, battle-tested)**
+- Deterministic build scripts in `tools/` (`build_chum_af.py` is the
+  template): remesh organics, scan-dressed materials, 2048 bakes with packed
+  images, fur-card generation (`make_fur_cards.py` atlas), in-file particle
+  hair for design renders, real CC0 donor meshes cut down via bmesh (the
+  Camera_01 tally-lens precedent).
+- sRGB→linear on authored colors; measure the texel not the render; raycast
+  forensics for mystery surfaces; thin shrinkwrapped shells are BANNED
+  (they collapse — solid geometry only); Principled Hair needs MELANIN
+  parametrization; Metal renders SIGABRT occasionally — retry once.
+- Every dir containing `.blend` keeps a `.gdignore` (harmless post-Godot,
+  protects the reference implementation's importer).
+- Cycles beauty + EEVEE bench renders remain the DESIGN loop before any
+  engine import.
+
+**Unreal side (learned so far; extend as lessons land)**
+- Engine: UE 5.8 at `/Users/Shared/Epic Games/UE_5.8`; editor CLI:
+  `Engine/Binaries/Mac/UnrealEditor-Cmd "<uproject>" ...`. Project lives at
+  `ue/Restoration/Restoration.uproject` in this repo.
+- Machine is M1 Pro / 16GB / ~20GB free disk: KEEP CACHES CAPPED (project
+  DerivedDataCache local, prune `Saved/`, `Intermediate/` — all gitignored).
+  Watch disk before every session; below 8GB free, cleanup IS the unit.
+- Import path: Blender→glTF (.glb) via Interchange, or FBX where Interchange
+  fights us. Units: UE is centimeters — export scale ×100 (glTF importer
+  handles when "Uniform Scale" left default; VERIFY on first import).
+- Material mapping on import never fully survives: budget a material-fixup
+  Python step per asset (Editor Python: `-run=pythonscript -script=...`).
+  MawBlack → Unlit black material. Fur cards → two-sided masked material.
+- Automation loop: Editor Python scripts for import/setup, Movie Render
+  Queue (or `HighResShot`) for captures, `-ExecCmds="Automation RunTests"`
+  for tests, all headless via UnrealEditor-Cmd. First runs compile shaders —
+  SLOW (minutes); patience, don't kill young processes.
+- Gameplay code: Blueprints where visual/simple, C++ where systemic. Port
+  from the GDScript reference — logic is already proven; translate, don't
+  redesign. Keep node/bone naming contracts (Head, Jaw, tally socket).
+
+**The reference implementation (Godot, in place)**
+- `scripts/rundown.gd` = Chum's whole AI + procedural animation brain.
+- `scripts/player.gd`, interactables, `world_builder.gd` (whole studio
+  layout with coordinates!), save v16, `scenes/soak.tscn` invariant harness
+  (I01 warn-precedes-strike, I02 no-strike-thru-wall, I22 noise-attribution,
+  I06 fail-forward-finale) — these invariants get UE automation-test
+  equivalents in Phase 0.9.
 
 ---
 
-## 3 · PIPELINE MAP (what exists; extend, don't fork)
+## 2 · ASSET POLICY
 
-- `tools/build_chum_af.py` — the After-Fire Chum build (geometry, materials,
-  bakes, fur cards, in-file hair, viewport prefs, glb + blend export). The
-  template for all character builds.
-- `tools/render_chum_af_beauty.py` — Cycles design renders (head / ears /
-  full). Clone per subject.
-- `tools/make_fur_cards.py` — fur tuft atlas generator.
-- `tools/debug_face.py` — albedo-emission debug render (the forensic tool).
-- `scripts/character_kit.gd` — glb loaders + procedural humans;
-  `scripts/rundown.gd` — Chum AI + procedural animation brain;
-  `scripts/world_builder.gd` — the whole greybox studio;
-  `scripts/prop_kit.gd` — prop builders with scan-textured `_pbr()`.
-- `scenes/head_preview.tscn`, `arm_preview`, `cast_preview` — capture rigs.
-- `scenes/soak.tscn` — invariant soak harness (bots: wanderer/checker/fail).
-- `README.md` — the commit ledger. Every session appends its entry.
+- **CC0 web sources (as before):** Poly Haven (api.polyhaven.com — models/
+  HDRIs/textures), AmbientCG (User-Agent header required). Downloads into
+  `tools/modelsrc/` + `tools/texsrc/` with CREDITS.md lines.
+- **NEW — the Unreal ecosystem (the reason for this pivot):**
+  **Fab / Quixel Megascans** — free-in-Unreal content via the Fab plugin or
+  fab.com while signed into the owner's Epic account. Surfaces, decals,
+  3D scans, foliage. License: fine for this UE game; note each import in
+  `ue/CREDITS-FAB.md`. Prefer Megascans for environment surfaces & props
+  before building anything by hand.
+- Everything imported gets the wear pass (nothing showroom-new) and a
+  credits line. CC0 or Fab-standard licenses only; no ripped content.
+- Audio later: freesound.org CC0 / Sonniss GDC packs.
 
 ---
 
-## 4 · THE VERIFICATION LOOP (run at the end of every unit)
+## 3 · PIPELINE MAP
+
+- Blender factory: `tools/build_*.py`, `tools/render_*_beauty.py`,
+  `tools/make_fur_cards.py`, `tools/debug_face.py` — unchanged.
+- Unreal project: `ue/Restoration/` — Content/{Characters,Studio,Props,
+  LookDev,Core}. Editor Python utilities live in `ue/pyscripts/` (import,
+  material fixup, capture, test-run helpers) — build them once, reuse
+  forever.
+- Reference Godot game: repo root (runnable via Godot 4.3 as before).
+- Ledger: `README.md`. Tracker: `PROGRESS.md`. Push every session.
+
+---
+
+## 4 · VERIFICATION LOOP (every unit)
 
 ```
-1. Rebuild the touched build script(s)            → "WROTE" with no Traceback
-2. Cycles beauty render(s) of the subject         → look at the image(s)
-3. EEVEE bench render                              → look (this is the user's app view)
-4. Godot --headless --import                       → 0 errors
-5. Real-renderer capture (stills or anim frames)   → look
-6. Fail-bot 2-min soak                             → I01/I02/I22/I06 PASS
-7. PROGRESS.md tick + README ledger + Desktop copies
+1. Blender rebuild of touched assets     → WROTE, no Traceback
+2. Cycles/EEVEE design renders           → look at them
+3. UE import/update (headless python)    → no errors in log
+4. UE look-dev capture(s) of the subject → look at them (ACCEPTANCE VIEW)
+5. UE automation tests (once they exist) → green; plus reference-Godot soak
+   only while the Godot game is still the live spec for the ported system
+6. Tick box → ledger → Desktop copies → commit → push
 ```
-Animation units add: frame-sequence review (≥4 frames across the motion) and,
-at phase gates, a 30-minute wanderer soak.
+Animation units: capture sequences (≥8 frames or MRQ clip), review motion.
+Disk check every session start (see doctrine).
 
 ---
 
-## 5 · WORK BREAKDOWN (the campaign — boxes live in PROGRESS.md)
+## 5 · WORK BREAKDOWN
 
-### PHASE 1 — AFTER-FIRE CHUM, COMPLETE & FULLY ANIMATED
-The hero. The head is done (Commits 060–072). Remaining: the body at head
-tier, then the full animation set.
-- **1.1 Torso**: quilted patchwork per the plate (rust chest, green side, tan
-  belly circle, plum/blue remnants as burnt versions), seam staples, char
-  zones; bake at 2048.
-- **1.2 Throat speaker** (dossier detail 2): source a real vintage
-  speaker/radio model, cut the driver, mount it in the chest with a grille
-  and cable runs to the jaw.
-- **1.3 Collar & bell**: leather collar strap (Leather030), sourced or built
-  brass keyhole bell, hung dead (it never rings).
-- **1.4 Arms & hands**: exposed tendon cables (dossier detail 3) on BOTH arms
-  (left is already dense), articulated 3-finger+thumb hands with rod
-  knuckles, claw tips; fur cards + hair to wrists.
-- **1.5 Legs** (dossier detail 5): internal control rods knee-to-ankle
-  visible through torn fur windows, weighted foot bases, toe caps.
-- **1.6 Tail**: segmented rod core, fur cards + hair, rust tip.
-- **1.7 Full-figure pass**: proportion check vs the 11-ft plate, silhouette
-  low-angle render, tone unification, glb size budget (≤80 MB; WebP-compress
-  bakes if over).
-- **1.8 Gait animation**: rework `rundown.gd` walk — weight shift onto the
-  planted foot, hip drop, shoulder counter-rotation, head bob with lag. Judge
-  from 90-frame captures, three angles.
-- **1.9 Strike & fold**: anticipation crouch, fast strike, recovery; fold-up
-  idle per canon. No pose pops.
-- **1.10 Jaw & lever sync**: jaw motion driven with the visible mouth lever
-  arm movement; teeth/lip staples ride correctly (parented to jaw ✓).
-- **1.11 Secondary motion**: ear micro-sway, tail follow-through, whisker
-  jitter on head turns, tally-eye brightness flicker states (idle/tracking/
-  hunting) wired to AI states.
-- **1.12 PHASE GATE**: 30-min wanderer soak + full check loop + a 10-shot
-  render gallery (`docs/telemetry/gallery-chum/`) reviewed image by image.
+### PHASE 0 — UNREAL FOUNDATION & CORE PORT (new; everything else waits)
+- **0.1 Project skeleton**: create `ue/Restoration` (Blueprint project,
+  Forward+? No — Deferred, Lumen on, VSM on), git hygiene (.gitignore for
+  Intermediate/Saved/DerivedDataCache/Binaries), first headless launch
+  proven, disk audit.
+- **0.2 Automation loop proven**: `ue/pyscripts/` — headless import script,
+  material-fixup script, capture script (MRQ or HighResShot), log-grep
+  helpers. Exit criteria: one command imports a test mesh and produces a
+  capture PNG unattended.
+- **0.3 Chum head into UE**: export `chum_af.glb` → import → material fixup
+  (bakes wired, fur cards masked+two-sided, MawBlack unlit, lens PBR) →
+  look-dev level v1 (Lumen, three-point rig, fog) → capture vs plate.
+  **This capture is the new acceptance baseline.**
+- **0.4 Quixel/Fab hookup**: owner signs into Epic/Fab once; pull a starter
+  set of studio-relevant Megascans surfaces; document the import path.
+- **0.5 Player port**: first-person controller + interaction trace + HUD
+  shell (Blueprint), parity with `player.gd` feel (sens, speeds).
+- **0.6 Studio blockout import**: export world_builder geometry (or rebuild
+  greybox from its coordinates) so there's a place to walk; collision.
+- **0.7 Chum actor port**: rig import, `rundown.gd` brain → Behavior Tree +
+  anim blueprint (gait/strike/fold/head-track/tally states).
+- **0.8 Systems port**: saves, doors/interactables, inventory/notes — per
+  the reference scripts.
+- **0.9 Test harness**: UE automation tests encoding I01/I02/I22/I06 +
+  soak-style bot wander map test; wire into the loop.
+- **0.10 PHASE GATE — PARITY SLICE**: one full room playable in UE with
+  Chum encounter, saves, and tests green, captured and reviewed. Only now
+  does Godot stop being the live spec (it stays in-repo as archive).
 
-### PHASE 2 — THE REST OF THE CAST
-Plates in `docs/canon/art/`. Upgrade the shared human pipeline once, then per
-character. Each character = model unit + animation unit.
-- **2.1 Human pipeline v2**: one build-script template (`tools/build_human.py`)
-  with: sculpted head (remesh + displacement from reference proportions),
-  particle-hair grooms per style, scan-dressed clothing (AmbientCG fabrics),
-  fur-card technique reused for hair cards in-game, baked 1024 textures,
-  shared armature-free pivot contract matching `character_kit.gd` poses.
-- **2.2–2.6 Per plate**: Merle Cottry · Harriet · Vess Keys · Leland Merrick ·
-  Rita Ivori (+ floor manager variant). Each: build vs plate → three-view
-  verify → cast_preview capture → kit hookup.
-- **2.7 1974 Chum**: apply the AF pipeline (bakes, fur cards, hair, real-asset
-  amber eye/bell) to `build_chum_1974.py` — pristine, loved, clean.
-- **2.8 1971 pilot Chum**: same treatment, rougher build per canon.
-- **2.9 Cast animation set**: idle/walk/talk gestures per character via the
-  kit's pose system; blink/head-track where faces allow.
-- **2.10 PHASE GATE**: cast_preview lineup render + captures reviewed; soaks.
+### PHASE 1 — AFTER-FIRE CHUM (Blender factory → UE acceptance)
+1.1 Torso (quilt/patches/char, 2048 bakes) · 1.2 Throat speaker (donor
+speaker asset) · 1.3 Collar & dead bell · 1.4 Arms & articulated hands ·
+1.5 Legs & control rods · 1.6 Tail · 1.7 Full-figure unification + budget ·
+1.8 Head realism retrofit per §R (staples→maps, sculpted teeth, beveled
+metals, fur density) · 1.9 Gait anim (UE anim BP) · 1.10 Strike/fold ·
+1.11 Jaw+lever sync · 1.12 Secondary motion & tally states · 1.13 GATE:
+gallery + long soak test.
 
-### PHASE 3 — THE STUDIO: ROOMS & PROPS
-First session of this phase: read `scripts/world_builder.gd` + the canon
-docs, enumerate EVERY room/zone into `PROGRESS.md` as its own box, then work
-them one per session. Per-room unit template:
-- Replace greybox surfaces with scan materials (AmbientCG: floors, walls,
-  ceiling tiles, carpets); check tiling scale at player height.
-- Source props from Poly Haven (desks, chairs, lamps, crates, tape machines,
-  cables…) into `prop_kit.gd` loaders; soot/wear pass; bespoke props built
-  procedurally only where sourcing fails.
-- Lighting pass per room: motivated practicals, horror-dim, tally-red
-  accents; player-path readability check from actual gameplay captures.
-- Collision/nav verify (walk the room with the wanderer bot), then the loop.
-Known majors from the docs (verify against world_builder at enumeration):
-lobby, stage floors, corridor ring, workshop/repair bay, archives, control
-booth, break room, storage, basement/service, the shrine wall (Vess),
-premiere spaces. **3.FINAL PHASE GATE**: full-studio walkthrough capture set
-+ 30-min soaks on all three bots.
+### PHASE 2 — THE CAST
+2.1 Human pipeline v2 (Blender template; consider MetaHuman for the humans
+— evaluate in-unit, the puppet cast may not suit it) · 2.2–2.6 Merle /
+Harriet / Vess / Leland / Rita+manager · 2.7 1974 Chum · 2.8 1971 pilot ·
+2.9 Cast anim sets · 2.10 GATE lineup.
 
-### PHASE 4 — PUZZLES & GAME FUNCTIONALITY
-Source of truth: the 13 canon design docs. First session: extract the full
-puzzle/mechanic list into `PROGRESS.md`. Per unit: implement/upgrade the
-mechanic → interactable polish (prompts, feedback, diegetic UI) → failure
-states feed the fail-forward system (I06) → soak with the checker bot →
-invariant added to the harness if the mechanic is load-bearing.
-Includes: save/load integrity (v16+ format), difficulty/pacing tuning passes,
-Chum encounter choreography per room, scripted premiere finale sequence.
+### PHASE 3 — THE STUDIO (rooms & props)
+3.0 ENUMERATE rooms from `world_builder.gd` + canon docs into boxes. Per
+room: Megascans surfaces, Fab/PolyHaven props (wear pass), bespoke set
+pieces from the Blender factory, Lumen lighting pass, collision/nav,
+capture review. 3.FINAL GATE: full-studio walkthrough captures + soaks.
 
-### PHASE 5 — SIXTH SENSE: AUDIO, UI, POST, PERFORMANCE
-- **5.1 Audio bed**: CC0 ambience per room, Chum servo/cloth/bell foley tied
-  to animation events, adaptive tension layers driven by AI state, premiere
-  cue. Mix pass with captures.
-- **5.2 UI/UX**: diegetic-first HUD polish, menus (main/pause/settings with
-  audio+sensitivity+accessibility), readable interaction prompts, no physical
-  text blocking the camera (regression-tested — this was a launch complaint).
-- **5.3 Post & atmosphere**: film grain, vignette, fog volumes, tonemap
-  tuning per room, tally-red grade moments.
-- **5.4 Performance**: 60fps target on this Mac — draw-call audit, fur-card
-  LODs, texture budget (WebP), occlusion, soak with FPS logging invariant.
-- **5.5 Packaging**: export presets (macOS at minimum), icon, first-run flow,
-  crash-free 60-min soak on the packaged build.
+### PHASE 4 — PUZZLES & FUNCTIONALITY
+4.0 ENUMERATE from the 13 canon docs. Per mechanic: port/implement →
+diegetic feedback → fail-forward integration → automation test. Plus:
+save integrity, encounter choreography per room, premiere finale sequence.
 
-### PHASE 6 — FINAL GATES (100% definition)
-- [ ] Every box above checked.
-- [ ] 60-min soaks, all bots, packaged build: all invariants PASS, zero
-      script errors in logs.
-- [ ] Full-game capture playthrough reviewed scene by scene for visual bar.
-- [ ] CREDITS complete (art + audio). README ledger tells the whole story.
-- [ ] The user has said the word: shipped.
+### PHASE 5 — POLISH
+5.1 Audio bed & foley on anim events (MetaSounds) · 5.2 UI/menus/
+accessibility · 5.3 Post & atmosphere per room · 5.4 Performance: 60fps on
+M1 Pro (scalability tuning, Nanite where it helps, texture budgets) ·
+5.5 Packaging: macOS build, 60-min packaged soak.
+
+### PHASE 6 — FINAL GATES
+All boxes checked · packaged-build soaks clean · full playthrough capture
+review · credits complete (art/audio/Fab) · owner sign-off.
 
 ---
 
 ## 6 · WHEN THINGS GO WRONG
-- Regression found mid-unit → fixing it becomes the unit; ledger it honestly.
-- An approach fails twice → stop, write the post-mortem in the ledger, pick a
-  different technique (the box-lips → curve-lips precedent).
-- Asset can't be sourced after two searches → build it procedurally, note it.
-- NEVER leave the repo failing import or soak at session end. If out of time,
-  revert the unit's changes (build scripts are deterministic — the previous
-  state is one rebuild away) and log what happened.
+Regression = the unit. Two failed attempts at an approach = post-mortem in
+the ledger, switch technique. Can't source an asset after two searches =
+build it. Disk under 8GB = cleanup unit. NEVER leave the repo un-runnable;
+Blender scripts are deterministic and the UE project must always open.
