@@ -991,3 +991,35 @@ writes ForceUTF8WithoutBOM. The cloud lane's PR #7 merged the same
 day, and its §6 delta audit — 7 shape mismatches and 32 missing keys
 against my own 0.8a SaveGame — is now unit 0.8b-3, a worklist I did
 not have to write myself. Two hands, one main.
+
+## Commit 087 · UNIT 4.0 · THE MECHANICS, COUNTED (cloud unit)
+A cloud session again, so rule 0 sent it to the last CLOUD-OK box:
+enumerate Phase 4. The method was to read everything that claims to be
+law — the eleven laws, the build order, the migration map, the design
+doc, the game master, the walkthrough, the routing, the casualty ledger,
+the after-fire canon, the reaction matrix, thirty-one invariants,
+sixty-one QA lines, twenty-six probes, twenty-eight achievements, the
+demo plan, the controls and accessibility contracts, the props packet —
+and then to read the seventy-three scripts that ARE the spec, header by
+header, constant by constant, plus the stamper's spawn list and the
+input map. The result is ue/PORT-NOTES-MECHANICS.md: thirty-four
+mechanics in thirty-nine boxes, ordered as BUILD-ORDER orders them (the
+hunter's remainder, the story gates, the meta), each carrying its
+GDScript, its state, its UE home, the laws it must keep, the QA lines
+that accept it, and the plan's four-step shape. Phase 0 keeps what it
+already owns; nothing is boxed twice. Two honest flags: ENDING A ·
+AUDIENCE ONLY (4.28b) has no code beneath it — QA-60/61 and the c046
+addendum are the whole spec, and it will need the v17 schema policy
+before it can be built; and the casualty ledger's own AS BUILT names
+two canon-only remainders inside 4.24c. Verification for a text unit is
+an assert script, not an eye: tools/verify_phase4.py proves tracker ↔
+register ↔ sources — every script has exactly one home, every law,
+invariant, QA line, achievement, action, and timing constant resolves
+to a real box, the seven pre-existing Phase 4 boxes survived verbatim,
+and 4.0's tag survived its tick. It failed three times before it passed
+(a shorthand range, a regex that ate its neighbor's cell, a table
+separator mistaken for a rule), which is the point of writing it. No
+renders this session (no Blender, no Unreal, no Desktop) — Desktop
+copies skipped, honestly. Repo green on entry (HEAD == origin/main
+6ac53ae) and on exit. The CLOUD-OK lane is now empty: the next cloud
+session should verify green and exit with a note, as the first one did.

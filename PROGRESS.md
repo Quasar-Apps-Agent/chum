@@ -160,7 +160,101 @@ discipline, QA-56 drift=dressing-only, QA-57 one hero object max.)
 - [ ] 3.FINAL PHASE GATE: full-studio walkthrough captures + soaks
 
 ## PHASE 4 — Puzzles & Functionality
-- [ ] 4.0 [CLOUD-OK] ENUMERATE mechanics from the canon docs into boxes here
+(Enumerated by unit 4.0 from the canon docs + the reference scripts. The
+register is ue/PORT-NOTES-MECHANICS.md: per box the GDScript spec, state,
+UE home, laws/invariants, QA acceptance, and the four-step unit shape from
+the plan §5 — port → diegetic feedback → fail-forward → automation test.
+Boxes follow BUILD-ORDER P4 → P5 → P6; Phase 0 keeps what it already owns.
+tools/verify_phase4.py asserts tracker ↔ register ↔ sources.)
+- [x] 4.0 [CLOUD-OK] ENUMERATE mechanics from the canon docs into boxes here
+      (34 mechanics / 39 boxes below; 73 scripts each given one home; laws
+      1–11, I01–I31, QA-01–61, A01–A28, 14 actions, 32 timings all resolve;
+      one CANON-ONLY box flagged (4.28b) — VERIFY-OK, cloud unit)
+- [ ] 4.1 Frame Discipline: camera cones = the lit hide (monitor_rig.gd →
+      SceneCapture feeds + cone volumes the Rundown queries; Laws 1/10/11,
+      I05/I23; QA-14, QA-35)
+- [ ] 4.2 Patchbay + amperage budget (patchbay_console.gd; circuits, revive;
+      I04; QA-14 revive, QA-20 order refusal)
+- [ ] 4.3 Noise, the dead room, the felt door (noise_tracker.gd, dead-room
+      volume drops inside noise; I25; QA-13 → A08, QA-38 radio toast +
+      [NO ECHO])
+- [ ] 4.4 Night trip: first blood once per save (night_trip.gd; QA-19, P9)
+- [ ] 4.5 The Floor Manager: 9 m look, 3 s hold, assist-hold; absent in
+      BREAK + premiere; hands only (floor_manager.gd; I15; QA-19, P8)
+- [ ] 4.6 The cascade + liveness: C then B, circuit F, holds waived only
+      here (cascade.gd, liveness_check.gd; I04/I07; QA-20, A15)
+- [ ] 4.7 The Coverage Director: profile from behavior, reason strings,
+      burn resets the read (coverage_director.gd; I21; V5, P5)
+- [ ] 4.8 Casting sheet, dresser, run end + modes (casting_sheet_prop.gd,
+      dresser.gd, run_ended card; I16/I17; QA-07, QA-08, P3/P4; A18, A19)
+- [ ] 4.9 Burn Your Dailies (dailies_manager/canister.gd, degausser.gd;
+      single-carry; I09; P5)
+- [ ] 4.10 Doors, keys, window holds (door.gd, key_item.gd from Doors.csv;
+      I08/I04; QA-10; A16)
+- [ ] 4.11 Readables + the Three Reads (readable_prop.gd, mark_read of 10,
+      D01–D11; A26)
+- [ ] 4.12 The credit chain: PER V. KEYS, Vess's binder, his lines
+      (credit_entry.gd, vess_binder.gd, vess.gd; A11, P13)
+- [ ] 4.13 Film cabinet + the seventh signal (film_cabinet.gd,
+      harriet_note.gd; signals_known 6→7; A07; QA-41 gate)
+- [ ] 4.14 The presigned page: Day 2+, S4, zero paper, saves free once
+      (mark_presigned; I10; QA-21, P6; A09)
+- [ ] 4.15 The crate + the frame-seance (impossible_crate.gd,
+      seance_dock.gd, frame_sequence.gd; answers at 7/14/21/28/35, wear
+      1.5/pass burns in; I19/I20; QA-22, QA-50, P16; A14)
+- [ ] 4.16 Tape stage, CRT material stack, gen knob, TBC + photo-safe
+      (tape_stage.gd, bench_tv.gd, gen_knob.gd, crt_tape params by name;
+      Law 2 the one lunge; I14; QA-06 picture, V2/V3/V4; A03)
+- [ ] 4.17 The fire tape: forced watch, no sting, af_active (fire_tape_
+      pickup/dock.gd; I14/I15; QA-23, QA-33; A13)
+- [ ] 4.18 Sign-Off assets: verse/cart/script/card + rack (asset_pickup.gd,
+      asset_rack.gd, spectro_dock.gd; gain_asset of 4)
+- [ ] 4.19 The dock contract: six units, one warm, nothing follows ever
+      (dock_task.gd, dock_chum.gd; Law 4, I12; QA-24, P7; A10)
+- [ ] 4.20 The once-ever sight, Day 4 fire corridor (glimpse.gd; Law 3,
+      I11/I30; QA-25, P10; no achievement, no reference anywhere)
+- [ ] 4.21 Lockdown: monitor sync, sealed doors, chairs to rows, permanent
+      (lockdown.gd, rec_chairs.gd; I18; QA-26, P11; A20)
+- [ ] 4.22 The club on schedule: Merle kettle/chair/DOORWAY, the pegs' drift
+      (merle.gd, coat_pegs.gd; QA-11, P14; A12)
+- [ ] 4.23 The rejected edit + the splice temptation (rejected_edit.gd,
+      mint_shortcut_daily; QA-49)
+- [ ] 4.24a Casualty ledger core: mark_casualty idempotent, binder page,
+      the epilogue reader (Law 7; I27/I28/I29; QA-39, QA-47; A27)
+- [ ] 4.24b M1/M2 + H1/H2 with ripples (fire tape offer, the slip, the
+      double; QA-40, QA-41)
+- [ ] 4.24c V1/V2 + F1/F2 (AUTHENTICATE/final breaker; GET VESS at the
+      cascade; the fader; third blind call; QA-42, QA-43) — green bleed +
+      post-F2 haunt are CANON-ONLY remainders
+- [ ] 4.24d L1/L2 + the rows + ENDING 0 (sixth line; the reading → 4c;
+      seats per expired incident; nine cards one name; QA-44/45/46; A28)
+- [ ] 4.25 The decision ledger: three entries, Merle watching the pen
+      (decision_ledger.gd; finale_started; A17)
+- [ ] 4.26a Premiere: cues on the mark, PGM switcher cam_1..3, incidents
+      TALLY/HOUSE/BOOM/CARDS with guarantees, fixtures (live_production.gd,
+      finale_fixture.gd; I03/I05/I06; QA-27)
+- [ ] 4.26b Premiere: sabotage sprint loop, the Vess breaker, pressure, the
+      bell ONCE (finale_breaker.gd; Law 5; QA-42 breaker, QA-46 seats)
+- [ ] 4.27 The divert, the fader, the last crossing: 75/62/−13 s, folds
+      paid, eye dark (Law 11; I19/I24; QA-28, QA-43 F1; P22/P23)
+- [ ] 4.28a Endings 1A/1B/2/3/4a/4b/4c/0 + credits + the one interface lie
+      (hud.gd _end_*, credits.gd; Law 8, I13; QA-03, QA-28, QA-47; A21–A25)
+- [ ] 4.28b ENDING A · AUDIENCE ONLY — CANON-ONLY (reels W1–W3, S2 slips,
+      radio dial, program guide, 58 · STILL ON; QA-60, QA-61; needs the v17
+      schema policy from 4.SAVE first)
+- [ ] 4.29 Achievements with deferral: two flush gates, meta-silence, DEMO
+      dark (achievements.gd; I30; QA-04, QA-29, QA-48)
+- [ ] 4.30 The DEMO build: seven rooms, demo reasons, S1+S5, whitelist,
+      six funnel marks, end card (QA-30, QA-48, DP1–DP5)
+- [ ] 4.31 The booth: settings apart from the save, remap with KEY IN USE,
+      opens before first play, full accessibility target (options_panel.gd;
+      Law 9; QA-01, QA-16, QA-17)
+- [ ] 4.32 HUD, binder, captions, pause (hud.gd; glyphs, tally lamp REC ·
+      SAFE WHILE LIT, scrim; Law 9; QA-32, QA-34 HUD)
+- [ ] 4.33 The map: from Rooms.csv, sealed dashed, BOUND key (map_view.gd;
+      QA-15, P15)
+- [ ] 4.34 Title + string table: focus ring, FILED once, NEW EPISODE once,
+      GameText.csv → StringTable (title.gd; QA-02, QA-04)
 - [ ] 4.WEB reaction-matrix wiring audit (every action echoes in ≥2
       systems/people, per the QUEUE order in the canon doc)
 - [ ] 4.SAVE integrity pass
