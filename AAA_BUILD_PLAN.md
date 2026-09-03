@@ -170,6 +170,19 @@ the one startle disclosable, safety never color alone); THE WEB LAW — every
 significant player action echoes in ≥2 systems or people, in character, at
 the right time.
 
+**Object taxonomy law — `restoration-object-taxonomy.md`**: three tiers as
+promises — INTERACTABLES carry verbs, never drift, never lie (affordance is
+diegetic wear, not outlines; one hero interactable per room max); LORE
+carries shards (handled lore prompts; AMBIENT LORE NEVER PROMPTS); DRESSING
+is the only drift-eligible tier and earns its place by biography. No fake
+affordances, ever. QA-55/56/57 sweep every room.
+
+**The doctrine library**: `docs/production/` holds the full production
+canon (art bible, audio bible, invariant suite, QA regression, gap audit
+with RULINGS — sprint: none; crouch: body verb c045; binder IS the
+inventory; assist-only difficulty — plus Steam/trailer/demo/ARG plans).
+Consult the gap audit's rulings before re-deciding anything.
+
 **The reference implementation (Godot, in place)**
 - `scripts/rundown.gd` = Chum's whole AI + procedural animation brain.
 - `scripts/player.gd`, interactables, `world_builder.gd` (whole studio
