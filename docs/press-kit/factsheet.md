@@ -12,5 +12,5 @@ It is eleven feet tall and does not fit through doors; every threshold costs it 
 Hiding, inverted: the safe hide is the lit one.
 Saving costs a signature; paper is scarce; the log remembers whose hand signed.
 Every death in the story is a choice you can name afterward, and the game will name it back to you, in the ledger, at the end.
-Nine ways for the broadcast to close, none of them free.
+More ways for the broadcast to close than the club will admit, none of them free.
 Accessibility as canon: captions, text scale, remapping, assist, pause, all in the booth from first launch.

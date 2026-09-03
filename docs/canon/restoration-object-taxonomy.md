@@ -7,3 +7,5 @@ DRESSING is the lived-in mass, and it is the ONLY drift-eligible tier. Dressing 
 
 LAWS ACROSS TIERS: the prompt is the tier boundary (if it prompts, it is a promise); drift eligibility is dressing-only so trust in tools is never spent; readables registry stands at D01 to D11 with homes per the Room Bible (D02 remains the one readable whose home is the player's: the welcome packet copy Rita carries); no object exists that is interactable-looking but inert (fake affordance is a lie in the light's language).
 QA HOOKS: QA-55 prompt-discipline sweep (nothing ambient prompts; nothing prompting is unstable); QA-56 drift audit (all drift instances resolve to dressing tier); QA-57 hero-object census (no room exceeds one).
+
+ADDENDUM: the AMBIENT LORE LEDGER (canon) is the source of record for ambient-lore placement; the Room Bible's L budgets count against it.

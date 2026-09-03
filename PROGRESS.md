@@ -20,14 +20,23 @@ through Phase 0.)
       sodium lamp, neutral floor; wired into the factory verification loop)
 - [ ] 0.4 Quixel/Fab hookup (owner Epic sign-in; starter Megascans set;
       documented import path)
-- [ ] 0.5 Player port (movement/look/interact parity with player.gd)
-- [ ] 0.6 Studio blockout in UE (geometry + collision, walkable)
-- [ ] 0.7 Chum actor port (behavior tree + anim BP: gait/strike/fold/
-      head-track/tally states per rundown.gd)
-- [ ] 0.8 Systems port (saves, doors, interactables, notes)
-- [ ] 0.9 Test harness (automation tests for I01/I02/I22/I06 + wander soak)
+- [ ] 0.5 Data extraction: Rooms/Doors/Stations/Landmarks/Timings/GameText
+      CSVs generated from world_builder.gd + game_state.gd (the port kit's
+      data deliverable, rebuilt from the same truth)
+- [ ] 0.6 P0 — boot & walk: pawn with Godot-matched feel (player.gd
+      constants incl. crouch c045), world stamped FROM the CSVs, doors with
+      locked reasons; acceptance: free walk of all twenty rooms
+- [ ] 0.6b P1 — SPIKE 2: twelve SceneCapture2D feeds on the monitor wall,
+      60fps sustained on this machine, written into the engine memo
+- [ ] 0.7 P4a — the Rundown actor: TICK BRAIN (no Behavior Tree, per the
+      migration map) with the grammar verbatim; WARN/STRIKE telemetry in
+      the identical log format
+- [ ] 0.8 P2+P3 — state/saves (v16 SaveGame mirroring _save_dict) + the
+      loop (bench capture, schedule clock, Harriet freeze)
+- [ ] 0.9 Harness: Gauntlet/functional-test maps, three bots, invariant
+      parser reading the same logs; I01/I02/I22/I06 green in UE
 - [ ] 0.10 PHASE GATE: parity slice — one room, Chum encounter, saves,
-      tests green, captured & reviewed
+      QA subset green, THE-LAWS spot-audit, captured & reviewed
 
 ## PHASE 1 — After-Fire Chum (Blender factory → UE acceptance)
 - [ ] 1.1 Torso: quilted patchwork, seams, char zones, 2048 bake

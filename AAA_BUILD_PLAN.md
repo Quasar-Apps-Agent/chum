@@ -191,6 +191,32 @@ with RULINGS — sprint: none; crouch: body verb c045; binder IS the
 inventory; assist-only difficulty — plus Steam/trailer/demo/ARG plans).
 Consult the gap audit's rulings before re-deciding anything.
 
+**THE PORT KIT — `docs/packet/portbrief/` (read in this order):**
+- `THE-LAWS.md` — 11 inviolable laws in any engine (on-camera-is-safe, one
+  startle, once-ever, the warm one never acts, silence contracts, the
+  schedule is real, every death has a signature, one interface lie, access
+  is canon, the tally contract, the two hides + the 2.2s door toll).
+  Phase gates audit these line by line.
+- `PORT-BRIEF.md` — the Godot build IS the specification; where prose and
+  code disagree, THE CODE IS THE INTENT. GDScript reads as exact
+  pseudocode; constants are canon. SPIKE 2 (twelve SceneCapture feeds at
+  60fps — the monitor wall) runs early as routine validation.
+- `BUILD-ORDER.md` — P0 walk → P1 spike → P2 state/saves → P3 loop →
+  P4 hunter/nights (+ after-fire body, tally, folds, dead room) →
+  P5 story/finale (+ casualty arc, crossing, endings) → P6 meta/modes.
+  Acceptance = QA-01..QA-48 from `restoration-qa-regression.md`.
+- `UE5-MIGRATION-MAP.md` — system-by-system homes: autoloads →
+  GameInstance/World Subsystems; signals → delegates with the same names;
+  world built FROM Data CSVs (never by hand); rundown.gd → an actor with a
+  TICK BRAIN (explicitly NO Behavior Tree — the grammar is the point);
+  CRT shader → material function stack with the same parameter names;
+  audio → MetaSounds + submixes; harness → Gauntlet/functional-test maps
+  reading THE SAME telemetry log formats. WHAT MUST NOT CHANGE: invariant
+  suite, log formats, save semantics, room table, tell-table, silence
+  ledger, every knob number. (The kit's Data/*.csv + build_greybox.py
+  deliverable is not in hand — extract the CSVs from world_builder.gd,
+  which is the same truth.)
+
 **The reference implementation (Godot, in place)**
 - `scripts/rundown.gd` = Chum's whole AI + procedural animation brain.
 - `scripts/player.gd`, interactables, `world_builder.gd` (whole studio
