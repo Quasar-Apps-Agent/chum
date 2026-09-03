@@ -991,3 +991,38 @@ writes ForceUTF8WithoutBOM. The cloud lane's PR #7 merged the same
 day, and its §6 delta audit — 7 shape mismatches and 32 missing keys
 against my own 0.8a SaveGame — is now unit 0.8b-3, a worklist I did
 not have to write myself. Two hands, one main.
+
+## Commit 087 · UNIT 4.0 · THE MECHANICS, COUNTED (cloud unit)
+A cloud session, so per rule 0 the unit is the first CLOUD-OK box: the
+Phase 4 enumeration. Every mechanic the canon names is now one box in
+the tracker, fifty of them in seven families (the body and the hands;
+the schedule and the house; the bench; the hunter and the nights; story
+gates and the finale; meta and modes; and the canon-only remainder),
+with the long form in ue/PORT-NOTES-MECHANICS.md: canon source,
+reference script, the constants it leans on, QA lines, invariants,
+achievements, laws, UE home, and which Phase 0 unit already carries
+part of the port. Every one of the 73 reference scripts is placed:
+sixty-three owned by a box, ten excluded by name with the unit that
+owns them instead. The counting turned up what counting does. The
+walkthrough's secret ending (the unnumbered reels, ENDING A · AUDIENCE
+ONLY, 58 · STILL ON) has QA-60 and QA-61 written against it and not one
+line of reference code: its "c046" is a doc-era number, not this repo's
+commit 046. The gap audit rules ASSIST-only difficulty while the save
+still carries three modes. Avert, bake, splice, the grade, the
+compactus, the catwalk route, the drill and the bolt cutters, the mic,
+the Improvise wheel: canon without code, each filed as a box with a
+recommendation, none silently promoted to a port. Eight rulings are
+collected at the end of the notes for the author. Verification for a
+text unit is an assert script, and this one has teeth:
+tools/verify_mechanics.py proves the boxes contiguous and the 4.0 tag
+preserved (rule 4b), one notes section per box under the same name, QA
+61 of 61 claimed, invariants 31 of 31, achievements 28 of 28, scripts
+73 of 73, twenty-six quoted constants equal to Timings.csv, 104 cited
+paths present, all eleven laws cited — VERIFY-OK. It bit twice before
+it passed (the achievements doc keeps A27 and A28 on one line; range
+notation with a repeated prefix), which is the point of a tripwire. No
+Blender, no Unreal, no renders, no Desktop here: the image loop and the
+Desktop copies were skipped, honestly. Repo green on entry (HEAD ==
+origin/main 6ac53ae) and on exit. Next for a machine session: 0.8b-3,
+the save's shape; next for a cloud session: none remain tagged, so
+verify green and exit, as the first one did.

@@ -160,7 +160,103 @@ discipline, QA-56 drift=dressing-only, QA-57 one hero object max.)
 - [ ] 3.FINAL PHASE GATE: full-studio walkthrough captures + soaks
 
 ## PHASE 4 — Puzzles & Functionality
-- [ ] 4.0 [CLOUD-OK] ENUMERATE mechanics from the canon docs into boxes here
+- [x] 4.0 [CLOUD-OK] ENUMERATED mechanics from the canon docs into the 50
+      boxes below (seven families; long form with canon/code/QA/invariant/
+      UE-home per box in ue/PORT-NOTES-MECHANICS.md; every scripts/*.gd
+      placed; 8 deltas needing author rulings collected there). Verified
+      by tools/verify_mechanics.py: QA 61/61, I 31/31, A 28/28, scripts
+      73/73, Timings cross-checked (VERIFY-OK). Cloud unit
+      (A · the body and the hands)
+- [ ] 4.1 Interaction reach, prompts and glyphs (REACH 2.6 stands until the
+      device pass; QA-17/55/57)
+- [ ] 4.2 Crouch honesty (the body verb; QA-58, I31; crouch-bot soak)
+- [ ] 4.3 Noise bus and attribution (footsteps, sign-log noise, dead room
+      deaf; QA-13, I22, I25)
+      (B · the schedule and the house)
+- [ ] 4.4 Broadcast clock, wall clocks, ON AIR (50/18; QA-10, I04)
+- [ ] 4.5 Doors, locks, keys and window holds (reasons from Doors.csv;
+      QA-10, I08)
+- [ ] 4.6 Harriet: the holding pattern (freeze, cup, H1 slip, H2 double,
+      H-R1/R2; QA-09/41/49/50)
+- [ ] 4.7 Merle: the schedule, the pen, 1974, M1 (QA-11/40; M-R1..R6)
+- [ ] 4.8 Vess and the credit dilemma (binder, margin, V1/V2; QA-42)
+- [ ] 4.9 Drift: coat pegs, cup, casting sheet, chairs (dressing tier only;
+      QA-11/56/59)
+- [ ] 4.10 Day/night cycle, the bed, the morning flush (QA-29/30/33)
+      (C · the bench)
+- [ ] 4.11 Tape stage, CRT stack, TBC, gen knob, the capture scare (the one
+      startle; QA-06, I14)
+- [ ] 4.12 Retake presentation, the dresser, the sheet, run death (QA-07/08,
+      I16/I17)
+- [ ] 4.13 Dailies and the degausser (burn your dailies; I09)
+- [ ] 4.14 Screening, stances, the beat, ASSIST (BEAT 0.8 / WINDOW 3.2;
+      QA-18/41)
+- [ ] 4.15 Audio bench and the four Sign-Off assets (QA-28 routing)
+- [ ] 4.16 Seance: frame stepping, wear, five answers, L1/L2, grief frames
+      (QA-22/44/50, I19/I20)
+- [ ] 4.17 Readables, mark_read, the taxonomy sweeps (D01..D10; QA-55..59)
+- [ ] 4.18 Producer Track (hidden; strip the HUD debug line)
+      (D · the hunter and the nights)
+- [ ] 4.19 Rundown night hunt: segments, warn/strike, savoring, camera
+      kills (0.7 core; QA-12..14, I01..I03)
+- [ ] 4.20 Frame Discipline: rigs, tallies, kills, revive, on-camera safety
+      (Law 1; spike 2's SAFE/EXPOSED assertion; QA-14, I05)
+- [ ] 4.21 Patchbay, power budget, night trip, the cascade, liveness
+      (QA-19/20/42, I04/I07; panel scale to be sized)
+- [ ] 4.22 Floor Manager: signals, the watch, F1/F2 (QA-19/43, I15)
+- [ ] 4.23 After-Fire layer: tally contract, cool, fold, dead room,
+      crossing (0.8a core; QA-33..38, I23..I26; captions + toasts)
+- [ ] 4.24 Coverage Director (profile, blockings, poisoned well once, burn
+      reset; I21)
+- [ ] 4.25 Glimpse (once, ever; QA-25, I11, I30, Law 3)
+      (E · story gates and the finale)
+- [ ] 4.26 Log stations, paper, signatures, presigned page, respawn
+      (QA-05/21, I10)
+- [ ] 4.27 Film cabinet and the signal vocabulary; PRESERVE/ASK/FORCE (the
+      built subset of the solutions matrix; QA-41)
+- [ ] 4.28 Crate, fire tape (pickup, forced watch, M1 offer), the wake
+      (QA-22/23/33/40, I15)
+- [ ] 4.29 Dock inventory and the warm one (Law 4; QA-24, I12)
+- [ ] 4.30 Rejected edit (H2 temptation; QA-49)
+- [ ] 4.31 Keys: TRAINING, EDITH, QUIET ROOM; the shed; FORCE instruments
+      (bolt cutters/drill are canon-only)
+- [ ] 4.32 Lockdown (sync, sealed doors, rows; QA-26, I18)
+- [ ] 4.33 Decision ledger (AUTHENTICATE / DESTROY / PERFORM; V1; QA-42)
+- [ ] 4.34 Live production: cues, incidents, fixtures, breaker, rows,
+      ending 0 (QA-27/45/46/51, I03/I05/I06; the bell once, Law 5)
+- [ ] 4.35 Crossing and the divert: Dead Air 4a/4b/4c (75/62/-13 s;
+      QA-28/43/44)
+- [ ] 4.36 Endings, credits, the reading, the one lie (QA-28/47, I13/I28/
+      I29, Law 8)
+- [ ] 4.37 Casualty ledger and ripples (the reaction matrix QUEUE; QA-39/46,
+      I27, Law 7)
+- [ ] 4.38 Secret ending: the unnumbered reels, ENDING A — CANON-ONLY, no
+      reference code; QA-60/61 cannot pass today; RULING: build or strike
+      (F · meta and modes)
+- [ ] 4.39 Binder: pause, map, pages, intermission (binder IS the
+      inventory; live-time in the premiere only; QA-15/32/39)
+- [ ] 4.40 Booth: settings, remap, assist, captions, photo-safe, scale
+      (Law 9; QA-01/16/17/18)
+- [ ] 4.41 Title, boot, credits crawl, FILED WHILE YOU WERE OUT (QA-02..04)
+- [ ] 4.42 Achievements: deferral, flush gates, meta-silence (A01..A28;
+      QA-29/48, I30)
+- [ ] 4.43 Modes: Late Night / Matinee / One Take vs the ASSIST-only ruling
+      (RULING before the booth: keep the save field, ship one mode)
+- [ ] 4.44 DEMO build (Tape 1): whitelist, funnel, stripping (QA-30/48)
+- [ ] 4.45 Save integrity and migration (defaults are the migration;
+      QA-31, I16/I18/I20)
+- [ ] 4.46 Strings, captions and telemetry formats (StringTable; the three
+      logs unchanged; QA-05/37)
+      (G · canon-only, no reference code: ruling before any port)
+- [ ] 4.47 Avert and held direct sight (recommend PARK: the two hides are
+      the law)
+- [ ] 4.48 Bench sub-tools: bake, splice, quality grade, GEN field
+      (recommend GEN field only)
+- [ ] 4.49 Level mechanics: compactus, catwalk route, airdate math, light
+      table, radio tuning (room-unit hero interactables, QA-57 caps them)
+- [ ] 4.50 Input canon: Quiet Game mic, Improvise wheel, one-to-one
+      switcher pad map, photo mode Tier B (P6 / 5.2 sizing)
+      (audits and gates, as before)
 - [ ] 4.WEB reaction-matrix wiring audit (every action echoes in ≥2
       systems/people, per the QUEUE order in the canon doc)
 - [ ] 4.SAVE integrity pass
