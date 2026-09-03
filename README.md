@@ -783,3 +783,21 @@ ran our Python: RESTORATION-PY-OK engine=5.8.0. The automation seam that
 made the Godot loop work (script in, evidence out) exists in Unreal from
 day one. The Godot game stays runnable as the reference spec per the
 rewritten charter. Next: 0.2, the import/capture loop.
+
+## Commit 074 · UNIT 0.2 · THE LOOP, CLOSED (with a zombie post-mortem)
+One command now walks a mesh from Blender to an Unreal-rendered PNG:
+tools/ue_loop.sh = export_ue.py (FBX, UE preset) → import_fbx.py
+(headless commandlet, SM_/SK_ naming law enforced, scale contract
+VERIFIED: the 1m calibration cube lands at exactly 100.0uu, written on
+the wall as the pipeline doc demands) → stage_and_capture.py (look-dev
+lights, bounds-framed camera, HighRes screenshot) run by a gated
+Content/Python/init_unreal.py. That last piece exists because of the
+week's best bug: -ExecCmds="py <path>" cannot survive a repo path
+containing a space, so UE executed `py ` with nothing, never quit, and
+idled for ten CPU-hours as a zombie. -ExecutePythonScript was no
+better — it quits before deferred tick callbacks fire. The auto-run
+init_unreal.py with an env-var gate dodges quoting entirely. Also this
+session: the first scheduled cloud run correctly no-opped in a
+toolless container, so the plan gained rule 0 and [CLOUD-OK] units —
+remote sessions now extract CSVs instead of bowing out. Next: 0.3,
+the head under Lumen — the first true acceptance baseline.

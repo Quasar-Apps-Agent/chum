@@ -9,9 +9,10 @@ through Phase 0.)
 - [x] 0.1 UE project skeleton (ue/Restoration, Lumen+VSM, git hygiene,
       headless launch proven: RESTORATION-PY-OK on UE 5.8.0; disk ~19GB —
       monitor per doctrine)
-- [ ] 0.2 Automation loop proven (pyscripts: FBX import w/ naming law /
-      material fixup / capture / log-grep; 1m-cube scale verify recorded;
-      one-command mesh→capture unattended)
+- [x] 0.2 Automation loop proven: tools/ue_loop.sh runs Blender FBX export
+      → headless import (naming law enforced; 1m cube = 100.0uu exactly,
+      recorded) → staged Lumen capture via gated init_unreal.py, one
+      command, unattended (LOOP-COMPLETE 2026-09-03)
 - [ ] 0.3 Chum head imported (FBX, sockets, ORM) + look-dev level v1
       (Lumen, locked EV, practicals w/ true bulbs) + ACCEPTANCE BASELINE
       capture vs the dossier plate; git LFS for ue Content when first
