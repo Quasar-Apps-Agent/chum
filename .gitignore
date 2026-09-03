@@ -16,3 +16,7 @@ ue/Restoration/Saved/
 ue/Restoration/DerivedDataCache/
 ue/Restoration/Binaries/
 ue/Restoration/.vs/
+
+# Python bytecode (UE editor python + tooling)
+__pycache__/
+*.pyc

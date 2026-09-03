@@ -37,9 +37,11 @@ through Phase 0.)
       GameText(714 keys from translations/strings.csv). Landmarks: no
       single source table exists — landmarks spawn in code; extract at
       P0 world-stamping when the interactable spawns are ported
-- [ ] 0.6 P0 — boot & walk: pawn with Godot-matched feel (player.gd
-      constants incl. crouch c045), world stamped FROM the CSVs, doors with
-      locked reasons; acceptance: free walk of all twenty rooms
+- [x] 0.6 P0 — boot & walk: /Game/Greybox stamped FROM the CSVs
+      (build_greybox.py, world_builder's algorithm: 20 rooms, 119 walls,
+      7 door slabs w/ locked-reason world text, 5 stations, PlayerStart);
+      DefaultPawn engine bindings = walkable; proofs archived. Godot feel
+      parity (3.1 m/s, crouch c045) deferred into 0.8b — tracked there
 - [x] 0.6b P1 — SPIKE 2 PASS: twelve SceneCapture2D feeds (256px,
       capture_every_frame) from twelve canon rooms onto a 4x3 unlit-RT
       wall in MASTER CONTROL; 601 PIE frames measured on the M1 Pro:
@@ -64,9 +66,14 @@ through Phase 0.)
       STRIKE af tally-cool → hidden until the next contract. Two spec-order
       bugs caught: night gate must sit BELOW the AF layer; the visible gate
       guards cool re-arm (both exactly as rundown.gd orders them)
+- [ ] 0.8b-spec [CLOUD-OK] Transcribe the FULL v16 _save_dict schema
+      (all fields, types, defaults) + game_state.gd public field/signal
+      inventory into ue/PORT-NOTES-STATE.md — the 0.8b implementation
+      checklist, pure text work from the Godot source
 - [ ] 0.8b P2+P3 remainder: paper economy + stations, bench capture loop,
       retake presentation, Harriet freeze, screening + assist, day/night
-      cycle driving is_night (replacing test scaffolds)
+      cycle driving is_night (replacing test scaffolds); pawn feel parity
+      (3.1 m/s walk, crouch c045)
 - [ ] 0.9 Harness: Gauntlet/functional-test maps, three bots, invariant
       parser reading the same logs; I01/I02/I22/I06 green in UE
 - [ ] 0.10 PHASE GATE: parity slice — one room, Chum encounter, saves,
@@ -138,7 +145,7 @@ discipline, QA-56 drift=dressing-only, QA-57 one hero object max.)
 - [ ] 3.FINAL PHASE GATE: full-studio walkthrough captures + soaks
 
 ## PHASE 4 — Puzzles & Functionality
-- [ ] 4.0 ENUMERATE mechanics from the 13 canon docs into boxes here
+- [ ] 4.0 [CLOUD-OK] ENUMERATE mechanics from the canon docs into boxes here
 - [ ] 4.WEB reaction-matrix wiring audit (every action echoes in ≥2
       systems/people, per the QUEUE order in the canon doc)
 - [ ] 4.SAVE integrity pass

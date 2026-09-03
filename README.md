@@ -926,3 +926,16 @@ visible flag is load-bearing (without it the cool re-armed forever).
 Both fixed by putting the lines back where rundown.gd always had
 them. Remaining in 0.8b: paper, stations, the bench loop, Harriet's
 freeze, the real day/night driver.
+
+## Commit 083 · THE WATCHDOG EARNS ITS KEEP
+The cloud session no-opped by design and, on its way out, audited the
+tracker better than the tracker's own author: unit 0.6 was still
+unticked (a scripted replace had no-opped silently — no assert), the
+CLOUD-OK lane had evaporated the same way (one tag never applied, the
+other erased in a rewrite), and six .pyc files were riding in git.
+All three fixed: 0.6 ticked with its honest deferral note, the lane
+restored with two real cloud units (the v16 save-schema transcription
+feeding 0.8b, and the Phase 4 mechanic enumeration), __pycache__
+ignored and untracked, and the plan gained rule 4b: tracker edits are
+code — assert your anchors, preserve the tags. The arithmetic-tripwire
+lesson from the CSV extractor, relearned in markdown.
