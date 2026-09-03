@@ -64,11 +64,72 @@ if "--cube" in argv:
     ucx.matrix_parent_inverse = cube.matrix_world.inverted()
     ucx.display_type = "WIRE"
     export([cube], os.path.join(EXPORTS, "SM_UnitCube.fbx"))
+elif "--all-meshes" in argv:
+    out = arg("--out")
+    if not out:
+        raise SystemExit("need --out with --all-meshes")
+    objs = [o for o in bpy.data.objects
+            if o.type == "MESH" and not o.hide_render]
+    if not os.path.isabs(out):
+        out = os.path.join(ROOT, out)
+    ## packed images (the bakes) have no disk file, so FBX COPY silently
+    ## drops them — write them out beside the export first
+    texdir = os.path.join(os.path.dirname(out), "textures")
+    os.makedirs(texdir, exist_ok=True)
+    for img in bpy.data.images:
+        if img.packed_file is not None:
+            img.filepath_raw = os.path.join(texdir, img.name.split(".")[0] + ".png")
+            img.file_format = "PNG"
+            try:
+                img.save()
+            except Exception as ex:
+                print("UE-TEX-FAIL", img.name, ex)
+    ## flatten: parent empties do not survive FBX combine — keep world
+    ## transforms explicitly so no part lands at the origin
+    bpy.ops.object.select_all(action="DESELECT")
+    for o in objs:
+        o.select_set(True)
+    bpy.context.view_layer.objects.active = objs[0]
+    bpy.ops.object.parent_clear(type="CLEAR_KEEP_TRANSFORM")
+    ## manifest: material -> texture image names, for the UE-side wiring
+    ## (FBX imports textures but never connects them to the instances)
+    import json
+    manifest = {}
+    for o in objs:
+        for ms in o.data.materials:
+            if not ms or not ms.use_nodes or ms.name in manifest:
+                continue
+            entry = {}
+            for n in ms.node_tree.nodes:
+                if n.type != "TEX_IMAGE" or not n.image:
+                    continue
+                nm = n.image.name
+                for lk in n.outputs["Color"].links:
+                    tgt = lk.to_node
+                    if tgt.type == "BSDF_PRINCIPLED" and lk.to_socket.name == "Base Color":
+                        entry["diff"] = nm
+                    elif tgt.type == "MIX_RGB":
+                        ## scan_dress: TexImage -> Multiply -> Base Color
+                        for lk2 in tgt.outputs["Color"].links:
+                            if (lk2.to_node.type == "BSDF_PRINCIPLED"
+                                    and lk2.to_socket.name == "Base Color"):
+                                entry.setdefault("diff", nm)
+                    elif tgt.type == "NORMAL_MAP":
+                        entry["nrm"] = nm
+                    elif tgt.type == "BSDF_PRINCIPLED" and lk.to_socket.name == "Roughness":
+                        entry["rgh"] = nm
+            if entry:
+                manifest[ms.name] = entry
+    mpath = os.path.splitext(out)[0] + ".manifest.json"
+    with open(mpath, "w") as fh:
+        json.dump(manifest, fh, indent=1)
+    print("UE-MANIFEST", mpath, len(manifest), "materials")
+    export(objs, out)
 else:
     names = (arg("--objects") or "").split(",")
     out = arg("--out")
     if not names or not out:
-        raise SystemExit("need --objects and --out (or --cube)")
+        raise SystemExit("need --objects and --out (or --cube / --all-meshes)")
     objs = [bpy.data.objects[n] for n in names]
     if not os.path.isabs(out):
         out = os.path.join(ROOT, out)

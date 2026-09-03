@@ -1,0 +1,141 @@
+{
+ "BurntWool.004": {
+  "diff": "ArmL_diff",
+  "rgh": "ArmL_rgh",
+  "nrm": "ArmL_nrm"
+ },
+ "FurCards": {
+  "diff": "fur_tuft_atlas.png"
+ },
+ "RodMetal": {
+  "diff": "Metal058A_1K-JPG_Color.jpg",
+  "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
+ },
+ "BurntWool.005": {
+  "diff": "ArmLHand_diff",
+  "rgh": "ArmLHand_rgh",
+  "nrm": "ArmLHand_nrm"
+ },
+ "BurntWool.006": {
+  "diff": "ArmR_diff",
+  "rgh": "ArmR_rgh",
+  "nrm": "ArmR_nrm"
+ },
+ "BurntWool.007": {
+  "diff": "ArmRHand_diff",
+  "rgh": "ArmRHand_rgh",
+  "nrm": "ArmRHand_nrm"
+ },
+ "Brass": {
+  "diff": "Metal058A_1K-JPG_Color.jpg",
+  "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
+ },
+ "BellyWool.001": {
+  "diff": "Belly_diff",
+  "rgh": "Belly_rgh",
+  "nrm": "Belly_nrm"
+ },
+ "BurntWool.001": {
+  "diff": "BodyCore_diff",
+  "rgh": "BodyCore_rgh",
+  "nrm": "BodyCore_nrm"
+ },
+ "StitchSteel": {
+  "diff": "Metal058A_1K-JPG_Color.jpg",
+  "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
+ },
+ "BronzeBand": {
+  "diff": "Metal058A_1K-JPG_Color.jpg",
+  "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
+ },
+ "CopperRing": {
+  "diff": "Metal058A_1K-JPG_Color.jpg",
+  "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
+ },
+ "LeatherCol": {
+  "diff": "Leather030_1K-JPG_Color.jpg",
+  "nrm": "Leather030_1K-JPG_NormalGL.jpg"
+ },
+ "EarFelt.001": {
+  "diff": "EarL_diff",
+  "rgh": "EarL_rgh",
+  "nrm": "EarL_nrm"
+ },
+ "EarFelt.002": {
+  "diff": "EarR_diff",
+  "rgh": "EarR_rgh",
+  "nrm": "EarR_nrm"
+ },
+ "BronzeChar": {
+  "diff": "Metal058A_1K-JPG_Color.jpg",
+  "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
+ },
+ "GrilleDark": {
+  "diff": "Metal058A_1K-JPG_Color.jpg",
+  "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
+ },
+ "BurntWool.010": {
+  "diff": "JawMesh_diff",
+  "rgh": "JawMesh_rgh",
+  "nrm": "JawMesh_nrm"
+ },
+ "BurntWool.002": {
+  "diff": "LegL_diff",
+  "rgh": "LegL_rgh",
+  "nrm": "LegL_nrm"
+ },
+ "BurntWool.003": {
+  "diff": "LegR_diff",
+  "rgh": "LegR_rgh",
+  "nrm": "LegR_nrm"
+ },
+ "LipLeather": {
+  "diff": "Leather030_1K-JPG_Color.jpg",
+  "nrm": "Leather030_1K-JPG_NormalGL.jpg"
+ },
+ "PatchFlannel.001": {
+  "diff": "PatchFlannel_diff",
+  "rgh": "PatchFlannel_rgh",
+  "nrm": "PatchFlannel_nrm"
+ },
+ "PatchGreen.001": {
+  "diff": "PatchGreen_diff",
+  "rgh": "PatchGreen_rgh",
+  "nrm": "PatchGreen_nrm"
+ },
+ "PatchLeather.001": {
+  "diff": "PatchLeather_diff",
+  "rgh": "PatchLeather_rgh",
+  "nrm": "PatchLeather_nrm"
+ },
+ "PatchRust.001": {
+  "diff": "PatchRust_diff",
+  "rgh": "PatchRust_rgh",
+  "nrm": "PatchRust_nrm"
+ },
+ "BurntWool.009": {
+  "diff": "Skull_diff",
+  "rgh": "Skull_rgh",
+  "nrm": "Skull_nrm"
+ },
+ "BurntWool.008": {
+  "diff": "Tail_diff",
+  "rgh": "Tail_rgh",
+  "nrm": "Tail_nrm"
+ },
+ "Camera_01_lens_body": {
+  "diff": "Camera_01_lens_body_diff.png",
+  "rgh": "Camera_01_lens_body_roughness.png",
+  "nrm": "Camera_01_lens_body_nor_gl.png"
+ },
+ "Camera_01_body": {
+  "diff": "Camera_01_body_diff.png",
+  "rgh": "Camera_01_body_roughness.png",
+  "nrm": "Camera_01_body_nor_gl.png"
+ },
+ "Camera_01_strap": {
+  "diff": "Camera_01_strap_diff.png",
+  "rgh": "Camera_01_strap_roughness.png",
+  "nrm": "Camera_01_strap_nor_gl.png"
+ }
+}
