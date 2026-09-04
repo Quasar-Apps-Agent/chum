@@ -991,3 +991,42 @@ writes ForceUTF8WithoutBOM. The cloud lane's PR #7 merged the same
 day, and its §6 delta audit — 7 shape mismatches and 32 missing keys
 against my own 0.8a SaveGame — is now unit 0.8b-3, a worklist I did
 not have to write myself. Two hands, one main.
+
+## Commit 087 · UNIT 4.0 · THE MECHANICS, COUNTED (cloud unit)
+A cloud session again, so per rule 0 the unit is the next CLOUD-OK box:
+4.0, enumerate the mechanics from the canon docs into Phase 4 boxes.
+The method was the port brief's own law, the code is the intent: every
+box was written from the GDScript first and the canon second, so each
+one names the reference script that IS its spec, the numbers in it
+(9 m for a camera kill, 20 s for the night trip, max(14, 26 - 4·fails)
+between incidents, 75 / 62 / -13 for the crossing), the QA lines that
+accept it and the invariants that guard it. Thirty-nine boxes in
+BUILD-ORDER's own milestones: eight for the hunter and the nights,
+twenty-one for the story gates and the finale, ten for meta, modes and
+the tape world. Thirty-six stand on reference code. Three are honest
+holes the code never had: LAW 1 AT NIGHT (the lit hide outside the
+tally contract — rundown.gd has no cone test, and I05 admits it), the
+post-F2 monitor haunt with the freeze-check inversion, and the whole
+secret-ending pilgrimage (QA-60/61 describe a system no script
+implements). A seventh section lists the design doc's systems that
+have neither code nor a QA line (bake, splice, avert, the breath, the
+full breaker map, the catwalks, PT tells, jump-cues) as UNSPECCED,
+needing a gap-audit ruling before they may become units — because
+enumerating them as work is exactly the gold-plating rule 2 forbids.
+Verification is tools/verify_mechanics.py, not an eye: it parses the
+tables and asserts every named script exists, all 73 reference scripts
+are claimed (57 by Phase 4 rows, 25 by the census of what Phase 0, 1,
+3, 5 and the dev tools own), QA-01..61 and I01..31 each have a home that
+is a real PROGRESS box, and the tracker's Phase 4 order equals the
+document's. Its first run failed three ways, all real: a literal pipe
+in the dead-room formula had split a table row (which made
+noise_tracker.gd look unclaimed), and I27 was cited by four boxes but
+routed to one; its second run exposed my own prose miscount (four
+canon-only boxes; there are three). The arithmetic tripwire, again,
+and it is why the file has a verifier at all. The tracker edit asserted
+its anchor, preserved the tag, and counted its 39 insertions per rule
+4b. No renders this session (no Blender, no Unreal, no Desktop here) —
+Desktop copies skipped, honestly. Repo green on entry (HEAD ==
+origin/main 6ac53ae) and on exit. Next for the Mac: 0.8b-3, the
+thirty-nine-key save delta; next for the cloud: none — the CLOUD-OK
+lane is empty until someone tags another box.
