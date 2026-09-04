@@ -991,3 +991,37 @@ writes ForceUTF8WithoutBOM. The cloud lane's PR #7 merged the same
 day, and its §6 delta audit — 7 shape mismatches and 32 missing keys
 against my own 0.8a SaveGame — is now unit 0.8b-3, a worklist I did
 not have to write myself. Two hands, one main.
+
+## Commit 087 · UNIT 4.0 · THE MECHANICS, COUNTED (cloud unit)
+A cloud session, so per rule 0 the unit is the first CLOUD-OK box:
+4.0, enumerate the mechanics from the canon into boxes. The method
+was the port brief's own law, the code is the intent: every canon
+document read whole, then all 73 scripts read against them, and each
+mechanic boxed with the script that IS its spec, its knob numbers,
+the save fields it owns, the QA lines that accept it, the invariants
+that guard it, and its UE home. ue/PORT-NOTES-MECHANICS.md holds it:
+thirty-nine built boxes (4.1 to 4.39, P3 remainder through P6 meta)
+and sixteen RULING boxes (4.R1 to 4.R16) for canon the reference
+never built, which per the gap audit's precedent get a ruling before
+a build. PROGRESS.md carries the same fifty-five boxes; the seven
+legacy Phase 4 boxes stand untouched. Verification for a text unit
+is an assert script, and this one ships: tools/verify_mechanics.py
+proves 73 of 73 scripts claimed, QA-01 to QA-61 and I01 to I31 all
+assigned, 32 of 32 Timings.csv constants homed, every cited id real,
+and the two files' boxes matched one to one (VERIFY-OK). The part
+that earns the unit is what the count found. The casualty ledger's
+AS BUILT says ten deaths; the code holds nine, M2 THE HOME SINGER
+has no site. QA-14's first clause, standing in a camera cone
+prevents the strike, is not in the night hunt at all; the only
+on-camera guards are the tally contract and the premiere, exactly as
+I05's own status admits. The eighth ending, AUDIENCE ONLY, carries
+two QA lines (60, 61) and an addendum and no code. Ending 2's
+audition clause is unreachable because the lockdown needs four
+assets first. Matinee's seven-line sheet, halved wear, and the
+canon's 7-per-pass wear are not what the code does (1.5 per step,
+four lines in every mode); the notes' §3 table files each canon
+number as a tuning candidate and keeps the code column as the port's
+truth. None of these is a fix for this unit; all of them are now
+boxes with a ruling attached. No renders this session (no Blender,
+no Unreal, no Desktop here), Desktop copies skipped, honestly. Repo
+green on entry (HEAD == origin/main 6ac53ae) and on exit.
