@@ -1062,3 +1062,21 @@ edges left as boxes: I22 was counted, not exercised — no break falls
 inside five seconds — and a positive-only run does not prove the
 parser catches a violation. 0.9b puts a wall between them and demands
 a FAIL.
+
+## Commit 091 · UNIT 0.9b · A WALL, AND THE PARSER SAYS NO
+A harness that only ever passes proves nothing, so this unit built the
+case for the prosecution. First on paper: three synthetic logs fed to
+the parser — a strike marked THRU-WALL failed I02, a strike with no
+warning before it failed I01, and a clean pair passed — each with the
+right exit code, so the detector detects. Then in the building: a
+three-metre wall spawned squarely between the hunter's anchor and the
+prey pulled to strike range. The brain's own raycast hit it, and the
+brain did what rundown.gd does at line 314 — it struck anyway and
+wrote THRU-WALL into the log, because marking is the canon and the
+soak is the judge. The parser read those two marked strikes and ruled
+I02 FAIL x2, exit 1, while I01 stayed PASS because the warn-latch
+still spoke before each strike. So the invariant machinery is now
+proven from both sides: it lets a clean run through and it convicts a
+dirty one. The wall scenario stays in the tree as the standing
+negative fixture — the test you run when you suspect the harness has
+gone soft. 0.9c gives I22 a real break to relocate through.

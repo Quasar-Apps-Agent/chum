@@ -121,8 +121,15 @@ through Phase 0.)
             I02 no-strike-thru-wall PASS. Two harness bugs fixed (target
             needed MOVABLE mobility; parser path) — test bugs, not brain
             bugs. I22 only COUNTED this run (no break in 5s)
-      - [ ] 0.9b Negative test: wall between hunter and prey must log
-            THRU-WALL and make the parser FAIL I02 (proves it catches)
+      - [x] 0.9b Negative test, both halves: (1) parser unit test on
+            synthetic logs — THRU-WALL strike -> I02 FAIL x1 exit 1;
+            strike with no prior WARN -> I01 FAIL x1 exit 1; clean -> PASS
+            exit 0. (2) LIVE: a 3m wall spawned between hunter (0,-1600)
+            and prey pulled to strike range — the brain's raycast hit it,
+            both strikes logged THRU-WALL, parser ruled I02 FAIL x2 exit 1
+            (I01 PASS). Godot parity confirmed: rundown.gd also MARKS thru-
+            wall (line 314) and lets the soak catch it — mark-not-gate is
+            canon. test_invariants_wall.py is the standing negative fixture
       - [ ] 0.9c I22 exercised: forced-break hook after ReportNoise ->
             "RELOCATE toward heard noise" attributed in the scorecard
       - [ ] 0.9d Three bots (fail-bot / explorer / still) as pawns + I06
