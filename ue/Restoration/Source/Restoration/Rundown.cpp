@@ -61,6 +61,31 @@ void ARundown::BeginPlay()
 	}
 	if (State)
 	{
+		// noise_event -> ReportNoise, exactly as rundown.gd connects it
+		State->OnNoise.AddLambda([this](const FVector& P, float /*R*/) { ReportNoise(P); });
+	}
+	if (bTestLoopFns && State)
+	{
+		// day/night driver: day 1 -> morning -> day 2 tape 2 -> morning -> day 3 run_complete
+		State->SetNight(false);
+		State->SetNight(true);
+		State->SetNight(false);
+		State->LogLineTest(FString::Printf(TEXT("DAYNIGHT day=%d tape=%d run_complete=%d"),
+		                                   State->Day, State->CurrentTape, State->bRunComplete ? 1 : 0));
+		// stations + the sign flow: register S2, note paper, sign, check respawn + relocate
+		State->RegisterStation(TEXT("S2"), FVector(700, -3100, 0));
+		const int32 PaperBefore = State->PaperFor(TEXT("S2"));
+		const bool bSigned = State->SignLog(TEXT("S2"));
+		const FVector Rp = State->RespawnPoint();
+		State->LogLineTest(FString::Printf(
+			TEXT("SIGNFLOW signed=%d paper %d->%d respawn=%s seg_now=%d"),
+			bSigned ? 1 : 0, PaperBefore, State->PaperFor(TEXT("S2")),
+			*Rp.ToCompactString(), SegIdx));
+		State->MarkRead(TEXT("D01"));
+		State->TakeKey(TEXT("QUIET ROOM"), TEXT("the dead-room key"));
+	}
+	if (State)
+	{
 		if (bTestForceNight) { State->bIsNight = true; }
 		if (bTestForceAF) { State->bAfActive = true; }
 		if (bTestForceRecording) { State->bRecording = true; }

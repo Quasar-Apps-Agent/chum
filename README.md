@@ -1009,3 +1009,21 @@ kind, saved, clobbered every field, loaded, and compared: match=1.
 The two-handed loop's full arc in one unit — cloud found it, Mac fixed
 it, and the save that carries a whole playthrough now round-trips
 clean. §6's gameplay-function tail is 0.8b-4.
+
+## Commit 088 · UNIT 0.8b-4 · THE CONNECTIVE TISSUE
+The state functions that stitch the loop together are C++ now, ported
+line for line. SetNight is the day/night driver: morning advances the
+day, caps the tape at five, and calls the prototype complete at day
+three — the run's whole spine in nine lines. The paper economy signs
+and decrements per station, with the Harriet-slip one-shot that lets a
+hand not yours close the log. Stations register with the (0, 0.5, 1.2)
+Godot offset mapped faithfully to UE's (0, 1.2, 0.5) metres, and the
+respawn resolved to exactly (700, -2980, 50) — the coordinate contract
+holding to the centimetre. And the receipt the world keeps: signing
+the log broadcasts a noise at your respawn, the hunter's brain records
+it, and it relocates toward you on the next break — SignFinish ->
+OnNoise -> ReportNoise, the same deferred relocation rundown.gd
+performs. One simulate proved all of it: two mornings, the paper
+falling 3 to 2, the respawn exact, the documents and keys filed. The
+presentation and NPC half — the retake screen, Harriet's freeze,
+screening and assist — is 0.8b-5.

@@ -1,7 +1,144 @@
 #include "RestorationState.h"
 #include "Kismet/GameplayStatics.h"
+#include "Misc/FileHelper.h"
+#include "Misc/Paths.h"
 
 DEFINE_LOG_CATEGORY_STATIC(LogRestoState, Log, All);
+
+namespace { constexpr float M = 100.0f; } // meters -> uu
+
+void URestorationState::LogLine(const FString& Text) const
+{
+	const FString Path = FPaths::Combine(FPaths::ProjectSavedDir(), TEXT("decision_log.txt"));
+	FFileHelper::SaveStringToFile(Text + LINE_TERMINATOR, *Path,
+	                              FFileHelper::EEncodingOptions::ForceUTF8WithoutBOM,
+	                              &IFileManager::Get(), FILEWRITE_Append);
+	UE_LOG(LogRestoState, Log, TEXT("%s"), *Text);
+}
+
+void URestorationState::SetNight(bool bOn)
+{
+	bIsNight = bOn;
+	if (!bOn)
+	{
+		Day += 1;
+		CurrentTape = FMath::Min(Day, 5);
+		LogLine(FString::Printf(TEXT("MORNING · Day %d · Tape %d"), Day, CurrentTape));
+		if (Day >= 3 && !bRunComplete)
+		{
+			bRunComplete = true;
+			LogLine(TEXT("PROTOTYPE COMPLETE"));
+		}
+	}
+	else
+	{
+		LogLine(TEXT("NIGHT · the building belongs to the schedule"));
+	}
+	SaveToSlot();
+	OnNightChanged.Broadcast(bOn ? 1 : 0);
+}
+
+int32 URestorationState::PaperFor(const FString& Station) const
+{
+	if (Mode == 0 /*MATINEE*/) { return 99; }
+	return Paper.FindRef(Station);
+}
+
+bool URestorationState::SignLog(const FString& Station)
+{
+	if (Mode != 0 /*MATINEE*/)
+	{
+		if (PaperFor(Station) <= 0)
+		{
+			if (bHarrietSlip)
+			{
+				bHarrietSlip = false; // the slip signs once, in a hand not yours
+			}
+			else
+			{
+				LogLine(FString::Printf(TEXT("SIGN REFUSED %s (no paper)"), *Station));
+				return false;
+			}
+		}
+		else
+		{
+			Paper.Add(Station, PaperFor(Station) - 1);
+		}
+	}
+	return SignFinish(Station);
+}
+
+bool URestorationState::SignFinish(const FString& Station)
+{
+	FRestorationSignature Sig;
+	Sig.Station = Station;
+	Sig.Tape = CurrentTape;
+	Sig.Signed = FDateTime::Now().ToString();
+	Signatures.Add(Sig);
+	SaveToSlot();
+	LogLine(FString::Printf(TEXT("SIGNED %s (paper left %d)"), *Station, PaperFor(Station)));
+	// noise_event(respawn_point(), 4.0) — signing gives away your position;
+	// the hunter relocates toward the noise (LAW: the world keeps receipts)
+	OnNoise.Broadcast(RespawnPoint(), 4.0f);
+	return true;
+}
+
+void URestorationState::RegisterStation(const FString& Id, const FVector& WorldPos)
+{
+	// Godot: pos + Vector3(0, 0.5, 1.2) — up 0.5m, forward 1.2m. Godot y(up)
+	// -> UE z(up); Godot z(forward) -> UE y. So the offset is (0, 1.2, 0.5)m.
+	StationPoints.Add(Id, WorldPos + FVector(0.0f, 1.2f * M, 0.5f * M));
+}
+
+FVector URestorationState::RespawnPoint() const
+{
+	if (Signatures.Num() > 0)
+	{
+		const FString Sid = Signatures.Last().Station;
+		if (const FVector* P = StationPoints.Find(Sid))
+		{
+			return *P;
+		}
+	}
+	// fallback (0, 1.0, 2.5) Godot -> (0, 2.5, 1.0) UE, in uu
+	return FVector(0.0f, 2.5f * M, 1.0f * M);
+}
+
+void URestorationState::MarkRead(const FString& Id)
+{
+	if (ReadProps.Contains(Id)) { return; }
+	ReadProps.Add(Id);
+	SaveToSlot();
+	LogLine(FString::Printf(TEXT("READ %s (%d of 10 documents)"), *Id, ReadProps.Num()));
+}
+
+bool URestorationState::HasKey(const FString& Id) const
+{
+	return Keys.Contains(Id);
+}
+
+void URestorationState::TakeKey(const FString& Id, const FString& Display)
+{
+	if (Keys.Contains(Id))
+	{
+		LogLine(FString::Printf(TEXT("KEY already carried: %s"), *Display));
+		return;
+	}
+	Keys.Add(Id);
+	SaveToSlot();
+	LogLine(FString::Printf(TEXT("TAKEN · %s"), *Display));
+}
+
+void URestorationState::LogCapture(const FString& CaptureName)
+{
+	FRestorationCapture Cap;
+	Cap.Name = CaptureName;
+	Cap.Tape = CurrentTape;
+	Cap.At = FDateTime::Now().ToString();
+	Captures.Add(Cap);
+	SaveToSlot();
+	LogLine(FString::Printf(TEXT("CAPTURED · %s · presentation kept"), *CaptureName));
+}
 
 void URestorationState::Initialize(FSubsystemCollectionBase& Collection)
 {

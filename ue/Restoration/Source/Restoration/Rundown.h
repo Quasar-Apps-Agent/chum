@@ -58,6 +58,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Rundown|Test")
 	bool bTestSaveRoundtrip = false;
 
+	UPROPERTY(EditAnywhere, Category = "Rundown|Test")
+	bool bTestLoopFns = false;
+
 	// the hunt target: player pawn if one exists, else any actor tagged
 	// RundownTestTarget (lets the brain run under simulate/harness)
 	AActor* ResolveTarget() const;

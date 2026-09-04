@@ -112,6 +112,7 @@ public:
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnRunEnded, int32 /*Take*/);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnSheetChanged, int32 /*Strikes*/);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnNoise, const FVector& /*Pos*/, float /*Radius*/);
 
 UCLASS()
 class RESTORATION_API URestorationState : public UGameInstanceSubsystem
@@ -132,6 +133,8 @@ public:
 	bool bCrossing = false;
 	bool bCrossingCaught = false;
 	bool bCascadeActive = false;
+	bool bHarrietSlip = false;             // one-shot: sign without paper
+	TMap<FString, FVector> StationPoints;  // respawn anchors, world-stamped (uu)
 
 	// ---- SAVED (mirror _save_dict; the persistent working set) ----------
 	int32 Mode = 1;               // LATE_NIGHT
@@ -192,15 +195,26 @@ public:
 	FOnRunEnded OnRunEnded;
 	FOnSheetChanged OnSheetChanged;
 	FOnSheetChanged OnNightChanged;
+	FOnNoise OnNoise; // noise_event → ARundown::ReportNoise (relocation)
 
-	void SetNight(bool bOn)
-	{
-		if (bIsNight != bOn)
-		{
-			bIsNight = bOn;
-			OnNightChanged.Broadcast(bOn ? 1 : 0);
-		}
-	}
+	// set_night: the day/night driver. Morning advances the day, caps the
+	// tape at 5, completes the prototype at day >= 3.
+	void SetNight(bool bOn);
+
+	// paper economy + the sign flow (paper_for / sign_log / _sign_finish)
+	int32 PaperFor(const FString& Station) const;
+	bool SignLog(const FString& Station);
+	bool SignFinish(const FString& Station);
+
+	// stations + respawn
+	void RegisterStation(const FString& Id, const FVector& WorldPos);
+	FVector RespawnPoint() const;
+
+	// readables, keys, captures
+	void MarkRead(const FString& Id);
+	bool HasKey(const FString& Id) const;
+	void TakeKey(const FString& Id, const FString& Display);
+	void LogCapture(const FString& CaptureName);
 
 	// canon: |x-19| <= 2.2 && |z-2.5| <= 2.7 (Godot m; UE y carries Godot z)
 	bool InDeadRoom(const FVector& Pos) const
@@ -216,4 +230,7 @@ public:
 
 private:
 	void SeedPaper();
+	void LogLine(const FString& Text) const; // telemetry, parser-format
+public:
+	void LogLineTest(const FString& T) const { LogLine(T); }
 };

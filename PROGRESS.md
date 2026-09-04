@@ -93,8 +93,18 @@ through Phase 0.)
       array/int array all survive save->clobber->load); AF contract still
       fires atop the reshaped state. The gameplay functions (§6 tail) are
       0.8b-4
-- [ ] 0.8b-4 P3 remainder: paper economy + stations + respawn, retake
-      presentation, Harriet freeze, real day/night cycle, screening + assist
+- [x] 0.8b-4 The loop's connective tissue (state functions ported
+      verbatim): SetNight day/night driver (morning advances day, tape=
+      min(day,5), PROTOTYPE COMPLETE at day>=3); paper economy (PaperFor
+      MATINEE=99 else per-station, SignLog decrement + harriet-slip branch,
+      SignFinish); RegisterStation + RespawnPoint (Godot offset (0,0.5,1.2)
+      mapped to UE (0,1.2,0.5)m — respawn resolved exact); MarkRead,
+      HasKey/TakeKey, LogCapture; and the sign->noise->relocate wiring
+      (SignFinish broadcasts OnNoise -> ARundown::ReportNoise, deferred to
+      the next break as the spec defers it). All verified in one simulate
+- [ ] 0.8b-5 P3 presentation/NPC half: retake presentation (the strike
+      screen + carried-daily flow), Harriet freeze on breaks, screening +
+      assist, the pawn's day/night-driven lighting states
 - [ ] 0.9 Harness: Gauntlet/functional-test maps, three bots, invariant
       parser reading the same logs; I01/I02/I22/I06 green in UE
 - [ ] 0.10 PHASE GATE: parity slice — one room, Chum encounter, saves,
