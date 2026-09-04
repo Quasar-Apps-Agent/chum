@@ -991,3 +991,42 @@ writes ForceUTF8WithoutBOM. The cloud lane's PR #7 merged the same
 day, and its §6 delta audit — 7 shape mismatches and 32 missing keys
 against my own 0.8a SaveGame — is now unit 0.8b-3, a worklist I did
 not have to write myself. Two hands, one main.
+
+## Commit 087 · UNIT 4.0 · THE MECHANICS, COUNTED (cloud unit)
+A cloud session, so per rule 0 the unit is the first CLOUD-OK box: 4.0,
+enumerate the puzzles and functionality from the canon into boxes. I
+read the plan, the laws, the port kit, the game master (with its
+solutions matrix), the design doc's twelve mechanics, the walkthrough's
+threat and save architecture and its two addenda, the routing doc, the
+after-fire canon, the casualty ledger, the controls map, the reaction
+matrix, the taxonomy, the gap audit's ten rulings, and then the thing
+that outranks all of them: the reference implementation, seventy-three
+scripts, because the code is the intent. Thirty-six boxes now sit in
+Phase 4 (ue/PORT-NOTES-MECHANICS.md carries each one's sources, canon
+constants, evidence ids, UE home and the four-step loop), ordered the
+way the port kit orders them: the P4 remainder after 0.7/0.8a (cones,
+patchbay, night trip, Floor Manager, cascade, dead room, tally HUD,
+Director, dailies), the P5 story gates (presigned page through the
+crossing, the casualty ledger, the endings), the Appendix B puzzles, and
+P6's meta. Thirty-two are PORTs. Three exist only in the canon and say
+so with page references: airdate math, the bench craft suite, and the
+eighth ending. One is a RULING box, because the design doc's avert,
+breath, formal-correctness phrases, PT tells, catwalk route and
+poltergeist layer were never ruled in the gap audit and the doctrine
+says consult rulings before re-deciding anything: nothing gets built
+there until the author rules. Verification for a text unit is an assert
+script, not an eye: tools/verify_mechanics.py proves every QA-01..61,
+I01..31 and A01..28 has a home box (120 of 120; the ones that belong to
+Phase 0, 1, 3 or 5 are tabled in §0 so coverage is total, not
+convenient), every script is cited or excluded with a reason (73 of
+73), every quoted constant matches Timings.csv (17 checked), and 4.0 is
+ticked with its CLOUD-OK tag intact. It was made to fail before it was
+trusted: a 7.5 where WARN_RADIUS is 7.0, an un-homed QA-38, an unticked
+4.0, each caught by name. Along the way it caught three of my own
+misses (A28 defined mid-line in the addendum, QA-51's home being the
+braid-audit box the tracker already carried, three scripts I had not
+homed). No renders this session (no Blender, no Unreal, no Desktop
+here) — Desktop copies skipped, honestly. The scheduled prompt still
+names the Mac path; this container cannot see it, and rule 0 exists for
+exactly that. Repo green on entry (HEAD == origin/claude branch 6ac53ae,
+main 8edc94f already merged into it) and on exit.
