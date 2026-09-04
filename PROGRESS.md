@@ -206,7 +206,13 @@ for each rule asserted; where canon is silent write OPEN, never invent.
 - [ ] C18 [CLOUD-OK] LIGHTING DATA: restoration-lighting-bible.md → per-room
       locked EV / state (red=watched=safe) / practical list / transition
       rule as data. Deliverable: ue/Restoration/Data/Lighting.csv + a
-      README paragraph in the PR body explaining columns
+      README paragraph in the PR body explaining columns. NOTE (from
+      docs/production/ROOM-BRIEFS-3.1-3.5.md §0): NO EV, kelvin or candela
+      value exists anywhere in canon, and world_builder.gd contradicts the
+      bible at night (×0.56 brown-out vs OFF). Do NOT invent numbers: ship
+      the STRUCTURE (room × state × practical × red-reads × transition)
+      with every numeric cell marked STAND-IN or OPEN and cite the stand-
+      in's source; put the ruling list in the PR body
 - [ ] C7 [CLOUD-OK] LANDMARKS TABLE: extract every landmark/interactable
       spawn from scripts/world_builder.gd (name, room, x,z, kind, script)
       into ue/Restoration/Data/Landmarks.csv and extend tools/

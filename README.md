@@ -1137,3 +1137,27 @@ The gate is the owner's. Meanwhile the lanes opened: a cloud routine
 on an eighteen-unit backlog with a claim check, four prep agents
 writing Phase 1's brief and rig spec, the access spec, and the first
 five room briefs. The build no longer waits on one pair of hands.
+
+## Commit 095 · THE SUBAGENT LANE'S FIRST FOUR
+While the gate waited, four agents wrote the papers the next phases
+will build from, in parallel, one file each, none touching the
+tracker. The Phase 1 brief verified its asset ids live against the
+Poly Haven and AmbientCG APIs — wool bouclé, hessian, teddy curl,
+leather, rusted metal, a vintage transceiver — and named the realism
+risk without flinching: the coat still reads as a plush toy, and canon
+wants a fused, scorched, stitched quilt. The rig spec tabled every
+bone and every shot the brain can call, locked the bell so it can
+never ring, and hands the jaw to the lever and the lever to the hand.
+The access spec turned LAW 9 from a red flag into six named classes
+with tests, and found that canon's "deferral rule" is the achievement
+deferral, not a scare's. The room briefs converted five rooms into
+uu-exact dressing orders with a template for the other fifteen — and
+found that canon never states a single EV, kelvin or candela, that the
+reference code browns the night down where the bible turns it off,
+and that no room has a window the data can draw. Two of the four,
+working blind to each other, flagged the same thing: the puppet is
+authored at 2.6 m, imported at 3.08, and canon wants 3.35 with the eye
+at three metres. The gate doc now asks for that ruling instead of
+asserting a number. Fifty-odd OPENs in all, every one cited, none
+invented. That is what the lane is for: the owner rules once, and the
+build never guesses.
