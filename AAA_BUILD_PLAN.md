@@ -19,19 +19,43 @@ functionality → polish/audio/perf/packaging.**
 
 ## 0 · SESSION PROTOCOL
 
-0. **KNOW WHERE YOU ARE.** The full pipeline (Blender, UE 5.8, Godot) exists
-   ONLY on the owner's Mac at `/Users/christianabowen/Desktop/
-   restoration-godot 3`. A cloud/Linux session (no `/Applications/Blender.app`,
-   no `/Users/Shared/Epic Games`) must NOT attempt tool units or fake
-   verification: instead take the first unchecked box tagged **[CLOUD-OK]**
-   in `PROGRESS.md` (pure text/data/code work: CSV extraction, doc
-   authoring, GDScript→spec transcription, credits, QA checklists), verify
-   by inspection, commit and push. If no CLOUD-OK box remains, verify green
-   and exit with a note — exactly as the first cloud session correctly did.
+0. **KNOW WHERE YOU ARE — THREE LANES, ONE MAIN.** The full pipeline
+   (Blender, UE 5.8, Godot) exists ONLY on the owner's Mac at
+   `/Users/christianabowen/Desktop/restoration-godot 3`. Work is split into
+   lanes that never overlap on files, so agents can run in parallel:
+   - **MAC LANE (exactly one runner, ever).** The in-app loop on the Mac.
+     The only lane that touches Blender or Unreal. Works `main` directly.
+     SKIPS boxes tagged **[CLOUD-OK]** (they belong to the cloud) unless the
+     cloud lane is switched off. Two Mac runners collide (two editors
+     clobber Saved/decision_log.txt and starve 16GB) — never start a second.
+   - **CLOUD LANE (1–3 routines, Linux, no tools).** A cloud session (no
+     `/Applications/Blender.app`, no `/Users/Shared/Epic Games`) takes the
+     first unchecked **[CLOUD-OK]** box in `PROGRESS.md` §CLOUD LANE BACKLOG
+     that is NOT ALREADY CLAIMED, works ONLY on its own branch named
+     `cloud/<unit-id>-<slug>`, opens a DRAFT PR, and never pushes to main.
+     CLAIM CHECK before starting unit Cn: `git ls-remote --heads origin`
+     shows a `cloud/Cn-` branch, OR the unit's deliverable path already
+     exists on `origin/main`, OR `gh pr list --state all --search "Cn"`
+     finds one → skip to the next CLOUD-OK box. Cloud NEVER edits
+     `PROGRESS.md`, `README.md` or this plan (that is what raced last
+     time): it writes its ONE deliverable file, verifies by inspection or
+     script, and puts the README ledger paragraph in the PR body under
+     `## Ledger`. If no unclaimed CLOUD-OK box remains, verify green and
+     exit with a note.
+   - **SUBAGENT LANE (in-session fan-out).** The Mac session may spawn
+     parallel subagents for prep (briefs, specs, audits): one output file
+     each, at a stated path, no tracker edits, no git; the session commits
+     their output.
+   The realism bar, doctrine and verification loop bind every lane.
 1. Confirm the repo is green (last README ledger entry + `git status`).
-   Broken = fixing it IS the unit. Never build on red.
-2. Take the FIRST unchecked box in `PROGRESS.md` that your environment can
-   actually run (see rule 0). No skipping beyond that, no gold-plating.
+   Broken = fixing it IS the unit. Never build on red. MAC LANE FIRST STEP:
+   `git fetch origin` and merge every green `cloud/*` PR branch (they are
+   single-file deliverables — conflicts are impossible by construction),
+   tick each merged unit's box, append its `## Ledger` paragraph from the
+   PR body to the README, then push. Cloud work only becomes canon here.
+2. Take the FIRST unchecked box in `PROGRESS.md` that YOUR LANE owns (Mac:
+   everything not tagged [CLOUD-OK]; cloud: only [CLOUD-OK], unclaimed —
+   see rule 0). No skipping beyond that, no gold-plating.
 3. Work it using the doctrine (§1), asset policy (§2), pipeline map (§3).
 4. Run the verification loop (§4). Look at every image with your own eyes.
 4b. Tracker edits are code: every scripted PROGRESS.md/plan edit ASSERTS

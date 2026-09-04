@@ -154,6 +154,79 @@ through Phase 0.)
 - [ ] 0.10 PHASE GATE: parity slice — one room, Chum encounter, saves,
       QA subset green, THE-LAWS spot-audit, captured & reviewed
 
+## CLOUD LANE BACKLOG — [CLOUD-OK] units (Linux, repo only; see plan rule 0)
+Cloud routines take the FIRST unclaimed box here, on branch
+`cloud/<id>-<slug>`, as a draft PR, ONE deliverable file each. The Mac
+lane merges green PRs at session start and ticks these boxes. Ordered by
+what the Mac lane needs soonest. Every unit: cite the canon doc+section
+for each rule asserted; where canon is silent write OPEN, never invent.
+- [ ] C17 [CLOUD-OK] PORT AUDIT: diff the UE C++ (ue/Restoration/Source/
+      Restoration/*.h,.cpp) against scripts/game_state.gd, rundown.gd,
+      harriet.gd, player.gd, bench/capture scripts — every constant,
+      default, order-of-effects and signal; list drift as a checklist like
+      ue/PORT-NOTES-STATE.md §6 did. Deliverable: ue/PORT-AUDIT-1.md
+- [ ] C8 [CLOUD-OK] PORT-NOTES BROADCAST: transcribe scripts/broadcast.gd +
+      coverage_director.gd (ON AIR/BREAK clock surface, window holds,
+      coverage labels cov_monitor/move/still, every signal + listener).
+      Deliverable: ue/PORT-NOTES-BROADCAST.md
+- [ ] C9 [CLOUD-OK] PORT-NOTES RETAKE: the retake presentation + dailies
+      (game_state pick_daily/burn_daily/mint_shortcut_daily, carried_id/
+      take, the retake screen script, toasts verbatim, timings).
+      Deliverable: ue/PORT-NOTES-RETAKE.md
+- [ ] C10 [CLOUD-OK] PORT-NOTES SCREENING: screening + assist + Merle
+      (screening_active/done, merle.gd, assist rule, Day-1 flow).
+      Deliverable: ue/PORT-NOTES-SCREENING.md
+- [ ] C11 [CLOUD-OK] PORT-NOTES FINALE: premiere incidents (INCIDENT/
+      RESOLVED t=, the 41s club auto-fix rule = I06), cascade + liveness
+      (I07), start_finale/mark_ending/endings, LOCKDOWN. Deliverable:
+      ue/PORT-NOTES-FINALE.md — makes I06/I07 implementable
+- [ ] C2 [CLOUD-OK] CAST DOSSIER: per character from docs/canon cast plates
+      + walkthrough + chum motion & sound: silhouette, materials, scale
+      truth, motion hooks, rooms, beats, LAW constraints (LAW 4 warm one,
+      LAW 5 silence, LAW 7 signatures). Deliverable: docs/production/
+      CAST-DOSSIER.md
+- [ ] C6 [CLOUD-OK] PROP MANIFEST from restoration-object-taxonomy.md +
+      room bible + ambient lore ledger: every prop, taxonomy class, room(s),
+      interactable?, real-world dims (scale truth), CC0/Fab source
+      candidate. Deliverable: docs/production/PROP-MANIFEST.md (+ .csv)
+- [ ] C3 [CLOUD-OK] ROOM BRIEFS 3.6–3.10 (format: docs/production/
+      ROOM-BRIEFS-3.1-3.5.md once it lands; else the room bible + lighting
+      bible + taxonomy + lore ledger). Deliverable: docs/production/
+      ROOM-BRIEFS-3.6-3.10.md
+- [ ] C4 [CLOUD-OK] ROOM BRIEFS 3.11–3.15. Deliverable: docs/production/
+      ROOM-BRIEFS-3.11-3.15.md
+- [ ] C5 [CLOUD-OK] ROOM BRIEFS 3.16–3.20. Deliverable: docs/production/
+      ROOM-BRIEFS-3.16-3.20.md
+- [ ] C18 [CLOUD-OK] LIGHTING DATA: restoration-lighting-bible.md → per-room
+      locked EV / state (red=watched=safe) / practical list / transition
+      rule as data. Deliverable: ue/Restoration/Data/Lighting.csv + a
+      README paragraph in the PR body explaining columns
+- [ ] C7 [CLOUD-OK] LANDMARKS TABLE: extract every landmark/interactable
+      spawn from scripts/world_builder.gd (name, room, x,z, kind, script)
+      into ue/Restoration/Data/Landmarks.csv and extend tools/
+      extract_data.py deterministically (row count asserted in the PR)
+- [ ] C12 [CLOUD-OK] GAMETEXT AUDIT: the 714 keys → class (UI/caption/
+      toast/lore/achievement), glyph-substitution map, LAW 5 check (no
+      Chum presence/achievement string), localization readiness.
+      Deliverable: docs/production/GAMETEXT-AUDIT.md
+- [ ] C13 [CLOUD-OK] QA-51 EXECUTABLE: each of the 51 QA items → the
+      fixture/capture/inspection that proves it in UE, or OPEN.
+      Deliverable: docs/production/QA-51-EXECUTABLE.md
+- [ ] C14 [CLOUD-OK] ACHIEVEMENTS + PRESENCE AUDIT vs LAW 3/5 (ONCE EVER
+      never referenced; Chum has no title/presence). Deliverable:
+      docs/production/ACHIEVEMENTS-AND-PRESENCE-AUDIT.md
+- [ ] C15 [CLOUD-OK] SOUND MANIFEST: every sound event in chum motion &
+      sound + dread doctrine + room bible; the bell-never-sounds rule;
+      CC0/Fab source candidates with licenses. Deliverable:
+      docs/production/SOUND-MANIFEST.md
+- [ ] C16 [CLOUD-OK] STREAMER MODE + CLIP LEDGER + TAPE 1 DEMO SPEC from
+      restoration-comparative-study.md adoptions (units 5.6–5.8), as
+      implementable UE specs. Deliverable: docs/production/
+      STREAMER-CLIP-DEMO-SPEC.md
+- [ ] C1 [CLOUD-OK] = unit 4.0 below (Phase 4 mechanics enumeration).
+      Deliverable: docs/production/PHASE4-MECHANICS-ENUMERATION.md; the
+      Mac lane then splices the boxes into PHASE 4
+
 ## PHASE 1 — After-Fire Chum (Blender factory → UE acceptance)
 - [ ] 1.1 Torso: quilted patchwork, seams, char zones, 2048 bake
 - [ ] 1.2 Throat speaker (donor speaker/radio driver, chest mount, cabling)
