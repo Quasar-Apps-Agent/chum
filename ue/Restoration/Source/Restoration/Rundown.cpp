@@ -66,13 +66,38 @@ void ARundown::BeginPlay()
 		if (bTestForceRecording) { State->bRecording = true; }
 		if (bTestSaveRoundtrip)
 		{
+			// a value of every container kind: int, bool, float, string,
+			// map entry, struct array, int array
 			State->Strikes = 7;
+			State->SeanceWear = 72.5f;
+			State->bAfTaught = true;
+			State->Decision = TEXT("HIS HAND");
+			State->Paper.Add(TEXT("S3"), 1);
+			FRestorationSignature Sig; Sig.Station = TEXT("S2"); Sig.Tape = 4;
+			Sig.Signed = TEXT("TODAY"); State->Signatures.Add(Sig);
+			State->LelandAnswers.Add(1023);
 			State->SaveToSlot(TEXT("roundtrip_test"));
-			State->Strikes = 0;
+			// clobber every field, then load and compare
+			State->Strikes = 0; State->SeanceWear = 0; State->bAfTaught = false;
+			State->Decision = TEXT(""); State->Paper.Add(TEXT("S3"), 3);
+			State->Signatures.Reset(); State->LelandAnswers.Reset();
 			const bool bOk = State->LoadFromSlot(TEXT("roundtrip_test"));
-			LogLine(FString::Printf(TEXT("SAVE-ROUNDTRIP v16 ok=%d strikes=%d"),
-			                        bOk ? 1 : 0, State->Strikes));
-			State->Strikes = 0;
+			const bool bMatch = bOk && State->Strikes == 7
+				&& FMath::IsNearlyEqual(State->SeanceWear, 72.5f) && State->bAfTaught
+				&& State->Decision == TEXT("HIS HAND")
+				&& State->Paper.FindRef(TEXT("S3")) == 1
+				&& State->Signatures.Num() == 1 && State->Signatures[0].Station == TEXT("S2")
+				&& State->LelandAnswers.Num() == 1 && State->LelandAnswers[0] == 1023;
+			LogLine(FString::Printf(
+				TEXT("SAVE-ROUNDTRIP v16 ok=%d match=%d strikes=%d wear=%.1f taught=%d decision=%s paperS3=%d sigs=%d leland=%d"),
+				bOk ? 1 : 0, bMatch ? 1 : 0, State->Strikes, State->SeanceWear,
+				State->bAfTaught ? 1 : 0, *State->Decision,
+				State->Paper.FindRef(TEXT("S3")), State->Signatures.Num(),
+				State->LelandAnswers.Num()));
+			// leave clean for the AF test that follows
+			State->Strikes = 0; State->SeanceWear = 0; State->bAfTaught = false;
+			State->Decision = TEXT(""); State->Signatures.Reset();
+			State->LelandAnswers.Reset(); State->Paper.Add(TEXT("S3"), 3);
 		}
 	}
 }

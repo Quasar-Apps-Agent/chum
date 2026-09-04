@@ -991,3 +991,21 @@ writes ForceUTF8WithoutBOM. The cloud lane's PR #7 merged the same
 day, and its §6 delta audit — 7 shape mismatches and 32 missing keys
 against my own 0.8a SaveGame — is now unit 0.8b-3, a worklist I did
 not have to write myself. Two hands, one main.
+
+## Commit 087 · UNIT 0.8b-3 · THE LOG SPEAKS FULL v16
+The cloud lane audited my 0.8a save and found it half-shaped; this
+unit finishes it. URestorationSaveGame now carries all fifty-five
+keys of _save_dict in order, each with the type the spec demands — the
+paper as a per-station map seeded three-per, the signatures and
+captures and casualties as real struct arrays (respawn_point reads the
+last signature's station, so a count would have been a latent bug),
+seance wear as the float its 70.0 threshold needs, Leland's answers as
+the int array that dedupes frames. Save and load copy the whole set,
+paper merging so keys absent from a file survive. And Strike() clamps
+lost items at seven, not six — the off-by-one that would have kept the
+LOUPE from ever becoming the New Game+ relic, filed by the cloud as
+9.x and now closed. The round-trip test set a value of every container
+kind, saved, clobbered every field, loaded, and compared: match=1.
+The two-handed loop's full arc in one unit — cloud found it, Mac fixed
+it, and the save that carries a whole playthrough now round-trips
+clean. §6's gameplay-function tail is 0.8b-4.

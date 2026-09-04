@@ -83,10 +83,16 @@ through Phase 0.)
       SIGNAL + CAPTURE ABORTED); Rita's reach ray dispatches the interface;
       SetNight broadcast added. Logging forced UTF-8 (0xff BOM crashed the
       py reader). CurrentTape/Captures in state
-- [ ] 0.8b-3 State parity: apply ue/PORT-NOTES-STATE.md §6 deltas to the
-      v16 SaveGame (7 shape mismatches inc. Paper->TMap, Signatures->array;
-      32 missing keys; Mode/CurrentTape defaults) — the save's semantic
-      fields must match the spec exactly
+- [x] 0.8b-3 State parity: URestorationSaveGame now carries all 55 v16
+      keys in dict order with spec types (Paper TMap seeded S1..S5=3;
+      Signatures/Captures/Casualties struct arrays; SeanceWear float;
+      LelandAnswers int array) and spec defaults (Mode=1 LATE_NIGHT,
+      CurrentTape=1, CarriedId=-1); Save/Load copy the full set (paper
+      MERGES on load); Strike() clamp fixed 6->7 (the LOUPE relic). Full
+      cross-type round-trip: match=1 (int/float/bool/string/map/struct
+      array/int array all survive save->clobber->load); AF contract still
+      fires atop the reshaped state. The gameplay functions (§6 tail) are
+      0.8b-4
 - [ ] 0.8b-4 P3 remainder: paper economy + stations + respawn, retake
       presentation, Harriet freeze, real day/night cycle, screening + assist
 - [ ] 0.9 Harness: Gauntlet/functional-test maps, three bots, invariant

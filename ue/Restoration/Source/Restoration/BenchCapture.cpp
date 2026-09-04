@@ -114,7 +114,11 @@ void ABenchCapture::Tick(float DeltaSeconds)
 		{
 			State->bRecording = false;
 			State->RecordingLeft = 0.0f;
-			State->Captures += 1;
+			FRestorationCapture Cap;
+			Cap.Name = FString::Printf(TEXT("TAPE %d · A CLEAN SIGNAL"), State->CurrentTape);
+			Cap.Tape = State->CurrentTape;
+			Cap.At = TEXT("BENCH");
+			State->Captures.Add(Cap);
 			LogLine(FString::Printf(TEXT("TAPE %d · A CLEAN SIGNAL"), State->CurrentTape));
 		}
 	}
