@@ -87,6 +87,7 @@ void ARundown::BeginPlay()
 	if (State)
 	{
 		if (bTestForceNight) { State->bIsNight = true; }
+		if (bTestInvariants) { State->bIsNight = true; }
 		if (bTestForceAF) { State->bAfActive = true; }
 		if (bTestForceRecording) { State->bRecording = true; }
 		if (bTestSaveRoundtrip)
@@ -215,6 +216,19 @@ void ARundown::Tick(float DeltaSeconds)
 	{
 		FoldT -= DeltaSeconds;
 		return;
+	}
+
+	// invariant scenario driver: 0-2s target at warn range, then pull to
+	// strike range; the normal hunt logic fires WARN then STRIKE
+	if (bTestInvariants)
+	{
+		TestClock += DeltaSeconds;
+		if (AActor* Tgt = ResolveTarget())
+		{
+			const FVector Anchor = SegmentAnchors[SegIdx];
+			const float Reach = (TestClock < 2.0f) ? 6.0f : 1.5f;
+			Tgt->SetActorLocation(Anchor + FVector(0, Reach * M, 100.0f));
+		}
 	}
 
 	// test scaffolding: scripted recording cutoff

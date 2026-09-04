@@ -111,8 +111,22 @@ through Phase 0.)
       - [ ] retake presentation (the strike screen + carried-daily flow)
       - [ ] screening + assist
       - [ ] pawn day/night-driven lighting states
-- [ ] 0.9 Harness: Gauntlet/functional-test maps, three bots, invariant
-      parser reading the same logs; I01/I02/I22/I06 green in UE
+- [~] 0.9 Harness (in progress):
+      - [x] 0.9a Invariant parser ported as a test step (tools/
+            invariant_parser.py, the SAME coverage rules as
+            invariant_parser.gd, exit 0 iff pass) + warn->strike scenario
+            (Rundown bTestInvariants: hold tagged target at 6m, pull to
+            strike range, clear LOS) run under simulate and fed to the
+            parser: I01 warn-precedes-strike PASS (two warn->strike pairs),
+            I02 no-strike-thru-wall PASS. Two harness bugs fixed (target
+            needed MOVABLE mobility; parser path) — test bugs, not brain
+            bugs. I22 only COUNTED this run (no break in 5s)
+      - [ ] 0.9b Negative test: wall between hunter and prey must log
+            THRU-WALL and make the parser FAIL I02 (proves it catches)
+      - [ ] 0.9c I22 exercised: forced-break hook after ReportNoise ->
+            "RELOCATE toward heard noise" attributed in the scorecard
+      - [ ] 0.9d Three bots (fail-bot / explorer / still) as pawns + I06
+            fail-forward-finale + liveness/premiere parser sections
 - [ ] 0.10 PHASE GATE: parity slice — one room, Chum encounter, saves,
       QA subset green, THE-LAWS spot-audit, captured & reviewed
 

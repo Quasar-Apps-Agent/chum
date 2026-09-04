@@ -1041,3 +1041,24 @@ a cardigan — the one member of the club who visibly obeys the same
 clock the hunter does, so the player learns to read the break in her
 stillness. Her H1/H2 casualty sequences are UI-heavy and wait for the
 presentation half, alongside the retake screen and screening.
+
+## Commit 090 · UNIT 0.9a · THE SAME PARSER, THE SAME VERDICT
+The migration map promised the harness would be "the parser as a test
+step reading the identical log files," and now it is. tools/
+invariant_parser.py carries the coverage rules of invariant_parser.gd
+line for line — a STRIKE with no WARN before it fails I01, a STRIKE
+marked THRU-WALL fails I02, relocations toward heard noise are counted
+for I22 — and exits zero only when the sheet is clean. The scenario
+lives in the Rundown itself: hold the tagged target at six metres,
+pull it to strike range with a clear line of sight, let the ordinary
+hunt logic speak. It spoke: WARN at 6.1, STRIKE at 1.8, and the
+warn-latch reset re-warning before the next strike, exactly as
+rundown.gd orders the grammar. The parser read the log the brain
+wrote and ruled PASS, PASS. Two bugs turned up, both in the harness
+and neither in the hunter: a target spawned STATIC ignores every
+SetActorLocation (so it sat at warn range forever, a silent no-op
+worth remembering), and one too many ".." in the parser path. Honest
+edges left as boxes: I22 was counted, not exercised — no break falls
+inside five seconds — and a positive-only run does not prove the
+parser catches a violation. 0.9b puts a wall between them and demands
+a FAIL.

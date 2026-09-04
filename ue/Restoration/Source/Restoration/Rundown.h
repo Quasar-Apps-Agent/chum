@@ -61,6 +61,11 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Rundown|Test")
 	bool bTestLoopFns = false;
 
+	// invariant harness: force night, hold the tagged target at warn range
+	// (WARN), then pull it to strike range (STRIKE) — the I01/I02 scenario
+	UPROPERTY(EditAnywhere, Category = "Rundown|Test")
+	bool bTestInvariants = false;
+
 	// the hunt target: player pawn if one exists, else any actor tagged
 	// RundownTestTarget (lets the brain run under simulate/harness)
 	AActor* ResolveTarget() const;
