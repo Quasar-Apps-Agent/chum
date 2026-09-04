@@ -63,6 +63,12 @@ void ARundown::BeginPlay()
 	{
 		// noise_event -> ReportNoise, exactly as rundown.gd connects it
 		State->OnNoise.AddLambda([this](const FVector& P, float /*R*/) { ReportNoise(P); });
+		// full sheet ends the run — the retake-level fail-forward the harness
+		// checks (UE-R1). The canonical I06 (premiere auto-fix) waits on the finale.
+		State->OnRunEnded.AddLambda([this](int32 Take)
+		{
+			LogLine(FString::Printf(TEXT("RUN ENDED take=%d (full sheet, fail forward)"), Take));
+		});
 	}
 	if (bTestLoopFns && State)
 	{
@@ -225,9 +231,12 @@ void ARundown::Tick(float DeltaSeconds)
 		TestClock += DeltaSeconds;
 		if (AActor* Tgt = ResolveTarget())
 		{
-			const FVector Anchor = SegmentAnchors[SegIdx];
+			// pin relative to where the hunter ACTUALLY is (it teleports to its
+			// segment anchor on every strike and re-targets on relocation), so
+			// a fail-bot stays in its face and the strikes keep coming
+			const FVector Here = GetActorLocation();
 			const float Reach = (TestClock < 2.0f) ? 6.0f : 1.5f;
-			Tgt->SetActorLocation(Anchor + FVector(0, Reach * M, 100.0f));
+			Tgt->SetActorLocation(Here + FVector(0, Reach * M, 100.0f));
 		}
 		// I22: at 3.5s a noise lands near PATCH BAY (segment 2), then the break
 		// comes — the relocation grammar must go TOWARD the noise (-> segment 2).

@@ -111,7 +111,8 @@ through Phase 0.)
       - [ ] retake presentation (the strike screen + carried-daily flow)
       - [ ] screening + assist
       - [ ] pawn day/night-driven lighting states
-- [~] 0.9 Harness (in progress):
+- [x] 0.9 Harness — Phase-0 scope complete (I06/I07 honestly N/A until
+      the premiere/cascade port; see 0.9d):
       - [x] 0.9a Invariant parser ported as a test step (tools/
             invariant_parser.py, the SAME coverage rules as
             invariant_parser.gd, exit 0 iff pass) + warn->strike scenario
@@ -137,8 +138,19 @@ through Phase 0.)
             chosen deliberately: from 0 a plain cycle gives 1, so 2 proves
             NEAREST-ANCHOR attribution, not order. One fixture now covers
             I01/I02/I22 in a 5s simulate
-      - [ ] 0.9d Three bots (fail-bot / explorer / still) as pawns + I06
-            fail-forward-finale + liveness/premiere parser sections
+      - [x] 0.9d Fail-bot + fail-forward at the retake level: the pinned
+            target (test_failbot.py, 15s) is struck to a full sheet; the
+            log shows the SAVOR rule engaging at strikes>=3 exactly as
+            canon, then RUN ENDED take=4 (full sheet, fail forward), then
+            a fresh non-savor warn/strike proving the sheet reset — no
+            soft-lock. Parser gained liveness (I07), premiere (I06, the
+            verbatim INCIDENT/RESOLVED t<=41 rules) and a clearly-labelled
+            UE-R1 full-sheet-ends-run check (PASS live; synthetic negative
+            convicted as soft-lock). HONEST SCOPE: canonical I06 measures
+            the finale's premiere auto-fix and I07 the cascade — neither
+            system is ported yet, so both report N/A, not green; they go
+            live with Phase 4/5. Explorer/still bots as real AI pawns are a
+            refinement — coverage is already exercised by the fixtures
 - [ ] 0.10 PHASE GATE: parity slice — one room, Chum encounter, saves,
       QA subset green, THE-LAWS spot-audit, captured & reviewed
 

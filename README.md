@@ -1095,3 +1095,23 @@ so it was moved rather than trusted. The parser now rules all three
 coverage invariants from one five-second simulate: I01 PASS, I02
 PASS, I22 PASS with one attributed. What remains of the harness is
 the cast of bots and I06, the finale that must fail forward.
+
+## Commit 093 · UNIT 0.9d · THE SHEET FILLS, THE RUN ENDS, THE LOOP GOES ON
+The last harness question was the one that matters most to a horror
+game: what happens when the player simply loses. A fail-bot — the
+target pinned in the hunter's face for fifteen seconds — was struck
+to a full sheet, and the log read like the design document: warn,
+strike, warn, strike, and at the third strike the savor rule woke and
+signed its name on the next pair, exactly as canon orders it. On the
+fourth strike: RUN ENDED take=4, fail forward. And then — the proof
+that counts — a fresh warn and strike with no savor on them, because
+the sheet had reset and the schedule had resumed. No soft-lock. The
+parser's new UE-R1 line ruled it PASS live and convicted a synthetic
+four-strikes-no-ending as a soft-lock. The parser also learned the
+liveness and premiere sections verbatim, and here the ledger keeps
+its receipts honestly: canonical I06 measures the finale's club
+auto-fixing an incident within 41 seconds, and I07 the cascade's
+liveness — neither system exists in Unreal yet, so both report N/A
+rather than a green they did not earn. They go live when Phase 4 and
+5 port them. The harness is complete for everything Phase 0 can
+exercise. What stands between here and Phase 1 is the gate.
