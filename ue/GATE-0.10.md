@@ -42,10 +42,36 @@ system it governs is a later phase; listed so it is scheduled, not forgotten.
 
 ## 3 · The capture
 
-`renders/gate_0.10_greybox_chum.png`, archived to
-`docs/telemetry/ue-baselines/`. It shows the imported After-Fire puppet
-(`/Game/Imported/SM_ChumAF`, scale-true 3.08 m) standing at the TAPE
-LIBRARY anchor inside the stamped greybox under its practicals.
+Two frames, both archived to `docs/telemetry/ue-baselines/` and copied to
+the Desktop as `chum-gate-0.10-current.png` / `-back.png`:
+
+- **`renders/gate_0.10_greybox_chum.png` (primary, face side).** The
+  imported After-Fire puppet (`/Game/Imported/SM_ChumAF`, scale-true
+  3.08 m — he stands nearly wall-height, the walls being 3.0 m) at the
+  TAPE LIBRARY anchor, camera inside the room at (4.2, −19.7) m. What to
+  see: the tally lens lit (LAW 10's "the eye's light"), the rebuilt mouth
+  and whiskers, the collar and dead bell, the belly patch; and the stamped
+  DATA made visible — the **S1** station marker (Stations.csv) and the
+  locked-door text **"SEALED · reopens for the anniversary (Tape 4)"** at
+  the FIRE CORRIDOR door (Doors.csv, LAW 3's corridor). That is the "one
+  room" clause in one frame: room, station, locked door, Chum.
+- **`renders/gate_0.10_greybox_chum_back.png` (body-state evidence).**
+  The same placement from behind: ears, collar, tail, and the torso and
+  limbs in full.
+
+**Honest reads, so the owner is not surprised:** (1) the torso, arms and
+legs read as the faceted, white-flecked "clay" surface — that is
+precisely the 0.3b sodium finding filed against units 1.1 / 1.4 / 1.5,
+i.e. Phase 1's mandate, not a regression; the head is the only part that
+has passed the gate and it is the only part that reads finished. (2) The
+ears are blown out because the greybox lights each room with one plain
+overhead practical and the puppet stands directly under it; the locked-EV
+rig from 0.3 is not applied to the greybox (that is the lighting bible's
+Phase 3 pass). Neither is a reason to fail the gate; both are reasons the
+next phases exist. (3) The first attempt shot a lit wall slab from OUTSIDE
+the room (camera at y = −10.4 m, wall at −11 m) — caught by looking before
+shipping, per rule 4. The inside-camera positions now live as the script's
+defaults.
 
 **Honest note:** the puppet is PLACED for the capture; the brain
 (`ARundown`) and the puppet are not yet one actor. Making the brain wear

@@ -153,6 +153,12 @@ through Phase 0.)
             refinement — coverage is already exercised by the fixtures
 - [ ] 0.10 PHASE GATE: parity slice — one room, Chum encounter, saves,
       QA subset green, THE-LAWS spot-audit, captured & reviewed
+      - [~] PACKAGE ASSEMBLED, AWAITING OWNER REVIEW — ue/GATE-0.10.md
+            (clause map + 11-law spot-audit, LAW 9 flagged), ue/GATE-0.10-
+            EVIDENCE.md (all 9 fixtures re-run at HEAD, verbatim lines),
+            renders/gate_0.10_greybox_chum{,_back}.png (scale-true puppet
+            in the stamped TAPE LIBRARY with the S1 marker and the SEALED
+            door text visible). The box above is the OWNER'S to tick
 
 ## CLOUD LANE BACKLOG — [CLOUD-OK] units (Linux, repo only; see plan rule 0)
 Cloud routines take the FIRST unclaimed box here, on branch

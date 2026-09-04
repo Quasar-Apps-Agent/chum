@@ -12,8 +12,10 @@ eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 
 LEVEL = "/Game/Greybox"
 ANCHOR = unreal.Vector(0, -1600, 0)  # TAPE LIBRARY, the brain's first anchor
-POS = [float(v) for v in os.environ.get("UE_CAP_POS", "260,-1040,175").split(",")]
-LOOK = [float(v) for v in os.environ.get("UE_CAP_LOOK", "0,-1600,150").split(",")]
+# INSIDE the room: TAPE LIBRARY is x -6..6 m, y -21..-11 m (Rooms.csv). A
+# camera at y=-10.4 m sat outside the north wall and shot a lit slab.
+POS = [float(v) for v in os.environ.get("UE_CAP_POS", "-420,-1240,175").split(",")]
+LOOK = [float(v) for v in os.environ.get("UE_CAP_LOOK", "0,-1600,140").split(",")]
 OUT = os.environ["UE_CAP_OUT"]
 FOV = float(os.environ.get("UE_CAP_FOV", "70"))
 
@@ -21,7 +23,8 @@ les.load_level(LEVEL)
 puppet_mesh = unreal.EditorAssetLibrary.load_asset("/Game/Imported/SM_ChumAF")
 puppet = eas.spawn_actor_from_object(puppet_mesh, ANCHOR)
 puppet.set_actor_rotation(unreal.Rotator(0, 0, 200), False)  # 3/4 toward camera
-unreal.log_warning("GATECAP puppet placed at %s (%s)" % (ANCHOR, puppet.get_name()))
+o, ext = puppet.get_actor_bounds(False)
+unreal.log_warning("GATECAP puppet placed at %s (%s) bounds origin=%s extent=%s" % (ANCHOR, puppet.get_name(), o, ext))
 
 cam = eas.spawn_actor_from_class(unreal.CameraActor, unreal.Vector(*POS))
 cam.camera_component.set_field_of_view(FOV)

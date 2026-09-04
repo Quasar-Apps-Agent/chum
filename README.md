@@ -1115,3 +1115,25 @@ liveness — neither system exists in Unreal yet, so both report N/A
 rather than a green they did not earn. They go live when Phase 4 and
 5 port them. The harness is complete for everything Phase 0 can
 exercise. What stands between here and Phase 1 is the gate.
+
+## Commit 094 · GATE 0.10 · THE PACKAGE, NOT THE VERDICT
+Phase 0 ends where the plan said it would: at a gate the loop is not
+allowed to open. So the loop assembled the case and stopped. Every one
+of the nine Phase-0 fixtures was re-run at HEAD in a single pass and
+its verbatim lines kept; the parity slice was mapped clause by clause
+to what proves it; the eleven laws were audited one by one and marked
+EXERCISED, BY ABSENCE or NOT YET — with LAW 9, access, flagged in red
+because nothing in the port yet honors it. Then the capture. The first
+frame was a lit wall: the camera sat a metre outside the room, and the
+rule that says look before you ship earned its keep. The second, from
+inside, showed the After-Fire puppet standing nearly wall-height at his
+own anchor, the S1 station beside him and the FIRE CORRIDOR's "SEALED ·
+reopens for the anniversary (Tape 4)" hanging at the door — the stamped
+data made visible around him. And it showed, honestly, a body that
+still reads as faceted clay beneath a head that reads finished: the
+sodium gate's finding, now in a room, which is the exact shape of
+Phase 1. The tracker notes the package and leaves the box unticked.
+The gate is the owner's. Meanwhile the lanes opened: a cloud routine
+on an eighteen-unit backlog with a claim check, four prep agents
+writing Phase 1's brief and rig spec, the access spec, and the first
+five room briefs. The build no longer waits on one pair of hands.
