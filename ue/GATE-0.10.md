@@ -46,8 +46,14 @@ Two frames, both archived to `docs/telemetry/ue-baselines/` and copied to
 the Desktop as `chum-gate-0.10-current.png` / `-back.png`:
 
 - **`renders/gate_0.10_greybox_chum.png` (primary, face side).** The
-  imported After-Fire puppet (`/Game/Imported/SM_ChumAF`, scale-true
-  3.08 m — he stands nearly wall-height, the walls being 3.0 m) at the
+  imported After-Fire puppet (`/Game/Imported/SM_ChumAF`, at the build's
+  UNSCALED height of 3.08 m to the ear tips — he stands nearly wall-height,
+  the walls being 3.0 m. **SCALE IS OPEN, not proven:** canon says 3.35 m
+  body on wake with the eye at 3 m (`Timings.csv` AF_HEIGHT 3.35; the
+  SCALE LAW), and the Godot rig applies ×1.2885 at wake. At scale 1.0 the
+  tally lens sits at ≈2.34 m, not 3 m. See `docs/production/
+  CHUM-RIG-AND-ANIMATION-SPEC.md` OPEN-1 for the arithmetic; §4 asks the
+  ruling) at the
   TAPE LIBRARY anchor, camera inside the room at (4.2, −19.7) m. What to
   see: the tally lens lit (LAW 10's "the eye's light"), the rebuilt mouth
   and whiskers, the collar and dead bell, the belly patch; and the stamped
@@ -85,6 +91,17 @@ the next phase's job.
 1. Open the capture. Does the room read as the club, and the puppet as the
    thing described? (Realism is Phase 1's mandate; here the question is
    scale-truth and placement.)
+   **1b. RULE ON SCALE (OPEN-1).** Author `SK_Chum_AfterFire` at scale 1.0
+   (3.08 m ear tips, eye 2.34 m) and let the brain apply the ×1.2885 wake
+   scale as actor scale, exactly as `rundown.gd` line 238 does — OR author
+   him at 3.35 m body / eye 3 m with actor scale 1.0. Either way one
+   uniform scale, frozen before export, never per-bone. The rig spec
+   builds from whichever you pick.
+   **1c. NOTE THREE BRAIN GAPS the rig spec found** (not gate blockers;
+   they are Phase 1/2 boxes): no 0.9 s telegraph before a strike (QA-54);
+   the post-cool withdrawal is not simulated (he hides and teleports;
+   canon shows a reversed walk); `AfCrossingSpeed` is declared in
+   `Rundown.h` but unused. They go into PROGRESS.md when 0.10 ticks.
 2. Read `GATE-0.10-EVIDENCE.md`. Every fixture's verbatim lines are there.
    Anything surprising?
 3. Sign the spot-audit boxes above, or strike a row.
