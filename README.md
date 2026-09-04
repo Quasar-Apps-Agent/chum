@@ -1027,3 +1027,17 @@ performs. One simulate proved all of it: two mornings, the paper
 falling 3 to 2, the respawn exact, the documents and keys filed. The
 presentation and NPC half — the retake screen, Harriet's freeze,
 screening and assist — is 0.8b-5.
+
+## Commit 089 · UNIT 0.8b-5a · HARRIET FREEZES INSIDE THE COLOR CHANGE
+The schedule is real, and Harriet is its proof. AHarriet sways gently
+while the building is ON AIR — roll on a slow sine, sin(t·0.9) — and
+the instant the break comes she FREEZES mid-motion, holding exactly
+where the cue left her, resuming only on the return signal. The test
+caught her in the act: swaying from 0.835 to 1.791 degrees of roll
+under ON AIR, then the break landing and freezing her at 1.791, held
+to the fourth decimal a full second later. swaying=1 held=1. Her cup
+rises by the day, and her prompt tells the phase. This is LAW 6 wearing
+a cardigan — the one member of the club who visibly obeys the same
+clock the hunter does, so the player learns to read the break in her
+stillness. Her H1/H2 casualty sequences are UI-heavy and wait for the
+presentation half, alongside the retake screen and screening.

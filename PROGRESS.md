@@ -102,9 +102,15 @@ through Phase 0.)
       HasKey/TakeKey, LogCapture; and the sign->noise->relocate wiring
       (SignFinish broadcasts OnNoise -> ARundown::ReportNoise, deferred to
       the next break as the spec defers it). All verified in one simulate
-- [ ] 0.8b-5 P3 presentation/NPC half: retake presentation (the strike
-      screen + carried-daily flow), Harriet freeze on breaks, screening +
-      assist, the pawn's day/night-driven lighting states
+- [~] 0.8b-5 P3 presentation/NPC half (in progress):
+      - [x] Harriet freeze on breaks (AHarriet, IRestorationInteractable):
+            sways ON AIR via sin(t*0.9), FREEZES mid-motion on break, holds
+            exactly where the cue left her (test: swayA 0.835 -> swayB 1.791
+            swaying, frozenC 1.791 held=1); cup rises by the day; prompt
+            per phase. H1/H2 casualty flows deferred (UI-heavy)
+      - [ ] retake presentation (the strike screen + carried-daily flow)
+      - [ ] screening + assist
+      - [ ] pawn day/night-driven lighting states
 - [ ] 0.9 Harness: Gauntlet/functional-test maps, three bots, invariant
       parser reading the same logs; I01/I02/I22/I06 green in UE
 - [ ] 0.10 PHASE GATE: parity slice — one room, Chum encounter, saves,
