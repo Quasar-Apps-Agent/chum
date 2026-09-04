@@ -160,7 +160,140 @@ discipline, QA-56 drift=dressing-only, QA-57 one hero object max.)
 - [ ] 3.FINAL PHASE GATE: full-studio walkthrough captures + soaks
 
 ## PHASE 4 — Puzzles & Functionality
-- [ ] 4.0 [CLOUD-OK] ENUMERATE mechanics from the canon docs into boxes here
+- [x] 4.0 [CLOUD-OK] ENUMERATED: the mechanics census is
+      docs/production/restoration-mechanics-enumeration.md — 34 boxes
+      below in BUILD-ORDER acceptance order (P2→P6), each keyed to its
+      reference script (the code is the intent), save keys, canon numbers,
+      QA lines, invariants, and UE home. Every QA-01..61, I01..I31,
+      A01..A28, all 55 save keys, all 32 Timings rows and all 73 reference
+      scripts have an owner; verified by tools/verify_mechanics_enum.py
+      (VERIFY-OK). Surfaced: M2 and ENDING A are prose-only in the
+      reference; the reaction QUEUE (13 items) is entirely unbuilt
+- [ ] 4.1 [CLOUD-OK] Landmarks.csv + Achievements.csv: extract the
+      interactable spawn registry (every world_builder _spawn_* site:
+      class, position, gate, label) and the 28-row achievement table via
+      tools/extract_data.py, deterministic — the data-driven-world law;
+      every box below spawns FROM these tables, never by hand
+- [ ] 4.2 The tape world: crt_tape → material function stack (generation /
+      tbc_on / photo_safe via an MPC), tape stage sublevel + Scare 1 Level
+      Sequence (one-frame lunge), bench TV, gen knob (the slate lies, the
+      scope does not); Spike 1 pass line; T and P as diegetic switches
+- [ ] 4.3 Doors, keys & grammar v0: hinged/locked doors stating reasons
+      from Doors.csv, the key chain (EDITH → shed → QUIET ROOM), window-
+      bound doors HELD FOR AIR waived only in cascade, wall clocks (QA-10,
+      I04, I08, A16)
+- [ ] 4.4 The dresser, the sheet & run death: seven items loupe-last, the
+      casting sheet as a wall object, NEXT WEEK'S EPISODE → title (no
+      credits, morning-after CONTINUE), the NG+ relic (QA-07/08, I16/I17)
+- [ ] 4.5 The club on schedule: Merle (kettle / chair / DOORWAY pen watch,
+      1974), the coat-peg drift meter, Vess at the shrine + his binder
+      (insight / credit flags), Harriet's seventh-signal note (QA-11, QA-56)
+- [ ] 4.6 Frame Discipline: monitor rigs as SceneCapture feeds with tally /
+      NO SIGNAL / stare-kill / re-patch / sync_to, the on-camera safety
+      gate in ARundown + a SAFE/EXPOSED assertion overlay (QA-14, I05;
+      Spike 2's other half)
+- [ ] 4.7 The patchbay & power budget: one amperage budget, circuits,
+      NO SIGNAL propagation, revive-first re-patch, the finale breaker
+      phases, blackout scrim (Spike 6 half one; routes, not percentages)
+- [ ] 4.8 The noise bus & night one: footsteps / doors / signatures / coil
+      → ReportNoise, "It changed direction" once per run (QA-13, I22, A08),
+      crouch honesty (QA-58, I31), the night-one trip once per save (P9)
+- [ ] 4.9 The Floor Manager: nights ON AIR at the stack end inside 9 m,
+      YOU'RE ON 3 s freeze check (holds / spoiled), absent on breaks and
+      the premiere, assist hold; never heard moving (QA-19, P8, I15)
+- [ ] 4.10 The cascade (Night 4+): circuit C → spread → B → ordered
+      restoration refusing B before C → circuit F; holds waived; the
+      Rundown bolder; liveness_log OK/VIOLATION (QA-20, I04, I07, A15)
+- [ ] 4.11 The Coverage Director: checker / sprinter / hider from the
+      counters, coverage_log with reason strings, kill priority, savoring
+      at the last line, burn reset, the A/B(/C) blocking table as data,
+      the poisoned well once per run (I21, V5, Spike 5)
+- [ ] 4.12 Burn your dailies: a canister per capture in the stacks, single
+      carry, the degausser burn removes a line and resets the read; abort
+      and run end mint none (I09, I17, P2, P5)
+- [ ] 4.13 After-Fire presentation & the dead room: the HUD REC · SAFE
+      WHILE LIT lamp, the AF captions, first-sighting once per save, dead-
+      room deafness + the felt-door hold + [NO ECHO], the eye lit only while
+      recording (QA-34..38, I23..I26; the arc itself is 0.8a's)
+- [ ] 4.14 Tape progression & the presigned page: day-mapped tapes, slated
+      captures, the objective line, S4 Day 2+ zero-paper signature once
+      (QA-21, I10, A09)
+- [ ] 4.15 The film cabinet & the signal vocabulary: six signals taught
+      once, the seventh via Harriet's note, signals_known feeding the FM
+      and the 3 s seek grace (A07; QA-41's gate)
+- [ ] 4.16 The readables & the binder: D01–D11 with read flags (A26 at ten;
+      D11 after first sighting), TAB binder (ledger page one, presentation
+      form, PT / keys / coverage lines; true-pause by day, live in the
+      premiere), the M map from Rooms.csv, the glyph layer (QA-15, QA-39,
+      QA-55, QA-59)
+- [ ] 4.17 The fire tape: pickup, the forced watch with no sting, the wake
+      (af_active + toast) once, M1's offer site, L2's consumption (QA-23,
+      QA-33, QA-40, I15, A13)
+- [ ] 4.18 The crate & the seance: the crate gate, Z/X over deterministic
+      seeded frames (I20), five answers at fixed frames, wear 7 / 3.5
+      burned in, knob restore, grief answers 14 / 28, L1 the sixth
+      question, L2 the reading (QA-22, QA-44, QA-50, Spike 3, A14)
+- [ ] 4.19 The dock task: six units, one warm, nothing follows ever, the
+      card gated on filing, the Director never stages here (QA-24, I12,
+      A10, P7)
+- [ ] 4.20 The rejected edit & the splice: played, refused, one backward
+      rotation, cobbler; the H2 temptation → shortcut daily → Harriet
+      doubled forever, rebuilt on load (QA-49)
+- [ ] 4.21 The Sign-Off assets & the decision ledger: verse (spectro dock),
+      cart, script, card + the bench rack; pen cycle + SPACE commit, ink
+      final, Merle to the doorway; V1's first trigger (QA-24, I19, A17)
+- [ ] 4.22 The glimpse & the unseal: Day 4 fire corridor unseals; the
+      elbow, under 2 s, once ever, unmediated; no entry anywhere and no
+      descriptive class name (QA-25, I11, Law 3)
+- [ ] 4.23 Lockdown: monitor sync, SEALED FOR BROADCAST, rec chairs to rows
+      forever, Merle's line, persistent and re-applied on load; ending 0's
+      precondition read here (QA-26, I18, A20)
+- [ ] 4.24 Live production I — cues & sabotage: PGM cue marks + switcher
+      refusal, the incident loop (tally / house / boom / cards) with
+      fixtures and escalation, the triple fail-forward guarantee (≤2
+      refusals, boom once, 40 s auto-fix), premiere_log, the Rundown
+      yields, the bell once, the little door by hand (QA-27, I03, I05,
+      I06, Spike 7)
+- [ ] 4.25 Live production II — the club's hands: the Vess breaker
+      (credited / uncredited / dead), F2 on the third blind call, the rows
+      triage; M2 authored from the ledger text, prose-only in the reference
+      (QA-42, QA-43, QA-46)
+- [ ] 4.26 Live production III — the divert, the fader & the crossing: the
+      window at the final break, F1 (SPACE his hand / hold-E 4.6 s hers +
+      13 s tax), the 75 / 62 s crossing with the eye dark (reached / caught
+      / late), ending 0's intercept (QA-43, QA-45)
+- [ ] 4.27 The casualty ledger: mark_casualty idempotent, the ten deaths at
+      their sites (M1 M2* V1 V2 H1 H2 F1 F2 L1 L2) + the rows, the ripples
+      as data (kettle, pegs, breaker, 0.05, seventh signal, 62 s, cards,
+      furniture), page one, the readings that never lie (QA-39..50,
+      I27, I28)
+- [ ] 4.28 The endings & credits: BURN (cold cobbler), NEW PRODUCER + the
+      one interface lie at the title (I13), SIGN-OFF 1A/1B, DEAD AIR 4a/4b,
+      4c, ENDING 0, THE LEDGER READ ALOUD + A27; ENDING A · AUDIENCE ONLY
+      built from the addendum, prose-only in the reference (QA-28, QA-45,
+      QA-47, QA-60, QA-61, I28, I29, A21–A25, A27, A28)
+- [ ] 4.29 Title, pause & the credits shell: the save-aware menu, FILED
+      WHILE YOU WERE OUT once, NEW EPISODE once, the demo badge, tree-wide
+      pause refusing authored sequences, the crawl with grace-skip and the
+      tower card (QA-01..04, QA-32)
+- [ ] 4.30 The booth: volume / sens / fullscreen / TBC / photo-safe / text
+      scale / captions / ASSIST, five-verb remap with KEY IN USE (UE: every
+      action + the pad map, hold-to-toggle), settings apart from the save,
+      the first-run booth (QA-16, QA-17, QA-18's switch)
+- [ ] 4.31 Captions, glyphs & the string table: the caption bus with source
+      tags, glyph substitution at the five chokepoints, tr() → GameText.csv
+      StringTable (QA-05, QA-17)
+- [ ] 4.32 Achievements: 28 ids, the deferral queue (morning toast / title),
+      meta-silence, DEMO-disabled, the Steam bridge (QA-29, QA-45, QA-47,
+      I30)
+- [ ] 4.33 Demo mode: DemoOpen rooms + door reasons, spawn gates, the bed
+      declines, S1 + S5 paper, the end sequence + protected card, the save
+      whitelist, six funnel marks, the carry line, dead-Merle refusal
+      (QA-30, QA-48, DP1–5)
+- [ ] 4.34 THE-LAWS + rulings audit: eleven laws line by line on the UE
+      build; the gap-audit rulings verified (no sprint, crouch honesty,
+      binder-is-inventory, stations-only saves, one death card, photo mode
+      Tier B); the modes-vs-"ASSIST only" conflict put to the owner
 - [ ] 4.WEB reaction-matrix wiring audit (every action echoes in ≥2
       systems/people, per the QUEUE order in the canon doc)
 - [ ] 4.SAVE integrity pass

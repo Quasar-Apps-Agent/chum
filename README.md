@@ -991,3 +991,30 @@ writes ForceUTF8WithoutBOM. The cloud lane's PR #7 merged the same
 day, and its §6 delta audit — 7 shape mismatches and 32 missing keys
 against my own 0.8a SaveGame — is now unit 0.8b-3, a worklist I did
 not have to write myself. Two hands, one main.
+
+## Commit 087 · UNIT 4.0 · THE MECHANICS, COUNTED (cloud unit)
+A cloud session, so per rule 0 the unit is the first CLOUD-OK box:
+enumerate the mechanics from the canon into Phase 4 boxes. The census
+lives in docs/production/restoration-mechanics-enumeration.md. Method:
+every canon and production document read whole, then every reference
+script's header, the state inventory, the Timings table and the UE
+source tree, then one owner per mechanic. Thirty-four new boxes in
+BUILD-ORDER acceptance order, P2 through P6, each naming the script that
+IS its spec, its save keys, its canon numbers, its QA lines and
+invariants, and its Unreal home; mechanics Phase 0 already claims are
+listed as OWNED so nothing is double-booked, and the seven existing
+Phase 4 boxes are kept and keyed. Coverage is total by assertion:
+QA-01..61, I01..I31, A01..A28, all 55 save keys, all 32 Timings rows,
+all 73 reference scripts, and the box ids diffed against PROGRESS.md
+(tools/verify_mechanics_enum.py, VERIFY-OK; it fails loudly when a line
+is removed — tested). The census earned its keep by what it found: M2
+THE HOME SINGER and ENDING A · AUDIENCE ONLY are described as built and
+exist nowhere in the code (nine deaths are in code, not ten; seven
+endings' routes, not eight); the reaction matrix's thirteen-item QUEUE
+is entirely unbuilt; the Force paths and Avert never shipped; and the
+gap audit's "ASSIST only" ruling sits against three shipped run modes,
+a conflict put to the owner at 4.34, not resolved here. The next cloud
+box is 4.1 (Landmarks.csv + Achievements.csv, the two port-kit tables
+0.5 deferred). No renders this session (no Blender, no Unreal, no
+Desktop) — Desktop copies skipped, honestly. Repo green on entry
+(HEAD == origin/main 6ac53ae) and on exit.
