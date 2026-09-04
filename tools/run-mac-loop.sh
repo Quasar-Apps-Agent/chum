@@ -16,9 +16,21 @@ cd "/Users/christianabowen/Desktop/restoration-godot 3" || exit 1
 
 PROMPT='Follow AAA_BUILD_PLAN.md session protocol exactly. Confirm the repo is green, take the FIRST unchecked box in PROGRESS.md that this Mac can run, complete that ONE unit, run the full verification loop and look at every render/capture with your own eyes, then tick the box, append the README ledger entry, copy current renders to the Desktop, git commit and git push. One unit per pass. Never leave the repo red. If the only remaining work needs input the owner must give, stop and say so instead of guessing.'
 
+fails=0
 while true; do
   echo "======== $(date '+%Y-%m-%d %H:%M:%S') · starting a unit ========"
-  claude -p "$PROMPT" --dangerously-skip-permissions || echo "(pass exited non-zero; continuing)"
+  if claude -p "$PROMPT" --dangerously-skip-permissions; then
+    fails=0
+  else
+    fails=$((fails + 1))
+    echo "(pass exited non-zero · consecutive failures: $fails)"
+    if [ "$fails" -ge 3 ]; then
+      echo ""
+      echo "!! Three passes failed in a row. Most likely the CLI is not logged in."
+      echo "!! Fix:  claude login    (authenticate once), then re-run this script."
+      exit 1
+    fi
+  fi
   echo "======== $(date '+%Y-%m-%d %H:%M:%S') · pass complete · sleeping 90s (Ctrl-C to stop) ========"
   sleep 90
 done
