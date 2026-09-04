@@ -96,7 +96,17 @@ the next phase's job.
    scale as actor scale, exactly as `rundown.gd` line 238 does — OR author
    him at 3.35 m body / eye 3 m with actor scale 1.0. Either way one
    uniform scale, frozen before export, never per-bone. The rig spec
-   builds from whichever you pick.
+   builds from whichever you pick. **Two independent specs converge:**
+   the Phase 1 build brief (`docs/production/PHASE1-CHUM-BUILD-BRIEF.md`
+   §1.7) recommends authoring at the TRUE 3.35 m — the tally lens then
+   sits at ≈3.01 m, matching canon's eye-at-3 m — and notes the build is
+   currently authored at 2.6 m relying on Godot's runtime scale. That is
+   the loop's recommendation too; the ruling stays yours.
+   **1d. CANON WARNING from the build brief (§0.5):** prior Chum builds
+   transferred two STAGE-PUPPET post-fire deltas (flannel, leather
+   patches) onto the MASCOT. The plate `after-fire-chum-dossier.png` is
+   the mascot's canon, not the stage tell-table. Rule whether those two
+   deltas stay (OPEN) before 1.1 rebuilds the torso.
    **1c. NOTE THREE BRAIN GAPS the rig spec found** (not gate blockers;
    they are Phase 1/2 boxes): no 0.9 s telegraph before a strike (QA-54);
    the post-cool withdrawal is not simulated (he hides and teleports;
