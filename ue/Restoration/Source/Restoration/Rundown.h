@@ -100,4 +100,5 @@ private:
 	bool bAfSeenOnce = false;
 	bool bDeadroomLine = false;
 	float TestClock = 0.0f;
+	bool bHeardFired = false; // invariant scenario: the I22 noise+break, once
 };

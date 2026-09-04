@@ -229,6 +229,18 @@ void ARundown::Tick(float DeltaSeconds)
 			const float Reach = (TestClock < 2.0f) ? 6.0f : 1.5f;
 			Tgt->SetActorLocation(Anchor + FVector(0, Reach * M, 100.0f));
 		}
+		// I22: at 3.5s a noise lands near PATCH BAY (segment 2), then the break
+		// comes — the relocation grammar must go TOWARD the noise (-> segment 2).
+		// Segment 2 is chosen deliberately: from segment 0 a plain cycle would
+		// give 1, so "-> segment 2" proves nearest-anchor attribution, not order.
+		// OnPhaseChanged(false) is the break branch, invoked directly because the
+		// real clock's 50s flip is outside the scenario window.
+		if (!bHeardFired && TestClock >= 3.5f)
+		{
+			bHeardFired = true;
+			ReportNoise(SegmentAnchors[2] + FVector(50.0f, 50.0f, 0.0f));
+			OnPhaseChanged(false);
+		}
 	}
 
 	// test scaffolding: scripted recording cutoff

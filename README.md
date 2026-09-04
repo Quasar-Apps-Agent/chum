@@ -1080,3 +1080,18 @@ proven from both sides: it lets a clean run through and it convicts a
 dirty one. The wall scenario stays in the tree as the standing
 negative fixture — the test you run when you suspect the harness has
 gone soft. 0.9c gives I22 a real break to relocate through.
+
+## Commit 092 · UNIT 0.9c · TOWARD THE NOISE, NOT THE NEXT IN LINE
+I22 had been a count that could never fail, so it was not yet a
+finding. Now the invariant fixture makes the brain earn it: at 3.5s a
+noise lands beside PATCH BAY and the break is invoked directly —
+OnPhaseChanged(false), the real 50-second flip being outside a 5-
+second window — and the relocation grammar answers "RELOCATE toward
+heard noise -> segment 2." The segment was the whole point of the
+design. From segment 0 a plain cycle steps to 1; only the nearest-
+anchor search reaches 2. The first pass had used STUDIO A, and its
+"-> segment 1" was true but could not tell attribution from order —
+so it was moved rather than trusted. The parser now rules all three
+coverage invariants from one five-second simulate: I01 PASS, I02
+PASS, I22 PASS with one attributed. What remains of the harness is
+the cast of bots and I06, the finale that must fail forward.

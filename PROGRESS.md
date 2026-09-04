@@ -130,8 +130,13 @@ through Phase 0.)
             (I01 PASS). Godot parity confirmed: rundown.gd also MARKS thru-
             wall (line 314) and lets the soak catch it — mark-not-gate is
             canon. test_invariants_wall.py is the standing negative fixture
-      - [ ] 0.9c I22 exercised: forced-break hook after ReportNoise ->
-            "RELOCATE toward heard noise" attributed in the scorecard
+      - [x] 0.9c I22 exercised: the fixture fires ReportNoise near PATCH
+            BAY at 3.5s then invokes the break branch directly (the real
+            50s flip is outside the window) -> "RELOCATE toward heard noise
+            ... -> segment 2", parser I22 PASS (1 attributed). Segment 2 was
+            chosen deliberately: from 0 a plain cycle gives 1, so 2 proves
+            NEAREST-ANCHOR attribution, not order. One fixture now covers
+            I01/I02/I22 in a 5s simulate
       - [ ] 0.9d Three bots (fail-bot / explorer / still) as pawns + I06
             fail-forward-finale + liveness/premiere parser sections
 - [ ] 0.10 PHASE GATE: parity slice — one room, Chum encounter, saves,
