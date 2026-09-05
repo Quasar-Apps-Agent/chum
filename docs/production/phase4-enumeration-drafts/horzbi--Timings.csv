@@ -1,0 +1,29 @@
+Name,Value,Source,Meaning
+ASSET_COUNT,4,game_state.gd,finale assets to bank
+DOCUMENT_COUNT,10,game_state.gd,readable documents tracked by the read-progress toast
+MATINEE_PAPER,99,game_state.gd,Matinee mode: paper effectively unlimited
+PAPER_PER_STATION,3,game_state.gd,Late Night log-paper lines per station per tape
+SAVE_VERSION,16,game_state.gd,transmitter-log save format version
+SIGN_NOISE,4.0,game_state.gd,noise loudness emitted by signing a log
+STRIKE_SHEET_CAP,4,game_state.gd,captures before the sheet is full and the run ends
+TAPE_MAX,5,game_state.gd,"tape number ceiling (day advances, tape caps at 5)"
+ACCEL,10.0,player.gd,player acceleration toward target velocity
+CROUCH_CAM_DROP,0.6,player.gd,"camera height drop while crouched, meters"
+CROUCH_MULT,0.55,player.gd,crouch speed multiplier (gap-audit ruling c045: body verb; camera drops 0.6)
+MOUSE_SENS,0.0022,player.gd,base mouse-look radians per pixel
+REACH,2.6,player.gd,"interaction raycast length, meters"
+SPEED,3.1,player.gd,"player walk speed, m/s (deliberate weight)"
+AF_APPROACH_SPEED,0.8,rundown.gd,"after-fire approach speed, m/s (the pour)"
+AF_COOL_SECONDS,2.0,rundown.gd,"cool-down hold after the loom, seconds"
+AF_CROSSING_SPEED,1.6,rundown.gd,"the crossing traversal speed, m/s"
+AF_DOOR_NEAR,1.0,rundown.gd,"doorway proximity that can trigger a fold, meters"
+AF_FOLD_SECONDS,2.2,rundown.gd,"the fold: doorway montage duration, seconds"
+AF_HEIGHT,3.35,rundown.gd,"after-fire body height, meters (his shadow is a mechanic)"
+AF_LOOM_DIST,1.2,rundown.gd,"loom distance, meters — the performance-quote range"
+BASE_HEIGHT,2.6,rundown.gd,"built rig height to the ear tips, meters (the scale law measures the body)"
+HEAD_TILT,0.045,rundown.gd,"resting head tilt, radians (delta 8: the restitched neck, never straight)"
+MOVE_SPEED,2.4,rundown.gd,"Chum relocation speed between segments, m/s"
+STRIKE_RADIUS,2.2,rundown.gd,"strike radius, meters"
+WARN_RADIUS,7.0,rundown.gd,"warn radius, meters (I01: warn precedes strike)"
+WALL_H,3.0,world_builder.gd,"wall height, meters"
+WALL_T,0.24,world_builder.gd,"wall thickness, meters"

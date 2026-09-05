@@ -1,0 +1,46 @@
+Class,Id,Label,X,Y,Z,Room,FullGameOnly
+AssetPickup,CARD,the sign-off card,-13.0,0.5,-41.5,SCENE DOCK,yes
+AssetPickup,CART,the station ID cart,4.0,0.9,-31.5,MASTER CONTROL,yes
+AssetPickup,D02,the finale script,16.2,0.5,-10.0,TRANSMITTER HALL,yes
+AssetRack,,,9.0,2.35,-18.82,BENCH ROOM,yes
+BedProp,,,-9.0,0.3,1.5,DORMS,
+BenchTV,,,9.0,1.55,-18.82,BENCH ROOM,
+BenchTV,,THE GLADHOUSE · CLUB PRINT,-4.78,1.6,1.0,REC ROOM,
+CaptureBench,,,9.0,0.5,-17.6,BENCH ROOM,
+CastingSheetProp,,,-20.9,1.5,-30.0,STUDIO A,
+CoatPegs,,,2.7,1.5,7.0,ENTRY,
+CompoundDoor,,THE LITTLE DOOR,-12.6,0,-33.35,STUDIO A,
+CreditEntry,,LEDGER MARGIN,7.4,0.9,-15.2,BENCH ROOM,
+CueSign,,HOLD,0.9,2.5,3.55,REC ROOM,
+CueSign,,RESPOND,-0.9,2.5,3.55,REC ROOM,
+DecisionLedger,,ACCESSION LEDGER,8.2,0.9,-16.2,BENCH ROOM,yes
+Degausser,,,14.25,0.55,-17.6,CLIMATE,
+DockTask,,CLIPBOARD,-19.5,0.7,-38.0,SCENE DOCK,yes
+Dresser,,,-11.5,0.28,-1.8,DORMS,
+FilmCabinet,,,-5.4,0.7,-19.0,TAPE LIBRARY,
+FireTapeDock,,1977 DOCK,7.8,0.9,-18.4,BENCH ROOM,yes
+FireTapePickup,,REEL · 1977,17.0,0.45,-10.0,TRANSMITTER HALL,yes
+FloorManager,,,-4.5,0.0,-19.4,TAPE LIBRARY,yes
+GenKnob,,,10.2,1.0,-18.5,BENCH ROOM,
+Harriet,,,1.2,0.0,2.6,REC ROOM,
+HarrietNote,,,2.8,0.55,2.2,REC ROOM,
+ImpossibleCrate,,DELIVERY,0.0,0.5,6.0,ENTRY,yes
+KeyItem,EDITH,"the EDITH key, felt-tagged in a child's hand",10.6,1.2,-2.3,KITCHEN,
+KeyItem,QUIET ROOM,the quiet room key · felt-wrapped,10.0,0.5,14.0,SHED,
+KeyItem,TRAINING,"the TRAINING key, tagged in green ink",10.2,1.2,-2.3,KITCHEN,
+Merle,,,8.0,0.0,-1.0,KITCHEN,
+MonitorRig,,CAM 1 · CORRIDOR,2.4,1.7,-3.82,REC ROOM,
+MonitorRig,,CAM 2 · STACKS,7.2,1.7,-13.18,BENCH ROOM,
+PatchbayConsole,,,-5.5,0.55,-31.8,PATCH BAY,
+ReadableProp,D04,"THE CLIPPING · 1974, behind glass",-4.2,1.15,-1.5,REC ROOM,
+ReadableProp,D05,WELCOME PACKET · mimeograph purple,-11.9,0.9,-1.0,DORMS,
+ReadableProp,D09,"FIRE MARSHAL REPORT · 1977, photocopy",0.0,0.8,-24.5,CONTROL,
+ReadableProp,D10,"A FAN LETTER · ruled paper, careful loops",-12.2,0.5,-40.6,SCENE DOCK,
+ReadableProp,D11,PEAK ASSET DOSSIER · CHUM-AF-1974-P,2.0,0.9,-27.5,MASTER CONTROL,
+RejectedEdit,,VESS'S CUT,-2.6,0.9,1.0,REC ROOM,yes
+ScreeningEvent,,,-1.4,0.55,1.0,REC ROOM,
+SeanceDock,,SEANCE REEL,7.8,0.9,-17.2,BENCH ROOM,yes
+SpectroDock,,SPECTROGRAM,10.6,0.9,-17.2,BENCH ROOM,yes
+ToneEmitter,,,16.75,1.6,-6.5,TRANSMITTER HALL,
+VessBinder,,VESS'S ROOM,-6.5,0.6,1.8,DORMS,
+VessProp,,,-3.7,0.0,-1.2,REC ROOM,

@@ -1,0 +1,26 @@
+diff --git a/PROGRESS.md b/PROGRESS.md
+index 5da4174..509829b 100644
+--- a/PROGRESS.md
++++ b/PROGRESS.md
+@@ -9,9 +9,18 @@ through Phase 0.)
+ - [x] 0.1 UE project skeleton (ue/Restoration, Lumen+VSM, git hygiene,
+       headless launch proven: RESTORATION-PY-OK on UE 5.8.0; disk ~19GB —
+       monitor per doctrine)
+-- [ ] 0.2 Automation loop proven (pyscripts: FBX import w/ naming law /
+-      material fixup / capture / log-grep; 1m-cube scale verify recorded;
+-      one-command mesh→capture unattended)
++- [x] 0.2a Automation loop, factory side (split per §0.5: this half is
++      verifiable off the Mac): export_ue.py proven headless (UE-EXPORTED,
++      no traceback); NEW tools/verify_fbx.py pre-engine contract gate —
++      UnitScaleFactor 1.0 (cm file, geometry x100), round-trip dims
++      1.000m → 100uu, SM_ naming, UCX child travels; gate proven to fail
++      red (bad expectation → exit 1) and pass green; Cycles evidence
++      render reviewed; reference-Godot import 0 errors + fail soak
++      I01/I02/I22/I06 PASS on Godot 4.3 Linux
++- [ ] 0.2b Automation loop, engine side (Mac only): headless import_fbx.py
++      run (IMPORT-OK size_uu=100 recorded in ledger — must agree with the
++      factory gate), stage_and_capture.py capture PNG reviewed, one-command
++      tools/ue_loop.sh mesh→capture unattended end-to-end
+ - [ ] 0.3 Chum head imported (FBX, sockets, ORM) + look-dev level v1
+       (Lumen, locked EV, practicals w/ true bulbs) + ACCEPTANCE BASELINE
+       capture vs the dossier plate; git LFS for ue Content when first

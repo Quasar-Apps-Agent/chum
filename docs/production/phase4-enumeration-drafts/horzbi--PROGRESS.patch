@@ -1,0 +1,18 @@
+diff --git a/PROGRESS.md b/PROGRESS.md
+index 0cd54b6..ff24ceb 100644
+--- a/PROGRESS.md
++++ b/PROGRESS.md
+@@ -21,9 +21,11 @@ through Phase 0.)
+       sodium lamp, neutral floor; wired into the factory verification loop)
+ - [ ] 0.4 Quixel/Fab hookup (owner Epic sign-in; starter Megascans set;
+       documented import path)
+-- [ ] 0.5 [CLOUD-OK] Data extraction: Rooms/Doors/Stations/Landmarks/
++- [x] 0.5 [CLOUD-OK] Data extraction: Rooms/Doors/Stations/Landmarks/
+       Timings/GameText CSVs generated from world_builder.gd + game_state.gd
+-      (the port kit's data deliverable, rebuilt from the same truth)
++      (the port kit's data deliverable, rebuilt from the same truth —
++      tools/extract_port_data.py → docs/packet/portbrief/Data/, deterministic,
++      self-checking; PORT-DATA-OK 2026-09-03)
+ - [ ] 0.6 P0 — boot & walk: pawn with Godot-matched feel (player.gd
+       constants incl. crouch c045), world stamped FROM the CSVs, doors with
+       locked reasons; acceptance: free walk of all twenty rooms

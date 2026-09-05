@@ -1,0 +1,133 @@
+diff --git a/PROGRESS.md b/PROGRESS.md
+index c9aed47..93b216a 100644
+--- a/PROGRESS.md
++++ b/PROGRESS.md
+@@ -160,7 +160,127 @@ discipline, QA-56 drift=dressing-only, QA-57 one hero object max.)
+ - [ ] 3.FINAL PHASE GATE: full-studio walkthrough captures + soaks
+ 
+ ## PHASE 4 — Puzzles & Functionality
+-- [ ] 4.0 [CLOUD-OK] ENUMERATE mechanics from the canon docs into boxes here
++- [x] 4.0 [CLOUD-OK] ENUMERATE mechanics from the canon docs into boxes:
++      done — 4.1–4.39 below from ue/PORT-NOTES-MECHANICS.md (39 boxes:
++      36 with reference GDScript as the spec, 3 CANON-ONLY gaps the
++      code never had; QA-01..61 and I01..31 each homed; all 73 reference
++      scripts claimed). Verify: tools/verify_mechanics.py → VERIFY-OK.
++      Per box: port → diegetic feedback → fail-forward → its QA lines +
++      invariants. Boxes below are in BUILD-ORDER milestones P4 → P5 → P6.
++- [ ] 4.1 P4 · noise bus + dead-room deafness + crouch honesty
++      (noise_tracker/door/sign-log emitters 6.0/8.0/4.0, hearing radius
++      loudness×3, deaf rectangle; QA-13 QA-38 QA-58; I22 I25 I31)
++- [ ] 4.2 P4 · Coverage Director + blockings (profiles from cov_*
++      counters, most-watched kill, sprinter bias, hider warn 5.0, savor
++      2.6 at 3 strikes, coverage_log dialect; QA-12 QA-13; I21 I22)
++- [ ] 4.3 P4 · camera kills (9 m at ON AIR), re-patch, two-circuit
++      budget, window-bound doors HELD FOR AIR; QA-10 QA-14; I04 I08
++- [ ] 4.4 P4 · night trip (20 s, once/save) + Floor Manager watch
++      (9 m point, 3 s hold, 0.4 spoil, ASSIST hold-E; D08); QA-18 QA-19
++- [ ] 4.5 P4 · cascade (C then B, 4 s + 16 s, blackout .55/.75) +
++      liveness_log + GET VESS (V2); QA-20 QA-42; I04 I07; A15
++- [ ] 4.6 P4 · tally HUD lamp REC · SAFE WHILE LIT, eye only while
++      recording, 3.35 m wake, footfall/jaw/fold captions, taught 4.0 s
++      cool once, felt-door hold + line, [NO ECHO], D11 dossier;
++      QA-33..38; I23 I24 I26
++- [ ] 4.7 P4 · keys (EDITH, TRAINING, QUIET ROOM) + locked doors
++      state their reasons; QA-38; I08; A16
++- [ ] 4.8 P4 · CANON-ONLY · LAW 1 AT NIGHT: camera cones as the lit
++      hide outside the tally contract (rundown.gd has no cone test; I05
++      admits it); QA-14 cone clause; THE-LAWS 1/11
++- [ ] 4.9 P5 · Burn Your Dailies: canisters per strike (4 slots,
++      respawn on load), single carry, degausser −1 strike + read reset,
++      shortcut daily take −1; QA-07 QA-49; I09 I16
++- [ ] 4.10 P5 · the presigned page (first S4 visit day ≥ 2, free
++      TOMORROW signature, once); QA-21; I10; A09
++- [ ] 4.11 P5 · film cabinet (TRAINING) + six signals + Harriet's note
++      D06 (the seventh; unlearnable if she dies first); QA-41; A07
++- [ ] 4.12 P5 · the crate + the seance (Z/X 0..40, 1.5 wear/step,
++      answers 7/14/21/28/35 with grief variants, wear>70 tears) + L1
++      sixth question + L2 the reading; QA-22 QA-44 QA-50; I20 I27; A14
++- [ ] 4.13 P5 · the fire tape: pickup, forced watch (11 s, no sting),
++      af_active wake, M1 Merle offer (E stay / Q refuse, once);
++      QA-23 QA-33 QA-40; I15; A13
++- [ ] 4.14 P5 · Vess: binder D07 (insight), ledger margin (credit),
++      shrine lines, V1 at AUTHENTICATE or the final breaker; QA-42;
++      I27; A11
++- [ ] 4.15 P5 · dock inventory: six units, one warm, dock_done gates
++      CARD + D10, nothing follows; QA-24; I12; A10
++- [ ] 4.16 P5 · Sign-Off assets (VERSE spectrogram, CART, SCRIPT D02,
++      CARD after the dock) + the rack + gain_asset 4-of-4; QA-26; I19
++- [ ] 4.17 P5 · decision ledger (day ≥ 3, E cycles, SPACE commits,
++      the entry stands; D03) + Merle to the doorway while the pen is
++      up; I19; A17
++- [ ] 4.18 P5 · lockdown (4 assets + night: monitors sync, doors
++      SEALED FOR BROADCAST, persisted) + chairs to rows (1.6 s, never
++      back) + coat-peg drift (+0.35); QA-11 QA-26; I18; A20
++- [ ] 4.19 P5 · Merle: kettle/chair/doorway/screening schedule at
++      1.6 m/s, day and decision lines, the 1974 monologue once;
++      QA-11; A12
++- [ ] 4.20 P5 · Harriet's graves: H1 the slip (free signature in her
++      hand, absence + cabinet next break), the rejected edit (once) +
++      the splice → shortcut daily → H2 doubled scenery forever;
++      QA-41 QA-49 QA-50; I27
++- [ ] 4.21 P5 · fire corridor unseals day ≥ 4 + THE GLIMPSE (elbow
++      rect, 1.8 s, once ever, no entry anywhere); QA-25; I11 I30
++- [ ] 4.22 P5 · live production: cue marks (1.6 m, PGM cam 1,
++      SPACE), incidents TALLY/HOUSE/BOOM/CARDS at max(14, 26−4·fails)
++      s, club auto-fix 40 s, tally refusals ≤2, boom hold 1, fixtures,
++      timed restores ×1.5 ASSIST, expiry takes a row seat,
++      premiere_log dialect; QA-27 QA-46; I03 I05 I06
++- [ ] 4.23 P5 · the final breaker (Vess credited → V1; dead → fused
++      pin; else the dark, 30 s retakes) + F2 on the third blind tally
++      call; QA-42 QA-43; I27
++- [ ] 4.24 P5 · the divert window (key + 5 answers + tape watched),
++      the fader (SPACE his / E hers 4.6 s), THE LAST CROSSING (75 / 62
++      / −13, 1.6 m/s with folds, eye dark; reached / caught / late), 4c
++      short-circuit, ending 0 intercept; QA-28 QA-43 QA-44 QA-45
++- [ ] 4.25 P5 · cue 3 the little door by hand, the line, THE BELL
++      once (its only call site) → 1A / 1B; QA-28 QA-47; I14
++- [ ] 4.26 P5 · endings (BURN, NEW PRODUCER + the one lie NEW
++      EPISODE, 1A, 1B, 4a, 4b, 4c, 0) with death furniture, THE LEDGER
++      READ ALOUD, credits crawl + ENDING REACHED card, A21–A28;
++      QA-03 QA-28 QA-45 QA-47; I13 I28 I29 I30
++- [ ] 4.27 P5 · casualty ledger presentation: mark_casualty dedupe +
++      toast, binder page NO ENTRIES. KEEP IT SO., every is_dead
++      ripple, demo never writes it; QA-39 QA-46 QA-48; I27
++- [ ] 4.28 P5 · CANON-ONLY · post-F2 monitor haunt + freeze-check
++      inversion + the margin's green bleed (casualty ledger AS BUILT
++      remainders; no GDScript)
++- [ ] 4.29 P5 · CANON-ONLY · the secret ending pilgrimage (W1–W3
++      reels, S2 slips, radio dial CONFIRM, AUDIENCE ONLY 75 s run,
++      ENDING A, program guide, 58 · STILL ON); QA-60 QA-61
++- [ ] 4.30 P6 · achievements: idempotent unlock, cfg persistence,
++      1 s poll + call sites + on_ending, flush ONLY at morning and
++      title (FILED WHILE YOU WERE OUT), DEMO dark, no glimpse entry;
++      QA-04 QA-29; I30
++- [ ] 4.31 P6 · modes (MATINEE 99 paper / LATE NIGHT / ONE TAKE),
++      the binder pages (status + presentation form), objective ladder,
++      casting sheet prop + SHEET n/4; binder-is-inventory and
++      true-pause-by-day rulings; QA-08 QA-39
++- [ ] 4.32 P6 · the booth: settings.cfg (volume, sens, fullscreen,
++      TBC, photo-safe, text scale, captions, ASSIST), remap ×5 with
++      KEY IN USE, glyph substitution, first-run BEFORE THE SHOW;
++      QA-01 QA-02 QA-16 QA-17
++- [ ] 4.33 P6 · INTERMISSION pause (tree + audio hold, refused while
++      locked); QA-32
++- [ ] 4.34 P6 · the map (rooms from the table, station dots,
++      landmarks, facing tick, bound-key footer; dashed-sealed delta);
++      QA-15
++- [ ] 4.35 P6 · captions with source tags + the blackout scrim
++      (cascade .55/.75, HOUSE .35); QA-05 QA-37
++- [ ] 4.36 P6 · the tape world: crt_tape params (generation, tbc_on,
++      photo_safe), slate-vs-scope lie, gen knob (A03), tape-stage
++      timeline (1.35 approach, 0.78→0.12 hold, 1.45 lunge, 1.6 s bars),
++      FrameSequence seeded; QA-06; I14 I20
++- [ ] 4.37 P6 · monitor rigs as gameplay (live / NO SIGNAL / KILLED /
++      synced on the 0.6b SceneCapture rig, group rig); QA-14 QA-26
++- [ ] 4.38 P6 · the DEMO build (Tape 1: DemoOpen rooms, demo door
++      reasons, skipped spawns, bed declines, save whitelist, funnel
++      marks, end card); QA-30 QA-48; DP1–DP5
++- [ ] 4.39 P6 · title/continue, NEW GAME reset + the relic on set,
++      migration toasts, tr()+glyphs on every string (GameText 714
++      keys → StringTable); QA-31; I13
+ - [ ] 4.WEB reaction-matrix wiring audit (every action echoes in ≥2
+       systems/people, per the QUEUE order in the canon doc)
+ - [ ] 4.SAVE integrity pass

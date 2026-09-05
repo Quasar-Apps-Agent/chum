@@ -1,0 +1,84 @@
+diff --git a/PROGRESS.md b/PROGRESS.md
+index c9aed47..e3a02d4 100644
+--- a/PROGRESS.md
++++ b/PROGRESS.md
+@@ -160,7 +160,78 @@ discipline, QA-56 drift=dressing-only, QA-57 one hero object max.)
+ - [ ] 3.FINAL PHASE GATE: full-studio walkthrough captures + soaks
+ 
+ ## PHASE 4 — Puzzles & Functionality
+-- [ ] 4.0 [CLOUD-OK] ENUMERATE mechanics from the canon docs into boxes here
++(Enumerated by unit 4.0 from the canon into ue/PORT-NOTES-MECHANICS.md —
++one entry per box with sources, constants, evidence ids, UE home and the
++four-step loop. PORT = reference code exists, the code is the intent;
++IMPLEMENT = canon-only, the cited docs are the spec; RULING = unruled,
++build nothing until the gap audit carries the decision. Order follows the
++port kit: P4 remainder → P5 story gates → the puzzles → P6 meta. Verifier:
++tools/verify_mechanics.py must print VERIFY-OK after any edit here.)
++- [x] 4.0 [CLOUD-OK] ENUMERATE mechanics from the canon docs into boxes here
++      (36 boxes below + ue/PORT-NOTES-MECHANICS.md; every QA-01..61, I01..31,
++      A01..28 and every scripts/*.gd homed; assert-verified VERIFY-OK)
++- [ ] 4.1 Camera cones + tally logic, Law 1 (PORT: monitor_rig; QA-14, I05)
++- [ ] 4.2 Patchbay routing + amperage budget + revive (PORT v0 two circuits;
++      IMPLEMENT the building-scale routing puzzle; QA-14)
++- [ ] 4.3 The night trip, once ever (PORT: night_trip; QA-19)
++- [ ] 4.4 The Floor Manager: signals, YOU'RE ON, the seventh (PORT +
++      IMPLEMENT F-R1/F-R2; QA-41, A07)
++- [ ] 4.5 The cascade: C then B, waived holds, liveness (PORT; QA-20, I04,
++      I07, A15)
++- [ ] 4.6 Noise, segment audio, the dead room — Law 11 (PORT; QA-38, I25)
++- [ ] 4.7 The tally HUD + the eye's light — Law 10 visible (PORT; QA-33,
++      QA-34, QA-35)
++- [ ] 4.8 The Coverage Director: profile, blockings A/B/C, the poisoned well
++      (PORT v0 + IMPLEMENT blockings/mood law; I21)
++- [ ] 4.9 Burn Your Dailies + the casting sheet (PORT; I09)
++- [ ] 4.10 The presigned page, singular (PORT; QA-21, I10, A09)
++- [ ] 4.11 The impossible crate + the frame-séance, wear 7/3.5, MAX_FRAME 40
++      (PORT; QA-22, QA-50, I20, A14)
++- [ ] 4.12 The fire tape: forced watch, the wake, Merle's M1 (PORT; QA-23,
++      QA-40, A13)
++- [ ] 4.13 The scene dock — the warm one never acts, Law 4 (PORT; QA-24,
++      I12, I19, A10)
++- [ ] 4.14 The unseal + the glimpse — once ever, Law 3 (PORT; QA-25, I11)
++- [ ] 4.15 The tape world: stage, bench TV, frame sequences, TBC, photo
++      Tier B (PORT; shared surface for 4.11/4.12/4.19; no ids of its own)
++- [ ] 4.16 Sign-off assets, the Vess credit dilemma, the rejected edit + H2
++      splice (PORT; QA-42, QA-49, A11)
++- [ ] 4.17 The decision ledger + THE BURN (PORT; A17, A21)
++- [ ] 4.18 Lockdown, permanent (PORT; QA-26, I18, A20)
++- [ ] 4.19a The premiere: cues, incidents ≤40 s, the rows (PORT; QA-27,
++      QA-43, QA-46, I03, I05, I06)
++- [ ] 4.19b The last crossing + the divert: 75/62/−13 s, the fader (PORT;
++      QA-28, QA-44)
++- [ ] 4.20 The casualty ledger — Law 7 (PORT; QA-39, QA-45, QA-47, I27,
++      I28, I29, I30, A27, A28)
++- [ ] 4.21 Endings, credits, THE LEDGER READ ALOUD, the one lie — Law 8
++      (PORT; QA-03, I13, A22, A23, A24, A25)
++- [ ] 4.22 The house: coat pegs, Merle's stations, Harriet, the bed (PORT +
++      IMPLEMENT reaction queue; QA-11, A12)
++- [ ] 4.23 Readables, keys, D01–D11, the ambient covenant (PORT; A16, A26)
++- [ ] 4.24 Airdate math: 141/138, three names, GEN field (IMPLEMENT; no
++      reference code; QA-62 to be written)
++- [ ] 4.25 The film cabinet: six signals, the seventh, the pry (PORT +
++      IMPLEMENT FORCE variant; A07)
++- [ ] 4.26 The missing verse, the spectrogram, the assembled frequency (PORT
++      spectro dock + IMPLEMENT audio bench/3 fragments; exercised by 4.19b)
++- [ ] 4.27 The provenance suite: GEN knob, accession log, light table (PORT
++      knob + IMPLEMENT log form/light table; A03; v17 candidate)
++- [ ] 4.28 The bench craft suite: bake, splice, quality grade (IMPLEMENT; no
++      reference code; QA-63..65 to be written)
++- [ ] 4.29 RULINGS FIRST: avert, breath, formal-correctness phrases, PT
++      tells, catwalk route, poltergeist layer, bench feel (RULING; build
++      nothing until the gap audit rules)
++- [ ] 4.30 The secret eighth ending: W1–W3, the radio confirm, AUDIENCE ONLY,
++      58 · STILL ON (IMPLEMENT; canon c046; QA-60, QA-61)
++- [ ] 4.31 The title + the booth: options, remap, first launch — Law 9
++      (PORT; QA-01, QA-02, QA-04, QA-16, QA-17)
++- [ ] 4.32 Achievements with the deferral rule, meta-silence (PORT; QA-29,
++      I30)
++- [ ] 4.33 Modes + DEMO whitelist + the Tape 1 funnel (PORT; QA-30, QA-48)
++- [ ] 4.34 Pause, the binder, the map — rulings 3/4 (PORT; QA-15, QA-32)
++- [ ] 4.35 Captions, glyphs, SFX cues, the string table (PORT; every box
++      emits through it; no ids of its own)
+ - [ ] 4.WEB reaction-matrix wiring audit (every action echoes in ≥2
+       systems/people, per the QUEUE order in the canon doc)
+ - [ ] 4.SAVE integrity pass

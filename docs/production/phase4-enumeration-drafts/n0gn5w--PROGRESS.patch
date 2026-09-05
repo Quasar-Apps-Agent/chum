@@ -1,0 +1,22 @@
+diff --git a/PROGRESS.md b/PROGRESS.md
+index 6142acd..3c7753b 100644
+--- a/PROGRESS.md
++++ b/PROGRESS.md
+@@ -66,10 +66,15 @@ through Phase 0.)
+       STRIKE af tally-cool → hidden until the next contract. Two spec-order
+       bugs caught: night gate must sit BELOW the AF layer; the visible gate
+       guards cool re-arm (both exactly as rundown.gd orders them)
+-- [ ] 0.8b-spec [CLOUD-OK] Transcribe the FULL v16 _save_dict schema
++- [x] 0.8b-spec [CLOUD-OK] Transcribe the FULL v16 _save_dict schema
+       (all fields, types, defaults) + game_state.gd public field/signal
+       inventory into ue/PORT-NOTES-STATE.md — the 0.8b implementation
+-      checklist, pure text work from the Godot source
++      checklist, pure text work from the Godot source. DONE (cloud,
++      2026-09-03): 55 keys / 74 vars / 20 signals / 47 public funcs
++      transcribed with record shapes, value domains, toast text and the
++      carry-across-new-game set; §7 gap audit of the 0.8a SaveGame finds 32
++      missing keys, 4 wrong types, 2 wrong defaults, Strike cap 6 vs 7;
++      tripwire tools/check_port_notes_state.py asserts notes ↔ source ↔ header
+ - [ ] 0.8b P2+P3 remainder: paper economy + stations, bench capture loop,
+       retake presentation, Harriet freeze, screening + assist, day/night
+       cycle driving is_night (replacing test scaffolds); pawn feel parity
