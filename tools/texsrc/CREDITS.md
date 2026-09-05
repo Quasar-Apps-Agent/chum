@@ -16,3 +16,4 @@ results ship in the glb.
 - Rust009 — AmbientCG, CC0 — https://ambientcg.com/view?id=Rust009 (2K JPG)
 - Bark015 — AmbientCG, CC0 — https://ambientcg.com/view?id=Bark015 (2K JPG)
 - denim_fabric_06 — Poly Haven, CC0 — https://polyhaven.com/a/denim_fabric_06 (2k jpg: Diffuse, nor_gl, Rough, Displacement, AO)
+- knitted_fleece — Poly Haven, CC0 — https://polyhaven.com/a/knitted_fleece (2k jpg: Diffuse, nor_gl, Rough, Displacement, AO)

@@ -76,6 +76,11 @@ if frame == "head":
     b_origin = unreal.Vector(b_origin.x, b_origin.y,
                              b_origin.z + b_extent.z * 0.62)
     size = size * 0.42
+elif frame == "torso":
+    ## 1.1c: the belly and patches at ~1.3 m — the seam maps must hold here
+    b_origin = unreal.Vector(b_origin.x, b_origin.y,
+                             b_origin.z - b_extent.z * 0.15)
+    size = size * 0.2
 dist = max(size * 3.2, 120.0)
 cam_loc = unreal.Vector(b_origin.x - dist * 0.72, b_origin.y - dist * 0.6,
                         b_origin.z + size * 0.25)

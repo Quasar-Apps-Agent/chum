@@ -302,7 +302,12 @@ the stage tell-table (PHASE1-CHUM-BUILD-BRIEF §0.5).
             scorched. Beauty: every patch identifiable on a fused matted
             torso, no halo. Sodium: three-way response in one frame. Head:
             no regression (its near-black is authored tint, not the bug)
-      - [ ] 1.1c SEAMS, CHAR, ENGINE: running stitches along every patch
+      - [~] 1.1c SEAMS, CHAR, ENGINE — Blender half DONE (evidence
+            docs/telemetry/blender-phase1/1.1c_*.png; four rebuilds: seam
+            on pointiness FAILED, on Bevel-edge FAILED (soft remeshed rims),
+            on an ANALYTIC rim from each cutter WORKED once the dash wave was
+            fed object METRES — the x12 scan mapping had baked a 0.9 mm
+            period flat); engine half running: running stitches along every patch
             edge as maps (seam mask into burlap_nodes; normal + darker
             albedo + rougher) and DELETE the sring/stt shoulder stitch
             cylinders (they read as pipes); char ZONES per PLATE (right

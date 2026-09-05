@@ -281,3 +281,17 @@ camd.dof.aperture_fstop = 4.0
 scene.render.filepath = os.path.join(OUTDIR, "chum_af_full.png")
 bpy.ops.render.render(write_still=True)
 print("RENDERED full")
+
+## SHOT 3 (1.1c): the torso at ONE METRE — the seam maps must hold here
+## (BRIEF 1.1 acceptance: stitched borders as normal relief, char crackle,
+## three-way response at the closeup). 85 mm, f/5.6, focus on the rust
+## patch's rim where it meets the belly.
+camd.lens = 85
+cam.location = mathutils.Vector((0.30, -1.05, 1.62)) * K
+_tgt = mathutils.Vector((-0.15, -0.40, 1.60)) * K
+aim(cam, _tgt)
+camd.dof.focus_distance = (cam.location - _tgt).length
+camd.dof.aperture_fstop = 5.6
+scene.render.filepath = os.path.join(OUTDIR, "chum_af_torso.png")
+bpy.ops.render.render(write_still=True)
+print("RENDERED torso")

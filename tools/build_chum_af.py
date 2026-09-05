@@ -415,8 +415,15 @@ def rounded_prism(loc, rot_z, w, h, depth=0.36, bevel=0.03):
 
 # the belly: a sewn-in oval PANEL of the body, 20 mm proud (PLATE: a lighter tan
 # oval with a dark border; the stage's resewn scar is OPEN, not built)
+K_SCALE = 3.35 / 2.6   # the frozen uniform scale (see THE SCALE LAW below)
+## SEAM_GEOM: each sewn-on piece's cutter, in WORLD metres after the scale, so
+## its rim can be found ANALYTICALLY in the bake shader (curvature tricks fail
+## on remeshed slabs whose rims are soft). ("box", centre, rot_z, w, h) or
+## ("ellipse", centre, rx, rz).
+SEAM_GEOM = {}
 belly_cut = sphere((0, -0.36, 1.34), 0.30, (1.0, 0.55, 1.28))
 belly = solid_patch("Belly", M["BellyWool"], belly_cut, proud=0.02, voxel=0.008, decimate=0.5)
+SEAM_GEOM["Belly"] = ("ellipse", (0.0, -0.36 * K_SCALE, 1.34 * K_SCALE), 0.30 * K_SCALE, 0.30 * 1.28 * K_SCALE)
 
 # ---- legs and weighted paw feet ------------------------------------------------------
 for sx, nm in ((-1, "LegL"), (1, "LegR")):
@@ -472,18 +479,9 @@ for sx, nm in ((-1, "ArmL"), (1, "ArmR")):
         c.name = f"{nm}Claw{fi}"
         simple(c, M["CharDark"])
         parent_to(c, shoulder)
-    ## the shoulder seam: a stitched ring where the arm was sewn back on
-    sring = torus((0.45 * sx, -0.01, 1.71), 0.11, 0.014, rot=(0, math.radians(75 * sx), 0))
-    sring.name = nm + "SeamRing"
-    simple(sring, M["Thread"])
-    parent_to(sring, shoulder)
-    for st in range(5):
-        sa = math.radians(72 * st)
-        stt = cyl((0.45 * sx + 0.02 * sx, -0.01 + 0.1 * math.cos(sa), 1.71 + 0.1 * math.sin(sa)), 0.005, 0.05,
-                  rot=(sa, math.radians(75 * sx), 0))
-        stt.name = f"{nm}SeamStitch{st}"
-        simple(stt, M["Thread"])
-        parent_to(stt, shoulder)
+    ## the shoulder seam: was a torus ring + five stitch cylinders (they read
+    ## as pipes at 1 m); seams are MAPS now (BRIEF 1.1 step 3, PLAN §R.2) —
+    ## see burlap_nodes(seam=...). Geometry stitches deleted in 1.1c.
     ## the elbow wrap: a fabric bandage band, tied
     wrap = torus((0.55 * sx, -0.03, 1.26), 0.105, 0.03, rot=(math.radians(10), math.radians(70 * sx), 0))
     wrap.name = nm + "ElbowWrap"
@@ -550,6 +548,7 @@ for _pn, _pm, _loc, _rz, _w, _h in (
         ("PatchBrownB", M["PatchBrown"], ( 0.15, -0.38, 1.88), -0.10, 0.12, 0.10),
         ("PatchPlaid",  M["PatchPlaid"], (-0.05, -0.30, 1.90),  0.00, 0.15, 0.13)):
     solid_patch(_pn, _pm, rounded_prism(_loc, _rz, _w, _h))
+    SEAM_GEOM[_pn] = ("box", tuple(c * K_SCALE for c in _loc), _rz, _w * K_SCALE, _h * K_SCALE)
 
 # ---- THE HEAD (dossier-matched, iteration 2) -----------------------------------------
 head = empty("Head", (0, 0, 2.28))
@@ -1130,6 +1129,7 @@ SCANS = {
     "greenwool": ("Fabric018/Fabric018_2K-JPG_Color.jpg", "Fabric018/Fabric018_2K-JPG_NormalGL.jpg", "Fabric018/Fabric018_2K-JPG_Roughness.jpg"),
     "bark":      ("Bark015/Bark015_2K-JPG_Color.jpg", "Bark015/Bark015_2K-JPG_NormalGL.jpg", "Bark015/Bark015_2K-JPG_Roughness.jpg"),
     "rustleak":  ("Rust009/Rust009_2K-JPG_Color.jpg", "Rust009/Rust009_2K-JPG_NormalGL.jpg", "Rust009/Rust009_2K-JPG_Roughness.jpg"),
+    "fleece":    ("knitted_fleece/knitted_fleece_Diffuse_2k.jpg", "knitted_fleece/knitted_fleece_nor_gl_2k.jpg", "knitted_fleece/knitted_fleece_Rough_2k.jpg"),
 }
 SCORCH_MASK = os.path.join(TEXSRC, "Metal058A/Metal058A_1K-JPG_Color.jpg")
 _img_cache = {}
@@ -1196,7 +1196,7 @@ scan_dress(M["LipLeather"], "Leather030/Leather030_1K-JPG_Color.jpg",
            "Leather030/Leather030_1K-JPG_NormalGL.jpg", 1.1, 10.0, 1.0)
 
 
-def burlap_nodes(matr, tint_srgb, scorch, scan_key, scale):
+def burlap_nodes(matr, tint_srgb, scorch, scan_key, scale, seam=0.0, zones=None, origin=(0.0, 0.0, 0.0), seam_geom=None):
     """Scanned cloth (CC0, ambientCG) layered with procedural age: tinted
     albedo, real weave normals, smudge-scan burn blotches, AO soot."""
     tint = tuple(srgb_to_linear(c) for c in tint_srgb)
@@ -1287,7 +1287,197 @@ def burlap_nodes(matr, tint_srgb, scorch, scan_key, scale):
     grime.inputs["Fac"].default_value = 0.2
     nt.links.new(soot.outputs["Color"], grime.inputs["Color1"])
     nt.links.new(gtex.outputs["Color"], grime.inputs["Color2"])
-    nt.links.new(grime.outputs["Color"], bsdf.inputs["Base Color"])
+    base_out = grime
+    rough_out = None   # set below
+    normal_in_chain = None
+
+    ## SEAMS AS MAPS (1.1c): the rim of a solid patch is convex, so Cycles
+    ## pointiness finds it; a darker sewn border sits on the rim and a dashed
+    ## running stitch (a band wave gated by the rim) darkens, roughens and
+    ## bumps the thread. No geometry stitches anywhere on the torso.
+    stitch = None
+    if seam > 0.0:
+        ## CONVEX-EDGE MASK via the Bevel node (1.1c closeup finding: pointiness
+        ## gave no rim on the remeshed slabs). The bevelled normal diverges from
+        ## the true normal only at edges; 1 - dot(N, Nbevel) is the rim band.
+        geo = nt.nodes.new("ShaderNodeNewGeometry")
+        bev = nt.nodes.new("ShaderNodeBevel")
+        bev.samples = 8
+        bev.inputs["Radius"].default_value = 0.03
+        dotn = nt.nodes.new("ShaderNodeVectorMath")
+        dotn.operation = "DOT_PRODUCT"
+        nt.links.new(geo.outputs["Normal"], dotn.inputs[0])
+        nt.links.new(bev.outputs["Normal"], dotn.inputs[1])
+        edge = nt.nodes.new("ShaderNodeMath")
+        edge.operation = "SUBTRACT"
+        edge.use_clamp = True
+        edge.inputs[0].default_value = 1.0
+        nt.links.new(dotn.outputs["Value"], edge.inputs[1])
+        rim = nt.nodes.new("ShaderNodeValToRGB")
+        if seam_geom is None:
+            rim.color_ramp.elements[0].position = 0.015
+            rim.color_ramp.elements[1].position = 0.12
+            nt.links.new(edge.outputs["Value"], rim.inputs["Fac"])
+        else:
+            ## ANALYTIC RIM (1.1c): the piece's own cutter, in world metres.
+            ## r = normalised distance to the cutter's lateral edge (1.0 AT the
+            ## edge); the sewn border is the band r in [0.80, 0.94].
+            gkind, gc, ga, gb = seam_geom[0], seam_geom[1], seam_geom[2], seam_geom[3]
+            wm = nt.nodes.new("ShaderNodeMapping")
+            wm.inputs["Location"].default_value = (origin[0] - gc[0], origin[1] - gc[1], origin[2] - gc[2])
+            nt.links.new(coord.outputs["Object"], wm.inputs["Vector"])
+            src = wm
+            if gkind == "box":
+                rot_z, w, h = ga, seam_geom[3], seam_geom[4]
+                rm2 = nt.nodes.new("ShaderNodeMapping")
+                rm2.inputs["Rotation"].default_value = (0.0, 0.0, -rot_z)
+                nt.links.new(wm.outputs["Vector"], rm2.inputs["Vector"])
+                src = rm2
+                sxyz = nt.nodes.new("ShaderNodeSeparateXYZ")
+                nt.links.new(src.outputs["Vector"], sxyz.inputs["Vector"])
+                ax = nt.nodes.new("ShaderNodeMath"); ax.operation = "ABSOLUTE"
+                nt.links.new(sxyz.outputs["X"], ax.inputs[0])
+                dx = nt.nodes.new("ShaderNodeMath"); dx.operation = "DIVIDE"
+                nt.links.new(ax.outputs["Value"], dx.inputs[0]); dx.inputs[1].default_value = w / 2.0
+                az = nt.nodes.new("ShaderNodeMath"); az.operation = "ABSOLUTE"
+                nt.links.new(sxyz.outputs["Z"], az.inputs[0])
+                dz = nt.nodes.new("ShaderNodeMath"); dz.operation = "DIVIDE"
+                nt.links.new(az.outputs["Value"], dz.inputs[0]); dz.inputs[1].default_value = h / 2.0
+                rr = nt.nodes.new("ShaderNodeMath"); rr.operation = "MAXIMUM"
+                nt.links.new(dx.outputs["Value"], rr.inputs[0]); nt.links.new(dz.outputs["Value"], rr.inputs[1])
+            else:
+                rx, rz = ga, gb
+                sxyz = nt.nodes.new("ShaderNodeSeparateXYZ")
+                nt.links.new(src.outputs["Vector"], sxyz.inputs["Vector"])
+                nx = nt.nodes.new("ShaderNodeMath"); nx.operation = "DIVIDE"
+                nt.links.new(sxyz.outputs["X"], nx.inputs[0]); nx.inputs[1].default_value = rx
+                nz = nt.nodes.new("ShaderNodeMath"); nz.operation = "DIVIDE"
+                nt.links.new(sxyz.outputs["Z"], nz.inputs[0]); nz.inputs[1].default_value = rz
+                px = nt.nodes.new("ShaderNodeMath"); px.operation = "MULTIPLY"
+                nt.links.new(nx.outputs["Value"], px.inputs[0]); nt.links.new(nx.outputs["Value"], px.inputs[1])
+                pz = nt.nodes.new("ShaderNodeMath"); pz.operation = "MULTIPLY"
+                nt.links.new(nz.outputs["Value"], pz.inputs[0]); nt.links.new(nz.outputs["Value"], pz.inputs[1])
+                sm = nt.nodes.new("ShaderNodeMath"); sm.operation = "ADD"
+                nt.links.new(px.outputs["Value"], sm.inputs[0]); nt.links.new(pz.outputs["Value"], sm.inputs[1])
+                rr = nt.nodes.new("ShaderNodeMath"); rr.operation = "SQRT"
+                nt.links.new(sm.outputs["Value"], rr.inputs[0])
+            ## band: 0 inside, 1 in [0.80, 0.94], falling to 0 at the edge
+            up = nt.nodes.new("ShaderNodeMapRange")
+            up.inputs["From Min"].default_value = 0.78; up.inputs["From Max"].default_value = 0.84
+            nt.links.new(rr.outputs["Value"], up.inputs["Value"])
+            dn = nt.nodes.new("ShaderNodeMapRange")
+            dn.inputs["From Min"].default_value = 1.0; dn.inputs["From Max"].default_value = 0.94
+            nt.links.new(rr.outputs["Value"], dn.inputs["Value"])
+            band = nt.nodes.new("ShaderNodeMath"); band.operation = "MULTIPLY"
+            nt.links.new(up.outputs["Result"], band.inputs[0]); nt.links.new(dn.outputs["Result"], band.inputs[1])
+            nt.links.new(band.outputs["Value"], rim.inputs["Fac"])
+            rim.color_ramp.elements[0].position = 0.05
+            rim.color_ramp.elements[1].position = 0.6
+        wave = nt.nodes.new("ShaderNodeTexWave")
+        wave.wave_type = "BANDS"
+        wave.bands_direction = "DIAGONAL"
+        ## TEXEL FINDING (rebuild #3): fed the scan mapping (object x12) the dash
+        ## period was ~0.9 mm — sub-texel, baked to a flat band. Unscaled
+        ## object METRES give a ~1.1 cm running stitch that reads at 1 m.
+        wave.inputs["Scale"].default_value = 90.0
+        wave.inputs["Distortion"].default_value = 0.6
+        nt.links.new(coord.outputs["Object"], wave.inputs["Vector"])
+        dash = nt.nodes.new("ShaderNodeMath")
+        dash.operation = "MULTIPLY"
+        nt.links.new(rim.outputs["Color"], dash.inputs[0])
+        nt.links.new(wave.outputs["Fac"], dash.inputs[1])
+        stitch = nt.nodes.new("ShaderNodeMath")
+        stitch.operation = "GREATER_THAN"
+        nt.links.new(dash.outputs["Value"], stitch.inputs[0])
+        stitch.inputs[1].default_value = 0.6   # clean gaps between stitches
+        border = nt.nodes.new("ShaderNodeMath")
+        border.operation = "MULTIPLY"
+        nt.links.new(rim.outputs["Color"], border.inputs[0])
+        border.inputs[1].default_value = 0.55 * seam
+        bmix = nt.nodes.new("ShaderNodeMixRGB")
+        bmix.blend_type = "MIX"
+        bmix.inputs["Color2"].default_value = (0.03, 0.022, 0.015, 1.0)
+        nt.links.new(border.outputs["Value"], bmix.inputs["Fac"])
+        nt.links.new(base_out.outputs["Color"], bmix.inputs["Color1"])
+        tmix = nt.nodes.new("ShaderNodeMixRGB")
+        tmix.blend_type = "MIX"
+        tmix.inputs["Color2"].default_value = (0.035, 0.026, 0.018, 1.0)
+        nt.links.new(stitch.outputs["Value"], tmix.inputs["Fac"])
+        nt.links.new(bmix.outputs["Color"], tmix.inputs["Color1"])
+        base_out = tmix
+
+    ## CHAR ZONES (1.1c): char is history, not noise — spherical falloffs at
+    ## the PLATE's scorch sites (world space via origin), bark crackle for the
+    ## alligator height, rust leaks as directional soot, albedo <= 0.02 and
+    ## roughness >= 0.95 inside the zone.
+    zonemask = None
+    if zones:
+        wmap = nt.nodes.new("ShaderNodeMapping")
+        wmap.inputs["Location"].default_value = tuple(origin)
+        nt.links.new(coord.outputs["Object"], wmap.inputs["Vector"])
+        prev = None
+        for (cx, cy, cz), rad in zones:
+            sub = nt.nodes.new("ShaderNodeVectorMath")
+            sub.operation = "SUBTRACT"
+            nt.links.new(wmap.outputs["Vector"], sub.inputs[0])
+            sub.inputs[1].default_value = (cx, cy, cz)
+            ln = nt.nodes.new("ShaderNodeVectorMath")
+            ln.operation = "LENGTH"
+            nt.links.new(sub.outputs["Vector"], ln.inputs[0])
+            dv = nt.nodes.new("ShaderNodeMath")
+            dv.operation = "DIVIDE"
+            nt.links.new(ln.outputs["Value"], dv.inputs[0])
+            dv.inputs[1].default_value = rad
+            inv = nt.nodes.new("ShaderNodeMath")
+            inv.operation = "SUBTRACT"
+            inv.use_clamp = True
+            inv.inputs[0].default_value = 1.0
+            nt.links.new(dv.outputs["Value"], inv.inputs[1])
+            if prev is None:
+                prev = inv
+            else:
+                mx = nt.nodes.new("ShaderNodeMath")
+                mx.operation = "MAXIMUM"
+                nt.links.new(prev.outputs["Value"], mx.inputs[0])
+                nt.links.new(inv.outputs["Value"], mx.inputs[1])
+                prev = mx
+        ## soften with the smudge so the zone edge is ragged, not a circle
+        zg = nt.nodes.new("ShaderNodeMath")
+        zg.operation = "MULTIPLY"
+        nt.links.new(prev.outputs["Value"], zg.inputs[0])
+        zsm = nt.nodes.new("ShaderNodeMath")
+        zsm.operation = "MULTIPLY_ADD"
+        nt.links.new(gtex.outputs["Color"], zsm.inputs[0])
+        zsm.inputs[1].default_value = 0.6
+        zsm.inputs[2].default_value = 0.6
+        nt.links.new(zsm.outputs["Value"], zg.inputs[1])
+        zonemask = nt.nodes.new("ShaderNodeMath")
+        zonemask.operation = "MULTIPLY"
+        zonemask.use_clamp = True
+        nt.links.new(zg.outputs["Value"], zonemask.inputs[0])
+        zonemask.inputs[1].default_value = 1.6
+        ## soot runs: Rust009 leaks, multiplied in
+        rmap = nt.nodes.new("ShaderNodeMapping")
+        rmap.inputs["Scale"].default_value = (1.2, 1.2, 1.2)
+        nt.links.new(coord.outputs["Object"], rmap.inputs["Vector"])
+        rtex = nt.nodes.new("ShaderNodeTexImage")
+        rtex.image = scan_img(SCANS["rustleak"][0])
+        rtex.projection = "BOX"
+        rtex.projection_blend = 0.3
+        nt.links.new(rmap.outputs["Vector"], rtex.inputs["Vector"])
+        sootrun = nt.nodes.new("ShaderNodeMixRGB")
+        sootrun.blend_type = "MULTIPLY"
+        nt.links.new(zonemask.outputs["Value"], sootrun.inputs["Fac"])
+        nt.links.new(base_out.outputs["Color"], sootrun.inputs["Color1"])
+        nt.links.new(rtex.outputs["Color"], sootrun.inputs["Color2"])
+        charmix = nt.nodes.new("ShaderNodeMixRGB")
+        charmix.blend_type = "MIX"
+        charmix.inputs["Color2"].default_value = (0.012, 0.009, 0.007, 1.0)
+        nt.links.new(zonemask.outputs["Value"], charmix.inputs["Fac"])
+        nt.links.new(sootrun.outputs["Color"], charmix.inputs["Color1"])
+        base_out = charmix
+
+    nt.links.new(base_out.outputs["Color"], bsdf.inputs["Base Color"])
 
     ## roughness: the scan, pushed matte, charred zones fully rough
     rmath = nt.nodes.new("ShaderNodeMath")
@@ -1295,7 +1485,26 @@ def burlap_nodes(matr, tint_srgb, scorch, scan_key, scale):
     nt.links.new(trgh.outputs["Color"], rmath.inputs[0])
     rmath.inputs[1].default_value = 0.22
     rmath.inputs[2].default_value = 0.74
-    nt.links.new(rmath.outputs["Value"], bsdf.inputs["Roughness"])
+    rough_out = rmath
+    if stitch is not None:
+        rs = nt.nodes.new("ShaderNodeMath")
+        rs.operation = "MULTIPLY_ADD"
+        nt.links.new(stitch.outputs["Value"], rs.inputs[0])
+        rs.inputs[1].default_value = 0.15
+        nt.links.new(rough_out.outputs["Value"], rs.inputs[2])
+        rough_out = rs
+    if zonemask is not None:
+        rz = nt.nodes.new("ShaderNodeMath")
+        rz.operation = "MULTIPLY_ADD"
+        nt.links.new(zonemask.outputs["Value"], rz.inputs[0])
+        rz.inputs[1].default_value = 0.35
+        nt.links.new(rough_out.outputs["Value"], rz.inputs[2])
+        rough_out = rz
+    rclamp = nt.nodes.new("ShaderNodeMath")
+    rclamp.operation = "MINIMUM"
+    nt.links.new(rough_out.outputs["Value"], rclamp.inputs[0])
+    rclamp.inputs[1].default_value = 1.0
+    nt.links.new(rclamp.outputs["Value"], bsdf.inputs["Roughness"])
 
     ## normals: the scanned weave, with grunge bump layered on top
     nmap = nt.nodes.new("ShaderNodeNormalMap")
@@ -1306,17 +1515,44 @@ def burlap_nodes(matr, tint_srgb, scorch, scan_key, scale):
     bmp.inputs["Distance"].default_value = 0.003
     nt.links.new(tmask.outputs["Color"], bmp.inputs["Height"])
     nt.links.new(nmap.outputs["Normal"], bmp.inputs["Normal"])
-    nt.links.new(bmp.outputs["Normal"], bsdf.inputs["Normal"])
+    normal_out = bmp
+    if stitch is not None:
+        sb = nt.nodes.new("ShaderNodeBump")
+        sb.inputs["Strength"].default_value = 0.9
+        sb.inputs["Distance"].default_value = 0.004
+        nt.links.new(stitch.outputs["Value"], sb.inputs["Height"])
+        nt.links.new(normal_out.outputs["Normal"], sb.inputs["Normal"])
+        normal_out = sb
+    if zonemask is not None:
+        kmap = nt.nodes.new("ShaderNodeMapping")
+        kmap.inputs["Scale"].default_value = (6.0, 6.0, 6.0)
+        nt.links.new(coord.outputs["Object"], kmap.inputs["Vector"])
+        ktex = nt.nodes.new("ShaderNodeTexImage")
+        ktex.image = scan_img(SCANS["bark"][0], noncolor=True)
+        ktex.projection = "BOX"
+        ktex.projection_blend = 0.3
+        nt.links.new(kmap.outputs["Vector"], ktex.inputs["Vector"])
+        kh = nt.nodes.new("ShaderNodeMath")
+        kh.operation = "MULTIPLY"
+        nt.links.new(ktex.outputs["Color"], kh.inputs[0])
+        nt.links.new(zonemask.outputs["Value"], kh.inputs[1])
+        kb = nt.nodes.new("ShaderNodeBump")
+        kb.inputs["Strength"].default_value = 0.7
+        kb.inputs["Distance"].default_value = 0.006
+        nt.links.new(kh.outputs["Value"], kb.inputs["Height"])
+        nt.links.new(normal_out.outputs["Normal"], kb.inputs["Normal"])
+        normal_out = kb
+    nt.links.new(normal_out.outputs["Normal"], bsdf.inputs["Normal"])
     return bsdf
 
 
 BAKE_TINTS = {
-    "BurntWool": ((0.13, 0.1, 0.07), 0.88, "boucle", 7.0),   # fused, matted wool (BRIEF 1.1)
+    "BurntWool": ((0.13, 0.1, 0.07), 0.55, "fleece", 7.0),   # plain wool for the body; checks stay on the patches   # fused, matted wool; char comes from ZONES (1.1c)
     "EarFelt": ((0.075, 0.058, 0.042), 0.92, "wool", 7.0),
-    "BellyWool": ((0.36, 0.29, 0.18), 0.3, "boucle", 8.0),
+    "BellyWool": ((0.50, 0.40, 0.25), 0.3, "fleece", 8.0),   # the PLATE: a LIGHTER tan oval
     "PatchRust": ((0.62, 0.24, 0.13), 0.22, "boucle", 12.0),
     "PatchGreen": ((0.22, 0.32, 0.22), 0.5, "weave", 14.0),
-    "PatchOlive": ((0.75, 0.85, 0.65), 0.2, "corduroy", 14.0),   # near-neutral: the scan carries the green
+    "PatchOlive": ((0.58, 0.66, 0.48), 0.3, "corduroy", 14.0),   # near-neutral: the scan carries the green
     "PatchNavy": ((0.8, 0.85, 1.0), 0.22, "denim", 14.0),
     "PatchOchre": ((0.68, 0.5, 0.24), 0.22, "boucle", 12.0),
     "PatchBrown": ((0.26, 0.18, 0.12), 0.35, "weave", 14.0),
@@ -1327,6 +1563,19 @@ BAKE_TINTS = {
     "PanelA": ((0.17, 0.13, 0.09), 0.72, "wool", 11.0),
     "PanelB": ((0.2, 0.16, 0.11), 0.66, "wool", 12.0),
     "PanelC": ((0.15, 0.115, 0.08), 0.76, "wool", 10.0),
+}
+
+## 1.1c: seams as maps on every sewn-on piece; char ZONES on the body at the
+## PLATE's scorch sites — right shoulder / arm root and left hip — given in
+## WORLD metres at the frozen 3.35 m scale (2.6-space × 1.2885).
+_K = 3.35 / 2.6
+CHAR_ZONES = [((0.42 * _K, -0.10 * _K, 1.80 * _K), 0.28 * _K),
+              ((-0.30 * _K, -0.15 * _K, 1.02 * _K), 0.32 * _K)]
+BAKE_EXTRA = {
+    "BurntWool": {"zones": CHAR_ZONES},
+    "BellyWool": {"seam": 1.0},
+    "PatchRust": {"seam": 1.0}, "PatchOlive": {"seam": 1.0}, "PatchNavy": {"seam": 1.0},
+    "PatchOchre": {"seam": 1.0}, "PatchBrown": {"seam": 1.0}, "PatchPlaid": {"seam": 1.0},
 }
 
 def bake_all():
@@ -1349,7 +1598,13 @@ def bake_all():
         bpy.ops.uv.smart_project(angle_limit=1.15, island_margin=0.03)   # BRIEF 1.1 step 7: kill the black-glass margins
         bpy.ops.object.mode_set(mode="OBJECT")
         matr = bpy.data.materials.new(obj.name + "_baked_src")
-        burlap_nodes(matr, tint, scorch, scan_key, wscale)
+        extra = dict(BAKE_EXTRA.get(mname, {}))
+        extra["origin"] = tuple(obj.matrix_world.translation)
+        if obj.name in SEAM_GEOM:
+            extra["seam"] = 1.0
+            extra["seam_geom"] = SEAM_GEOM[obj.name]
+        print("BAKE", obj.name, "origin", tuple(round(v, 3) for v in extra["origin"]), "extra", {k: v for k, v in extra.items() if k != "origin"})
+        burlap_nodes(matr, tint, scorch, scan_key, wscale, **extra)
         obj.data.materials.clear()
         obj.data.materials.append(matr)
         nt = matr.node_tree
