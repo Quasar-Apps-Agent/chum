@@ -17,3 +17,6 @@ results ship in the glb.
 - Bark015 — AmbientCG, CC0 — https://ambientcg.com/view?id=Bark015 (2K JPG)
 - denim_fabric_06 — Poly Haven, CC0 — https://polyhaven.com/a/denim_fabric_06 (2k jpg: Diffuse, nor_gl, Rough, Displacement, AO)
 - knitted_fleece — Poly Haven, CC0 — https://polyhaven.com/a/knitted_fleece (2k jpg: Diffuse, nor_gl, Rough, Displacement, AO)
+- vintage_radio_transceiver — Poly Haven MODEL, CC0 — https://polyhaven.com/a/vintage_radio_transceiver (1k blend + 8 textures; donor part)
+- Rope002 — AmbientCG, CC0 — https://ambientcg.com/view?id=Rope002 (2K JPG)
+- Metal063 — AmbientCG, CC0 — https://ambientcg.com/view?id=Metal063 (2K JPG)

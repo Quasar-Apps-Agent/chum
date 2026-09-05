@@ -42,7 +42,7 @@ floor = eas.spawn_actor_from_object(
     unreal.Vector(0, 0, 0))
 floor.set_actor_scale3d(unreal.Vector(40, 40, 1))
 fmesh = floor.static_mesh_component
-fmat = unreal.EditorAssetLibrary.load_asset("/Engine/EngineMaterials/PersistentLevelMaterial")
+fmat = unreal.EditorAssetLibrary.load_asset("/Engine/BasicShapes/BasicShapeMaterial")   # 1.2: PersistentLevelMaterial printed PREVIEW on the floor
 
 ## lights: warm key, cool rim, skylight — the look-dev grammar's skeleton
 dark = os.environ.get("UE_CAPTURE_DARK") == "1"
@@ -52,9 +52,12 @@ key.light_component.set_intensity(1.6 if dark else 6.0)
 key.light_component.set_light_color(unreal.LinearColor(1.0, 0.82, 0.6, 1.0))
 sky = eas.spawn_actor_from_class(unreal.SkyLight, unreal.Vector(0, 0, 400))
 sky.light_component.set_intensity(0.25 if dark else 0.6)
+## 1.2: the rim is placed and AIMED from the subject's bounds (the fixed
+## (-260,300,260)/-35° placement lit the floor beside a 4 m puppet). Spawned
+## here, positioned once the subject's bounds are known (below).
 rim = eas.spawn_actor_from_class(unreal.SpotLight, unreal.Vector(-260, 300, 260))
 rim.set_actor_rotation(unreal.Rotator(-35, -125, 0), False)
-rim.light_component.set_intensity(9000.0 if dark else 120000.0)
+rim.light_component.set_intensity(120.0 if dark else 1500.0)   # 1.2: on the order of the key; 9000 cd only looked sane because it missed the subject
 rim.light_component.set_light_color(unreal.LinearColor(0.6, 0.7, 0.95, 1.0))
 ## LOCKED EV (lighting bible: exposure never swims) — manual metering
 ppv = eas.spawn_actor_from_class(unreal.PostProcessVolume, unreal.Vector(0, 0, 0))
@@ -76,6 +79,10 @@ except ValueError:
 subj.set_actor_rotation(unreal.Rotator(0, 0, yaw), False)
 b_origin, b_extent = subj.get_actor_bounds(False)
 size = max(b_extent.x, b_extent.y, b_extent.z)
+## rim: behind-left and above, looking at the subject's centre (cool edge light)
+_rim_loc = unreal.Vector(b_origin.x - size * 1.1, b_origin.y + size * 1.3, b_origin.z + size * 0.9)
+rim.set_actor_location(_rim_loc, False, False)
+rim.set_actor_rotation(unreal.MathLibrary.find_look_at_rotation(_rim_loc, b_origin), False)
 
 ## camera framing: full figure by default; UE_CAPTURE_FRAME=head frames the
 ## upper quarter (the portrait the plate uses)
@@ -84,13 +91,27 @@ if frame == "head":
     b_origin = unreal.Vector(b_origin.x, b_origin.y,
                              b_origin.z + b_extent.z * 0.62)
     size = size * 0.42
+elif frame == "chest":
+    ## 1.2: the throat speaker under the collar at ~1.3 m
+    b_origin = unreal.Vector(b_origin.x, b_origin.y,
+                             b_origin.z + b_extent.z * 0.12)
+    size = size * 0.22
 elif frame == "torso":
     ## 1.1c: the belly and patches at ~1.3 m — the seam maps must hold here
     b_origin = unreal.Vector(b_origin.x, b_origin.y,
                              b_origin.z - b_extent.z * 0.10)
     size = size * 0.26   # ~1.5 m: belly, rims and three patches in frame
 dist = max(size * 3.2, 120.0)
-cam_loc = unreal.Vector(b_origin.x - dist * 0.72, b_origin.y - dist * 0.6,
+## per-frame bearing: the full/head/torso 3/4 view, the chest frame front-on so
+## the throat speaker (centre chest, facing -Y after the 180 yaw) is framed
+import math as _math
+## 1.2: bracketed at 200/240/280 — 280 is the front (speaker centred). Default it for the chest.
+_bear = os.environ.get("UE_CAPTURE_BEARING") or ("280" if frame == "chest" else None)
+if _bear:
+    _bx, _by = _math.cos(_math.radians(float(_bear))), _math.sin(_math.radians(float(_bear)))
+else:
+    _bx, _by = (-0.72, -0.6)
+cam_loc = unreal.Vector(b_origin.x + dist * _bx, b_origin.y + dist * _by,
                         b_origin.z + size * 0.25)
 cam = eas.spawn_actor_from_class(unreal.CameraActor, cam_loc)
 look = unreal.MathLibrary.find_look_at_rotation(cam_loc, b_origin)
@@ -98,7 +119,7 @@ cam.set_actor_rotation(look, False)
 ## 1.1c: the torso closeup gets its own warm fill at the camera — the rig's
 ## key models the head and leaves the torso in shadow at 1.5 m. Look-dev
 ## practice for a closeup; full/head frames stay comparable with 0.3.
-if frame == "torso":
+if frame in ("torso", "chest"):
     fill = eas.spawn_actor_from_class(unreal.PointLight, cam_loc)
     fill.light_component.set_intensity(6.0 if dark else 20.0)   # on the order of the 1.6-lux key at a locked EV; 900 cd blew the frame to white
     fill.light_component.set_editor_property("intensity_units", unreal.LightUnits.CANDELAS)

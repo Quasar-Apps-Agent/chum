@@ -340,7 +340,7 @@ the stage tell-table (PHASE1-CHUM-BUILD-BRIEF §0.5).
             a shade dirtier; then export_ue.py --all-meshes →
             fixup_materials.py → dark locked-EV capture at 3–6 m and 1 m;
             texel + sodium + beauty re-judged. Then 1.1 ticks
-- [ ] 1.2 Throat speaker (donor speaker/radio driver, chest mount, cabling)
+- [x] 1.2 Throat speaker (donor speaker/radio driver, chest mount, cabling) — DONE 2026-09-05: real donor speaker (vintage_radio_transceiver, CC0) recessed into the remeshed throat, sooted at pixel level; riveted steel wobble ring, two rubber cables to a plug, SOCKET_ThroatSpeaker; sodium + beauty chest judged; Unreal chest/full captures under the 120 cd rim (`docs/telemetry/ue-baselines/1.2_ue_*.png`). OPEN for owner: donor grille is a slotted plate, plate says woven wire. Limits until 1.7 master: metallic/roughness unused (rivets over-bright).
 - [ ] 1.3 Collar, leather strap, dead brass bell
 - [ ] 1.4 Arms & hands: tendons both sides, articulated fingers
 - [ ] 1.5 Legs: control rods, torn fur windows, weighted feet

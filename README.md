@@ -1423,3 +1423,29 @@ under Lumen; the rim light pools on the floor beside a figure taller
 than it was placed for. Named, not hidden. Unit 1.1 is done: from a
 plush toy to the plate's quilt, in Cycles and in Unreal, at four
 metres and at one.
+
+## Commit 110 · UNIT 1.2 · THE THROAT SPEAKER
+The plate calls for a real speaker, not a drawing of one, so the
+throat got a donor: the driver and its plug from a CC0 vintage radio
+transceiver, scaled three to one, its own diffuse sooted at the pixel
+before it was packed, so the thing arrives already old. It sits in a
+recess cut into the remeshed body — cut after the remesh, on a
+manifold, healed with a smooth pass, because cutting it before had
+mangled the front and zeroed two patches — behind a steel wobble ring
+with six rivets, two rubber cables running to the plug, and a socket
+empty for the voice to come out of. Sodium and the Cycles chest frame
+judged it at a metre. Then the engine, which found three more holes in
+the pipeline: curves were never exported (the ring and the cables
+converted to mesh at export), the tints of every scan-dressed material
+were lost because the importer's Phong master lerps its colour away
+under a map, so twelve tinted copies are now pre-multiplied into the
+textures themselves; and the rim spot, aimed at the subject at nine
+thousand candela, blew every frame — it now stands off the bounds at a
+hundred and twenty. Under that rim the ring reads dark steel, the
+cables rubber, the grille a sooted olive plate, the plug olive. Named,
+not hidden: the rivets read bright grey, because the Phong master has
+no metallic and will not until 1.7's real wool/ORM master; and the
+donor grille is a slotted plate where the plate says woven wire —
+OPEN for the owner, marked in the tracker. The 1.1 full baseline is
+re-archived under the corrected rim. Unit 1.2 is done. Next is 1.3:
+the collar, the leather strap, the dead brass bell.

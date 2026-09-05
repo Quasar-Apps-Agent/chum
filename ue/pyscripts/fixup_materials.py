@@ -152,6 +152,7 @@ if os.path.exists(manifest_path):
             break
     _parent = _good.get_editor_property("parent") if _good else None
     made = 0
+    tinted = 0
     for _i, _sl in enumerate(_slots):
         _mi = _sl.get_editor_property("material_interface")
         _slotname = str(_sl.get_editor_property("material_slot_name"))
@@ -193,12 +194,17 @@ if os.path.exists(manifest_path):
             mel.set_material_instance_texture_parameter_value(_mi, "DiffuseColorMap", _d)
         if _n is not None:
             mel.set_material_instance_texture_parameter_value(_mi, "NormalMap", _n)
+        ## tints arrive pre-multiplied in the texture (export writes <mat>_tint.png):
+        ## the Phong master LERPs DiffuseColor -> map by DiffuseColorMapWeight=1,
+        ## so a colour parameter cannot tint a map here (1.2 finding)
+        if _entry.get("tint") and _entry.get("diff", "").endswith("_tint"):
+            tinted += 1
         if _d or _n:
             eal.save_asset(_mi.get_path_name())
             slotwired += 1
     if made:
         eal.save_asset(MESH)
-    unreal.log_warning("FIXUP-SLOTWIRED %d of %d mesh slots (%d instances created)" % (slotwired, len(_slots), made))
+    unreal.log_warning("FIXUP-SLOTWIRED %d of %d mesh slots (%d instances created, %d tints applied)" % (slotwired, len(_slots), made, tinted))
 
 ## swap onto the mesh slots
 sm = eal.load_asset(MESH)

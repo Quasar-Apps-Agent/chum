@@ -68,6 +68,19 @@ elif "--all-meshes" in argv:
     out = arg("--out")
     if not out:
         raise SystemExit("need --out with --all-meshes")
+    ## 1.2 finding: bevelled CURVES (the throat ring and cables, the mouth's
+    ## lips) never reached the engine — this list took meshes only. Convert
+    ## every render-visible curve to a mesh first, then collect.
+    _curves = [o for o in bpy.data.objects if o.type == "CURVE" and not o.hide_render]
+    for _c in _curves:
+        bpy.ops.object.select_all(action="DESELECT")
+        _c.select_set(True)
+        bpy.context.view_layer.objects.active = _c
+        try:
+            bpy.ops.object.convert(target="MESH")
+        except RuntimeError as _ex:
+            print("UE-CURVE-SKIP", _c.name, _ex)
+    print("UE-CURVES converted", len(_curves))
     objs = [o for o in bpy.data.objects
             if o.type == "MESH" and not o.hide_render]
     if not os.path.isabs(out):
@@ -109,17 +122,55 @@ elif "--all-meshes" in argv:
                     if tgt.type == "BSDF_PRINCIPLED" and lk.to_socket.name == "Base Color":
                         entry["diff"] = nm
                     elif tgt.type == "MIX_RGB":
-                        ## scan_dress: TexImage -> Multiply -> Base Color
+                        ## scan_dress: TexImage -> Multiply -> Base Color. The
+                        ## MULTIPLY's Color2 is the tint the engine must apply too
+                        ## (1.2 finding: without it a dark steel ring and rubber
+                        ## cables rendered WHITE in Unreal — the raw scans)
                         for lk2 in tgt.outputs["Color"].links:
                             if (lk2.to_node.type == "BSDF_PRINCIPLED"
                                     and lk2.to_socket.name == "Base Color"):
                                 entry.setdefault("diff", nm)
+                                if tgt.blend_type == "MULTIPLY" and not tgt.inputs["Color2"].is_linked:
+                                    c = tgt.inputs["Color2"].default_value
+                                    entry["tint"] = [round(float(c[0]), 4), round(float(c[1]), 4), round(float(c[2]), 4)]
                     elif tgt.type == "NORMAL_MAP":
                         entry["nrm"] = nm
                     elif tgt.type == "BSDF_PRINCIPLED" and lk.to_socket.name == "Roughness":
                         entry["rgh"] = nm
             if entry:
                 manifest[ms.name] = entry
+    ## scan_dress tints, BAKED INTO A TEXTURE COPY (1.2 finding): the FBX Phong
+    ## master lerps DiffuseColor -> DiffuseColorMap by DiffuseColorMapWeight=1,
+    ## so a colour parameter cannot multiply a map. Do what the Cycles graph
+    ## does, in pixels: write <material>_tint.png = scan x tint, and point the
+    ## manifest at it. (Metals since 0.3, the throat ring and cables rendered
+    ## as their raw light scans in the engine before this.)
+    _tinted = 0
+    for _mname, _entry in manifest.items():
+        _t = _entry.get("tint")
+        if not _t or not _entry.get("diff"):
+            continue
+        _src = bpy.data.images.get(_entry["diff"])
+        if _src is None:
+            continue
+        _safe = _mname.replace(".", "_")
+        _dst = bpy.data.images.new(_safe + "_tint", _src.size[0], _src.size[1], alpha=False)
+        _dst.colorspace_settings.name = "sRGB"
+        _px = list(_src.pixels)
+        for _i in range(0, len(_px), 4):
+            _px[_i] = min(_px[_i] * _t[0], 1.0)
+            _px[_i + 1] = min(_px[_i + 1] * _t[1], 1.0)
+            _px[_i + 2] = min(_px[_i + 2] * _t[2], 1.0)
+        _dst.pixels = _px
+        _dst.filepath_raw = os.path.join(texdir, _safe + "_tint.png")
+        _dst.file_format = "PNG"
+        try:
+            _dst.save()
+            _entry["diff"] = _safe + "_tint"
+            _tinted += 1
+        except Exception as _ex:
+            print("UE-TINT-FAIL", _mname, _ex)
+    print("UE-TINTED", _tinted, "scan-dressed materials pre-multiplied")
     mpath = os.path.splitext(out)[0] + ".manifest.json"
     with open(mpath, "w") as fh:
         json.dump(manifest, fh, indent=1)

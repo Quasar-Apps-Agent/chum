@@ -49,11 +49,35 @@ def ambientcg(aid):
     credit("- %s — AmbientCG, CC0 — https://ambientcg.com/view?id=%s (2K JPG)" % (aid, aid))
     return "ok %d files" % len(names)
 
+MODELS = os.path.join(ROOT, "modelsrc")
+
+def polyhaven_model(aid):
+    """A Poly Haven MODEL: the 1k .blend + its included textures, laid out
+    like tools/modelsrc/Camera_01 (blend at <id>/<id>_1k.blend, maps in
+    <id>/textures/). Donor parts are appended with bpy.data.libraries.load."""
+    d = os.path.join(MODELS, aid)
+    if os.path.exists(os.path.join(d, aid + "_1k.blend")):
+        return "skip (have)"
+    files = json.loads(get("https://api.polyhaven.com/files/" + aid))
+    entry = files.get("blend", {}).get("1k", {}).get("blend")
+    if not entry:
+        return "FAILED: no 1k blend in files API (keys: %s)" % list(files.keys())
+    os.makedirs(os.path.join(d, "textures"), exist_ok=True)
+    open(os.path.join(d, aid + "_1k.blend"), "wb").write(get(entry["url"]))
+    n = 0
+    for rel, inc in (entry.get("include") or {}).items():
+        out = os.path.join(d, rel) if rel.startswith("textures") else os.path.join(d, "textures", os.path.basename(rel))
+        os.makedirs(os.path.dirname(out), exist_ok=True)
+        open(out, "wb").write(get(inc["url"]))
+        n += 1
+    credit("- %s — Poly Haven MODEL, CC0 — https://polyhaven.com/a/%s (1k blend + %d textures; donor part)" % (aid, aid, n))
+    return "ok blend + %d textures" % n
+
 if __name__ == "__main__":
     for spec in sys.argv[1:]:
         src, aid = spec.split(":", 1)
         try:
-            r = polyhaven(aid) if src == "ph" else ambientcg(aid)
+            r = polyhaven_model(aid) if src == "phm" else (polyhaven(aid) if src == "ph" else ambientcg(aid))
         except Exception as ex:
             r = "FAILED: %s" % ex
         print("%-28s %s" % (spec, r))

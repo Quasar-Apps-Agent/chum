@@ -342,6 +342,9 @@ M["PatchNavy"]  = mat("PatchNavy",  (0.10, 0.12, 0.20), 0.95)
 M["PatchOchre"] = mat("PatchOchre", (0.42, 0.32, 0.16), 0.95)
 M["PatchBrown"] = mat("PatchBrown", (0.16, 0.11, 0.08), 0.95)
 M["PatchPlaid"] = mat("PatchPlaid", (0.55, 0.45, 0.35), 0.95)
+## unit 1.2: the throat speaker's mount ring (oxidised steel) and its cabling
+M["RingSteel"]   = mat("RingSteel",   (0.40, 0.38, 0.35), 0.55, metal=1.0)
+M["CableRubber"] = mat("CableRubber", (0.06, 0.05, 0.045), 0.7)
 
 # ---- the body: round-bellied, patched, burnt ---------------------------------------
 ## PLATE silhouette: belly forward, chest sagging over the collar line (BRIEF 1.1 step 1)
@@ -355,6 +358,26 @@ body = join([
     sphere((0.24, 0, 1.0), 0.2, (1, 1, 0.9)),
 ], "BodyCore")
 organic(body, M["BurntWool"], 0.02, 0.018, 0.006, 0.4, smooth=4)
+## unit 1.2 (BRIEF 1.2 step 2): the throat-speaker RECESS. NOT before organic():
+## the joined spheres are seven overlapping shells, and an exact boolean on
+## them mangled the whole front (every front patch then intersected nothing —
+## 0 verts — and the bake loop died on the first empty mesh). Cut the
+## REMESHED, manifold body instead and heal the edge with a short smooth.
+_rc = cyl((0, -0.28, 1.74), 0.115, 0.20, rot=(math.radians(90), 0, 0))
+bpy.ops.object.select_all(action="DESELECT")
+body.select_set(True)
+bpy.context.view_layer.objects.active = body
+_bo = body.modifiers.new("recess", "BOOLEAN")
+_bo.operation = "DIFFERENCE"
+_bo.object = _rc
+_bo.solver = "EXACT"
+_hs = body.modifiers.new("heal", "SMOOTH")
+_hs.factor = 0.5
+_hs.iterations = 3
+bpy.ops.object.convert(target="MESH")
+body = bpy.context.active_object
+bpy.data.objects.remove(_rc, do_unlink=True)
+print("RECESS cut on the remeshed body: verts", len(body.data.vertices))
 ## BRIEF 1.1 step 6: singed rims only — cards survive on the shoulder and hip
 ## crests; the fused bouclé scan carries the pile everywhere else so the quilt
 ## can read. mask=True excludes.
@@ -530,10 +553,113 @@ bell = sphere((0, -0.27, 1.94), 0.06)
 bell.name = "Bell"
 simple(bell, M["Brass"])
 
-# ---- throat speaker (dossier detail 2) ---------------------------------------------------
-spk = cyl((0, -0.37, 1.74), 0.09, 0.05, rot=(math.radians(78), 0, 0))
+# ---- THE THROAT SPEAKER (unit 1.2; PLATE detail 2, MOTION §AFTER-FIRE) -------------
+## "a salvaged studio monitor revoiced into the chest" — a REAL donor driver:
+## Poly Haven vintage_radio_transceiver (CC0), its speaker unit appended whole
+## (its grille faces -Y: 255 faces, 202 of them wire-fine), scaled x3 so the
+## grille is ~0.20 m at base (0.25 m at 3.35), seated in the recess. Its
+## plug becomes the cable entry at the shoulder. NO VOCALIZATIONS, EVER:
+## the emitter is wired in 1.12 and plays band-limited room tone only.
+RADIO_SRC = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                         "modelsrc", "vintage_radio_transceiver", "vintage_radio_transceiver_1k.blend")
+with bpy.data.libraries.load(RADIO_SRC) as (_rf, _rt):
+    _rt.objects = ["vintage_radio_transceiver_speaker", "vintage_radio_transceiver_speaker_plug"]
+spk, spk_plug = _rt.objects[0], _rt.objects[1]
+for _o in (spk, spk_plug):
+    col.objects.link(_o)
 spk.name = "ThroatSpeaker"
-simple(spk, M["CharDark"])
+spk_plug.name = "ThroatPlug"
+_ss = 3.0
+spk.scale = (_ss, _ss, _ss)
+spk.rotation_euler = (0, 0, 0)
+spk.location = (0, -0.37 + 0.012 * _ss, 1.74)   # grille face at y=-0.37, the cloth line
+spk_plug.scale = (_ss, _ss, _ss)
+spk_plug.rotation_euler = (0, 0, math.radians(35))
+spk_plug.location = (0.31, -0.19, 1.93)            # the shoulder slit where the cable enters
+for _o in (spk, spk_plug):
+    for _m in _o.data.materials:
+        if _m and _m.use_nodes:
+            for _n in _m.node_tree.nodes:
+                if _n.type == "TEX_IMAGE" and _n.image:
+                    try:
+                        _n.image.pack()
+                    except Exception:
+                        pass
+## soot the donor (illegible branding, fire-worn) — at the PIXEL level, so
+## the exported PNG carries it: a node multiply stays in Cycles only (the
+## manifest hands Unreal the raw scan, and the housing rendered cream-white
+## in the engine — 1.2 finding). Multiply the diffuse image in place, once.
+_acc = bpy.data.materials.get("vintage_radio_transceiver_accessories")
+if _acc is not None and _acc.use_nodes:
+    for _n in _acc.node_tree.nodes:
+        if _n.type == "TEX_IMAGE" and _n.image and "diff" in _n.image.name and "sooted" not in _n.image:
+            _img = _n.image
+            _px = list(_img.pixels)
+            _k = (0.34, 0.31, 0.29)
+            for _i in range(0, len(_px), 4):
+                _px[_i] *= _k[0]; _px[_i + 1] *= _k[1]; _px[_i + 2] *= _k[2]
+            _img.pixels = _px
+            _img["sooted"] = True
+            try:
+                _img.pack()
+            except Exception:
+                pass
+            print("SOOTED donor diffuse", _img.name)
+
+## the mount ring: a bevelled poly-curve with a hand-made wobble (never a
+## perfect torus — PLAN §R.1), riveted, in oxidised steel
+def ring_curve(name, center, radius, r_bevel, material, n=18, jitter=0.03):
+    cu = bpy.data.curves.new(name, "CURVE")
+    cu.dimensions = "3D"
+    cu.bevel_depth = r_bevel
+    cu.bevel_resolution = 5
+    cu.resolution_u = 8
+    sp = cu.splines.new("NURBS")
+    sp.points.add(n - 1)
+    for i in range(n):
+        a = 2.0 * math.pi * i / n
+        rr = radius * (1.0 + jitter * math.sin(3.7 * a + 1.3) + 0.5 * jitter * math.cos(7.1 * a))
+        sp.points[i].co = (center[0] + rr * math.cos(a), center[1], center[2] + rr * math.sin(a), 1.0)
+    sp.use_cyclic_u = True
+    sp.order_u = 3
+    ob = bpy.data.objects.new(name, cu)
+    col.objects.link(ob)
+    ob.data.materials.append(material)
+    return ob
+
+spk_ring = ring_curve("ThroatRing", (0, -0.372, 1.74), 0.108, 0.011, M["RingSteel"])
+for _rv in range(6):
+    _ra = math.radians(60 * _rv + 20)
+    _riv = sphere((0.108 * math.cos(_ra), -0.383, 1.74 + 0.108 * math.sin(_ra)), 0.011)
+    _riv.name = f"ThroatRivet{_rv}"
+    simple(_riv, M["RodMetal"])
+    bpy.ops.object.shade_smooth()   # a faceted ball at 1.2 m is a naked primitive (1.2 chest frame)
+
+## cabling (BRIEF 1.2 step 3): from the grille's edge, under the collar, into
+## the cloth at the shoulder slit where the plug sits — never floating
+def cable(name, pts, r, material):
+    cu = bpy.data.curves.new(name, "CURVE")
+    cu.dimensions = "3D"
+    cu.bevel_depth = r
+    cu.bevel_resolution = 4
+    cu.resolution_u = 12
+    sp = cu.splines.new("NURBS")
+    sp.points.add(len(pts) - 1)
+    for i, p in enumerate(pts):
+        sp.points[i].co = (p[0], p[1], p[2], 1.0)
+    sp.use_endpoint_u = True
+    sp.order_u = 3
+    ob = bpy.data.objects.new(name, cu)
+    col.objects.link(ob)
+    ob.data.materials.append(material)
+    return ob
+
+cable("ThroatCableA", [(0.09, -0.36, 1.80), (0.16, -0.34, 1.90), (0.24, -0.28, 1.95),
+                       (0.30, -0.21, 1.94), (0.31, -0.19, 1.93)], 0.008, M["CableRubber"])
+cable("ThroatCableB", [(0.07, -0.37, 1.67), (0.17, -0.36, 1.76), (0.26, -0.31, 1.88),
+                       (0.31, -0.22, 1.92), (0.31, -0.19, 1.93)], 0.006, M["CableRubber"])
+## the emitter's home (naming by analogy with the canon sockets; OPEN in PIPELINE)
+empty("SOCKET_ThroatSpeaker", (0, -0.33, 1.74))
 
 # ---- patches: the PLATE's quilt as SOLID sewn-on mass (BRIEF 1.1 step 2) ----------
 ## Count/placement read from the PLATE: rust-red left shoulder, olive right
@@ -885,6 +1011,7 @@ for rv in range(8):
     rivet = sphere((0.13 + 0.092 * math.cos(ra), -0.375, 2.34 + 0.092 * math.sin(ra) * 0.96), 0.01)
     rivet.name = f"LensRivet{rv}"
     simple(rivet, M["RodMetal"])
+    bpy.ops.object.shade_smooth()
     parent_to(rivet, head)
 
 # nose: the plate's wide felt triangle pad, apex down, softened by remesh
@@ -1194,6 +1321,11 @@ for _mk in ("LeatherCol", "PatchLeather"):
 ## the lips: same leather scan, kept burnt-dark
 scan_dress(M["LipLeather"], "Leather030/Leather030_1K-JPG_Color.jpg",
            "Leather030/Leather030_1K-JPG_NormalGL.jpg", 1.1, 10.0, 1.0)
+## unit 1.2: oxidised steel on the throat ring, steel-rope on the cabling
+scan_dress(M["RingSteel"], "Metal063/Metal063_2K-JPG_Color.jpg",
+           "Metal063/Metal063_2K-JPG_NormalGL.jpg", 1.6, 8.0, 1.0)
+scan_dress(M["CableRubber"], "Rope002/Rope002_2K-JPG_Color.jpg",
+           "Rope002/Rope002_2K-JPG_NormalGL.jpg", 1.4, 40.0, 1.0)
 
 
 def burlap_nodes(matr, tint_srgb, scorch, scan_key, scale, seam=0.0, zones=None, origin=(0.0, 0.0, 0.0), seam_geom=None):
@@ -1589,6 +1721,9 @@ def bake_all():
         if mname not in BAKE_TINTS:
             continue
         tint, scorch, scan_key, wscale = BAKE_TINTS[mname]
+        if len(obj.data.vertices) == 0:
+            print("BAKE-SKIP empty mesh", obj.name, "(a boolean produced nothing — check PATCH lines)")
+            continue
         res = 2048 if len(obj.data.vertices) > 1500 else 1024
         bpy.ops.object.select_all(action="DESELECT")
         obj.select_set(True)

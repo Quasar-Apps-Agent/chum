@@ -295,3 +295,14 @@ camd.dof.aperture_fstop = 5.6
 scene.render.filepath = os.path.join(OUTDIR, "chum_af_torso.png")
 bpy.ops.render.render(write_still=True)
 print("RENDERED torso")
+
+## SHOT 4 (1.2): the chest — the throat speaker at ~1.2 m, under the collar
+camd.lens = 85
+cam.location = mathutils.Vector((0.28, -1.15, 1.86)) * K
+_tgt = mathutils.Vector((0.0, -0.36, 1.76)) * K
+aim(cam, _tgt)
+camd.dof.focus_distance = (cam.location - _tgt).length
+camd.dof.aperture_fstop = 5.6
+scene.render.filepath = os.path.join(OUTDIR, "chum_af_chest.png")
+bpy.ops.render.render(write_still=True)
+print("RENDERED chest")
