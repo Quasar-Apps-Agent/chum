@@ -1366,3 +1366,27 @@ to the body's own tone, so no colour identifies. Two patches are
 buried under the belly panel by my own placement. The stitch
 cylinders read as pipes. So 1.1 stays open, 1.1a is the mass, and
 1.1b is the moment the quilt appears.
+
+## Commit 108 · UNIT 1.1b · THE QUILT READS, AND WHY IT NEVER HAD
+The fur came off the front and the two buried patches came out from
+under the belly, and the quilt still did not read: one dark brown from
+collar to hip. So instead of guessing at the light, the unit measured
+the texel — the mean colour of every baked albedo on the puppet — and
+the answer was the same number twenty times over: rust, olive, navy,
+plaid, belly, body, arms, legs, all (0.05, 0.04, 0.03). No tint had
+ever reached a bake. The burn layer took its mask from a bright copper
+smudge and thresholded it as if it were dark, so nearly every texel
+burned to black whatever the scorch dial said; two multiplies of soot
+and grime finished what was left. The head's felt measured 0.02 and
+had been near-black since the first day. That is the mottled dark
+mass the owner called garbage, explained at last, by arithmetic. The
+graph now means what it says: scorch is the burn fraction, only the
+brightest smudges char, and the soot follows the burn. Rebuilt, the
+texels separate — rust from olive from navy from plaid — and the
+beauty render shows a puppet wearing the plate's quilt on a fused,
+matted, scorched body with no plush halo, the belly a lighter woven
+oval, the head untouched because its darkness was always authored.
+The sodium check shows albedo, roughness and weave answering one lamp
+in one frame. Still owed in 1.1c: the running stitches along every
+edge, the shoulder pipes gone, char in zones rather than everywhere,
+and the whole torso through Unreal's locked-EV rig. Then 1.1 ticks.

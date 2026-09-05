@@ -285,13 +285,32 @@ the stage tell-table (PHASE1-CHUM-BUILD-BRIEF §0.5).
             tone; plaid + brownA are BURIED under the belly panel (my
             placement: inside its footprint, 14 mm proud vs 20); stitch
             cylinders read as pipes. 1.1 stays unticked
-      - [ ] 1.1b THE QUILT MUST READ: fur cards to singed rims on the
-            shoulder/hip crests only (900, 20–40 mm); post-bake body hair
-            masked off the front; patch/belly scorch 0.5→0.2 and tints up so
-            rust/olive/navy/plaid identify in the beauty; move the two
-            buried patches off the belly; then seams-to-maps + delete the
-            sring/stt stitch cylinders; char zones (bark/rustleak); UE
-            export + locked-EV capture; sodium + beauty re-judged
+      - [x] 1.1b THE QUILT READS (evidence docs/telemetry/blender-phase1/
+            1.1b_*.png): fur cards to singed rims on the crests only (900,
+            20–40 mm) + post-bake body hair masked off the front; the two
+            buried patches moved clear of the belly; and the finding that
+            mattered — MEASURED THE TEXEL: every baked albedo on the puppet
+            was (0.05,0.04,0.03) regardless of tint or scan, because the
+            burn layer keyed off a BRIGHT copper smudge with dark-mask
+            thresholds and burned 40–100% of every texel; then soot 0.66 and
+            grime 0.4 crushed the rest. This predates Phase 1 (the "mottled
+            dark mass" since 0.3). burlap_nodes fixed: scorch IS the burn
+            fraction (ramp 0.55–0.85 × scorch), soot 0.30+0.35·scorch, grime
+            0.2. Texels now separate: rust (0.14,0.05,0.02), olive
+            (0.21,0.25,0.16), navy (0.04,0.05,0.08), plaid (0.25,0.17,0.17),
+            ochre (0.13,0.09,0.03), belly lighter than body, body 0.044
+            scorched. Beauty: every patch identifiable on a fused matted
+            torso, no halo. Sodium: three-way response in one frame. Head:
+            no regression (its near-black is authored tint, not the bug)
+      - [ ] 1.1c SEAMS, CHAR, ENGINE: running stitches along every patch
+            edge as maps (seam mask into burlap_nodes; normal + darker
+            albedo + rougher) and DELETE the sring/stt shoulder stitch
+            cylinders (they read as pipes); char ZONES per PLATE (right
+            shoulder/arm root, left hip, crown) with Bark015 crackle height
+            + Rust009 soot runs, roughness ≥0.95 albedo ≤0.02 there; olive
+            a shade dirtier; then export_ue.py --all-meshes →
+            fixup_materials.py → dark locked-EV capture at 3–6 m and 1 m;
+            texel + sodium + beauty re-judged. Then 1.1 ticks
 - [ ] 1.2 Throat speaker (donor speaker/radio driver, chest mount, cabling)
 - [ ] 1.3 Collar, leather strap, dead brass bell
 - [ ] 1.4 Arms & hands: tendons both sides, articulated fingers

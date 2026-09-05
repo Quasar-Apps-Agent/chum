@@ -355,9 +355,13 @@ body = join([
     sphere((0.24, 0, 1.0), 0.2, (1, 1, 0.9)),
 ], "BodyCore")
 organic(body, M["BurntWool"], 0.02, 0.018, 0.006, 0.4, smooth=4)
-body_fur = fur(body, 3000, 0.035, 0.09, "BodyFur",
+## BRIEF 1.1 step 6: singed rims only — cards survive on the shoulder and hip
+## crests; the fused bouclé scan carries the pile everywhere else so the quilt
+## can read. mask=True excludes.
+body_fur = fur(body, 900, 0.02, 0.04, "BodyFur",
                [M["FurDark"], M["FurMid"], M["FurRust"]],
-               mask=lambda wp: (wp.y < -0.3 and 1.0 < wp.z < 1.8 and abs(wp.x) < 0.32))
+               mask=lambda wp: not ((wp.z > 1.72 and abs(wp.x) > 0.25) or
+                                    (0.85 < wp.z < 1.15 and abs(wp.x) > 0.20)))
 
 ## SOLID PATCHES (BRIEF 1.1 step 2): a copy of the fused body pushed proud along
 ## its normals, boolean-INTERSECTED with a cutter, then voxel-remeshed — real
@@ -541,10 +545,10 @@ for _pn, _pm, _loc, _rz, _w, _h in (
         ("PatchRust",   M["PatchRust"],  (-0.27, -0.36, 1.66),  0.30, 0.24, 0.22),
         ("PatchOlive",  M["PatchOlive"], ( 0.29, -0.33, 1.52), -0.20, 0.21, 0.19),
         ("PatchNavy",   M["PatchNavy"],  (-0.38, -0.20, 1.20),  0.55, 0.19, 0.17),
-        ("PatchOchre",  M["PatchOchre"], ( 0.31, -0.29, 1.26),  0.10, 0.17, 0.15),
-        ("PatchBrownA", M["PatchBrown"], (-0.12, -0.42, 1.08),  0.05, 0.13, 0.11),
+        ("PatchOchre",  M["PatchOchre"], ( 0.36, -0.22, 1.30),  0.10, 0.17, 0.15),
+        ("PatchBrownA", M["PatchBrown"], (-0.37, -0.16, 0.98),  0.05, 0.13, 0.11),
         ("PatchBrownB", M["PatchBrown"], ( 0.15, -0.38, 1.88), -0.10, 0.12, 0.10),
-        ("PatchPlaid",  M["PatchPlaid"], ( 0.05, -0.44, 1.62),  0.00, 0.15, 0.13)):
+        ("PatchPlaid",  M["PatchPlaid"], (-0.05, -0.30, 1.90),  0.00, 0.15, 0.13)):
     solid_patch(_pn, _pm, rounded_prism(_loc, _rz, _w, _h))
 
 # ---- THE HEAD (dossier-matched, iteration 2) -----------------------------------------
@@ -1240,14 +1244,24 @@ def burlap_nodes(matr, tint_srgb, scorch, scan_key, scale):
     tmask.projection = "BOX"
     tmask.projection_blend = 0.3
     nt.links.new(mmap.outputs["Vector"], tmask.inputs["Vector"])
+    ## TEXEL FINDING (unit 1.1b): the mask is a BRIGHT copper smudge, so the old
+    ## thresholds burned 40-100% of every texel whatever `scorch` was — every
+    ## bake on the puppet measured the same (0.05, 0.04, 0.03), the head 0.02.
+    ## Now `scorch` IS the burn fraction: only the brightest smudges fire, and
+    ## the ramp is scaled by scorch, so a 0.2 patch keeps its colour and a
+    ## 0.88 body still chars in mottled zones.
     ramp = nt.nodes.new("ShaderNodeValToRGB")
-    ramp.color_ramp.elements[0].position = max(0.05, 0.55 - 0.38 * scorch)
-    ramp.color_ramp.elements[1].position = min(0.95, 0.8 - 0.1 * scorch)
+    ramp.color_ramp.elements[0].position = 0.55
+    ramp.color_ramp.elements[1].position = 0.85
     nt.links.new(tmask.outputs["Color"], ramp.inputs["Fac"])
+    burnfac = nt.nodes.new("ShaderNodeMath")
+    burnfac.operation = "MULTIPLY"
+    nt.links.new(ramp.outputs["Color"], burnfac.inputs[0])
+    burnfac.inputs[1].default_value = scorch
     burn = nt.nodes.new("ShaderNodeMixRGB")
     burn.blend_type = "MIX"
     burn.inputs["Color2"].default_value = (0.01, 0.008, 0.006, 1.0)
-    nt.links.new(ramp.outputs["Color"], burn.inputs["Fac"])
+    nt.links.new(burnfac.outputs["Value"], burn.inputs["Fac"])
     nt.links.new(tinted.outputs["Color"], burn.inputs["Color1"])
 
     ## soot in the crevices
@@ -1255,7 +1269,7 @@ def burlap_nodes(matr, tint_srgb, scorch, scan_key, scale):
     ao.inputs["Distance"].default_value = 0.08
     soot = nt.nodes.new("ShaderNodeMixRGB")
     soot.blend_type = "MULTIPLY"
-    soot.inputs["Fac"].default_value = 0.66
+    soot.inputs["Fac"].default_value = 0.30 + 0.35 * scorch   # soot follows the burn
     nt.links.new(burn.outputs["Color"], soot.inputs["Color1"])
     nt.links.new(ao.outputs["Color"], soot.inputs["Color2"])
 
@@ -1270,7 +1284,7 @@ def burlap_nodes(matr, tint_srgb, scorch, scan_key, scale):
     nt.links.new(gmap.outputs["Vector"], gtex.inputs["Vector"])
     grime = nt.nodes.new("ShaderNodeMixRGB")
     grime.blend_type = "MULTIPLY"
-    grime.inputs["Fac"].default_value = 0.4
+    grime.inputs["Fac"].default_value = 0.2
     nt.links.new(soot.outputs["Color"], grime.inputs["Color1"])
     nt.links.new(gtex.outputs["Color"], grime.inputs["Color2"])
     nt.links.new(grime.outputs["Color"], bsdf.inputs["Base Color"])
@@ -1299,14 +1313,14 @@ def burlap_nodes(matr, tint_srgb, scorch, scan_key, scale):
 BAKE_TINTS = {
     "BurntWool": ((0.13, 0.1, 0.07), 0.88, "boucle", 7.0),   # fused, matted wool (BRIEF 1.1)
     "EarFelt": ((0.075, 0.058, 0.042), 0.92, "wool", 7.0),
-    "BellyWool": ((0.26, 0.21, 0.14), 0.6, "boucle", 8.0),
-    "PatchRust": ((0.45, 0.2, 0.14), 0.5, "boucle", 12.0),
+    "BellyWool": ((0.36, 0.29, 0.18), 0.3, "boucle", 8.0),
+    "PatchRust": ((0.62, 0.24, 0.13), 0.22, "boucle", 12.0),
     "PatchGreen": ((0.22, 0.32, 0.22), 0.5, "weave", 14.0),
-    "PatchOlive": ((0.75, 0.85, 0.65), 0.5, "corduroy", 14.0),   # near-neutral: the scan carries the green
-    "PatchNavy": ((0.8, 0.85, 1.0), 0.5, "denim", 14.0),
-    "PatchOchre": ((0.55, 0.42, 0.22), 0.5, "boucle", 12.0),
-    "PatchBrown": ((0.2, 0.14, 0.1), 0.55, "weave", 14.0),
-    "PatchPlaid": ((0.85, 0.8, 0.75), 0.5, "plaid", 12.0),
+    "PatchOlive": ((0.75, 0.85, 0.65), 0.2, "corduroy", 14.0),   # near-neutral: the scan carries the green
+    "PatchNavy": ((0.8, 0.85, 1.0), 0.22, "denim", 14.0),
+    "PatchOchre": ((0.68, 0.5, 0.24), 0.22, "boucle", 12.0),
+    "PatchBrown": ((0.26, 0.18, 0.12), 0.35, "weave", 14.0),
+    "PatchPlaid": ((0.85, 0.8, 0.75), 0.2, "plaid", 12.0),
     "PatchFlannel": ((0.48, 0.48, 0.5), 0.35, "weave", 16.0),   # stage delta — unused on the mascot
     "PatchLeather": ((0.35, 0.28, 0.22), 0.2, "leather", 12.0), # stage delta — unused on the mascot
     "CharDark": ((0.12, 0.1, 0.085), 0.82, "wool", 10.0),
@@ -1443,12 +1457,15 @@ def hbelly_mask(wp):
 def hsole_mask(wp):
     return wp.z < 0.08
 
+## 1.1b: no guide hair on the front of the torso (the quilt must read);
+## the belly exclusion is kept. Masks are evaluated in 2.6 space.
+hbody_mask = lambda wp: (wp.y < -0.10) or bool(hbelly_mask(wp))
 BUILD_HAIR_PLAN = [
     ("Skull", 2600, 0.05, HAIR_DARK, hface_mask),
     ("EarL", 1400, 0.05, HAIR_RUST, hear_mask),
     ("EarR", 1600, 0.055, HAIR_RUST, hear_mask),
     ("JawMesh", 300, 0.03, HAIR_DARK, hjaw_mask),
-    ("BodyCore", 3600, 0.06, HAIR_DARK, hbelly_mask),
+    ("BodyCore", 1000, 0.03, HAIR_DARK, hbody_mask),
     ("ArmL", 700, 0.045, HAIR_DARK, None),
     ("ArmR", 700, 0.045, HAIR_DARK, None),
     ("LegL", 800, 0.05, HAIR_DARK, hsole_mask),
