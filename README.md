@@ -1316,3 +1316,29 @@ failed four times and the invariants run reported a soft-lock that did
 not exist. The harness convicted my change before it reached main,
 which is the only reason the harness was built. The line is RETAKE
 now, with a guard comment above it. Phase 0 is finished, honestly.
+
+## Commit 106 · THE CAST, ON PAPER FIRST
+A dedicated character agent wrote the cast — every one but Chum, whose
+papers already existed — as build briefs and rig specs in the same
+shape as his: canon quoted and cited, the laws that bind each body
+named on its page, assets verified live against the CC0 libraries on
+the day of writing, and the owner's ruling made operational across the
+whole cast — true canon height, actor scale one, one frozen uniform
+scale, never a scaled bone. Merle's forty-five-second pen-up hold and
+her four hand-stills. Harriet's freeze as a play-rate of zero with the
+phase preserved, exactly as her C++ already does it, and her doubling
+as a second instance offset by centimetres, never a stretched bone.
+Vess's pin on real plastic. Leland as forty poses with no interpolation
+ever. Rita as hands, a reflection, and a frame, with a two-hundred-
+millisecond avert. The Floor Manager's seven signals as a nine-metre
+legibility test with no audio component at all. Chum in 1974 as a
+static thing on the dock and a skeletal one only in footage, the bell
+keyed exactly once. And the once-ever figure kept nameless in every
+file, because the law says so, even though the reference code did
+not. The finding that matters most is the one the whole phase will
+turn on: the art bible describes needle-felt at one-to-five-and-a-half
+with mitten hands, and the plates are photographs. At true height
+those heads are twenty-nine centimetres. So unit 2.1 will put one felt
+head, one mitten and one glove on a single sodium sheet beside the
+Merle plate and Chum's wool before a single cast unit is built, and
+the owner will rule on the look once, with the material in hand.
