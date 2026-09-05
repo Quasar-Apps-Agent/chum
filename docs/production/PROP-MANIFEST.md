@@ -1,0 +1,739 @@
+# RESTORATION · PROP MANIFEST (unit C6, cloud lane)
+
+Every prop the canon names, room by room in PROGRESS.md §PHASE 3 order, with its
+taxonomy tier, interactability, real-world dimensions (scale truth), placement in
+the reference implementation where one exists, and a CC0 / Fab source candidate.
+The companion `PROP-MANIFEST.csv` carries the same rows (generated from one data
+set; §6 is the verification). Every canon claim carries a citation; where canon
+is silent the cell says **OPEN** and §5 lists the ruling needed. Nothing here
+invents canon.
+
+Sources read: docs/canon/restoration-object-taxonomy.md (the three tiers), restoration-room-bible.md (twenty rooms, keynotes, I/L/D budgets), restoration-ambient-lore-ledger.md (source of record for ambient lore), restoration-room-inventory.md (the interactability bible, 18 zones), restoration-lighting-bible.md, restoration-after-fire-chum.md, docs/production/restoration-props-packet.md (D01–D11), restoration-art-bible.md §3–§8, ROOM-BRIEFS-3.1-3.5.md (format precedent and its OPEN ids), PHASE1-CHUM-BUILD-BRIEF.md (asset ids verified live on 2026-09-04), docs/packet/portbrief/THE-LAWS.md, ue/Restoration/Data/{Rooms,Doors,Stations,Monitors,GameText}.csv, ue/FAB-IMPORT.md, scripts/world_builder.gd, prop_kit.gd, coat_pegs.gd, rec_chairs.gd, harriet.gd, dailies_manager.gd, live_production.gd, finale_breaker.gd (the reference implementation is the spec for placements: PORT-BRIEF via AAA_BUILD_PLAN.md §1).
+
+---
+
+## 0 · CONVENTIONS
+
+### 0.1 Citation codes used in the tables
+| Code | Document |
+|---|---|
+| RB | docs/canon/restoration-room-bible.md, the named room's paragraph |
+| OT | docs/canon/restoration-object-taxonomy.md |
+| LL | docs/canon/restoration-ambient-lore-ledger.md, the named room; [tag] = its thread tag |
+| RI sN | docs/canon/restoration-room-inventory.md, section N (its zone codes: EXT ENT REC KIT DRM LIB CLM BEN FIRE CTL MC PB STA CAT GRN DOCK TH DR, GLOBAL) |
+| PP Dnn | docs/production/restoration-props-packet.md, readable Dnn |
+| LB | docs/canon/restoration-lighting-bible.md (GRAMMAR, STATES, HIM, UE5 TECHNICALS) |
+| AB sN | docs/production/restoration-art-bible.md section N |
+| AF | docs/canon/restoration-after-fire-chum.md |
+| LAWS n | docs/packet/portbrief/THE-LAWS.md, law n |
+| RBR | docs/production/ROOM-BRIEFS-3.1-3.5.md (its section or OPEN id) |
+| WB n | scripts/world_builder.gd line n · prop_kit.gd, coat_pegs.gd, rec_chairs.gd, harriet.gd, dailies_manager.gd, live_production.gd, finale_breaker.gd by name |
+| GT n | ue/Restoration/Data/GameText.csv line n (the prompt / label key) |
+| Rooms.csv, Doors.csv, Stations.csv, Monitors.csv | ue/Restoration/Data/ |
+| PLAN | AAA_BUILD_PLAN.md (§R realism bar, §1 doctrine, §2 asset policy) |
+
+### 0.2 Tier law (the columns `tier` and `interactable`)
+| Tier | Rule | Source |
+|---|---|---|
+| INTERACTABLE | carries a verb, prompts, glyphs the real binding, never drifts, never lies; affordance is diegetic wear; ONE HERO per room | OT ¶INTERACTABLES |
+| LORE-HANDLED | the D-series readables: prompt, mark_read, obey the Three Reads Rule; registry D01–D11 with homes per the Room Bible | OT ¶LORE OBJECTS, ¶LAWS |
+| LORE-AMBIENT | NEVER PROMPTS, never flagged, found by looking; the ledger (LL) is the source of record; placed FIRST, dressing around it | OT ¶LORE OBJECTS, ADDENDUM; PROGRESS.md §PHASE 3 |
+| DRESSING | the only drift-eligible tier; never prompts, never blocks; earns its place by biography; density per the RB caps | OT ¶DRESSING |
+| SURFACE | floors, walls, openings, sky (not in the taxonomy; listed so the Fab pull is complete) | this manifest |
+| `interactable` | YES = prompts in the reference build or is a data-placed station/door/pickup; NO = promptless; OPEN = the room inventory gives it a verb the room bible's cap cannot hold, or it is not in the reference build | RI legend; OT ¶LAWS (the prompt is the tier boundary) |
+| Caps | I/L/D are caps, not quotas. L is read as HANDLED lore (RBR OPEN 0-G). Doors, camera rigs and monitors are data-placed and not counted against a room's I (OPEN 0-I); stations are counted | RB header; RBR 0.3 |
+| QA | QA-55 prompt discipline · QA-56 drift = dressing only · QA-57 one hero max; the per-room census is §4 | OT ¶QA HOOKS |
+
+### 0.3 Dimensions (scale truth) — the `dims_m` / `dims_src` columns
+| Code | Meaning |
+|---|---|
+| REF | taken from the reference implementation's geometry (world_builder.gd / prop_kit.gd / the named script); metres |
+| RW | a real-world period reference for the object class, given so the build judges scale at gameplay distance AND 1 m closeup (PLAN §R.5). **RW numbers are engineering references, not canon** |
+| REF / RW | both given; where they disagree the row says so and an OPEN id is raised |
+| OPEN | no honest reference exists (character-scale assets belong to C2) |
+Placement: `placement_uu` is UE (X, Y, Z) uu = (Godot x, Godot z, Godot y) × 100 [ue/pyscripts/build_greybox.py via RBR 0.1]; 'proposed' means this manifest's suggestion, not the reference. The only numbers canon itself states for objects are the ones in LAWS/AF (3.35 m body, 1.2 m loom, 2.2 s fold).
+
+### 0.4 Source candidates — the `source_candidate` / `licence` columns
+- Policy: prefer Megascans/Fab (free tier, MEDIUM/2K) for surfaces and props before building by hand; CC0 from Poly Haven / AmbientCG into tools/modelsrc + tools/texsrc with CREDITS.md lines; everything gets the wear pass and a credits line; no ripped content [PLAN §2; ue/FAB-IMPORT.md].
+- **Fab entries are SEARCH TERMS** (Fab has no API; ids are read off the editor at pull time and logged in ue/CREDITS-FAB.md) [ue/FAB-IMPORT.md §WHY NOT HEADLESS].
+- Poly Haven / AmbientCG ids marked **(verify id)** were not confirmed against the APIs: this run's network policy denied api.polyhaven.com and ambientcg.com (403 CONNECT; see the PR's verification). Ids marked **verified 2026-09-04** were confirmed live by docs/production/PHASE1-CHUM-BUILD-BRIEF.md §asset tables and are reused here. Camera_01 (Poly Haven) and Fabric030/031, Leather030, Metal058A (AmbientCG) are already in hand (tools/*/CREDITS.md).
+- 'Bespoke' = Blender factory build per tools/build_chum_af.py doctrine; small detail (<2 cm) goes in maps, never geometry [PLAN §R.2].
+- Material masters referenced: M_Wool, M_TapeStock, M_Phosphor, M_Paper, M_Enamel, M_Practical [PLAN §1]. Palette: warning red #C23A2E only on slates, tallies and the breaker [AB §4].
+
+### 0.5 Zone map: room inventory (18 zones) → room bible (20 rooms)
+| RI zone | Bible room (unit) | Note |
+|---|---|---|
+| EXT lot / tower base / guy field | YARD (3.5) + SHED (3.6) | RI keeps the shed's rows under EXT |
+| ENT | ENTRY (3.1) | |
+| REC | REC ROOM (3.2) | |
+| KIT | KITCHEN (3.3) | |
+| DRM | DORMS (3.4) | |
+| LIB | TAPE LIBRARY (3.8) | S1 'landing' |
+| CLM | CLIMATE (3.10) | |
+| BEN | BENCH ROOM (3.9) | |
+| FIRE | FIRE CORRIDOR (3.13) | |
+| CTL control corridor | CONTROL (3.17) | NOT the bible's CORRIDOR (3.7), which has no RI section |
+| MC | MASTER CONTROL (3.18) | |
+| PB patchbay and breaker room | PATCH BAY (3.16) | |
+| STA | STUDIO A (3.15) | |
+| CAT catwalks | STUDIO A (3.15) grid; ramp in STAGE HALL (3.14) | no bible room; the reference builds the grid over Studio A [WB 504–535] |
+| GRN | GREEN ROOM (3.19) | |
+| DOCK | SCENE DOCK (3.20) | |
+| TH | TRANSMITTER HALL (3.11) | |
+| DR | DEAD ROOM (3.12) | |
+| GLOBAL | §3 | |
+| — | CORRIDOR (3.7), STAGE HALL (3.14) | no RI section: rows come from RB + LL + data only |
+
+---
+
+## 1 · READABLES REGISTRY D01–D11 (homes per source; conflicts are OPEN)
+
+| D | Title (PP) | PP home | RB home | Reference (WB) | Verdict |
+|---|---|---|---|---|---|
+| D01 | Leland Merrick's catalog notes | LIB compactus; p.4 in the seance reel's box | SCENE DOCK 'D01's shelf' | not built | OPEN 3.8-D |
+| D02 | Ansel Craik's production notebook (PP) · 'the welcome packet copy Rita carries' (OT) | TH cage, Craik's box | — | read_id D02 = the finale script pickup at CRAIK'S BOX (WB 1033) | OPEN R-1 |
+| D03 | Accession ledger | bench, always | BENCH ROOM | ACCESSION LEDGER (8.2, 0.9, −16.2) | homed |
+| D04 | The clipping, 1974 | REC shrine glass | REC ROOM | (−4.2, 1.15, −1.5) | homed |
+| D05 | 58 Club welcome packet | Rita's dresser, Day 1 | DORMS | (−11.9, 0.9, −1.0) | homed |
+| D06 | Harriet's note | film cabinet, post-training-film | GREEN ROOM 'D06's home' | A FOLDED NOTE in REC ROOM (2.8, 0.55, 2.2) | OPEN 3.8-C |
+| D07 | Vess's research binder | DRM, his room, door ajar | DORMS keynote… and PATCH BAY keynote 'D07 binder' | VESS'S ROOM (−6.5, 0.6, 1.8) | OPEN 3.16-A |
+| D08 | The Floor Manager's run sheet | glimpsed angle only | MASTER CONTROL 'run sheets on clips' | not built | OPEN 3.18-B (tier) |
+| D09 | Fire marshal report | CTL drawer, Day 2 | CONTROL 'D09 marshal packet' | (0, 0.8, −24.5) | homed |
+| D10 | Iris Bell's fan letter | props crate, beneath the sign-off card | SCENE DOCK 'D10 IRIS' | (−12.2, 0.5, −40.6) | homed |
+| D11 | Peak asset dossier (AF) | 'Peak security office copy' | — | (2.0, 0.9, −27.5): inside MASTER CONTROL by Rooms.csv | OPEN 3.17-B |
+
+---
+
+## 2 · THE MANIFEST, ROOM BY ROOM
+
+Columns: **#** id · **Prop** · **Tier · class** · **Interact?** (YES/NO/OPEN; gate · verb from RI; text key) · **Dims m** (src) · **Placement uu** · **Source candidate · licence** · **Canon** · **Notes / OPEN**.
+
+### 3.1 · ENTRY — The threshold that decides you are expected. Amber over the door, the rest borrowed. [RB ENTRY]
+Budget I/L/D **1/0/8** [RB]; drift: pegs, mat angle [RB]; web: deliveries land here; the door eases with ritual kept (B-R1) [RB]; RI zone: RI s2 ENT.
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.1-01 | COAT PEGS: rail, 5 brass pegs, 5 coats (drift ground zero; the palette meter) | INTERACTABLE · hero · DYN | YES — T1 · inspect · DYN — GT 58, 61 | rail 2.2 x 0.08 x 0.08; peg 0.04 x 0.10; coat 0.34 x 0.80 x 0.10 (REF) | (270, 700, 150) [Godot (2.7, 1.5, 7.0)] | Bespoke (Blender factory): rail + brass pegs; coats under M_Wool with a per-coat drift tint; Fab search 'coat rack wall wooden' for the rail only · Bespoke / Fab Standard | RB ENTRY; RI s2; WB 1090-1092; coat_pegs.gd 16-39; AB s4-5 DRIFT LAW | The room's one I. Drift: pegs, mat angle [RB ENTRY] |
+| 3.1-02 | Sign-in / guest book podium with its open book | DRESSING · ambient host | NO — RI s2: T1 · sign (breaches the 1/0/8 cap) | top 0.5 x 0.42; 1.2 tall (REF (lectern)) |  | Reuse the station lectern build (prop_kit.gd lectern) with a different binder; Poly Haven search 'lectern' (verify id) · Bespoke / CC0 | RB ENTRY keynote; RI s2; RBR 3.1.4; OPEN 3.1-A | RI 'Leland's entry two pages back, never checked out' and LL's 1976 line are ONE object: dress one podium, not two [RBR 3.1.5] |
+| 3.1-03 | Podium's oldest pages: 1976 line, L. MERRICK signs IN, OUT column blank forever; every later line closed | LORE-AMBIENT · T3 | NO — never prompts (QA-55) | page 0.216 x 0.279 (RW) | on the podium book, page turned back | M_Paper; hand-lettered albedo, legible at 1 m only · Bespoke | LL ENTRY [T3]; OT LORE |  |
+| 3.1-04 | Door mat, worn through at one heel | DRESSING · ambient host | NO | 0.9 x 0.6 x 0.02 (RW) | inside the YARD door (0, 940, 1) proposed | AmbientCG search 'Fabric' coir/jute (verify id) on a bevelled slab; hole and wear in the mask · CC0 | RB ENTRY keynote; RBR 3.1.4 |  |
+| 3.1-05 | The mat's worn heel faces the building, not the door (people brace coming IN) | LORE-AMBIENT · HF | NO — never prompts | wear patch 0.15 (RW) | the mat, heel toward -Y | wear in the mat's mask · Bespoke | LL ENTRY [HF] |  |
+| 3.1-06 | Key hook board incl. a hook labelled TOWER | DRESSING · ambient host | NO | 0.3 x 0.2; 4 brass hooks (RW) | +X wall above peg height (298, 880, 150) proposed | Bespoke pine board + brass hooks; tags under M_Paper · Bespoke | LL ENTRY; RBR 3.1.4 |  |
+| 3.1-07 | TOWER key whose cut is newer than its tag | LORE-AMBIENT · T4 | NO — never prompts | key 0.06-0.08 (RW) | on the TOWER hook | prop_kit.gd key_prop geometry (bow 0.12, shaft 0.18 - oversized vs RW) or Poly Haven search 'key' (verify id) · Bespoke / CC0 | LL ENTRY [T4] | Reference key_prop is ~0.3 m long; RW is 0.06-0.08 (OPEN 0-H scale of keys) |
+| 3.1-08 | Club charter, framed ('The 58 Club exists to preserve what loved us first') | DRESSING | NO — RI s2: T1 · inspect | 0.4 x 0.5 (RW) | -X wall (-298, 800, 160) proposed | Poly Haven hanging_picture_frame_01 (verify id); glass plain or M_Practical · CC0 | RI s2; RBR 3.1.4 |  |
+| 3.1-09 | Bulletin board: casserole rotation, screening notices; T5 gains the PREMIERE bill | DRESSING · DYN by tape | NO — RI s2: T1 · inspect · DYN | 0.9 x 0.6 (RW) | -X wall (-298, 620, 160) proposed | Fab search 'cork board' / 'notice board' (Megascans free tier if present); paper under M_Paper · Fab Standard | RI s2; RBR 3.1.4 |  |
+| 3.1-10 | Umbrella stand, one umbrella with a child-size handle (never explained) | DRESSING | NO — RI s2: T1 · inspect | 0.25 dia x 0.6; umbrellas 0.8 (RW) | corner by the YARD door (-250, 960, 0) proposed | Fab search 'umbrella stand' or bespoke bevelled cylinder + 3 umbrellas · Fab Standard / Bespoke | RI s2; RBR 3.1.4 | The child-size handle is RI-only; not in LL |
+| 3.1-11 | THE IMPOSSIBLE-TAPES CRATE (DELIVERY dock; T4.1 Vess backs in; then lives at the bench) | INTERACTABLE · pickup · EVT | YES — T4 · EVT then BEN — GT 379 'A CRATE · Vess is hovering (E)' | dock body 0.45 x 0.40 x 0.45 + plinth 0.55; RW tape shipping crate 0.5 x 0.4 x 0.4 (REF / RW) | (0, 600, 50) [Godot (0.0, 0.5, 6.0)] | Bespoke wooden crate (Fab 'wooden crates' starter set for the shell); stencilled labels in albedo · Fab Standard / Bespoke | RI s2 'Vess's delivery spot', RI GLOBAL; WB 1119-1122; GT 379; RB ENTRY web 'deliveries land here' | Event-gated second I in a 1-cap room: OPEN 3.1-D. rooms_also: BENCH ROOM |
+| 3.1-12 | Door leaves x2 (REC side, YARD side; exterior is industrial steel) | INTERACTABLE · door | YES — door verb (Doors.csv) — Doors.csv rows REC ROOM-ENTRY, ENTRY-YARD | gap 1.6; leaf 2.2 (REF) vs slab 2.6 (greybox) - OPEN 0-A (REF) | gaps at (0, 400) and (0, 1000) | Fab search 'wooden door old painted' (interior); 'steel door industrial' (exterior, game master T1.1) · Fab Standard | Doors.csv; WB 279 door_leaf 2.2; RBR 0.1; game master T1.1 | Doors count in the Doors table, not the room's I cap [RBR 3.1.4] |
+| 3.1-13 | Amber tungsten fixture over the door (the room's only authored pool; the rest borrowed) | DRESSING · practical | NO | fixture 0.25 dia; true bulb geometry (RW) | over the door gap - which door is OPEN 3.1-B | Bespoke fixture with true bulb (M_Practical glass); Fab search 'wall light industrial vintage' · Bespoke / Fab Standard | RB ENTRY 'Amber over the door'; LB GRAMMAR, UE5 TECHNICALS | No EV/kelvin/candela in canon [RBR 0.2] |
+| 3.1-14 | Surfaces: floor 6 x 6, walls 4 x 6 x 3, ceiling | SURFACE | NO | 36 m2 floor (REF (Rooms.csv)) |  | Megascans worn parquet / linoleum (MI_Entry_Floor); plaster painted aged (MI_Entry_Wall); acoustic tile (MI_Entry_Ceiling); CC0 alt AmbientCG WoodFloor051, PaintedPlaster017 (verify ids) · Fab Standard / CC0 | Rooms.csv; FAB-IMPORT starter set; RBR 3.1.4 |  |
+
+### 3.2 · REC ROOM — The hearth; the club's living proof. Warm amber, the safest light in the game. [RB REC ROOM]
+Budget I/L/D **2/1/14** [RB]; drift: bracket updates, doilies migrate [RB]; web: kitchen smells reach here on your habits (M-R1) [RB]; RI zone: RI s3 REC.
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.2-01 | THE PROJECTOR (16 mm, two reels; the club print) | INTERACTABLE · hero | YES — EVT · operate (T1.7, T2.8, T4.5) — GT 588-589 | body 0.5 x 0.4 x 0.7 (REF); RW Bell & Howell 16 mm sound projector 0.43 x 0.24 x 0.37 + reel arms, reels 0.32-0.38 dia (REF / RW) | (-140, 100, 55) [Godot (-1.4, 0.55, 1.0)] | Bespoke from a CC0 donor (Poly Haven search 'projector', verify id) under M_Enamel painted steel; take-up reel animatable backward one rotation (T4.5) · CC0 / Bespoke | RI s3; WB 728-773; GT 588-589; RB REC; game master T1.7/T2.8/T4.5 | Hero by wear: worn carry handle, polished switch [RBR 3.2.6 P2] |
+| 3.2-02 | S5 LOG STATION (lectern, transmitter log binder, chained pen) under a shaded lamp | INTERACTABLE · station | YES — T1 · sign — GT 485-486 | post 0.12 sq x 0.95; top 0.5 x 0.42 tilted 0.35 rad; binder 0.36 x 0.30; pen 0.11 (REF) | (-420, 320, 0) [Godot (-4.2, 0.0, 3.2)] | Bespoke lectern shared across S1-S5 with per-station wear; paper M_Paper; chain in maps (<2 cm) · Bespoke | Stations.csv S5; WB 283-304; prop_kit.gd lectern 347-361; RB REC keynote; RI s3 | Second I of two |
+| 3.2-03 | D04 THE CLIPPING, Chillicothe Courier October 1974, behind shrine glass | LORE-HANDLED · readable D04 · Day 1 | YES — T1 · read (mark_read, Three Reads) — GT 696 + 3 lines; WB 1153-1157 | newsprint 0.15 x 0.25, one fold; frame 0.25 x 0.35 (RW) | (-420, -150, 115) [Godot (-4.2, 1.15, -1.5)] | M_Paper (4K allowed: readable); glass under M_Practical or plain · Bespoke | PP D04; RB REC 'corkboard with D04'; OT LORE handled; WB 1153 | The room's one L (handled) |
+| 3.2-04 | Cabinet television, 4:3 (the projector's screen; N1 static; lockdown sync; dark only in ending 1) | DRESSING · event-driven · phosphor | NO — RI s3: T1 · inspect · DYN (OPEN 3.2-A) — none (slate 'THE GLADHOUSE · CLUB PRINT' WB 723) | RW 1970s 25-inch console 0.95 x 0.55 x 0.75; REF screen centre at 1.6 m (RW / REF) | (-478, 100, 160) [Godot (-4.78, 1.6, 1.0)] | Fab search 'vintage television console 70s'; screen M_Phosphor; veneer Megascans · Fab Standard | RI s3; WB 722-727; game master T1.4; RBR 3.2.4 | OPEN 3.2-C: reference screen height 1.6 m vs a floor console's ~1.0 m |
+| 3.2-05 | Cue signs RESPOND / HOLD (diegetic audience signs; lit only in response windows; never operable) | DRESSING · event-lit practical | NO — EVT · read | 0.6 x 0.2 x 0.1 each; amber gel face (RW) | (-90, 355, 250) [Godot (-0.9, 2.5, 3.55)] | Bespoke steel box + amber gel (M_Practical) + one true bulb each; gel matches the catwalk gel frame [RI s14] · Bespoke | RI s3; WB 713-720; design doc Call-and-Response UI via RBR 3.2.2 | HOLD at Godot (0.9, 2.5, 3.55). Amber, never red [RBR 0.2] |
+| 3.2-06 | Five armchairs, mismatched (CASUAL until T4.10 lockdown, then ROWS facing the screen; never convert back) | DRESSING · DYN | NO — RI s3: T1 · use · DYN (OPEN 3.2-A) | seat 0.62 sq, back to 0.995 (REF club_chair); collision 0.66 x 0.95 x 0.66; RW 0.85 x 0.9 x 0.95 (REF / RW) | CASUAL (60,20) (200,200) (-80,240) (320,40) (-220,20); ROWS (-150,60) (0,60) (150,60) (-75,180) (75,180) uu [rec_chairs.gd] | Poly Haven ArmChair_01 (verify id) x5 with the five rec_chairs.gd upholstery tints as MI variants; wear on arms/seat · CC0 | RI s3; rec_chairs.gd; prop_kit.gd club_chair 216-241; audio bible S10 (no sound worth naming) |  |
+| 3.2-07 | Harriet's chair + teacup and saucer (the cup rises by the day; resolves only in ending 1) | DRESSING · character seat · DYN | NO — the character prompts, not the chair — GT 202 (HARRIET) | chair as armchair; cup 0.08 dia, saucer 0.14 (RW) | (120, 260, 0) [Godot (1.2, 0.0, 2.6)] | Same armchair family; Poly Haven tea_set_01 (verify id) for cup/saucer · CC0 | RI s3; WB 1082-1084; harriet.gd 70 (cup height); LAWS 6 | Cup Z = 0.99 + 0.05 x min(day, 6) m [harriet.gd 70 via RBR 3.2.2] |
+| 3.2-08 | Shrine wall / corkboard: ALDER, BELL, PRICE missing-persons clippings beside 'find our friend' articles; the gray flannel jacket photo | DRESSING · lore host (D04 sits here) | NO — RI s3: T1 · inspect | corkboard 1.2 x 0.9; frames 0.2-0.4 (RW) | -X wall centred (-498, -150, 150) proposed | Fab search 'cork board'; clippings M_Paper; enamel pins in maps · Fab Standard / Bespoke | RI s3; RB REC keynote 'the corkboard with D04'; lore architecture (deducible layer) |  |
+| 3.2-09 | Tournament bracket in three handwritings (drift: updates) | DRESSING · drift · ambient host | NO | poster 0.6 x 0.9 (RW) | -Y wall (250, -398, 160) proposed | M_Paper plane; three hands in the albedo; re-authorable per day · Bespoke | RB REC keynote + drift |  |
+| 3.2-10 | Bracket's fifth name inked out; the scoring beneath continues one more round anyway | LORE-AMBIENT · HC | NO — never prompts | on the bracket (RW) | the bracket poster | albedo detail · Bespoke | LL REC [HC] |  |
+| 3.2-11 | One photo frame faces the wallpaper; hanging wire dusty, nail not | LORE-AMBIENT · T5 | NO — never prompts | frame 0.2 x 0.25 (RW) | shrine wall near the frame cluster (-498, -60, 170) proposed | Poly Haven hanging_picture_frame_01 (verify id) turned; dust vs clean via roughness/normal maps · CC0 | LL REC [T5] |  |
+| 3.2-12 | Corkboard's green pushpins hold only the oldest papers; nobody stocks green pins now | LORE-AMBIENT · T3, HC | NO — never prompts | pin 0.01 dia (maps, PLAN R.2) (RW) | the corkboard around D04 | pins in normal + albedo maps · Bespoke | LL REC [T3, HC] |  |
+| 3.2-13 | Doily archipelago (doilies migrate) | DRESSING · drift | NO | 0.2-0.3 dia each (RW) | rack, TV top, side tables | alpha-masked cloth cards; lace in maps · Bespoke | RB REC keynote + drift 'doilies migrate' |  |
+| 3.2-14 | Doily'd equipment rack (domesticity over broadcast steel; standby LEDs at night) | DRESSING · practical (standby LEDs) | NO — RI s3: T1 · inspect | 19-inch rack 0.6 x 0.6 x 1.2 (RW) | +X/-Y corner (450, -300, 0) proposed | Fab search 'audio rack vintage' / 'server rack'; doilies as above · Fab Standard | RI s3; LB STATES NIGHT (standby LEDs) |  |
+| 3.2-15 | Gladhouse licensed board game, 1975 box (rulebook's counting rhyme missing its fourth line) | DRESSING · lore host (RI-only) | NO — RI s3: T1 · inspect (OPEN 3.2-A) | box 0.5 x 0.27 x 0.05 (RW) | shelf under the rack | Bespoke box under M_Paper (board art in albedo, show palette) · Bespoke | RI s3 | Not in LL; RI-only lore. OPEN 3.2-F tier |
+| 3.2-16 | Photo albums (ASK-tier lore G3: the club's canon in snapshots) | DRESSING · lore host (RI-only) | NO — RI s3: T2 · inspect (OPEN 3.2-A) | 0.33 x 0.30 x 0.05 each (RW) | shelf | Bespoke; covers M_Paper-adjacent cloth · Bespoke | RI s3 | OPEN 3.2-F tier (handled lore outside the D-series?) |
+| 3.2-17 | Casserole whiteboard | DRESSING | NO | 0.9 x 0.6 (RW) | -Y wall (-200, -398, 160) proposed | Bespoke bevelled frame; marker text in albedo · Bespoke | game master T1.2 via RBR 3.2.2 |  |
+| 3.2-18 | Shaded lamp over S5 + three amber overhead fixtures (proposed count) | DRESSING · practical | NO | floor/table lamp 1.5 tall; overhead 0.3 dia (RW) | S5 lamp at (-420, 320, ~150); overheads (-250,0,290) (0,0,290) (250,0,290) proposed | Fab search 'floor lamp vintage', 'ceiling light vintage'; true bulbs under M_Practical · Fab Standard / Bespoke | RB REC 'S5 under a shaded lamp'; LB UE5 TECHNICALS 'REC amber overheads plus the kettle's glow' | Fixture count OPEN; EV OPEN |
+| 3.2-19 | Wall clock (break-window repeater) | DRESSING · event-driven | NO — RI GLOBAL: T2 · read | 0.3 dia (RW) | (0, 0, 230) [Godot (0.0, 2.3, 0.0)] | Fab search 'wall clock vintage' · Fab Standard | WB 538 wall_clocks; RI GLOBAL 'Break-window clocks' | OPEN 3.2-D: reference sits at room centre; which wall |
+| 3.2-20 | CAM 1 · CORRIDOR monitor (the corridor feed's endpoint) on the -Y wall | INTERACTABLE · monitor · read | OPEN — RI GLOBAL: T2 · read · DYN — Monitors.csv 'CAM 1 · CORRIDOR' | CRT 0.5 x 0.45 (REF crt_shell); RW 19-inch broadcast monitor 0.5 x 0.45 x 0.45 (REF / RW) | (240, -382, 170) [Godot (2.4, 1.7, -3.82)] | prop_kit.gd crt_shell geometry as the modelling brief; screen M_Phosphor; Fab search 'crt monitor vintage' · Bespoke / Fab Standard | Monitors.csv; WB 316-324; prop_kit.gd crt_shell 179-211; RI GLOBAL | Placed by data, not by the room; counts toward no room cap in the port (OPEN 0-I) |
+| 3.2-21 | VESS'S CUT dock (T4.5 the rejected edit; take-up reel turns backward one rotation) | INTERACTABLE · dock · EVT | YES — T4 · EVT — GT 549, 695 | dock body 0.45 x 0.40 x 0.45 (REF) | (-260, 100, 90) [Godot (-2.6, 0.9, 1.0)] | Bespoke: dock family (plinth, cased body, wood rim, brass plaque) per WB 929-972 · Bespoke | WB 1126-1130; GT 549; game master T4.5 | Event-window I beyond the 2 cap: OPEN 3.2-A |
+| 3.2-22 | A FOLDED NOTE · Harriet's hand (D06) - reference placement | LORE-HANDLED · readable D06 (home conflict) | YES — read — GT 218 | index card 0.125 x 0.075 (RW) | (280, 220, 55) [Godot (2.8, 0.55, 2.2)] | M_Paper; pencil capitals · Bespoke | WB 899-915; PP D06 (film cabinet); RB GREEN ROOM ('D06's home') | Three homes: REC (code), film cabinet (PP), GREEN ROOM (RB) - OPEN 3.8-C |
+| 3.2-23 | Surfaces: floor 10 x 8, walls, ceiling; wallpaper band | SURFACE | NO | 80 m2 floor (REF (Rooms.csv)) |  | Megascans office carpet short pile 70s (MI_RecRoom_Floor) over worn parquet margin; plaster + wallpaper vintage (MI_RecRoom_Wall; AmbientCG search 'Wallpaper' verify id); acoustic tile (MI_RecRoom_Ceiling) · Fab Standard / CC0 | Rooms.csv; FAB-IMPORT starter; AB s7 REC 'warmest neutrals' | OPEN 3.2-E windows |
+
+### 3.3 · KITCHEN — Merle's sovereign nation. Amber plus the kettle's glow (a real light). [RB KITCHEN]
+Budget I/L/D **1/1/12** [RB]; drift: chalkboard menu, jar order [RB]; web: the kettle click-off is a death beat; recipes become accessions if she goes (V-R3) [RB]; RI zone: RI s4 KIT.
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.3-01 | KEY BOARD with the EDITH key (felt tag, child's hand) and the TRAINING key (green-ink tag) | INTERACTABLE · hero · pickups | YES — T2 · take — GT 677 (KEY BOARD), 676 (EDITH), 678 (TRAINING) | board 0.3 x 0.25; keys 0.06-0.08 RW (REF key_prop ~0.3 long - OPEN 0-H) (RW / REF) | (1060, -230, 120) [Godot (10.6, 1.2, -2.3)] | Bespoke pine board + brass hooks; keys from Poly Haven search 'key' (verify id) or bespoke; EDITH tag felt (M_Wool-family), TRAINING tag M_Paper green ink · Bespoke / CC0 | WB 776-806; GT 676-678; RI s4; RB KITCHEN | TRAINING key at Godot (10.2, 1.2, -2.3). PRESERVE keys for film cabinet and shed [RI s4] |
+| 3.3-02 | THE KETTLE (stovetop, steel; its glow is a real light; click-off is a death beat; stills forever if Merle dies) | DRESSING · practical + state object | NO — RI s4: T1 · inspect (OPEN 3.3-A) — GT 141-142 (kettle click-off) | body 0.2 dia x 0.14 + spout/handle ~0.25 tall (REF); RW stovetop kettle 0.2 dia x 0.25 (REF / RW) | (940, -210, 91) [Godot (9.4, 0.91, -2.1)] | Poly Haven search 'kettle' (verify id) or bespoke; brushed steel with dents in the normal map; glow fixture per OPEN 3.3-B · CC0 / Bespoke | RB KITCHEN 'a real light'; prop_kit.gd kettle 540-569; WB 1272-1274; casualty ledger MERLE RIPPLES; RBR 3.3.4 | Never drifts. OPEN 3.3-B (stove element vs electric indicator), 3.3-C (night / after Merle) |
+| 3.3-03 | Counter run: base cabinets with knobbed doors, counter top, sink and tap, uppers | DRESSING · collision | NO | 5.0 x 0.58 x 0.91 (top at 0.91); uppers 3.5 x 0.55 x 0.34 at 1.95; door faces 0.44 x 0.62, knob 0.036 dia (REF) | (800, -215, 0) [Godot (8.0, 0.0, -2.15)] | Fab search 'kitchen cabinet vintage' or bespoke per prop_kit kitchen_block; counter laminate AmbientCG search 'Laminate' / 'Terrazzo' (verify id) · Fab Standard / CC0 / Bespoke | prop_kit.gd kitchen_block 574-603; WB 1268-1271 | Counter top exactly Z 91 uu: Merle's hands land on it [RBR 3.3.6 P2] |
+| 3.3-04 | Break table on a single pedestal | DRESSING | NO | 0.9 x 0.9 x 0.74 (REF) | (960, 100, 74) [Godot (9.6, 0.74, 1.0)] | Poly Haven wooden_table_02 or coffee_table_round_01 (verify ids) · CC0 | WB 1288-1306 | Reference is square on one pedestal |
+| 3.3-05 | Two mugs nobody collected (ochre) | DRESSING · biography | NO | 0.08 dia x 0.09 (REF) | (840, -220, 91) [Godot (8.4, 0.91, -2.2)] | Poly Haven tea_set_01 / search 'mug' (verify id); OCHRE tint (0.89, 0.64, 0.24) per prop_kit OCHRE · CC0 | WB 1276-1287 | Second mug at Godot (8.62, 0.91, -2.05) |
+| 3.3-06 | Mug rail: six hooks, five mugs | DRESSING · ambient host | NO | rail 0.6; mugs 0.08 dia (RW) | -Y wall above the counter (700, -248, 150) proposed | Bespoke rail + 5 mugs (tea_set_01 family) · Bespoke / CC0 | LL KITCHEN |  |
+| 3.3-07 | The empty hook is the most polished of the six | LORE-AMBIENT · T3 | NO — never prompts | hook 0.03 (RW) | the mug rail | roughness/metallic only (no albedo tell) · Bespoke | LL KITCHEN [T3] |  |
+| 3.3-08 | Recipe box (recipes become accessions if she goes, V-R3) | DRESSING · ambient host | NO | 0.15 x 0.12 x 0.10 (RW) | counter (700, -215, 91) proposed | Bespoke tin/wood box; cards M_Paper · Bespoke | RB KITCHEN keynote + web V-R3 |  |
+| 3.3-09 | Recipe card CHUM'S BIRTHDAY SHEET CAKE, SERVES 60, amended to SERVES 12, then to nothing | LORE-AMBIENT · HC, T1 | NO — never prompts | card 0.127 x 0.076 (5 x 3 in) (RW) | front card of the recipe box, lid open | M_Paper; three hands in albedo · Bespoke | LL KITCHEN [HC, T1] |  |
+| 3.3-10 | Cabinet door ajar with a volunteer feeding rotation taped inside, dated the week after the fire, all names crossed off but one | LORE-AMBIENT · T5, HF | NO — never prompts | door 0.44 x 0.62; sheet 0.216 x 0.279 (REF / RW) | one counter door e.g. (720, -186, 42) proposed, openable ajar | part of the counter run; sheet M_Paper · Bespoke | LL KITCHEN [T5, HF] |  |
+| 3.3-11 | Menu chalkboard (drift: the menu) | DRESSING · drift | NO | 0.6 x 0.9 (RW) | +Y wall (800, 248, 160) proposed | Fab search 'chalkboard'; chalk text in albedo, re-authorable per day · Fab Standard | RB KITCHEN keynote + drift |  |
+| 3.3-12 | Two aprons, one hook (Merle's is MUSTARD from Day 1 and never drifts) | DRESSING | NO | apron 0.6 x 0.9 hanging (RW) | +X wall (1098, -150, 170) proposed | Cloth cards, cotton under the M_Wool family; MUSTARD #C9A33D for hers · Bespoke | RB KITCHEN keynote; AB s4 palette, s5 MERLE |  |
+| 3.3-13 | Refrigerator with magnets and children's drawings (one signed T.A.); bed: refrigerator sigh | DRESSING · practical (standby LED) | NO — RI s4: T1 · inspect | 0.7 x 0.7 x 1.7 (RW) | +X wall (1060, 180, 0) proposed | Fab search 'refrigerator vintage 70s'; drawings M_Paper · Fab Standard | RI s4; RB KITCHEN bed | T.A. is RI-only (never-stated ledger applies) |
+| 3.3-14 | Plate rack + casserole dishes (the dried-past-dry plate, T2.5) | DRESSING | NO — RI s4: T1 · inspect | rack 0.5 x 0.3; casserole 0.33 x 0.23 x 0.07; plate 0.26 dia (RW) | counter end (600, -215, 91) proposed | Fab search 'dish rack'; Poly Haven search 'plate' / 'casserole' (verify ids) · Fab Standard / CC0 | RI s4; game master T2.5 |  |
+| 3.3-15 | Coffee urn | DRESSING | NO — RI s4: T1 · use (OPEN 3.3-A) | 0.25 dia x 0.45 (RW) | counter (1000, -215, 91) proposed | Fab search 'coffee urn' · Fab Standard | RI s4 |  |
+| 3.3-16 | Kitchen circuit sub-panel (T3 COND: Merle unlocks it, with questions; FORCE = cut dorm heat) | INTERACTABLE · COND · not in the reference build | OPEN — RI s4: T3 · COND · operate | 0.3 x 0.4 x 0.1 (RW) | +X wall (1098, 60, 160) proposed | Megascans 'electrical panel' if free; breaker toggles M_Enamel; warning red on the breaker only [AB s4] · Fab Standard | RI s4; game master 'Power shortfalls' table via RBR 3.3.2 | Breaches the 1 cap and is routing-critical: OPEN 3.3-A |
+| 3.3-17 | Framed TV listings, 'hallway' (airdate-math source two of four) | DRESSING · lore host (RI-only) | NO — RI s4: T2 · inspect | 0.3 x 0.4 (RW) | no hallway exists in Rooms.csv; nearest honest home the kitchen's -X wall beside the gap (502, 150, 160) | Poly Haven hanging_picture_frame_01 (verify id); listings M_Paper · CC0 | RI s4; player routing airdate circuit | OPEN 3.3-D |
+| 3.3-18 | Jars in an order (drift: jar order) | DRESSING · drift | NO | jars 0.1 dia x 0.15 (RW) | counter / uppers | Poly Haven search 'jar' (verify id); labels M_Paper · CC0 | RB KITCHEN drift |  |
+| 3.3-19 | Second teacup on the rack (retires to the green room on M-R5, 'the saddest line of set dressing') | DRESSING · state (reaction web) | NO | cup 0.08 dia (RW) | plate rack | tea_set_01 family · CC0 | reaction matrix M-R5 via RBR 3.3.2; RB GREEN ROOM web | rooms_also: GREEN ROOM |
+| 3.3-20 | Tea towel (neutral Day 1 -> mustard Day 2: the first drifted prop) | DRESSING · drift | NO | 0.5 x 0.7 (RW) | oven rail / counter | cloth card under M_Wool family; MUSTARD tint by day · Bespoke | AB s4 DRIFT LAW ('a mustard tea towel on Day 2') |  |
+| 3.3-21 | Practicals: amber overhead + over-counter light + the kettle's glow | DRESSING · practical | NO | true bulb geometry (RW) | P-K1 (800,0,290), P-K2 (800,-200,200), P-K3 at the kettle - proposed | Bespoke fixtures, M_Practical · Bespoke | RB KITCHEN; LB UE5 TECHNICALS; RBR 3.3.3 | EV OPEN |
+| 3.3-22 | Surfaces: floor 6 x 5, walls, tile splashback on -Y, ceiling | SURFACE | NO | 30 m2 floor (REF (Rooms.csv)) |  | Megascans linoleum/checker (MI_Kitchen_Floor); plaster (MI_Kitchen_Wall); ceramic tile (MI_Kitchen_Tile) · Fab Standard | Rooms.csv; FAB-IMPORT starter |  |
+
+### 3.4 · DORMS — Five doors, three slept-in; the club sleeps where it worked. [RB DORMS]
+Budget I/L/D **1/1/10** [RB]; drift: which doors stand open [RB]; web: the blank card is a shard [RB]; RI zone: RI s5 DRM.
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.4-01 | RITA'S BED (day/night driver; made every morning) | INTERACTABLE · hero | YES — T1 · use — GT 38-40, 184, 674 | 2.0 x 1.1 x 0.5 (frame 0.24 + mattress 0.2); headboard 0.7 high at -X; collision 2.0 x 0.6 x 1.1 (REF) | (-900, 150, 30) [Godot (-9.0, 0.3, 1.5)] | Fab search 'single bed metal frame vintage' or Poly Haven search 'bed' (verify id); blanket tucked hard (cloth in maps), one pillow; tints blanket (0.42,0.34,0.26) pillow (0.8,0.77,0.7) · Fab Standard / CC0 | WB 587-639; RI s5; GT 38-40 |  |
+| 3.4-02 | RITA'S DRESSER with the seven items (watch, pen, photograph, lighter, compact, keys, loupe - one vanishes per capture, loupe last) | INTERACTABLE · DYN (the quietest horror meter) | YES — T1 · inspect · DYN — GT 111-112, 258 | 1.7 x 0.5 x 0.56 (REF; RW dresser ~0.85 high - OPEN 3.4-B); items: watch 0.035 dia, pen 0.14, photo 0.09 x 0.13, lighter 0.06 x 0.04, compact 0.07 dia, keys 0.06, loupe 0.03 dia (REF / RW) | (-1150, -180, 28) [Godot (-11.5, 0.28, -1.8)] | Poly Haven vintage_wooden_drawer_01 (verify id) or Fab search 'dresser vintage'; seven bespoke hero-small props, each removable by state · CC0 / Bespoke | WB 641-656; RI s5; walkthrough Part V-B line 183; GT 111-112 | Second I in a 1-cap room: OPEN 3.4-A. Taken items reappear as props inside restored episodes |
+| 3.4-03 | D05 58 CLUB WELCOME PACKET (mimeograph purple; Merle's ballpoint) | LORE-HANDLED · readable D05 · Day 1 | YES — T1 · read — GT 700-703; WB 1158-1162 | one page 0.216 x 0.279 (RW) | (-1190, -100, 90) [Godot (-11.9, 0.9, -1.0)] | M_Paper 4K; purple mimeograph ink + ballpoint layer · Bespoke | PP D05; RB DORMS keynote 'D05 welcome folder'; WB 1158 | Reference floats at Z 90 over a Z 56 top: sit it on the top [RBR 3.4.4]. OT calls the packet Rita carries 'D02' - see registry OPEN R-1 |
+| 3.4-04 | Vess's room (door ajar) with D07 VESS'S RESEARCH BINDER (FORCE path; one true insight, one confident error; the credit chain's object) | LORE-HANDLED · readable D07 · T2 · FORCE | YES — T2 · take (FORCE) — GT 644; label 'VESS'S ROOM' (WB 1054) | door 0.9 x 2.1 ajar 15 deg; binder 0.3 x 0.28 x 0.06 three-ring (RW) | (-650, 180, 60) [Godot (-6.5, 0.6, 1.8)] | Fab search 'ring binder'; printouts M_Paper in three pen colours; door Fab 'interior door wooden painted' · Fab Standard / Bespoke | PP D07; WB 1052-1055; RI s5; game master T2.1 [FORCE, G2] | RB PATCH BAY also lists 'D07 binder' as a keynote: OPEN 3.16-A |
+| 3.4-05 | Spare label maker (his habit, documented) | DRESSING · biography | NO — RI s5: T2 · inspect | 0.2 x 0.08 x 0.05 (Dymo) (RW) | beside the binder | Bespoke; label strips in maps · Bespoke | RI s5 |  |
+| 3.4-06 | Beds A and B (the other slept-in bays; Merle's quilt drifts to show palette by T4; Vess's neutral) | DRESSING · drift (textile) | NO | 2.0 x 1.0 x 0.53; headboard 0.62 (REF dorm_bed) (REF) | (-1200, 160, 0) [Godot (-12.0, 0.0, 1.6)] | Same bed family; quilt under M_Wool with drift tint · Fab Standard / Bespoke | prop_kit.gd dorm_bed 761-770; WB 1397-1404; RI s5 'Merle's room' | Bed B at Godot (-6.2, 0, 1.6) |
+| 3.4-07 | Lockers, run of 4 (one ajar) | DRESSING | NO | 1.8 x 0.5 x 1.9 (REF) | (-720, -220, 0) [Godot (-7.2, 0.0, -2.2)] | Fab search 'metal locker' (Megascans if free); painted steel M_Enamel · Fab Standard | prop_kit.gd locker_run 774-789; WB 1405-1408 | OPEN 3.4-C: are the 'five doors' lockers, door frames, or partitions |
+| 3.4-08 | Five doors: three slept-in; door four carries the blank card; Harriet's never opens (inside everything mid-motion); one door settles (bed) | DRESSING · drift (which stand open) | NO — Harriet's: inspect through, never opens | 0.9 x 2.1 each (RW) | OPEN 3.4-C (single 8 x 5 box, no partitions in Rooms.csv) | Fab search 'interior door wooden painted'; name cards M_Paper · Fab Standard | RB DORMS; RI s5; LL DORMS |  |
+| 3.4-09 | Blank name card on door four; inside, a wallpaper square brighter than its wall where something hung the length of a warning | LORE-AMBIENT · T3 | NO — never prompts | card 0.09 x 0.05; bright square ~0.3 x 0.4 (RW) | door four; the square at Z ~150 on the bay wall | albedo only for the square; card M_Paper · Bespoke | LL DORMS [T3]; RB DORMS 'name cards (one blank)' + web 'the blank card is a shard' |  |
+| 3.4-10 | Name cards on the other doors | DRESSING | NO | 0.09 x 0.05 (RW) | the doors | M_Paper · Bespoke | RB DORMS keynote |  |
+| 3.4-11 | Welcome folder's earlier revision misfiled beneath the shelf liner, listing a room count of six | LORE-AMBIENT · HC | NO — never prompts | page 0.216 x 0.279 (RW) | under the dresser's top-drawer liner, corner lifted so the edge shows | M_Paper · Bespoke | LL DORMS [HC] |  |
+| 3.4-12 | Window on the yard side, latch painted shut from the inside; thick curtain (blocks the beacon; purely humane) | DRESSING · operable (curtain) · ambient host | OPEN — RI s5: T1 · operate (curtain) | window 1.0 x 1.2; latch 0.08; curtain 1.4 x 1.6 (RW) | +Y wall (-900, 248, 150) proposed | Curtain cloth under M_Wool family; latch in maps; window needs a wall cut Doors.csv does not carry · Bespoke | RI s5; LL DORMS [HF]; game master T1.2 'the curtain's thick' | OPEN 3.4-D (wall cut), 3.4-A (prompt) |
+| 3.4-13 | Latch painted shut from the inside | LORE-AMBIENT · HF | NO — never prompts | 0.08 (RW) | the window | paint-over in albedo/roughness · Bespoke | LL DORMS [HF] |  |
+| 3.4-14 | Mirror (reflection budget; from T3 her reflections compose better) + communal bath mirror | DRESSING · scripted reflection | NO — RI s5: T1 · inspect · DYN | 0.4 x 0.6 (RW) | -X wall (-1298, 60, 160) proposed | planar reflection / SceneCapture per the port; bespoke frame · Bespoke | RI s5 |  |
+| 3.4-15 | Radiators (bed: radiators); FORCE path cuts dorm heat | DRESSING | NO | 1.0 x 0.2 x 0.6 cast iron (RW) | under the window and one per bay | Fab search 'cast iron radiator' (Megascans if free) · Fab Standard | RB DORMS bed; RI s4 (dorm heat) |  |
+| 3.4-16 | Practicals per bay (three) with the hall gap authored | DRESSING · practical | NO | wall lamp 0.2 (RW) | (-900,220,200) (-1200,220,200) (-620,220,200) proposed | Bespoke wall lamps with true bulbs; Fab search 'wall lamp vintage' · Bespoke / Fab Standard | RB DORMS 'Practicals per room, hall gap authored'; LB UE5 'the gaps are content' | EV OPEN |
+| 3.4-17 | Rita's suitcase (unpacked), a chair with a cardigan, a wash basin, a clock (dressing mass to the 10 cap) | DRESSING | NO | suitcase 0.6 x 0.4 x 0.2 (RW) | Rita's bay | Fab search 'vintage suitcase'; Poly Haven search 'chair' (verify id) · Fab Standard / CC0 | RB DORMS 'Rita's unadorned room' (keep sparse); RBR 3.4.6 P5 | Proposal, not canon |
+| 3.4-18 | Surfaces: floor 8 x 5, walls neutral (never drift), ceiling; rugs per bay | SURFACE | NO | 40 m2 floor (REF (Rooms.csv)) |  | Megascans worn parquet / linoleum (MI_Dorms_Floor); plaster (MI_Dorms_Wall) · Fab Standard | Rooms.csv; AB s4 'wall tones never' |  |
+
+### 3.5 · YARD — The only sky the game owns. Night exterior, tower light visible and steady. [RB YARD]
+Budget I/L/D **0/1/8** [RB]; drift: laundry count [RB]; web: the tower light's meanings (premiere, 4c) read from here [RB]; RI zone: RI s1 EXT (lot, tower base, guy field).
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.5-01 | THE TOWER with the red beacon (the only sky's fixture; never operable; goes out on 4c) | DRESSING · practical (red, not a tally) | NO — RI s1: T1 · inspect — GT 78, 340, 642 (the tower light) | REF lattice 7.5 tall, base 1.4 sq to 0.3 top, four sections; beacon 0.24 dia; RW UHF mast far taller - OPEN 3.5-E (REF) | (-900, 1450, 0) [Godot (-9.0, 0.0, 14.5)] | Bespoke lattice (real angle-iron profiles, PLAN R.1); beacon glass M_Practical with a true bulb; Megascans 'galvanized metal' · Bespoke / Fab Standard | prop_kit.gd tower 482-521; WB 1230-1243; RB YARD; LB STATES 4c; RI s1 | Steady (RB) vs pulse (walkthrough, game master T4.7, RI s1): OPEN 3.5-B. Red joins the grammar? OPEN 0-F |
+| 3.5-02 | Antenna guy-wires with concrete anchors (bed: wire hum) | DRESSING · ambient host | NO — RI s1: T1 · traverse (guy field) | wire 0.01 dia; anchors 0.3 x 0.3 x 0.6 (RW) | anchors (-1400,1100) (-1400,1750) (-400,1750) proposed, wires to the top section | Spline cable meshes, steel; anchors Megascans 'concrete block' · Bespoke / Fab Standard | RB YARD keynote; RI s1 |  |
+| 3.5-03 | Guy-wire crimp tag stamped 1971, still bright | LORE-AMBIENT · HC | NO — never prompts | tag 0.03 dia (RW) | anchor nearest the entry path (-400, 1750, 70) proposed | bright metal via roughness/metallic only · Bespoke | LL YARD [HC] |  |
+| 3.5-04 | Fence (chain-link) along the perimeter | DRESSING · ambient host | NO | 1.8 high (RW) | +Y perimeter - OPEN 3.5-A (stamper gives four 3 m walls) | Fab search 'chain link fence' (Megascans) · Fab Standard | RBR 3.5.4; RI s1 (lot, guy field) | Fence is implied, not stated: OPEN 3.5-A |
+| 3.5-05 | Child's bicycle bell zip-tied to the fence, clapper removed (it rhymes with his) | LORE-AMBIENT · T1 | NO — never prompts; never sounds | bell 0.05 dia; zip tie 0.2 (RW) | fence (600, 1795, 110) proposed | Bespoke, clapperless; chrome under a wear pass · Bespoke | LL YARD [T1]; LAWS 5 (silence contracts); audio bible S06 | Silent by law |
+| 3.5-06 | Burn barrel holding melted film-can lids fused into one disk, rim stamps just legible: GLADHOUSE | DRESSING · ambient host; W2 spawn site | NO | 55-gal drum 0.58 dia x 0.88; fused disk ~0.4 dia (16 mm 400 ft cans 0.19 dia) (RW) | (-300, 1650, 0) proposed | Fab search 'oil drum rusted' (Megascans); disk bespoke, stamps in the normal map (PLAN R.2) · Fab Standard / Bespoke | LL YARD [T5, HF]; walkthrough ADDENDUM (W2 behind the barrel, Day 3) |  |
+| 3.5-07 | Fused lid disk with GLADHOUSE rim stamps | LORE-AMBIENT · T5, HF | NO — never prompts | 0.4 dia (RW) | inside the barrel at Z ~30, legible only from above at 1 m | normal-map stamps · Bespoke | LL YARD [T5, HF] |  |
+| 3.5-08 | W2 (the secret pilgrimage's second viewing) behind the burn barrel from Day 3, after W1 | INTERACTABLE · pickup · secret | OPEN — Day 3 · COND (after W1) — OPEN (W-series keys not identified) | a viewing slip (OPEN) | behind the barrel | M_Paper · Bespoke | walkthrough ADDENDUM SPOILER THE SECRET via RBR 3.5.5 | Breaches I = 0: OPEN 3.5-G |
+| 3.5-09 | Laundry line, pegs, laundry (drift: laundry count) | DRESSING · drift | NO | line 6.0 at 1.7 high; garments 0.6-0.9 (RW) | posts (200, 1700) and (800, 1700) proposed | Poly Haven search 'clothes line' / 'towel' (verify ids); cloth under the M_Wool family, compound neutrals · CC0 / Bespoke | RB YARD keynote + drift |  |
+| 3.5-10 | Pallets x2 by the tower base | DRESSING | NO | 1.1 x 0.94 x 0.15 (three slats 1.1 x 0.05 x 0.24 at 0.35 pitch) (REF) | (-650, 1300, 6) [Godot (-6.5, 0.06, 13.0)] | Fab search 'wooden pallet' (Megascans) · Fab Standard | WB 1244-1254 | Second pallet at Godot (-6.2, 0.06, 15.6) |
+| 3.5-11 | Rita's car (locked in by the club's van from the T4 lockdown; inspecting it then updates flavour) | DRESSING · state | NO — RI s1: T1 · inspect (I = 0 - OPEN 3.5-F) | ~4.4 x 1.7 x 1.4 (1970s sedan) (RW) | (1200, 1100, 0) nose -X proposed, or beyond the box per OPEN 3.5-A | Fab search 'sedan 70s'; Poly Haven search 'car' (verify id); wear pass mandatory · Fab Standard / CC0 | RI s1 |  |
+| 3.5-12 | The club's van (its absence is the ENTRY's sound bed; present from the T4 lockdown, blocking Rita's car) | DRESSING · state | NO | ~5.0 x 2.0 x 2.0 (RW) | OPEN whether it is ever visible | Fab search 'van 70s' · Fab Standard | RB ENTRY bed 'the delivery van's absence'; RI s1 'Rita's car' | OPEN 3.5-H |
+| 3.5-13 | Hand-painted sign over the steel entry door: THE 58 CLUB, EST. WITH LOVE | DRESSING | NO — RI s1: T1 · inspect | 1.2 x 0.4 (RW) | above the ENTRY door on the yard face (0, 1005, 275) proposed | Bespoke plywood board, painted letters in albedo, three wear states [AB s3] · Bespoke | RI s1; game master T1.1 |  |
+| 3.5-14 | Gravel lot floodlight (T2 operate; draws from the amperage budget: a trap for the generous) | INTERACTABLE · practical · operable | OPEN — RI s1: T2 · operate | pole 4.0; head 0.3 (RW) | (1300, 1050, 0) by the car proposed | Fab search 'floodlight pole industrial'; head M_Practical · Fab Standard | RI s1 | Breaches I = 0 and is not in the data: OPEN 3.5-D |
+| 3.5-15 | Shed door (yard face) with padlock hasp and the EDITH tag - LOCKED per Doors.csv | INTERACTABLE · door · locked | YES — door verb; key EDITH — Doors.csv YARD-SHED 'PADLOCKED · the tag reads EDITH · a key exists'; GT 655 | door 1.2 wide; padlock 0.05; hasp 0.15 (RW) | gap (850, 1400) in the shed's -X face | Padlock + hasp bespoke or Fab search 'padlock'; felt EDITH tag in a child's hand · Bespoke / Fab Standard | Doors.csv; RI s1 'The shed'; RB SHED 'padlock hasp (unlocked, always)' | Locked (data) vs 'unlocked, always' (RB): OPEN 3.6-A |
+| 3.5-16 | Packed dirt with the two worn path legs (entry door to the middle; to the shed door) | SURFACE | NO | dirt 29.6 x 7.6; leg 1 1.1 x 4.2 at (0, 1240); leg 2 8.6 x 1.1 at (420, 1400) (REF) | (0, 1400, 2) [Godot (0.0, 0.015, 14.0)] | Megascans 'gravel ground' over 'packed dirt' (MI_Yard_Ground, MI_Yard_Path) · Fab Standard | WB 1309-1333 |  |
+| 3.5-17 | Sky: moonless night; overcast by day (no sodium, no moon) | SURFACE · sky | NO | - (OPEN) |  | SkyAtmosphere restored for the yard only, motivated · - | LB STATES NIGHT 'moonless windows'; AB s8 Day; RBR 3.5.3 | OPEN 3.5-C (the yard by day); OPEN 0-D (sodium spill) |
+| 3.5-18 | Hose reel, coal scuttle, bench by the door, bird feeder, coax spool (dressing mass to the 8 cap) | DRESSING | NO | various (RW) |  | Fab / Poly Haven searches (verify ids) · Fab Standard / CC0 | RBR 3.5.6 P5 (proposal) | Proposal, not canon |
+
+### 3.6 · SHED — The yard's shadow; tools that predate everyone. Single bulb, pull chain. [RB SHED]
+Budget I/L/D **1/1/6** [RB]; drift: the hasp's angle [RB]; web: shard site for the rebuild question (never stated) [RB]; RI zone: RI s1 EXT (the shed rows).
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.6-01 | Edith Craik's overflow boxes -> the QUIET ROOM key (felt-wrapped, tagged FOR THE QUIET ROOM) | INTERACTABLE · hero · pickup | YES — T4 · take — GT 679-680; WB 782 | box 0.4 x 0.3 x 0.3; key 0.06-0.08 (REF key_prop oversized - OPEN 0-H) (RW / REF) | (1000, 1400, 50) [Godot (10.0, 0.5, 14.0)] | Bespoke cardboard boxes (Fab 'cardboard boxes' starter) + key_prop; felt wrap under the M_Wool family · Fab Standard / Bespoke | RI s1 'Edith Craik's overflow boxes'; WB 781-782; GT 679-680; Doors.csv key id QUIET ROOM | The room's one I; the DEAD ROOM KEY of RI s1 = key id QUIET ROOM in the data |
+| 3.6-02 | Child's drawings of Chum, pre-show (in the boxes) | DRESSING · lore host (RI-only) | NO | 0.216 x 0.279 (RW) | in the boxes | M_Paper, crayon albedo · Bespoke | RI s1 | Not in LL: OPEN 3.6-B tier |
+| 3.6-03 | Padlock hasp on the door's inside face (RB: unlocked, always; drift: the hasp's angle) | DRESSING · drift | NO | hasp 0.15; padlock 0.05 (RW) | the door | part of the shed door build · Bespoke | RB SHED keynote + drift | Contradicts Doors.csv PADLOCKED · EDITH: OPEN 3.6-A |
+| 3.6-04 | Single bulb on a pull chain | DRESSING · practical | NO | bulb 0.06 dia; chain 0.3 (RW) | ceiling centre (1000, 1400, 290) proposed | Bespoke socket + true bulb (M_Practical); chain in maps · Bespoke | RB SHED 'Single bulb, pull chain' | EV OPEN |
+| 3.6-05 | Shelf of paint cans (x3) with the reason you came; a broom | DRESSING | NO | shelf 0.3 x 0.04 x 2.4 at 1.2 high; cans 0.16 dia x 0.2; broom 1.5 (REF) | (1120, 1400, 120) [Godot (11.2, 1.2, 14.0)] | Fab search 'paint can' / 'broom'; Poly Haven search 'paint bucket' (verify id) · Fab Standard / CC0 | WB 1411-1446 | Broom at Godot (8.9, 0.75, 15.1) |
+| 3.6-06 | Paint can labelled STAGE FLOOR '74 with a clean brush balanced across it, hardened mid-care | LORE-AMBIENT · T4 | NO — never prompts | can 0.17 dia x 0.19 (1 gal); brush 0.25 (RW) | the shelf | label M_Paper; hardened bristles in normal map · Bespoke | LL SHED [T4] |  |
+| 3.6-07 | Rod stock in a coil, felt scraps snagged on the cut ends | LORE-AMBIENT · T4, T1 | NO — never prompts | coil 0.5 dia; rod 0.006 (RW) | floor corner | AmbientCG Rope002 (verified 2026-09-04 per Phase 1 brief) for the coil as a curve; felt scraps alpha cards · CC0 / Bespoke | LL SHED [T4, T1] |  |
+| 3.6-08 | Pencil tally marks inside the door, groups of five, stopping at fifty-eight | LORE-AMBIENT · HC | NO — never prompts | decal 0.3 x 0.4 (RW) | the door's inner face | decal, graphite albedo · Bespoke | LL SHED [HC] |  |
+| 3.6-09 | Stencilled initials gone illegible | DRESSING · keynote | NO | decal 0.2 (RW) | door / wall | decal · Bespoke | RB SHED keynote |  |
+| 3.6-10 | Tools that predate everyone (bed: paint cans, wasp-quiet) | DRESSING | NO | hand tools 0.2-0.6 (RW) | wall / shelf | Fab search 'hand tools vintage'; Poly Haven search 'tools' (verify id) · Fab Standard / CC0 | RB SHED personality |  |
+| 3.6-11 | Surfaces: 3 x 3 x 3 box; corrugated / painted wood siding outside, bare studs inside | SURFACE | NO | 9 m2 floor (REF (Rooms.csv)) |  | Megascans 'corrugated metal' / 'painted wood siding' (MI_Shed_Ext); concrete floor · Fab Standard | Rooms.csv; RBR 3.5.4 |  |
+
+### 3.7 · CORRIDOR — The spine; the walk you will know blind. Spaced tungsten with authored gaps. [RB CORRIDOR]
+Budget I/L/D **1/0/6** [RB]; drift: notice board papers [RB]; web: bulbs die per casualty (B-R2) [RB]; RI zone: none (RI s10 CTL is CONTROL, not this).
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.7-01 | S1 at the library mouth (RB keynote) | INTERACTABLE · station (data places it in TAPE LIBRARY) | YES — T1 · sign — GT 485-486 | lectern per S5 (REF) | Stations.csv puts S1 LIBRARY LANDING at Godot (-1.2, 0, -11.8), i.e. inside TAPE LIBRARY | see TAPE LIBRARY row · Bespoke | RB CORRIDOR keynote 'S1 at the library mouth'; Stations.csv S1 | Counted in TAPE LIBRARY by the data; the corridor's I cap of 1 is then unused: OPEN 3.7-A |
+| 3.7-02 | Notice board (drift: papers) | DRESSING · drift · ambient host | NO | 0.9 x 0.6 (RW) | a long wall, mid-run (-148, -750, 160) proposed | Fab search 'cork board'; papers M_Paper · Fab Standard | RB CORRIDOR keynote + drift |  |
+| 3.7-03 | Yellowed memo: FOUND PROPERTY, ONE CHILD'S MITTEN, UNCLAIMED, dated three years before the fire, initialled and never taken down | LORE-AMBIENT · T2 | NO — never prompts | 0.216 x 0.279 (RW) | the notice board | M_Paper, yellowed · Bespoke | LL CORRIDOR [T2] | Rhymes with the desiccated mitten in CLIMATE (RI s7) - never stated |
+| 3.7-04 | Floor wax history: beneath the newest wax an older traffic lane bends toward the dead room's door | LORE-AMBIENT · T7 adjacent, HH | NO — never prompts | lane 0.6 wide (RW) | floor | roughness/normal lane under the wax layer · Bespoke | LL CORRIDOR; RB CORRIDOR keynote 'floor wax history' | The dead room (19, 2.5) is nowhere near the corridor (0, -7.5): OPEN 3.7-B |
+| 3.7-05 | S1's chained pen: the chain replaced twice, the pen never | LORE-AMBIENT · ritual, HC | NO — never prompts | pen 0.14; chain 0.4 (RW) | S1 (TAPE LIBRARY by data) | chain in maps; two chain generations by roughness · Bespoke | LL CORRIDOR [ritual, HC] | Follows S1 wherever 3.7-A rules |
+| 3.7-06 | Spaced tungsten fixtures with authored gaps (bulbs die per casualty, B-R2) | DRESSING · practical · state | NO | ceiling fixture 0.25 dia (RW) | count and gap positions OPEN | Bespoke fixtures with true bulbs; Fab search 'ceiling light industrial vintage' · Bespoke / Fab Standard | RB CORRIDOR; LB UE5 'CORRIDORS spaced tungsten with authored gaps'; reaction matrix B-R2 via RB web | EV OPEN |
+| 3.7-07 | CAM 1 · CORRIDOR camera mount + tally lamp (the rig at (0, 2.4, -10.6) looking at (0, 1.2, -4.5)) | INTERACTABLE · camera rig · route/read | OPEN — RI GLOBAL: T2 · route/read — Monitors.csv 'CAM 1 · CORRIDOR' | camera 0.3 x 0.3 x 0.5; tally 0.05 dia (RW) | (0, -1060, 240) [Godot (0.0, 2.4, -10.6)] | Bespoke security/studio camera; tally M_Practical red (red = watched) · Bespoke | Monitors.csv; WB 316-324; RI GLOBAL 'Camera mounts + tally lamps'; LB GRAMMAR | Tallies are shape-coded [RI GLOBAL]; kills persist until re-patched |
+| 3.7-08 | Surfaces: 3 x 7 spine; waxed floor with the older lane | SURFACE | NO | 21 m2 floor (REF (Rooms.csv)) |  | Megascans linoleum / 'waxed floor' (MI_Corridor_Floor); painted plaster; skirting · Fab Standard | Rooms.csv |  |
+
+### 3.8 · TAPE LIBRARY — A chapel of holdings; quiet is enforced by the room itself. [RB TAPE LIBRARY]
+Budget I/L/D **2/2/16** [RB]; drift: a spine reversed [RB]; web: Vess's country borders here; the crate lives deep [RB]; RI zone: RI s6 LIB.
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.8-01 | Compactus rolling stacks (player-cranked moving walls; the T3 chase geometry; noise draws attention at night) | INTERACTABLE · operate | OPEN — RI s6: T1 · operate | RW compactus range 0.9-1.0 per bay, 2.2 high, 0.6 deep double-sided; REF four FIXED tape_shelf 3.0 x 2.2 x 0.42 (RW / REF) | (-320, -1320, 0) [Godot (-3.2, 0.0, -13.2)] | Fab search 'archive shelving' / 'metal shelving' (starter set); crank wheel bespoke · Fab Standard / Bespoke | RI s6; prop_kit.gd tape_shelf 387-415; WB 1203-1216; RB TAPE LIBRARY 'chapel of holdings' | Rolling (RI) vs fixed (reference) - OPEN 3.8-A. Other shelves at Godot (3.2,-13.2) (-3.2,-18.8) (3.2,-18.8) |
+| 3.8-02 | Reel shelving + canisters: accession spines (browsable; retrieval objectives; one mislabelled decade) | DRESSING · ambient host (RI: inspect/take) | NO — RI s6: T1 · inspect/take (OPEN 3.8-E) | spines 0.035-0.06 x 0.24-0.30 x 0.30 (REF); RW 2-inch quad reel box 0.38 x 0.38 x 0.08; 16 mm can 0.19-0.38 dia (REF / RW) | the stacks | Spine rows as instanced meshes with seeded jitter (tape_shelf); labels M_Paper; Fab search 'film reel canister' · Bespoke / Fab Standard | RB TAPE LIBRARY keynote; RI s6; prop_kit.gd 402-414 |  |
+| 3.8-03 | The accession skip cluster, findable by anyone who runs a finger down the spines | LORE-AMBIENT · T5 | NO — never prompts | a gap in the numbering on the spines (RW) | one shelf run | spine labels in albedo; numbers skip 0118-0121 per D03 · Bespoke | LL TAPE LIBRARY [T5]; RB keynote 'the skip cluster findable'; PP D03 |  |
+| 3.8-04 | A spine reversed (drift) | DRESSING · drift | NO | one spine (REF) | the stacks | state on one instanced spine · Bespoke | RB TAPE LIBRARY drift |  |
+| 3.8-05 | Card catalog (search aid; Leland's cross-reference cards in green) | INTERACTABLE · operate | OPEN — RI s6: T1 · operate | 60-drawer cabinet 0.85 x 0.45 x 1.3 (RW) | near S1 proposed | Fab search 'card catalog cabinet'; Poly Haven search 'drawer' (verify id) · Fab Standard / CC0 | RI s6; RB keynote 'card catalog' | OPEN 3.8-E (cap) |
+| 3.8-06 | Card catalog drawer G: one card's corner scissored off cleanly, the cut older than the dust | LORE-AMBIENT · T5 | NO — never prompts | card 0.125 x 0.075 (RW) | drawer G, ajar | M_Paper; dust via roughness · Bespoke | LL TAPE LIBRARY [T5] |  |
+| 3.8-07 | Donations ledger line in Merle's hand: 27 REELS, ANONYMOUS, WATER DAMAGE, DO NOT ACCESSION, M.C. (no reels answer to it) | LORE-AMBIENT · T5 (missable forever) | NO — never prompts | ledger book 0.35 x 0.25 (RW) | OPEN where the donations ledger sits (not the bench's D03) | M_Paper · Bespoke | LL TAPE LIBRARY [T5] | OPEN 3.8-F |
+| 3.8-08 | S1 LOG STATION · LIBRARY LANDING (first save taught here; binder's first green note on first open) | INTERACTABLE · station | YES — T1 · sign — GT 485-486 | lectern per S5 (REF) | (-120, -1180, 0) [Godot (-1.2, 0.0, -11.8)] | Bespoke lectern family · Bespoke | Stations.csv S1; RI s6; WB 283-304 | RB homes S1 in the CORRIDOR: OPEN 3.7-A |
+| 3.8-09 | Station log drawer (airdate-math source one of four) | DRESSING · lore host (RI-only) | NO — RI s6: T2 · inspect | drawer 0.4 x 0.15 x 0.5 (RW) | in or beside S1 | bespoke · Bespoke | RI s6; player routing airdate circuit | OPEN 3.8-G tier |
+| 3.8-10 | FILM CABINET (media alcove flat file; LOCKED, key TRAINING; PRESERVE key / FORCE pry; runs the 1971 orientation film) | INTERACTABLE · locked · operate | YES — T2 · operate — GT 118-122 | 0.7 x 1.4 x 0.7, four drawer faces 0.62 x 0.28 (second sits proud) (REF) | (-540, -1900, 70) [Godot (-5.4, 0.7, -19.0)] | Fab search 'metal filing cabinet vintage'; painted steel M_Enamel · Fab Standard | WB 858-897; GT 118-120; RI s6 | Second I of two |
+| 3.8-11 | 16 mm projector for the instructional film (RI) - the reference runs the film FROM the cabinet | INTERACTABLE · operate (RI-only) | OPEN — RI s6: T2 · operate | as the REC projector (RW) | media alcove | as the REC projector · CC0 / Bespoke | RI s6 | OPEN 3.8-B: a second projector or the cabinet itself |
+| 3.8-12 | D06 HARRIET'S NOTE (film-cabinet index card, pencil, exhausted capitals; the seventh signal) - props packet home | LORE-HANDLED · readable D06 · post-training-film gate | YES — read — GT 218 | index card 0.125 x 0.075 (RW) | film cabinet (PP); reference at REC (2.8, 0.55, 2.2); RB says GREEN ROOM | M_Paper · Bespoke | PP D06; RB GREEN ROOM 'D06's home'; WB 899-915 | OPEN 3.8-C (three homes) |
+| 3.8-13 | DAILIES canisters (SPAWN one per capture, labelled SCENE 4 TAKE n; carry to the CLIMATE degausser; unburned feed the Coverage Director) | INTERACTABLE · pickup · SPAWN · DYN | YES — SPAWN · take — GT 79, 159 | canister 0.6 dia x 0.16 collision (REF); RW 2-inch reel box 0.38 sq or 16 mm can 0.19 dia (REF / RW) | (-350, -1400, 35) [Godot (-3.5, 0.35, -14.0)] | Bespoke canister with SCENE/TAKE label M_Paper · Bespoke | dailies_manager.gd SLOTS 5-9; RI s6; GT 79 | Slots at Godot (-3.5,-14.0) (2.5,-18.5) (4.0,-13.0) (-4.5,-19.0) + 0.4 x per cycle. rooms_also: CLIMATE, BENCH ROOM |
+| 3.8-14 | Leland's desk (green pens, tidy abandonment; T3 reveals the mid-sentence final note) | DRESSING · DYN · lore host | NO — RI s6: T1 · inspect · DYN | 1.2 x 0.6 x 0.75 (RW) | a stack end proposed | Poly Haven search 'desk' (verify id); pens bespoke · CC0 / Bespoke | RI s6 |  |
+| 3.8-15 | D01 LELAND MERRICK'S CATALOG NOTES (green ink, four steno pages; page 4 inside the seance reel's box, gated by the crate) | LORE-HANDLED · readable D01 | YES — read (pages 1-3 here; page 4 with the reel) — none in the reference (not built) | steno sheets 0.15 x 0.23 (RW) | PP: LIB compactus; RB: SCENE DOCK 'D01's shelf' | M_Paper; fountain-pen green albedo · Bespoke | PP D01; RB SCENE DOCK keynote | OPEN 3.8-D (home); not in world_builder.gd |
+| 3.8-16 | Rail ladder (vertical stack access; creaks on a fixed note) | DRESSING · RI: operate | OPEN — RI s6: T1 · operate | rolling ladder 2.4 high (RW) | a stack run | Fab search 'library ladder' · Fab Standard | RI s6 | OPEN 3.8-E (cap) |
+| 3.8-17 | Stack-end lamps (cool practicals); bed: HVAC breath, ballast tick | DRESSING · practical | NO | lamp 0.3 (RW) | one per stack end proposed | Fab search 'industrial lamp'; M_Practical · Fab Standard | RB TAPE LIBRARY 'Cool practicals, stack-end lamps' | EV OPEN |
+| 3.8-18 | CAM 2 · STACKS camera mount + tally (rig at (0, 2.4, -20.4) looking at (0, 1.2, -12.0); its monitor sits in the BENCH ROOM) | INTERACTABLE · camera rig · route/read | OPEN — RI GLOBAL: T2 · route/read — Monitors.csv 'CAM 2 · STACKS' | camera 0.3 x 0.3 x 0.5; tally 0.05 (RW) | (0, -2040, 240) [Godot (0.0, 2.4, -20.4)] | Bespoke camera; tally M_Practical · Bespoke | Monitors.csv; RI GLOBAL |  |
+| 3.8-19 | Surfaces: 12 x 10; floor, walls, ceiling | SURFACE | NO | 120 m2 floor (REF (Rooms.csv)) |  | Megascans industrial concrete / linoleum (MI_TapeLibrary_Floor); painted brick (MI_TapeLibrary_Wall) · Fab Standard | Rooms.csv; FAB-IMPORT starter | RB web 'the crate lives deep' - which crate is OPEN 3.8-H |
+
+### 3.9 · BENCH ROOM — Rita's altar; the game's heart at 9,-16. Task lamp truth over the bench, warm elsewhere. [RB BENCH ROOM]
+Budget I/L/D **3/1/8** [RB]; drift: none here ever (trust law) [RB]; web: everything routes through this room's verbs [RB]; RI zone: RI s8 BEN.
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.9-01 | THE BENCH: workbench with the tape transport (reel deck) - capture runs real time | INTERACTABLE · hero | YES — T1 · operate — GT 48, 183 | top 1.8 x 0.08 x 0.8 at 0.92 high; legs 0.08 sq x 0.92; reel deck 0.72 x 0.5 x 0.16 (REF); RW a 2-inch quad VTR (Ampex VR-2000 class) is a console 1.65 high x 1.2 x 0.75 (REF / RW) | (900, -1760, 50) [Godot (9.0, 0.5, -17.6)] | Bespoke (Blender): no CC0 quad VTR exists; Poly Haven search 'reel to reel' (verify id) for a donor deck · Bespoke / CC0 | WB 327-366; prop_kit.gd reel_deck 294-322; RB BENCH ROOM 'THE BENCH'; RI s8; AB s7 BENCH | OPEN 3.9-A: the reference deck is a bench-top audio deck while the ledger's '2in master' [PP D03] implies quad; scale truth undecided |
+| 3.9-02 | Bench monitor / monitor bank (the room's only saturated light) | DRESSING · event · phosphor | NO — RI s8: T1 · inspect | REF crt_shell; RW 19-inch broadcast monitor 0.5 x 0.45 x 0.45 (REF / RW) | (900, -1882, 155) [Godot (9.0, 1.55, -18.82)] | prop_kit crt_shell brief; M_Phosphor; Fab search 'crt monitor vintage' · Bespoke / Fab Standard | WB 367-370; AB s7 BENCH; RI s8 'Monitor bank' |  |
+| 3.9-03 | GEN KNOB (cycle the generation shown) | INTERACTABLE · knob | YES — T1 · operate — GT 191 | REF 0.2 dia x 0.12; RW knob 0.05 dia (REF / RW) | (1020, -1850, 100) [Godot (10.2, 1.0, -18.5)] | Bespoke; fluted brass cap (prop_kit knob) · Bespoke | WB 371-389; GT 191 | OPEN 3.9-C (I count) |
+| 3.9-04 | ACCESSION LEDGER (D03; the paper economy's altar; the T5 three-entry decision; GEN stamps) | INTERACTABLE · readable D03 · commit/sign | YES — T1 · commit/sign — GT 85-87 | green-columned ledger 0.35 x 0.25 x 0.04; dock body REF 0.45 (RW / REF) | (820, -1620, 90) [Godot (8.2, 0.9, -16.2)] | M_Paper 4K (readable); dock family · Bespoke | WB 1019-1022; PP D03; RB keynote 'the decision LEDGER with D03'; RI s8 | The room's one handled L, and an I |
+| 3.9-05 | LEDGER MARGIN (credit the insight, 'per V. Keys') | INTERACTABLE · part of the ledger object | YES — T2+ · credit — GT 65, 694 | dock body REF 0.45 (REF) | (740, -1520, 90) [Godot (7.4, 0.9, -15.2)] | fold into the ledger asset in the port · Bespoke | WB 1056-1059; GT 65; RB PATCH BAY keynote 'the credit margin' | RB puts 'the credit margin' in PATCH BAY: OPEN 3.16-C |
+| 3.9-06 | SPECTROGRAM dock (the audio bench; pull the sidebands; Asset 1 extraction) | INTERACTABLE · dock | YES — T2 · operate — GT 634-636 | dock body REF 0.45; RW spectrum analyser 0.4 x 0.3 x 0.2 (REF / RW) | (1060, -1720, 90) [Godot (10.6, 0.9, -17.2)] | Poly Haven search 'oscilloscope' (verify id) as donor; M_Phosphor trace · CC0 / Bespoke | WB 1012-1015; RI s8 'Audio bench + spectrogram' |  |
+| 3.9-07 | 1977 DOCK (thread the fire tape; watch it again) | INTERACTABLE · dock | YES — T3+ · operate — GT 128-129, 665 | dock body REF 0.45 (REF) | (780, -1840, 90) [Godot (7.8, 0.9, -18.4)] | dock family · Bespoke | WB 392-396; fire_tape_dock.gd | RB FIRE CORRIDOR keynote names 'the FIRE TAPE DOCK' there: OPEN 3.9-B |
+| 3.9-08 | SEANCE REEL dock (the impossible tape; the jog/shuttle seance verb from T4) | INTERACTABLE · dock | YES — T4 · operate — GT 608-609 | dock body REF 0.45; RW jog wheel 0.1 dia (REF / RW) | (780, -1720, 90) [Godot (7.8, 0.9, -17.2)] | dock family + jog wheel · Bespoke | WB 397-401; seance_dock.gd; RI s8 'Jog/shuttle wheel' | RB SCENE DOCK keynote names 'the SEANCE DOCK' there: OPEN 3.20-A |
+| 3.9-09 | Asset rack / shelf (collected Sign-Off assets rack visibly: verse transcription, ID cart, script, card) | DRESSING · DYN | NO — RI s8: DYN · inspect | shelf 1.2 x 0.25 at 2.35 high (REF position) (REF) | (900, -1882, 235) [Godot (9.0, 2.35, -18.82)] | Bespoke shelf; 'reads amber against dust' [AB s7] · Bespoke | WB 1016-1018; RI s8 'Asset shelf'; AB s7 |  |
+| 3.9-10 | Splice block, blades, leader in surgical order (THE SPLICING BLOCK: joined takes yield a daily) | INTERACTABLE · operate | YES — T1 · operate — GT 548 | RW 2-inch quad splicing block 0.3 x 0.1 x 0.05; razor blades; leader reel 0.15 dia (RW) | on the bench top | Bespoke; steel M_Enamel-free brushed · Bespoke | RB keynote 'splice tools in surgical order'; RI s8; GT 548 | OPEN 3.9-C: own prompt or a bench mode |
+| 3.9-11 | Splice blade log: blades changed weekly for years, then a four-month gap in 1977, then weekly in a different hand | LORE-AMBIENT · HF, T6 | NO — never prompts | sheet 0.216 x 0.279 on a clip (RW) | beside the splice block | M_Paper · Bespoke | LL BENCH ROOM [HF, T6] |  |
+| 3.9-12 | L.M. scratched shallow under the bench lip where only a cleaner's hand would find it | LORE-AMBIENT · T3 | NO — never prompts | letters 0.02 (RW) | under the bench lip | normal-map detail only (PLAN R.2) · Bespoke | LL BENCH ROOM [T3] |  |
+| 3.9-13 | Task lamp (truth over the bench; one warm task lamp) | DRESSING · practical | NO | architect lamp arm 0.8, shade 0.15 dia (RW) | clamped to the bench's -X end proposed | Fab search 'desk lamp vintage'; M_Practical; true bulb · Fab Standard | RB BENCH ROOM 'Task lamp truth over the bench'; AB s7 | EV OPEN |
+| 3.9-14 | Bake oven (timed thermal holds; Destroy-path tool from T4) | INTERACTABLE · operate (RI-only) | OPEN — RI s8: T1 · operate | lab oven 0.5 x 0.5 x 0.6 (RW) | against the +X wall proposed | Fab search 'laboratory oven' · Fab Standard | RI s8 | OPEN 3.9-C |
+| 3.9-15 | TBC unit (the photosensitivity device, diegetic) | INTERACTABLE · operate (RI-only) | OPEN — RI s8: T1 · operate | 19-inch 2U 0.48 x 0.09 x 0.4 (RW) | rack under the monitor | Bespoke rack unit · Bespoke | RI s8; accessibility matrix (photosensitivity) via PLAN s1 | OPEN 3.9-C |
+| 3.9-16 | Waveform + vector scopes (the zero-loss anomaly is read here) | DRESSING · inspect · phosphor | NO — RI s8: T1 · inspect | 0.22 x 0.13 x 0.45 each (Tektronix class) (RW) | beside the monitor | Poly Haven search 'oscilloscope' (verify id); M_Phosphor · CC0 | RI s8 |  |
+| 3.9-17 | Bench notepad (seance questions, five canonical; T4 write) | INTERACTABLE · write (RI-only) | OPEN — RI s8: T4 · write | pad 0.15 x 0.23 (RW) | bench top | M_Paper · Bespoke | RI s8 | OPEN 3.9-C |
+| 3.9-18 | Glove box + lamp (ritual props; the gloves are the player's face) | DRESSING | NO — RI s8: T1 · use | box 0.25 x 0.12 x 0.1 (RW) | bench top | Bespoke; cotton gloves cloth · Bespoke | RI s8; GT 499 (Merle on the gloves) |  |
+| 3.9-19 | CAM 2 · STACKS monitor on the bench room's -Y (north) wall | INTERACTABLE · monitor · read | OPEN — RI GLOBAL: T2 · read — Monitors.csv 'CAM 2 · STACKS' | CRT 0.5 x 0.45 (REF / RW) | (720, -1318, 170) [Godot (7.2, 1.7, -13.18)] | crt_shell brief; M_Phosphor · Bespoke | Monitors.csv; WB 316-324 | OPEN 0-I |
+| 3.9-20 | The impossible-tapes crate (lives here from T4.1) | INTERACTABLE · pickup · EVT (see ENTRY) | YES — T4 · BEN — GT 379 | see ENTRY (REF) | at the bench after delivery - position OPEN | see ENTRY · Bespoke | RI GLOBAL 'The impossible-tapes crate' | rooms_also: ENTRY |
+| 3.9-21 | Surfaces: 6 x 6; paper stock and ledger green dominate | SURFACE | NO | 36 m2 floor (REF (Rooms.csv)) |  | Megascans linoleum (MI_BenchRoom_Floor); painted plaster (MI_BenchRoom_Wall) tinted toward ledger green #596B52 [AB s4] · Fab Standard | Rooms.csv; AB s7 BENCH | Drift FORBIDDEN here [RB] |
+
+### 3.10 · CLIMATE — The building's lungs. Green gauge glow, grille shadows. [RB CLIMATE]
+Budget I/L/D **1/1/6** [RB]; drift: one needle's rest point [RB]; web: the hum settles a cent flat when ritual holds [RB]; RI zone: RI s7 CLM.
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.10-01 | THE DEGAUSSER (burns dailies = strike removal; the archive on the Destroy path; humming coil, felt-lined throat) | INTERACTABLE · hero | YES — T1 · inspect; T4 · operate — GT 96-97, 159 | REF 1.2 x 0.9 x 0.8 + coil ring 0.6 dia at 0.42; RW bulk tape eraser 0.4 x 0.3 x 0.2 (tabletop) or a floor unit 0.6 x 0.5 x 1.0 (REF / RW) | (1425, -1760, 55) [Godot (14.25, 0.55, -17.6)] | Bespoke; hazard stripe OCHRE (REF) - warning red is reserved [AB s4]; coil hum 120/240 Hz ToneEmitter [WB 848-853] · Bespoke | WB 809-855; RI s7; GT 96-97 | OPEN 3.10-A scale (reference is cabinet-sized) |
+| 3.10-02 | Reel racks (nightly retrieval objectives; the errand that baits the T3 chase) | INTERACTABLE · take (RI-only) | OPEN — RI s7: T1 · take | steel shelving 0.9 x 0.45 x 1.8 (RW) | -X wall proposed | Megascans 'metal shelving' (starter set) · Fab Standard | RI s7 | OPEN 3.10-B (cap 1 already spent on the degausser) |
+| 3.10-03 | Gauges with handwritten ranges (green gauge glow, grille shadows) | DRESSING · practical (phosphor as data) · ambient host | NO | gauge 0.1 dia (RW) | the transmitter wall (+X) proposed | Fab search 'pressure gauge'; needle red allowed? no - warning red is slates/tallies/breaker only [AB s4]; glow M_Phosphor · Fab Standard | RB CLIMATE keynote; LB GRAMMAR 'phosphor illuminates data, never rooms' |  |
+| 3.10-04 | Gauge nearest the transmitter wall wears a heat crack; its twin does not | LORE-AMBIENT · HF | NO — never prompts | crack 0.05 (RW) | the +X gauge | normal/albedo crack · Bespoke | LL CLIMATE [HF] |  |
+| 3.10-05 | One needle's rest point drifts | DRESSING · drift | NO | needle 0.05 (RW) | one gauge | rotation state · Bespoke | RB CLIMATE drift |  |
+| 3.10-06 | Filter log ending mid-1977 and resuming with no explanation and better handwriting | LORE-AMBIENT · HF, T6 | NO — never prompts | clipboard 0.23 x 0.32 (RW) | hung on the HVAC unit | M_Paper; two hands · Bespoke | LL CLIMATE [HF, T6]; RB CLIMATE keynote |  |
+| 3.10-07 | Maintenance tag signed by three initial-sets across one decade, the third only after 1974 | LORE-AMBIENT · T4 | NO — never prompts | tag 0.07 x 0.14 on wire (RW) | the HVAC unit | M_Paper card on wire · Bespoke | LL CLIMATE [T4] |  |
+| 3.10-08 | Hygrometer + thermograph (drum recorder; one night's trace shows a spike no thermostat explains) | DRESSING · inspect | NO — RI s7: T1 · inspect | hygrothermograph 0.3 x 0.2 x 0.2 (RW) | shelf | Bespoke; drum chart M_Paper · Bespoke | RI s7 |  |
+| 3.10-09 | HVAC / compressor unit (the building's lungs; bed: the deepest hum, compressor cycles; the hum settles a cent flat when ritual holds) | DRESSING | NO | air handler 1.2 x 0.8 x 1.5; grilles 0.6 x 0.3 (RW) | +X/-Y corner proposed | Fab search 'hvac unit industrial'; Megascans 'riveted metal panel' · Fab Standard | RB CLIMATE personality, bed, web |  |
+| 3.10-10 | Bake supplies (feed the oven workflow at the bench) | DRESSING | NO — RI s7: T1 · use | boxes 0.3 (RW) | shelf | Fab 'cardboard boxes' starter · Fab Standard | RI s7 |  |
+| 3.10-11 | Silica bins (one holds a single small mitten, desiccated) | DRESSING · lore host (RI-only) | NO — RI s7: T1 · inspect | bin 0.4 x 0.3 x 0.3; mitten 0.15 (RW) | floor | Bespoke bins; mitten under the M_Wool family · Bespoke | RI s7 | Rhymes with the CORRIDOR memo; never stated. OPEN 3.10-C tier |
+| 3.10-12 | Surfaces: 4.5 x 6; grille shadows | SURFACE | NO | 27 m2 floor (REF (Rooms.csv)) |  | Megascans industrial concrete (MI_Climate_Floor); painted brick · Fab Standard | Rooms.csv |  |
+
+### 3.11 · TRANSMITTER HALL — The plant; a cathedral that never sleeps. Phosphor and pilot lamps, S4 in the aisle. [RB TRANSMITTER HALL]
+Budget I/L/D **2/1/10** [RB]; drift: never (the plant is honest) [RB]; web: he syncs to this room's hum while performing; V2 ends here at circuit F [RB]; RI zone: RI s17 TH.
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.11-01 | THE TRANSMITTER: rack cabinets x4 along the +X wall (vent slats, dial gauges, one warm pilot lamp each, the big handle); the hum floor 55/110 Hz | INTERACTABLE · hero (RI: inspect only) | OPEN — RI s17: T3 · inspect | REF 0.9 x 2.4 x 0.7 each; RW UHF transmitter bay 2.0 high x 0.6-0.9 x 0.8 (REF / RW) | (2040, -200, 0) [Godot (20.4, 0.0, -2.0)] | Fab search 'electrical cabinet industrial' / 'server rack vintage'; bespoke gauges; Megascans 'riveted metal panel', 'steel plate' · Fab Standard / Bespoke | prop_kit.gd transmitter_cabinet 420-476; WB 1218-1227, 918-926; RB TRANSMITTER HALL keynote; RI s17 | Cabinets at Godot z -2.0, -4.5, -7.0, -9.5. Never drifts ('the plant is honest'). OPEN 3.11-A: is the transmitter an I or dressing |
+| 3.11-02 | Breaker rows (keynote) | DRESSING · ambient host | NO | breaker handle 0.1; row 1.0 (RW) | on the cabinets / a wall board | M_Enamel; warning red on breakers permitted [AB s4] · Bespoke | RB TRANSMITTER HALL keynote 'breaker rows' | RI s12 places 'Breaker panel' in the patch bay: OPEN 3.16-B |
+| 3.11-03 | Breaker F's handle is newer than its row, the enamel around it re-fired (V2 ends here at circuit F) | LORE-AMBIENT · foreshadow, HV | NO — never prompts | handle 0.1 (RW) | the breaker row | roughness/albedo difference only · Bespoke | LL TRANSMITTER HALL [foreshadow, HV]; RB web 'V2 ends here at circuit F' |  |
+| 3.11-04 | Warning placards in period voice: DE-ENERGIZE BEFORE SERVICE; under raking light an older painted-over line ghosts through: IT STAYS ON | LORE-AMBIENT · never-stated | NO — never prompts | placard 0.3 x 0.2 (RW) | cabinet face / wall | M_Enamel with a ghost layer in normal + subtle albedo (reads only under raking light) · Bespoke | LL TRANSMITTER HALL; RB keynote 'warning placards in period voice' | Never explained by any system |
+| 3.11-05 | Dymo strip on the rack, not Vess's font: AUDIENCE FEED, DO NOT MONITOR, green | LORE-AMBIENT · T3, T2 | NO — never prompts | strip 0.1 x 0.012 (RW) | a rack rail | embossed tape in normal + green albedo · Bespoke | LL TRANSMITTER HALL [T3, T2] |  |
+| 3.11-06 | S4 LOG STATION · TRANSMITTER THRESHOLD (hosts the singular pre-signed page, dated tomorrow) | INTERACTABLE · station · EVT | YES — T3 · sign · EVT — GT 485-486 | lectern per S5 (REF) | (1450, -1140, 0) [Godot (14.5, 0.0, -11.4)] | Bespoke lectern family · Bespoke | Stations.csv S4; RI s17; PP D03 'the presigned page's site' |  |
+| 3.11-07 | High-voltage cage (placarded; never a hazard to life per the one-source rule) | DRESSING | NO — RI s17: T3 · inspect | mesh cage 2.0 x 2.0 x 2.2 (RW) | +X/-Y corner proposed | Poly Haven metal_grate_rusty (verified 2026-09-04 per Phase 1 brief) as an alpha; Fab search 'wire mesh' · CC0 / Fab Standard | RI s17 |  |
+| 3.11-08 | Storage cage: Craik's boxes -> CRAIK'S BOX (the finale script, Asset 4; cue-shorthand notebooks; beneath, the childhood radio scripts = the Dead Air item) | INTERACTABLE · pickup (read_id D02 in the code) | YES — T3 · take — GT 689; flavour WB 1036 | boxes 0.4 x 0.3 x 0.3; script 0.216 x 0.279 typed; dock body REF 0.45 (RW / REF) | (1620, -1000, 50) [Godot (16.2, 0.5, -10.0)] | Bespoke boxes (Fab 'cardboard boxes'); script M_Paper 4K · Fab Standard / Bespoke | WB 1032-1039; RI s17; PP D02 | D02 identity conflict (registry OPEN R-1). rooms_also: BENCH ROOM (asset rack after retrieval) |
+| 3.11-09 | REEL · 1977 · THE FINALE, UNFINISHED (the fire tape pickup) | INTERACTABLE · pickup | YES — take — GT 145, 667 | dock body REF 0.45; RW 2-inch reel box 0.38 sq x 0.08 (REF / RW) | (1700, -1000, 45) [Godot (17.0, 0.45, -10.0)] | dock family; reel box M_TapeStock-adjacent card · Bespoke | WB 402-406; GT 145 | Format (quad reel vs 16 mm) OPEN 3.11-B |
+| 3.11-10 | Tool wall: BOLT CUTTERS and THE DRILL (the FORCE instruments; taking either logs itself) | INTERACTABLE · pickups (RI-only) | OPEN — RI s17: T4 · take | bolt cutters 0.75; drill 0.25 x 0.2 (RW) | -X wall proposed | Fab search 'bolt cutters', 'hand drill vintage'; Poly Haven search 'tools' (verify id) · Fab Standard / CC0 | RI s17; game master 'Locked shed' table | Not in the reference build; cap breach OPEN 3.11-A |
+| 3.11-11 | Transformer catwalk (loose notebook pages for the thorough; noisy) | DRESSING · traverse | NO — RI s17: T3 · traverse | grating 0.9 wide (RW) | along the +X wall above the cabinets proposed | Megascans 'metal grate'; pages M_Paper · Fab Standard | RI s17 | OPEN 3.11-C (no catwalk in the data) |
+| 3.11-12 | The dead room door (felt-faced; LOCKED · the hum stops at the seam; key QUIET ROOM; FORCE = the drill, seal never perfect again) | INTERACTABLE · door · locked | YES — T3 · inspect; T4 · operate — Doors.csv TRANSMITTER HALL-DEAD ROOM | door 1.2 wide x 2.2; felt face 0.02 (REF / RW) | gap (1900, 0) in the hall's +X wall | Door leaf with felt face under the M_Wool family (dead-room gray [AB s3]) · Bespoke | Doors.csv; RI s17; LAWS 11 |  |
+| 3.11-13 | Pilot lamps (one warm per cabinet) + phosphor + the hall's own fixtures | DRESSING · practical | NO | lamp 0.044 dia (REF) (REF) | on the cabinets | emissive lamps with true bulbs; volumetrics motivated here only · Bespoke | RB 'Phosphor and pilot lamps'; LB UE5 TECHNICALS 'the transmitter hall only' | EV OPEN |
+| 3.11-14 | Contactor cabinet (bed: contactor clacks); mains as organ note | DRESSING | NO | 0.3 x 0.2 x 0.4 (RW) | wall | Fab search 'electrical box' · Fab Standard | RB TRANSMITTER HALL bed |  |
+| 3.11-15 | Surfaces: 8.5 x 13 cathedral; steel plate floor, riveted panels | SURFACE | NO | 110 m2 floor (REF (Rooms.csv)) |  | Megascans steel plate / industrial concrete (MI_TransmitterHall_Floor); riveted painted metal panel (MI_TransmitterHall_Wall) · Fab Standard | Rooms.csv; FAB-IMPORT starter |  |
+
+### 3.12 · DEAD ROOM — Already doctrined; the one dark hide. Single flat toplight, near-zero bounce. [RB DEAD ROOM]
+Budget I/L/D **1/1/3** [RB]; drift: forbidden [RB]; web: deaf to noise; he holds at its door [RB]; RI zone: RI s18 DR.
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.12-01 | THE RADIO (radio rack; the Dead Air instrument: re-patch in Phase 1, sign-off in Phase 3; its dial the room's only specular object) | INTERACTABLE · hero | YES — T4 · inspect; T5 · operate — none in the reference (not built) | RW console radio 0.6 x 0.3 x 0.4, or a 19-inch rack 0.6 x 0.6 x 1.8 - OPEN 3.12-A (RW) | against the -Y felt wall proposed | Poly Haven vintage_radio_transceiver (verified 2026-09-04 per Phase 1 brief) as the donor; dial glass M_Practical · CC0 / Bespoke | RB DEAD ROOM keynote 'the RADIO'; RI s18; AB s7 DEAD ROOM | The room's one I |
+| 3.12-02 | The radio's dial is fixed at 58 with a dot of nail polish | LORE-AMBIENT · HC | NO — never prompts | dot 0.004 (RW) | the dial | albedo dot + slight gloss · Bespoke | LL DEAD ROOM [HC] |  |
+| 3.12-03 | Wedge foam walls / felt lining (near-zero bounce; the hum stops at the seam) | SURFACE · acoustic lining | NO — RI s18: T4 · inspect | REF felt panels 0.6 x 2.0 x 0.05 in runs of 3.6 / 4.4 / 4.4 m; RW anechoic wedge 0.3 base x 0.6 deep (REF / RW) | (1900, 480, 0) [Godot (19.0, 0.0, 4.8)] | Fab search 'acoustic foam'; felt under the M_Wool family, dead-room gray [AB s3]; mattest room in the game · Fab Standard / Bespoke | prop_kit.gd felt_run 526-534; WB 1257-1262; RB DEAD ROOM; LB UE5 'DEAD ROOM one flat toplight' | Runs at Godot (19.0, 4.8) yaw pi, (17.2, 2.5) yaw pi/2, (20.8, 2.5) yaw -pi/2 |
+| 3.12-04 | One foam wedge cut out and re-glued inverted, the seam careful | LORE-AMBIENT · HH | NO — never prompts | one wedge (RW) | a wall panel at eye height | one instance flipped; glue seam in normal · Bespoke | LL DEAD ROOM [HH] |  |
+| 3.12-05 | The felt door (inside face; closing it from inside is stepping outside the format) | INTERACTABLE · door | YES — T4 · operate — Doors.csv (see TRANSMITTER HALL row) | 1.2 x 2.2 (REF) | gap (1900, 0) | see TRANSMITTER HALL · Bespoke | RI s18; RB keynote 'the felt door'; LAWS 11 'he holds at its felt door' |  |
+| 3.12-06 | Inside the felt door at knee height, the nap worn through in one hand-sized place, from the inside | LORE-AMBIENT · T7 adjacent | NO — never prompts | patch 0.15 at Z ~50 uu (RW) | the door's inner face | roughness/normal + albedo wear · Bespoke | LL DEAD ROOM [T7 adjacent] | 'worse the longer you look' |
+| 3.12-07 | Patch panel (the three-step re-route, left looking untouched) | INTERACTABLE · operate (RI-only) | OPEN — RI s18: T5 · operate | 19-inch jackfield 0.48 x 0.09 (RW) | in the radio rack | Bespoke rack unit · Bespoke | RI s18 | OPEN 3.12-C (cap; may be part of THE RADIO) |
+| 3.12-08 | Music stand (holds the childhood script beside the finale script) | DRESSING · RI: use | OPEN — RI s18: T5 · use | 1.2 high (RW) | centre | Fab search 'music stand' · Fab Standard | RI s18 | OPEN 3.12-C |
+| 3.12-09 | Craik's chair (worn where a boy's heels would kick) | DRESSING · biography | NO — RI s18: T4 · inspect | wooden chair 0.45 x 0.45 x 0.85 (RW) | facing the radio | Poly Haven search 'wooden chair' (verify id); heel wear in maps · CC0 | RI s18 |  |
+| 3.12-10 | Single flat toplight (light goes here to die too) | DRESSING · practical | NO | diffuser 0.6 x 0.6 (RW) | ceiling centre (1900, 250, 295) | Bespoke flat panel, M_Practical · Bespoke | RB DEAD ROOM; LB UE5 TECHNICALS | AB s8 says 'Dead room: no key at all' - OPEN 3.12-B |
+| 3.12-11 | Surfaces: 4 x 5; palette entirely fog and slate; mattest room | SURFACE | NO | 20 m2 floor (REF (Rooms.csv)) |  | Felt/carpet floor under the M_Wool family; fog #666B6B, slate #5C5C61 [AB s4] · Bespoke | Rooms.csv; AB s7 DEAD ROOM | Drift forbidden [RB] |
+
+### 3.13 · FIRE CORRIDOR — The scar; 1977 under two coats of paint. Deliberately underlit, one honest bulb. [RB FIRE CORRIDOR]
+Budget I/L/D **1/1/5** [RB]; drift: the shadowline does not drift and players will swear it does [RB]; web: the wake begins here [RB]; RI zone: RI s9 FIRE.
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.13-01 | Sealed door, library side (SEALED · reopens for the anniversary, Tape 4) | INTERACTABLE · door · locked | YES — T4 · operate — Doors.csv TAPE LIBRARY-FIRE CORRIDOR | gap 1.4; leaf 2.2 (REF) | gap (-600, -1600) in the library's -X wall | Fab search 'steel door industrial'; seal tape / plastic in decals · Fab Standard | Doors.csv; RI s9 |  |
+| 3.13-02 | THE FIRE TAPE DOCK (RB keynote) - the reference builds the 1977 DOCK in the BENCH ROOM | INTERACTABLE · hero (per RB) | OPEN — GT 665 (see BENCH ROOM) | dock body REF 0.45 (REF) | none here in the data | dock family · Bespoke | RB FIRE CORRIDOR keynote 'the FIRE TAPE DOCK'; WB 392-396 (bench) | OPEN 3.9-B / 3.13-A: which room holds it |
+| 3.13-03 | Char shadowline at knee height under two coats of paint (does not drift, and players will swear it does) | LORE-AMBIENT · HF | NO — never prompts | band at Z ~50 uu along both walls (RW) | both long walls | Megascans 'soot/burn edges' decal (starter set) under two paint layers in albedo; PLAN R.2 · Fab Standard | LL FIRE CORRIDOR [HF]; RB keynote 'char shadowline at knee height' |  |
+| 3.13-04 | Hydrant post nobody repainted; the repaint stops at a masking-tape line and the tape was never pulled | DRESSING · keynote · ambient host | NO | RW interior standpipe / hose-valve post ~1.0 high x 0.15 - OPEN 3.13-C what an indoor 'hydrant post' is (RW) | mid-corridor -Y wall proposed | Fab search 'standpipe' / 'fire hydrant'; masking tape decal · Fab Standard | RB FIRE CORRIDOR keynote; LL FIRE CORRIDOR [HF] |  |
+| 3.13-05 | Masking-tape line, never pulled | LORE-AMBIENT · HF (work interrupted) | NO — never prompts | tape 0.025 wide (RW) | the hydrant post | decal · Bespoke | LL FIRE CORRIDOR [HF] |  |
+| 3.13-06 | Door hinge on the dock side replaced with one brass screw among steel | LORE-AMBIENT · T4 | NO — never prompts | screw 0.005 (maps) (RW) | the STAGE HALL door hinge (-1200, -1750)? - OPEN 3.13-B which door is 'the dock side' | metallic/albedo dot in maps · Bespoke | LL FIRE CORRIDOR [T4] |  |
+| 3.13-07 | Char under plastic sheeting (the 1977 wound preserved like a relic; sheeting breathes with drafts) | DRESSING | NO — RI s9: T4 · inspect | sheeting 2 x 3 (RW) | a wall bay | Fab search 'plastic sheet'; cloth sim or vertex animation for the breathing · Fab Standard | RI s9 |  |
+| 3.13-08 | Melted fixtures, scorched frames; one frame's photo survived: the 1974 live audience, front row circled in someone's hand | DRESSING · lore host (RI-only) | NO — RI s9: T4 · inspect | frame 0.3 x 0.4; melted fixture 0.3 (RW) | wall | Bespoke melted fixture (sculpt); photo M_Paper · Bespoke | RI s9 | OPEN 3.13-D tier (not in LL) |
+| 3.13-09 | One honest bulb (deliberately underlit) | DRESSING · practical | NO | bulb 0.06 in a cage 0.15 (RW) | ceiling, off-centre | Bespoke caged bulb, M_Practical · Bespoke | RB FIRE CORRIDOR 'one honest bulb' | EV OPEN |
+| 3.13-10 | Surfaces: 7.5 x 3; two coats of paint over char; 'this hall eats sound politely' | SURFACE | NO | 22.5 m2 floor (REF (Rooms.csv)) |  | Megascans painted plaster aged (MI_FireCorridor_Wall) with soot decals; concrete floor · Fab Standard | Rooms.csv; RB FIRE CORRIDOR | The elbow (T4 N EVT, once ever) is an event, not a prop; its name appears in no code file [LAWS 3] |
+
+### 3.14 · STAGE HALL — The wings' approach; anticipation as architecture. Borrowed studio spill through the door crack. [RB STAGE HALL]
+Budget I/L/D **0/1/6** [RB]; drift: sandbag count [RB]; web: the FM's point (F-R1) reads best from here [RB]; RI zone: none (RI s14 CAT's ladders touch it).
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.14-01 | Window opening to STUDIO A (the sightline tease of the stage) | SURFACE · opening | NO — Doors.csv STAGE HALL-STUDIO A 'window' | gap 1.6; sill 0.9 + header 1.1 (greybox) (REF) | gap (-1200, -2400) | glass or open frame per port · - | Doors.csv; RBR 0.1 door slabs; RB keynote 'sightline tease of the stage' |  |
+| 3.14-02 | Sandbag row (drift: sandbag count) | DRESSING · drift · ambient host | NO | sandbag 0.4 x 0.25 x 0.1 (~12 kg) (RW) | along the -X wall proposed | Fab search 'sandbag'; canvas under the M_Wool family · Fab Standard | RB STAGE HALL keynote + drift |  |
+| 3.14-03 | Sandbag tags carry rig dates; one sandbag is dated the spring AFTER the fire | LORE-AMBIENT · T4 | NO — never prompts | tag 0.05 x 0.03 (RW) | the row | M_Paper tags · Bespoke | LL STAGE HALL [T4] |  |
+| 3.14-04 | Cue light (dark) | DRESSING · practical (off) | NO | box 0.1 x 0.1 x 0.15 (RW) | by the studio door | Bespoke, M_Practical lens · Bespoke | RB STAGE HALL keynote 'cue light (dark)' |  |
+| 3.14-05 | The cue light's bulb is missing, but its socket is clean | LORE-AMBIENT · HP | NO — never prompts | socket 0.03 (RW) | the cue light | clean brass via roughness · Bespoke | LL STAGE HALL [HP] |  |
+| 3.14-06 | Chalk arrow on the floor, mostly mopped away, pointing toward the little door's side of the stage | LORE-AMBIENT · T7 (missable) | NO — never prompts | arrow 0.4 (RW) | floor near the window | decal, faint · Bespoke | LL STAGE HALL [T7] |  |
+| 3.14-07 | Ramp up to the catwalk grid (reference) / ladders (RI) | DRESSING · structure | NO — RI s14: T3 · operate (ladders) | REF ramp 1.4 x 0.12 x 5.2 at rot x -0.68; landing 1.4 x 2.4; RW ladder 0.5 wide (REF / RW) | (-1200, -2200, 158) [Godot (-12.0, 1.575, -22.0)] | Megascans 'metal grate'; steel · Fab Standard | WB 517-534; RI s14 | OPEN 3.14-A ramp vs ladders |
+| 3.14-08 | Wall clock (reference (-15.5, 2.5, -24.6)) | DRESSING · event-driven | NO | 0.3 dia (RW) | (-1550, -2460, 250) [Godot (-15.5, 2.5, -24.6)] | Fab search 'wall clock vintage' · Fab Standard | WB 538 | Sits on the STUDIO A side of the window wall by Rooms.csv: OPEN 3.14-B |
+| 3.14-09 | Borrowed studio spill through the door crack (no fixture of its own); bed: studio air pressure, grid creak above | DRESSING · lighting note | NO | - (OPEN) |  | no practical; light is borrowed · - | RB STAGE HALL 'Borrowed studio spill' | I = 0 by the bible; no prompt in this room |
+| 3.14-10 | Surfaces: 3 x 6.5; stage floorboards dark | SURFACE | NO | 19.5 m2 floor (REF (Rooms.csv)) |  | Megascans stage floorboards dark (MI_StageHall_Floor); black painted plaster · Fab Standard | Rooms.csv; FAB-IMPORT starter |  |
+
+### 3.15 · STUDIO A — The church. Grid above, tallys around, CHUM'S MARK at center stage. [RB STUDIO A]
+Budget I/L/D **3/2/18** [RB]; drift: the mark's tape lifts one corner across days [RB]; web: everything ends here; row casualties seat here [RB]; RI zone: RI s13 STA + s14 CAT (catwalks, no bible room).
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.15-01 | THE LITTLE DOOR in the painted house (Cue 3 / Cue 5: close the house, on camera, by hand; ending 4's destination) | INTERACTABLE · hero · door | YES — T5 · operate — GT 669-670, 435, 458 | leaf 0.8 x 1.2 x 0.09 (REF); collision 0.8 x 1.2 x 0.08 (REF) | (-1260, -3335, 0) [Godot (-12.6, 0.0, -33.35)] | Bespoke painted plywood leaf, three wear states [AB s3]; 'lit like a prop that knows it is one' [AB s7] · Bespoke | WB 462-474; GT 669-670; RB keynote 'the little door under the set'; RI s13; AF THE LAST CROSSING |  |
+| 3.15-02 | The little door's floor shows a scuffed swing arc through wax that is otherwise unbroken | LORE-AMBIENT · T7 | NO — never prompts | arc radius 0.8 (RW) | floor at the little door | roughness/normal arc · Bespoke | LL STUDIO A [T7] |  |
+| 3.15-03 | The set: carpet 6 x 5, cubby wall 4 x 3 cells (some still holding toys), painted house (rebuilt to the centimetre from tape measurement) | DRESSING · the rebuilt Gladhouse | NO — RI s13: T4 · inspect | carpet 6.0 x 5.0; cubby wall 3.2 x 2.0 x 0.4; house 2.6 x 2.4 x 0.4 (REF) | (-1550, -3150, 2) [Godot (-15.5, 0.02, -31.5)] | Bespoke (Blender): scan-first painted plywood [AB s3]; toys per prop_kit cubby_wall; carpet Megascans 'carpet' · Bespoke / Fab Standard | WB 450-461; prop_kit.gd cubby_wall 608-652; RI s13 | Cubby wall at Godot (-19.0, 0, -33.7); house at (-12.2, 1.2, -33.6) |
+| 3.15-04 | CHUM'S MARK (a taped X the club refreshes; drift: the tape lifts one corner across days) | DRESSING · drift | NO — RI s13: T4 · inspect | 0.4 x 0.4 tape X, tape 0.05 wide (REF) | (-1550, -3120, 6) [Godot (-15.5, 0.06, -31.2)] | gaffer tape decal + a lifted-corner mesh state · Bespoke | WB 475-484; RB STUDIO A keynote + drift; RI s13 | 'nobody says who for' [RI s13] |
+| 3.15-05 | Camera pedestals 1-3 with taped names, every lens on Chum's mark (frame-safety anchors; camera one hosts the line) | INTERACTABLE · operate (RI) · coverage endpoints | OPEN — RI s13: T4 · operate; RI GLOBAL route/read — labels CAM 1-3 (WB 496) | REF column 1.15 + head + body 0.34 x 0.34 x 0.62, lens 0.22 dia, ~1.7 tall; RW Norelco PC-70 on a Vinten pedestal ~1.8 tall x 0.7 base (REF / RW) | (-1550, -2650, 0) [Godot (-15.5, 0.0, -26.5)] | Bespoke (Blender); Fab search 'broadcast camera vintage'; tally M_Practical red · Bespoke / Fab Standard | WB 485-501; prop_kit.gd camera_pedestal 657-689; RI s13; RB keynote | Also at Godot (-19.5, -27.5) and (-11.5, -27.5). OPEN 3.15-A cap (three pedestals as one I?) |
+| 3.15-06 | The camera pedestals' tape names include one taped-over name the light catches | LORE-AMBIENT · HP | NO — never prompts | tape 0.05 x 0.15 (RW) | one pedestal | double tape layer in normal; text under, faint · Bespoke | LL STUDIO A [HP] |  |
+| 3.15-07 | Tally lamps (on the cameras) + ON AIR sign + studio clock (the break-window masters; red = watched = safe) | DRESSING · practical (red) · event | NO — RI s13: T4 · read | ON AIR box 0.4 x 0.15 x 0.1; clock 0.3 dia; tally 0.05 (RW) | over the studio door / on the pedestals | Bespoke; M_Practical red glass, true bulbs · Bespoke | RI s13; LB GRAMMAR; LB STATES (tallys die together on BREAK); RB 'tallys around' | The ON AIR master switch lives in MASTER CONTROL (never thrown) [RI s11] |
+| 3.15-08 | THE CASTING SHEET (posted on the wall; lines fill per capture from T2; the club dusts it) | INTERACTABLE · read · DYN · lore | YES — T4 · inspect · DYN (reads from T2 in the code) — GT 56, 70, 75 | REF 0.06 x 1.2 x 0.9 board; RW poster 0.9 x 1.2 (REF) | (-2090, -3000, 150) [Godot (-20.9, 1.5, -30.0)] | M_Paper 4K (readable); typewriter + hand-filled lines · Bespoke | WB 545-568; GT 56; RI s13 | Second I |
+| 3.15-09 | Audience rows / gallery (chairs arrive with the lockdown; the club fills them for the premiere) | DRESSING · DYN · ambient host | NO — RI s13: T5 · DYN | folding chair 0.45 x 0.5 x 0.8 (RW) | rows facing the set, -Y half proposed | Fab 'folding chairs' (starter set) · Fab Standard | RB keynote 'audience rows'; RI s13; RB web 'row casualties seat here' |  |
+| 3.15-10 | Audience seat 14 wears a brass RESERVED plate with the name line blank | LORE-AMBIENT · HH | NO — never prompts | plate 0.06 x 0.02 (RW) | seat 14 | brass M_Enamel-free metal, engraving in normal · Bespoke | LL STUDIO A [HH] | 'frame fourteen knows why' |
+| 3.15-11 | Catwalks / the grid above (two crossing walkways with rails; lighting instruments; grating noise is the toll) | DRESSING · structure · traverse | NO — RI s14: T3 · traverse | REF walkways 12.0 x 1.2 at Z 3.15 m, rails 0.9; RW Fresnel 0.3 x 0.3 x 0.4 each (REF / RW) | (-1550, -3000, 315) [Godot (-15.5, 3.15, -30.0)] | Megascans 'metal grate'; Fab search 'stage light fresnel' · Fab Standard | WB 504-535; RI s14; RB 'Grid above' | RI's CATWALKS zone has no room in the bible: mapped here (and the ramp to STAGE HALL) |
+| 3.15-12 | On the grid, chalked puppeteer marks: three, one scuffed to a smear (the arithmetic) | LORE-AMBIENT · T4 | NO — never prompts | marks 0.2 each (RW) | the grid walkway over the set | chalk decals · Bespoke | LL STUDIO A [T4] |  |
+| 3.15-13 | Ladders (exposure points at both ends) | DRESSING · RI: operate | OPEN — RI s14: T3 · operate | 0.5 wide x 3.0 (RW) | ends of the walkways | Fab search 'steel ladder' · Fab Standard | RI s14 | OPEN 3.14-A |
+| 3.15-14 | Sandbags and gel frames on the grid (one gel frame holds amber the exact shade of the cue signs) | DRESSING | NO — RI s14: T3 · inspect | gel frame 0.2 x 0.2; sandbag 0.4 x 0.25 (RW) | the grid | Bespoke; amber gel M_Practical · Bespoke | RI s14 |  |
+| 3.15-15 | The hung spare Chum (Coverage Director staging target; always explainable, never twice in the same place) | DRESSING · event · character asset | NO — RI s14: COND · inspect | dims per the cast dossier (C2) - OPEN (OPEN) | the grid, varies | Chum stage-body asset (Phase 1/2), hung by rigging · Bespoke | RI s14 | OPEN 3.15-B (asset scale; C2 owns it) |
+| 3.15-16 | The stage body's home (the in-game stage puppet never animates; L1 drift only) | DRESSING · character asset at rest | NO | per C2 - OPEN (OPEN) | on the set | Chum stage-body asset · Bespoke | RB STUDIO A keynote 'the stage body's home'; PLAN s1 Motion law | OPEN 3.15-B |
+| 3.15-17 | Teleprompter (T5 read: Craik's finale script loaded, a dead man's typing at reading speed) | INTERACTABLE · read (RI-only) | OPEN — RI s13: T5 · read | on-camera prompter 0.5 x 0.4 (RW) | camera one | Bespoke; M_Phosphor text · Bespoke | RI s13 | OPEN 3.15-A cap |
+| 3.15-18 | Slate / clapper (scene and take numbers match the player's record) | DRESSING · inspect | NO — RI s13: T4 · inspect | 0.28 x 0.24 (RW) | on a pedestal | Bespoke; warning red permitted on slates [AB s4] · Bespoke | RI s13; AB s4 |  |
+| 3.15-19 | Boom mic + stands (windscreens worn to the foam) + BOOM WINCH fixture (crank; the frame is clean) | INTERACTABLE · event fixture (premiere) | YES — T5 · EVT — GT 461, 408 | Fisher-class boom base 0.9, arm 3-5; fixture collision 0.5 x 0.7 x 0.4 (REF) (RW / REF) | (-1340, -3040, 90) [Godot (-13.4, 0.9, -30.4)] | Fab search 'microphone boom'; winch bespoke · Fab Standard / Bespoke | live_production.gd 289, 293-305; RI s13; GT 461 | Third I (premiere-only) |
+| 3.15-20 | CARD STAND (restack; premiere fixture) | INTERACTABLE · event fixture (premiere) | YES — T5 · EVT — GT 462 | stand 1.2 high; cards 0.28 x 0.36; fixture collision 0.5 x 0.7 x 0.4 (RW / REF) | (-1690, -2740, 90) [Godot (-16.9, 0.9, -27.4)] | Fab search 'music stand'; cards M_Paper · Fab Standard / Bespoke | live_production.gd 290; GT 462 | Premiere-only I beyond the cap: OPEN 3.15-A |
+| 3.15-21 | The Floor Manager's mark (a worn spot on the floor paint, decades deep) | DRESSING | NO — RI s13: T4 · inspect | 0.4 dia (RW) | floor, off the set | roughness/albedo wear decal · Bespoke | RI s13 |  |
+| 3.15-22 | NG relic: one item from the prior run, on the set, in shot, unremarked | DRESSING · state (NG+) | NO — GT (relic name lower-cased, WB 1105) | 0.14 x 0.08 x 0.14 (REF stand-in) (REF) | (-1460, -3100, 10) [Godot (-14.6, 0.1, -31.0)] | the taken dresser item's own mesh · Bespoke | WB 1093-1110 |  |
+| 3.15-23 | Grid tungsten wash + tallys (premiere: full tungsten stage wash, the one gorgeous image) | DRESSING · practical | NO | Fresnels on the grid (RW) | the grid | true-bulb Fresnels, M_Practical · Bespoke / Fab Standard | LB UE5 'STUDIO grid plus tallys'; AB s8 Premiere; AB s7 STUDIO A | EV OPEN |
+| 3.15-24 | Window openings to STAGE HALL (-12, -24) and SCENE DOCK (-15.5, -36); door to PATCH BAY, GREEN ROOM | SURFACE · openings | NO — Doors.csv | gaps 1.6 / 1.6 / 1.4 / 1.4 (REF) |  | per port · - | Doors.csv | RI s11's 'glass window to Studio A' from MASTER CONTROL has no opening in the data: OPEN 3.18-C |
+| 3.15-25 | Surfaces: 12 x 12; stage floorboards dark; grid darkness above with one practical | SURFACE | NO | 144 m2 floor (REF (Rooms.csv)) |  | Megascans stage floorboards dark (MI_StudioA_Floor); black drapes/painted brick (MI_StudioA_Wall) · Fab Standard | Rooms.csv; AB s7 STUDIO A | 'The largest room tone in the game' [RB] |
+
+### 3.16 · PATCH BAY — Vess country; a jungle with a wiring diagram somewhere under it. Phosphor plus a clip lamp he added. [RB PATCH BAY]
+Budget I/L/D **3/2/12** [RB]; drift: one loom re-dressed [RB]; web: V2's offer lives here; his absence makes this room loudest [RB]; RI zone: RI s12 PB (patchbay and breaker room).
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.16-01 | THE PANEL (the cascade console: RESTORE CIRCUIT B/C in order; re-patch the dead feed; re-route the live one; where the Dead Air re-route is committed) | INTERACTABLE · hero | YES — T2 · operate — GT 526-531 | REF console body 1.6 x 0.85 x 0.6 + angled fascia, knob rows, 6 faders; RW patch field 19-inch jackfields in a rack 0.6 x 0.6 x 1.8 (REF / RW) | (-550, -3180, 55) [Godot (-5.5, 0.55, -31.8)] | Bespoke (prop_kit console brief); Fab search 'audio patch bay'; breaker red permitted [AB s4] · Bespoke / Fab Standard | WB 673-697; prop_kit.gd console 261-288; GT 526-531; RB PATCH BAY keynote 'THE PANEL (cascade)'; RI s12 | The panel's labels are the cascade map [LB STATES] |
+| 3.16-02 | Breaker panel (trips, resets, budget management; the kitchen circuit COND) | INTERACTABLE · operate (RI) | OPEN — RI s12: T2 · operate — GT 526-527 (circuits B, C) | industrial panel 0.6 x 1.5 x 0.15 (RW) | -Y wall beside the console proposed | Megascans 'electrical panel'; breaker handles M_Enamel, warning red · Fab Standard | RI s12; RB TRANSMITTER HALL keynote 'breaker rows' | OPEN 3.16-B: part of THE PANEL (reference) or a separate object (RI), and which room the breakers live in |
+| 3.16-03 | Amperage meter (the budget, analog) | DRESSING · read | NO — RI s12: T2 · read | panel meter 0.15 dia (RW) | on the breaker panel | Bespoke; needle in the phosphor family · Bespoke | RI s12 |  |
+| 3.16-04 | CART DECK BREAKER / MAIN BUS (the final breaker: Vess's hand; the credited-variant hesitation window) | INTERACTABLE · event fixture (premiere) | YES — T5 · EVT — GT 126, 415-416, 427 | fixture collision 0.5 x 0.7 x 0.4 (REF) (REF) | (-550, -2820, 90) [Godot (-5.5, 0.9, -28.2)] | part of the breaker panel build · Bespoke | live_production.gd 270-272, 75, 103; finale_breaker.gd 6; RI s12 'The final breaker' |  |
+| 3.16-05 | AUX PANEL (TALLY_HOUSE; resets; premiere fixture) | INTERACTABLE · event fixture (premiere) | YES — T5 · EVT — GT 460 | fixture collision 0.5 x 0.7 x 0.4 (REF) (REF) | (-500, -2940, 90) [Godot (-5.0, 0.9, -29.4)] | Bespoke rack panel · Bespoke | live_production.gd 288 | Premiere-only I: OPEN 3.16-D cap |
+| 3.16-06 | Spare fuse drawer (finite; a soft resource) | INTERACTABLE · take (RI-only) | OPEN — RI s12: T2 · take | drawer 0.3 x 0.1 x 0.4; fuses 0.03 (RW) | under the console | Bespoke · Bespoke | RI s12 | OPEN 3.16-D |
+| 3.16-07 | Cable looms with Vess's tags (the building's nervous system, labelled in three eras of handwriting) | DRESSING · ambient host · drift (one loom re-dressed) | NO — RI s12: T1 · inspect | loom 0.05 dia, runs 2-6 m; tags 0.05 x 0.02 (RW) | walls and overhead | Poly Haven modular_electric_cables (verified 2026-09-04 per Phase 1 brief); AmbientCG Rope002 (verified) for lacing; tags M_Paper · CC0 | RB PATCH BAY keynote 'cable looms with his tags' + drift; RI s12 'Cable loom wall' |  |
+| 3.16-08 | One loom re-dressed in someone else's lacing pattern | LORE-AMBIENT · HV, T4 | NO — never prompts | one loom (RW) | a loom | different lacing mesh/normal · Bespoke | LL PATCH BAY [HV, T4] |  |
+| 3.16-09 | A jack labelled in green ink, older than every dymo strip: AUD RETURN | LORE-AMBIENT · T3, T2 | NO — never prompts | jack 0.006 (maps) (RW) | the patch field | label in albedo, older paper · Bespoke | LL PATCH BAY [T3, T2] |  |
+| 3.16-10 | Coffee rings on the run sheets aging like tree rings toward the panel, stopping in 1977 and beginning again in 1984 | LORE-AMBIENT · HC, HF | NO — never prompts | rings 0.08 dia (RW) | run sheets on the console shelf | Megascans coffee-stain decal (starter set) with authored dates · Fab Standard / Bespoke | LL PATCH BAY [HC, HF] |  |
+| 3.16-11 | D07 binder (RB keynote) - props packet and code home it in DORMS | LORE-HANDLED · readable D07 (home conflict) | OPEN — GT 644 | see DORMS (RW) |  | see DORMS · Bespoke | RB PATCH BAY keynote 'D07 binder'; PP D07; WB 1052-1055 | OPEN 3.16-A |
+| 3.16-12 | The credit margin (RB keynote) - the reference builds LEDGER MARGIN in the BENCH ROOM | INTERACTABLE · (home conflict) | OPEN — GT 65 | see BENCH ROOM (REF) |  | see BENCH ROOM · Bespoke | RB PATCH BAY keynote 'the credit margin'; WB 1056-1059 | OPEN 3.16-C |
+| 3.16-13 | Clip lamp he added (phosphor plus a clip lamp) | DRESSING · practical | NO | clip lamp 0.15 dia (RW) | clamped to the console | Fab search 'clamp lamp'; M_Practical · Fab Standard | RB PATCH BAY light family | EV OPEN |
+| 3.16-14 | Rack fans (bed: fan chorus, jack clicks remembered) | DRESSING | NO | fan 0.12 (RW) | the racks | part of the rack build · Bespoke | RB PATCH BAY bed |  |
+| 3.16-15 | A wiring diagram somewhere under it all | DRESSING | NO | 0.6 x 0.9 (RW) | wall, half-covered | M_Paper · Bespoke | RB PATCH BAY personality |  |
+| 3.16-16 | Surfaces: 8 x 7; a jungle | SURFACE | NO | 56 m2 floor (REF (Rooms.csv)) |  | Megascans industrial concrete (MI_PatchBay_Floor); painted brick · Fab Standard | Rooms.csv | 'His absence makes this room loudest' [RB web] |
+
+### 3.17 · CONTROL — Narrow authority; the marshal's corridor of record. Cold fluorescent, honest and unflattering. [RB CONTROL]
+Budget I/L/D **1/2/6** [RB]; drift: stamp alignment [RB]; web: authority's paper trail shards live here [RB]; RI zone: RI s10 CTL (control corridor).
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.17-01 | D09 FIRE MARSHAL REPORT, 1977, photocopy of a photocopy (the marshal packet) | LORE-HANDLED · readable D09 · Day 2 | YES — T2 · read — label WB 1163 'FIRE MARSHAL REPORT · 1977, photocopy' | letter 0.216 x 0.279; dock body REF 0.45 (RW / REF) | (0, -2450, 80) [Godot (0.0, 0.8, -24.5)] | M_Paper 4K, generation-lost toner · Bespoke | PP D09; RB CONTROL keynote 'D09 marshal packet'; WB 1163-1167 | RI s10 homes it in a CTL drawer |
+| 3.17-02 | Inspection stamps (drift: stamp alignment) | DRESSING · drift · ambient host | NO | stamped sheets 0.216 x 0.279 on a board (RW) | wall board | M_Paper · Bespoke | RB CONTROL keynote + drift |  |
+| 3.17-03 | The inspection stamps skip one quarter and no one restamped it | LORE-AMBIENT · HM, HF | NO — never prompts | a gap in the stamp grid (RW) | the board | albedo · Bespoke | LL CONTROL [HM, HF] |  |
+| 3.17-04 | A carbon flimsy filed backward: NOISE COMPLAINT, SIGNAL AFTER SIGN-OFF, 1975, the response line blank | LORE-AMBIENT · T1, HM | NO — never prompts | 0.216 x 0.279 onion-skin (RW) | a file tray | M_Paper, translucent · Bespoke | LL CONTROL [T1, HM] |  |
+| 3.17-05 | A chair that faces the door (its casters have worn a quarter-circle, not a line) | DRESSING · ambient host | NO | office chair 0.6 x 0.6 x 0.9 (RW) | facing the -Y door proposed | Fab search 'office chair vintage'; caster wear decal · Fab Standard | RB CONTROL keynote |  |
+| 3.17-06 | Casters worn a quarter-circle | LORE-AMBIENT · T3 (somebody watched the door) | NO — never prompts | arc 0.4 (RW) | under the chair | floor roughness decal · Bespoke | LL CONTROL [T3] |  |
+| 3.17-07 | Wall monitors (mediated-corridor endpoints; individually killable by the Rundown from T3; dead sets stay dead until re-patched) | INTERACTABLE · read · DYN | OPEN — RI s10: T2 · inspect · DYN — none (Monitors.csv has no feed here) | CRT 0.5 x 0.45 (RW) | count OPEN | crt_shell brief; M_Phosphor · Bespoke | RI s10; RI GLOBAL 'Wall monitors' | OPEN 3.17-C: no monitor in the data for this room |
+| 3.17-08 | Corkboard memos (compliance notes, screening etiquette) | DRESSING | NO — RI s10: T2 · inspect | 0.9 x 0.6 (RW) | wall | Fab 'cork board'; M_Paper · Fab Standard | RI s10 |  |
+| 3.17-09 | Clock repeater (break-window timing without entering MC) | DRESSING · event-driven | NO — RI s10: T2 · read | 0.3 dia (RW) | (0, -2450, 230) [Godot (0.0, 2.3, -24.5)] | Fab search 'wall clock vintage' · Fab Standard | WB 538; RI s10 |  |
+| 3.17-10 | Overhead cable trays (routing legibility; teaches the coverage-map model) | DRESSING | NO — RI s10: T1 · inspect | tray 0.3 wide (RW) | ceiling | Fab search 'cable tray'; modular_electric_cables (verified) · Fab Standard / CC0 | RI s10 |  |
+| 3.17-11 | Cold fluorescent fixture(s) - honest and unflattering | DRESSING · practical | NO | 1.2 m twin tube (RW) | ceiling | Bespoke tube fixture, M_Practical · Bespoke | RB CONTROL 'Cold fluorescent' | Reference lights it AMBER (OmniLight (0.98,0.68,0.32) at (0,2.6,-24.5), WB 660-665): OPEN 3.17-A |
+| 3.17-12 | Relay cabinet (bed: relay ticks) | DRESSING | NO | 0.4 x 0.3 x 0.6 (RW) | wall | Fab search 'electrical box' · Fab Standard | RB CONTROL bed |  |
+| 3.17-13 | D11 PEAK ASSET DOSSIER · CHUM-AF-1974-P ('Peak security office copy'; findable after first sighting) | LORE-HANDLED · readable D11 · Day 4 | YES — T4 · read — label WB 1174; body WB 1175-1177 | folder 0.24 x 0.32; dock body REF 0.45 (RW / REF) | (200, -2750, 90) [Godot (2.0, 0.9, -27.5)] | M_Paper 4K; the dossier art docs/canon/art/after-fire-chum-dossier.png · Bespoke | AF THE REVEAL (D11); WB 1174-1178; achievements A26 ruling | By Rooms.csv the point (2.0, -27.5) is inside MASTER CONTROL; no 'Peak security office' exists in canon: OPEN 3.17-B |
+| 3.17-14 | Surfaces: 3 x 7 narrow authority | SURFACE | NO | 21 m2 floor (REF (Rooms.csv)) |  | Megascans linoleum (MI_Control_Floor); painted plaster · Fab Standard | Rooms.csv |  |
+
+### 3.18 · MASTER CONTROL — The show's eye; the FM's realm and S2's home. Monitor wall glow, phosphor dominant. [RB MASTER CONTROL]
+Budget I/L/D **3/2/12** [RB]; drift: run sheet clip angles [RB]; web: F2 fires here; ending 2's chair faces this wall [RB]; RI zone: RI s11 MC.
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.18-01 | THE MONITOR WALL (program/preview logic taught by labels; the port's SPIKE 2: twelve SceneCapture feeds at 60 fps) | INTERACTABLE · hero · read | OPEN — RI s11: T2 · inspect — Monitors.csv (two feeds only) | RW 12 x 19-inch CRTs in a 4 x 3 wall ~2.0 x 1.5; each 0.5 x 0.45 x 0.45 (RW) | -Y wall proposed | crt_shell brief x12; M_Phosphor; Fab search 'crt monitor vintage' · Bespoke / Fab Standard | RB MASTER CONTROL keynote 'the MONITOR WALL'; RI s11; PLAN s1 PORT KIT SPIKE 2; PROGRESS 0.6b | OPEN 3.18-A: twelve feeds (spike) vs two rows in Monitors.csv |
+| 3.18-02 | The switcher (muscle-memory target; face-button mapping mirrors the panel) | INTERACTABLE · operate | OPEN — RI s11: T2 · inspect; T5 · operate | Grass Valley 1600-class 1.2 x 0.6 x 0.2 desktop (RW) | the desk under the wall | Bespoke; Fab search 'video switcher' · Bespoke / Fab Standard | RI s11; controls map (stable inputs) via PLAN s1 |  |
+| 3.18-03 | S2 LOG STATION · MASTER CONTROL | INTERACTABLE · station | YES — T2 · sign — GT 485-486 | lectern per S5 (REF) | (700, -3100, 0) [Godot (7.0, 0.0, -31.0)] | Bespoke lectern family · Bespoke | Stations.csv S2; RI s11; RB 'S2's home' |  |
+| 3.18-04 | CART RACK -> THE STATION ID CART (Asset 3; punched and verified here) | INTERACTABLE · pickup | YES — T3 · take — GT 686; flavour WB 1027 | NAB cart 0.1 x 0.13 x 0.02; rack 0.5 x 0.3 x 0.4; cart machine 0.2 x 0.4 x 0.15; dock body REF 0.45 (RW / REF) | (400, -3150, 90) [Godot (4.0, 0.9, -31.5)] | Bespoke cart rack + ITC-class cart deck; labels M_Paper · Bespoke | WB 1024-1030; RI s11 'Cart racks' | The CART DECK loses power at the premiere (GT 415-416) |
+| 3.18-05 | Run sheets on clips (drift: clip angles) incl. D08 THE FLOOR MANAGER'S RUN SHEET (laminated, grease pencil, always angled away; one column edge legible) | DRESSING · drift · lore host (D08) | NO — glimpsed only - never read whole | clipboard 0.23 x 0.32 (RW) | clipped along the desk edge | M_Paper under laminate gloss; SEG timings that do not sum · Bespoke | RB MASTER CONTROL keynote 'run sheets on clips' + drift; PP D08 | OPEN 3.18-B: D08 is in the D-series yet 'glimpsed angle only' - handled or ambient tier |
+| 3.18-06 | The run sheets carry no unlisted camera anywhere | LORE-AMBIENT · HP | NO — never prompts | the sheets (RW) | the run sheets | albedo text · Bespoke | LL MASTER CONTROL [HP]; RB keynote 'the unlisted camera's absence on the sheet' |  |
+| 3.18-07 | Tally test button worn to bare metal; nothing else on that panel is | LORE-AMBIENT · ritual, T1 | NO — never prompts | button 0.02 dia (RW) | the switcher panel | metallic/roughness only · Bespoke | LL MASTER CONTROL [ritual, T1] |  |
+| 3.18-08 | Two headset hooks: one bent straight and retired in place (the FM uses the other) | DRESSING · ambient host | NO | hook 0.05 (RW) | desk edge | Bespoke brass hooks · Bespoke | RB keynote 'his headset's hook'; LL MASTER CONTROL [HP] |  |
+| 3.18-09 | The bent-straight hook | LORE-AMBIENT · HP | NO — never prompts | 0.05 (RW) | one hook | bent mesh · Bespoke | LL MASTER CONTROL [HP] |  |
+| 3.18-10 | Uplink panel (T5 operate on the Authenticate route; the premiere's exit to the world; ending 2's console) | INTERACTABLE · operate (RI-only) | OPEN — RI s11: T5 · operate | rack panel 0.48 x 0.3 (RW) | rack beside the wall | Bespoke rack unit · Bespoke | RI s11; RB web 'ending 2's chair faces this wall' | OPEN 3.18-D cap |
+| 3.18-11 | Glass window to Studio A (the mediation lesson: through the glass is direct sight) | SURFACE · opening (RI-only) | NO — RI s11: T2 · inspect | - (OPEN) | no such opening: MC (x 1.5..9.5) does not border STUDIO A (x -21.5..-9.5) | - · - | RI s11; Rooms.csv; Doors.csv | OPEN 3.18-C |
+| 3.18-12 | ON AIR master switch (the one switch the player may never throw; inspect only) | DRESSING · never operable | NO — RI s11: never · inspect only | toggle 0.05 under a guard (RW) | the switcher | Bespoke; red guard M_Enamel · Bespoke | RI s11; LAWS 6 (the schedule is real) |  |
+| 3.18-13 | Operator manuals (period paper; one margin note in green: 'It watches the preview bus too') | DRESSING · lore host (RI-only) | NO — RI s11: T2 · inspect | binder 0.3 x 0.28 x 0.06 (RW) | shelf | Fab 'ring binder'; M_Paper · Fab Standard | RI s11 | OPEN 3.18-E tier |
+| 3.18-14 | Deck transports (bed: sync tone underlay, deck transports) | DRESSING | NO | 1-inch VTR 0.6 x 0.5 x 1.2 or 2-inch console 1.65 x 1.2 x 0.75 (RW) | +X wall proposed | Bespoke; Fab search 'reel to reel vintage' · Bespoke / Fab Standard | RB MASTER CONTROL bed | Format OPEN (see 3.9-A) |
+| 3.18-15 | Ending 2's chair, facing the wall | DRESSING | NO | office chair 0.6 x 0.6 x 0.9 (RW) | at the switcher | Fab search 'office chair vintage' · Fab Standard | RB MASTER CONTROL web |  |
+| 3.18-16 | Wall clock (reference (5.5, 2.3, -26.6)) | DRESSING · event-driven | NO — RI GLOBAL: T2 · read | 0.3 dia (RW) | (550, -2660, 230) [Godot (5.5, 2.3, -26.6)] | Fab search 'wall clock vintage' · Fab Standard | WB 538 |  |
+| 3.18-17 | Monitor wall glow, phosphor dominant (the room's light family) | DRESSING · practical (phosphor as data) | NO | - (OPEN) |  | M_Phosphor emissives; phosphor illuminates data, never rooms · - | RB MASTER CONTROL; LB GRAMMAR | EV OPEN |
+| 3.18-18 | Surfaces: 8 x 7; the show's eye | SURFACE | NO | 56 m2 floor (REF (Rooms.csv)) |  | Megascans office carpet / linoleum (MI_MasterControl_Floor); acoustic tile · Fab Standard | Rooms.csv | F2 fires here [RB web] |
+
+### 3.19 · GREEN ROOM — Harriet's parlor; the club performing calm for itself. Mirror bulbs (two dead, always the same two), S3 warm. [RB GREEN ROOM]
+Budget I/L/D **2/2/10** [RB]; drift: the saucer ring count [RB]; web: the second teacup retires here (M-R5); her doubling is staged here or Studio A per scene [RB]; RI zone: RI s15 GRN.
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.19-01 | HER CHAIR (Harriet's; ending 2 inherits a warm chair here; it should look sat-in) | DRESSING · hero by keynote · character seat | NO — no prompt (she is elsewhere or in it) | armchair 0.85 x 0.9 x 0.95 (REF club_chair 0.62 sq) (RW / REF) | beside the vanity proposed | Poly Haven ArmChair_01 (verify id); deep sat-in wear in the seat normal · CC0 | RB GREEN ROOM keynote 'HER CHAIR'; WB 1338 comment | OPEN 3.19-A: the keynote hero is a chair with no verb |
+| 3.19-02 | Makeup mirror / vanity, bulb-lit (two dead bulbs, always the same two); obeys the reflection budget | DRESSING · practical · scripted reflection | NO — RI s15: T4 · inspect | REF vanity 1.4 wide x 1.6 high, mirror 1.1 sq, 10 bulbs 0.064 dia; RW Hollywood mirror 1.1 x 1.1 (REF) | (-2710, -2700, 0) [Godot (-27.1, 0.0, -27.0)] | Fab search 'makeup mirror bulbs'; bulbs M_Practical with true filaments; mirror per the port's reflection method · Fab Standard / Bespoke | prop_kit.gd vanity 695-728; WB 1339-1343; RB 'Mirror bulbs (two dead, always the same two)'; RI s15 | Reference lights 6 of 10 (i % 3 != 1) while canon says exactly two dead: OPEN 3.19-B |
+| 3.19-03 | The two dead bulbs are the same two in every era of photographs on the wall | LORE-AMBIENT · HH | NO — never prompts | photos 0.15 x 0.10 (RW) | wall beside the mirror | M_Paper prints, era-toned · Bespoke | LL GREEN ROOM [HH] |  |
+| 3.19-04 | Mirror with cards tucked in the frame (incl. the 1977 season schedule, last line hand-amended FINALE -> SIGN-OFF) | DRESSING · ambient host | NO | cards 0.10 x 0.15 (RW) | the mirror frame | M_Paper · Bespoke | RB keynote 'mirror with cards tucked in the frame' |  |
+| 3.19-05 | 1977 season schedule, FINALE amended to SIGN-OFF | LORE-AMBIENT · HF, HH | NO — never prompts | 0.10 x 0.15 (RW) | the frame | M_Paper, ballpoint amendment · Bespoke | LL GREEN ROOM [HF, HH] |  |
+| 3.19-06 | Behind the mirror's corner, a strip of gray flannel used as a shim | LORE-AMBIENT · T2 (the worst place to find it) | NO — never prompts | 0.05 x 0.10 (RW) | mirror corner | Poly Haven poly_wool_herringbone (verified 2026-09-04; the school-gray flannel candidate per the Phase 1 brief) · CC0 | LL GREEN ROOM [T2]; AB s3 (school-gray flannel ties patch seven to the clipping) |  |
+| 3.19-07 | Teacup and saucer (drift: the saucer ring count); the second teacup retires here (M-R5) | DRESSING · drift · state | NO | cup 0.08 dia; saucer 0.14 dia (RW) | the low table | Poly Haven tea_set_01 (verify id); ring stains as decals · CC0 | RB GREEN ROOM keynote 'the teacup's saucer ring' + drift + web M-R5 |  |
+| 3.19-08 | S3 LOG STATION · GREEN ROOM | INTERACTABLE · station | YES — T4 · sign — GT 485-486 | lectern per S5 (REF) | (-2450, -2860, 0) [Godot (-24.5, 0.0, -28.6)] | Bespoke lectern family · Bespoke | Stations.csv S3; RI s15; RB 'S3 warm' |  |
+| 3.19-09 | D06's home (RB) - see the three-way conflict | LORE-HANDLED · readable D06 (home conflict) | OPEN — GT 218 | index card 0.125 x 0.075 (RW) |  | M_Paper · Bespoke | RB GREEN ROOM keynote 'D06's home'; PP D06; WB 899-915 | OPEN 3.8-C |
+| 3.19-10 | Costume rack (club garments in show palette accumulate here as drift completes) | DRESSING · DYN | NO — RI s15: T4 · inspect · DYN | 1.5 x 0.5 x 1.7 (RW) | -X wall proposed | Fab search 'clothing rack'; garments under M_Wool with drift tints · Fab Standard / Bespoke | RI s15; AB s4-5 DRIFT LAW |  |
+| 3.19-11 | Call sheet, framed (the 1977 finale's; every name checked in, none checked out) | DRESSING · lore host (RI-only) | NO — RI s15: T4 · inspect | 0.3 x 0.4 (RW) | wall | hanging_picture_frame_01 (verify id); M_Paper · CC0 | RI s15 | OPEN 3.19-C tier |
+| 3.19-12 | Couch + low table (+ kettle per RI; Harriet's deepest holding-pattern freeze plays here) | DRESSING | NO — RI s15: T4 · use | REF couch 1.9 x 0.7 x 0.85; table 0.8 x 0.5 x 0.43 (REF) | (-2500, -2940, 0) [Godot (-25.0, 0.0, -29.4)] | Poly Haven search 'sofa' (verify id); table wooden_table_02 (verify id) · CC0 | prop_kit.gd couch 732-744; WB 1344-1364; RI s15 | Table at Godot (-25.2, 0.4, -28.3). A second kettle here is RI-only: OPEN 3.19-D |
+| 3.19-13 | Clock older than the building's (bed) | DRESSING | NO | mantel clock 0.3 x 0.15 x 0.25 (RW) | shelf | Fab search 'mantel clock' · Fab Standard | RB GREEN ROOM bed |  |
+| 3.19-14 | Surfaces: 6 x 6 parlour | SURFACE | NO | 36 m2 floor (REF (Rooms.csv)) |  | Megascans office carpet (MI_GreenRoom_Floor); wallpaper vintage · Fab Standard | Rooms.csv | Her doubling is staged here or in STUDIO A per scene [RB web] |
+
+### 3.20 · SCENE DOCK — Backstage afterlife; where the show's bones are stored standing. THE SODIUM TRUTH LIGHT lives here, plus work strips. [RB SCENE DOCK]
+Budget I/L/D **3/3/14** [RB]; drift: which flat faces out [RB]; web: the reading, the sixth line, and the sodium check all live in this room [RB]; RI zone: RI s16 DOCK.
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| 3.20-01 | Spare Chum rows on armatures, UNIT 1-6 (generations in order, fur graying by year; units 1-2 are the 1971 pilot; the era catalog physicalised) | INTERACTABLE · count (the dock task) | YES — T4 · inspect / count — GT 99-102, 682 | collision 0.6 x 1.4 x 0.6 each (REF); asset dims per the cast dossier (C2) - OPEN (REF / OPEN) | (-1800, -4000, 0) [Godot (-18.0, 0.0, -40.0)] | Chum stage-body assets (character_kit chum_pilot / chum_mini -> Phase 2); armature stands bespoke · Bespoke | WB 982-1006; dock_chum.gd; RI s16; AB s7 DOCK 'wools graying left to right by era' | Grid: x -18 + 2c, z -40 - 1.7r (c 0..2, r 0..1). OPEN 3.20-B scale |
+| 3.20-02 | The warm one (found by hand mid-inventory; the game does nothing further, ever) | INTERACTABLE · touch · COND | OPEN — T4 · COND · touch | one unit (OPEN) | one of the six | one unit with a warm state · Bespoke | RI s16; LAWS 4 (the warm one never acts) | OPEN 3.20-C: no prompt may exist beyond the count (LAW 4 and QA-55) |
+| 3.20-03 | Inventory CLIPBOARD (the dock task's diegetic UI; its paper the brightest value in frame) | INTERACTABLE · operate | YES — T4 · operate — label 'CLIPBOARD' (WB 980) | 0.23 x 0.32; dock body REF 0.45 (RW / REF) | (-1950, -3800, 70) [Godot (-19.5, 0.7, -38.0)] | M_Paper on a bespoke board · Bespoke | WB 975-981; dock_task.gd; RB keynote 'the dock clipboard'; RI s16; AB s7 |  |
+| 3.20-04 | THE SEANCE DOCK (RB keynote) - the reference builds the SEANCE REEL dock in the BENCH ROOM | INTERACTABLE · hero (per RB) | OPEN — GT 608-609 (see BENCH ROOM) | dock body REF 0.45 (REF) | none here in the data | dock family · Bespoke | RB SCENE DOCK keynote 'the SEANCE DOCK'; WB 397-401 | OPEN 3.20-A which room |
+| 3.20-05 | PROPS CRATE -> THE SIGN-OFF CARD (Asset 2; 'WGLD CHANNEL 58. GOODNIGHT.') | INTERACTABLE · pickup · search | YES — T4 · search — GT 692; flavour WB 1045 | title card 0.28 x 0.36; crate 0.7 (REF) (RW / REF) | (-1300, -4150, 50) [Godot (-13.0, 0.5, -41.5)] | Bespoke crate (Fab 'wooden crates' starter); card M_Paper 4K hand-lettered · Fab Standard / Bespoke | WB 1041-1048; RI s16 |  |
+| 3.20-06 | D10 IRIS BELL'S FAN LETTER, 1975 (ruled school paper; beneath the sign-off card) | LORE-HANDLED · readable D10 · needs the dock | YES — read — label WB 1168 'A FAN LETTER · ruled paper, careful loops' | 0.20 x 0.27 (RW) | (-1220, -4060, 50) [Godot (-12.2, 0.5, -40.6)] | M_Paper 4K, pencil loops · Bespoke | PP D10; RB keynote 'D10 IRIS'; WB 1168-1172 |  |
+| 3.20-07 | D01's shelf (RB keynote) - the props packet homes D01 in the library | LORE-HANDLED · readable D01 (home conflict) | OPEN | steno pad 0.15 x 0.23 (RW) | a shelf | M_Paper · Bespoke | RB SCENE DOCK keynote 'D01's shelf'; PP D01 | OPEN 3.8-D |
+| 3.20-08 | Flats leaned like tarot (three in the reference; drift: which flat faces out) | DRESSING · drift · ambient host | NO — RI s16: T4 · inspect | REF 2.0 x 2.4, 1.7 x 2.2, 1.4 x 2.0 with battens; RW 1.2 x 3.0 (4 x 10 ft) flats (REF / RW) | (-2010, -3820, 0) [Godot (-20.1, 0.0, -38.2)] | Bespoke painted plywood flats, three wear states [AB s3] · Bespoke | prop_kit.gd scene_flat 748-757; WB 1370-1377; RB keynote + drift | Lean rot z -0.12 - 0.02 i; positions x -20.1 + 0.14 i, z -38.2 - 1.4 i |
+| 3.20-09 | The flat that faces out is the little house's interior wall, its painted door painted OPEN (the only rendering anywhere that shows it open) | LORE-AMBIENT · T7, T1 | NO — never prompts | one flat (RW) | the front flat | painted albedo · Bespoke | LL SCENE DOCK [T7, T1] |  |
+| 3.20-10 | Set flat: a window with the curtain painted mid-swing; spare painted-house parts; paint shelf | DRESSING | NO — RI s16: T4 · inspect | flat 1.2 x 3.0; shelf 1.0 x 0.3 (RW) | the rank | Bespoke flats; Fab 'paint can' · Bespoke / Fab Standard | RI s16 |  |
+| 3.20-11 | Under a chained tarp, a shape the size of a kettledrum that is not a kettledrum, dust seal unbroken | LORE-AMBIENT · T4 (never resolved) | NO — never prompts | timpani-sized 0.75 dia x 0.8; tarp 2 x 2; chain 3 (RW) | back corner | Fab search 'tarp'; chain bespoke; dust seal via roughness · Fab Standard / Bespoke | LL SCENE DOCK [T4] |  |
+| 3.20-12 | THE SODIUM TRUTH LIGHT fixture (one fixture in the game) + its purchase tag on the chain, dated 1978 | DRESSING · practical (SODIUM) · ambient host | NO | HPS high-bay 0.4 dia x 0.5; chain; tag 0.05 x 0.09 (RW) | over the rows, high | Bespoke fixture, M_Practical, true arc tube; the sodium check lives here [PLAN s1] · Bespoke | RB SCENE DOCK 'THE SODIUM TRUTH LIGHT lives here'; LB GRAMMAR 'SODIUM ... one fixture, the scene dock'; LL SCENE DOCK [T6] | EV OPEN; OPEN 0-D (art bible's sodium at windows) |
+| 3.20-13 | The sodium fixture's purchase tag, dated 1978, the first thing bought after | LORE-AMBIENT · T6 | NO — never prompts | tag 0.05 x 0.09 (RW) | the fixture's chain | M_Paper on wire · Bespoke | LL SCENE DOCK [T6] | 'someone needed the truth light' |
+| 3.20-14 | Work strips (fluorescent) | DRESSING · practical | NO | 1.2 m tubes (RW) | ceiling | Bespoke tube fixtures, M_Practical · Bespoke | RB SCENE DOCK 'plus work strips' | EV OPEN |
+| 3.20-15 | Crates (three in the reference; always about to ship somewhere) | DRESSING | NO | 0.7 cube; 0.6 cube; 0.6 x 0.6 x 0.8 (REF) (REF) | (-1130, -4200, 35) [Godot (-11.3, 0.35, -42.0)] | Fab 'wooden crates' (starter set) · Fab Standard | WB 1378-1392 | Others at Godot (-11.3, 1.0, -42.0), (-12.3, 0.3, -42.2) |
+| 3.20-16 | Chain hoist (bed: chain hoist idle) | DRESSING | NO | 0.3 x 0.2; chain 3 m (RW) | overhead beam | Fab search 'chain hoist' · Fab Standard | RB SCENE DOCK bed |  |
+| 3.20-17 | Rolling door (sealed; daylight in the seam) | DRESSING · never operable | NO — RI s16: never | 3.0 x 3.0 (RW) | -Y wall | Megascans 'corrugated metal' · Fab Standard | RI s16 | AB s7's 'cold north light through high glass' has no window in the data: OPEN 3.20-D |
+| 3.20-18 | Window opening to STUDIO A (-15.5, -36) | SURFACE · opening | NO — Doors.csv STUDIO A-SCENE DOCK 'window' | gap 1.6; sill 0.9 + header 1.1 (REF) | gap (-1550, -3600) | per port · - | Doors.csv |  |
+| 3.20-19 | Surfaces: 10 x 7 backstage afterlife | SURFACE | NO | 70 m2 floor (REF (Rooms.csv)) |  | Megascans industrial concrete (MI_SceneDock_Floor); painted brick; tarps · Fab Standard | Rooms.csv; AB s7 DOCK | State changes: none, ever, by contract [RI s16] |
+
+---
+
+## 3 · GLOBAL AND DATA-PLACED FAMILIES
+
+| # | Prop | Tier · class | Interact? | Dims m (src) | Placement uu | Source candidate · licence | Canon | Notes / OPEN |
+|---|---|---|---|---|---|---|---|---|
+| G-01 | Transmitter log stations S1-S5 (lectern, binder, chained pen; the save system; paper economy on Late Night; one page arrives pre-signed) | INTERACTABLE · station family | YES — per station · sign — GT 485-486 | lectern per S5 row (REF) | Stations.csv: S5 REC ROOM, S1 TAPE LIBRARY (landing), S2 MASTER CONTROL, S3 GREEN ROOM, S4 TRANSMITTER HALL | One bespoke lectern build, five wear variants · Bespoke | Stations.csv; RI GLOBAL; prop_kit.gd lectern |  |
+| G-02 | Camera mounts + tally lamps (coverage endpoints; tallies shape-coded; kills persist until re-patched) | INTERACTABLE · rig family | OPEN — T2 · route/read — Monitors.csv | camera 0.3 x 0.3 x 0.5; tally 0.05 (RW) | CAM 1 CORRIDOR, CAM 2 TAPE LIBRARY (data); more per SPIKE 2 | Bespoke · Bespoke | Monitors.csv; RI GLOBAL; LB GRAMMAR | OPEN 0-I: whether rigs count toward any room's I cap |
+| G-03 | Wall monitors (mediation surfaces; the poisoned well may lie through exactly one, once) | INTERACTABLE · monitor family | OPEN — T2 · read · DYN — Monitors.csv | CRT 0.5 x 0.45 x 0.45 (REF / RW) | REC ROOM (-Y wall), BENCH ROOM (north wall) by data | crt_shell brief; M_Phosphor · Bespoke | Monitors.csv; RI GLOBAL; LAWS 8 (the interface lies once) |  |
+| G-04 | Break-window clocks (every zone carries a repeater or a sightline to one) | DRESSING · clock family · event-driven | NO — T2 · read | 0.3 dia (RW) | WB 538: (0, 2.3, -24.5) CONTROL; (-15.5, 2.5, -24.6) STUDIO A edge; (5.5, 2.3, -26.6) MASTER CONTROL; (0, 2.3, 0) REC ROOM | Fab search 'wall clock vintage' · Fab Standard | WB 537-542; RI GLOBAL; LAWS 6 |  |
+| G-05 | Member pins (enamel everywhere, plastic once; the status system worn on cardigans) | DRESSING · on characters, not rooms | NO — T1 · inspect | 0.025 dia (RW) | on the cast's cardigans | Bespoke enamel + one plastic variant; M_Enamel · Bespoke | RI GLOBAL | Belongs to the cast dossier (C2) for placement |
+| G-06 | The binder (meta UI home; pause, presentation form, ledger access; THE BINDER IS THE INVENTORY) | INTERACTABLE · UI object carried by Rita | YES — T1 · operate — controls map | 0.3 x 0.28 x 0.06 (RW) | with Rita | UI asset; a bespoke binder mesh for the hands · Bespoke | RI s5 'The binder'; gap audit ruling 4 (the binder is the inventory); OT (D02 note) |  |
+| G-07 | Door leaves for every Doors.csv row with a kind (door / locked); windows get sill + header | INTERACTABLE · door family | YES — door verb; locked reason text; key ids EDITH, QUIET ROOM — Doors.csv kind column | leaf 2.2 (REF) vs slab 2.6 (greybox): OPEN 0-A; thickness 0.09 (REF) (REF) | see the Doors table | Fab search 'wooden door old painted' / 'steel door industrial'; felt-faced leaf bespoke · Fab Standard / Bespoke | Doors.csv; WB 242-281; prop_kit.gd door_leaf 327-343; LAWS 11 (every threshold costs him 2.2 s) |  |
+| G-08 | Dailies canisters (SPAWN; carried between rooms) | INTERACTABLE · pickup family | YES — SPAWN · take — GT 79, 159 | see TAPE LIBRARY (REF) | spawn in TAPE LIBRARY; burn in CLIMATE | Bespoke · Bespoke | dailies_manager.gd; RI s6, s7 |  |
+
+### 3-A Doors (every Doors.csv row; leaves exist only where `kind` is set)
+
+| room_a | room_b | gap (Godot x, z) | width m | axis | kind | key |
+|---|---|---|---|---|---|---|
+| REC ROOM | KITCHEN | (5.0, 0.0) | 1.4 | z | (open gap) |  |
+| REC ROOM | DORMS | (-5.0, 0.0) | 1.4 | z | (open gap) |  |
+| REC ROOM | ENTRY | (0.0, 4.0) | 1.6 | x | door |  |
+| ENTRY | YARD | (0.0, 10.0) | 1.6 | x | door |  |
+| YARD | SHED | (8.5, 14.0) | 1.2 | z | locked:PADLOCKED · the tag reads EDITH · a key exists | EDITH |
+| REC ROOM | CORRIDOR | (0.0, -4.0) | 1.6 | x | (open gap) |  |
+| CORRIDOR | TAPE LIBRARY | (0.0, -11.0) | 1.6 | x | (open gap) |  |
+| TAPE LIBRARY | BENCH ROOM | (6.0, -16.0) | 1.4 | z | (open gap) |  |
+| BENCH ROOM | CLIMATE | (12.0, -16.0) | 1.4 | z | (open gap) |  |
+| CLIMATE | TRANSMITTER HALL | (14.5, -13.0) | 1.4 | x | (open gap) |  |
+| TRANSMITTER HALL | DEAD ROOM | (19.0, 0.0) | 1.2 | x | locked:LOCKED · felt-faced · the hum stops at the seam | QUIET ROOM |
+| TAPE LIBRARY | FIRE CORRIDOR | (-6.0, -16.0) | 1.4 | z | locked:SEALED · reopens for the anniversary (Tape 4) |  |
+| FIRE CORRIDOR | STAGE HALL | (-12.0, -17.5) | 1.4 | x | (open gap) |  |
+| STAGE HALL | STUDIO A | (-12.0, -24.0) | 1.6 | x | window |  |
+| STUDIO A | PATCH BAY | (-9.5, -29.5) | 1.4 | z | (open gap) |  |
+| CONTROL | PATCH BAY | (-1.5, -27.0) | 1.4 | z | (open gap) |  |
+| CONTROL | MASTER CONTROL | (1.5, -27.0) | 1.4 | z | (open gap) |  |
+| TAPE LIBRARY | CONTROL | (0.0, -21.0) | 1.6 | x | (open gap) |  |
+| STUDIO A | GREEN ROOM | (-21.5, -27.0) | 1.4 | z | (open gap) |  |
+| STUDIO A | SCENE DOCK | (-15.5, -36.0) | 1.6 | x | window |  |
+
+### 3-B Stations and monitors (data)
+
+| id | label | Godot (x, y, z) |
+|---|---|---|
+| S5 | REC ROOM | (-4.2, 0.0, 3.2) |
+| S1 | LIBRARY LANDING | (-1.2, 0.0, -11.8) |
+| S2 | MASTER CONTROL | (7.0, 0.0, -31.0) |
+| S3 | GREEN ROOM | (-24.5, 0.0, -28.6) |
+| S4 | TRANSMITTER THRESHOLD | (14.5, 0.0, -11.4) |
+| monitor | CAM 1 · CORRIDOR | cam (0, 2.4, -10.6) look (0, 1.2, -4.5) monitor (2.4, 1.7, -3.82) yaw PI |
+| monitor | CAM 2 · STACKS | cam (0, 2.4, -20.4) look (0, 1.2, -12.0) monitor (7.2, 1.7, -13.18) yaw 0.0 |
+
+### 3-C Reference-only fixtures (not props; do not dress)
+- WOOL SPIKE 001 at Godot (10.8, 0, −14.3) in the BENCH ROOM [WB 409–447]: the art bible's interim fiber-shader standard [AB §3]; a dev fixture. OPEN whether anything of it ships.
+- Label3D tags (THE BENCH, DEGAUSSER, CAM n, UNIT n, station 'S LOG' …) are greybox labels; in UE the prompt text comes from GameText.csv keys and diegetic wear, not floating text [OT ¶INTERACTABLES].
+- Characters (Merle at the kitchen counter, Harriet in her chair, Vess at the shrine, the Floor Manager in the library, the dock units' bodies) are C2's; only their seats/stands are rows here.
+- The elbow (FIRE CORRIDOR, T4 night, once ever) is an event; its name appears in no code file [LAWS 3].
+
+---
+
+## 4 · PER-ROOM CENSUS (QA-55/56/57 pre-check)
+
+I counted = rows with tier INTERACTABLE and interactable YES, excluding doors and cross-references; +OPEN = rows the room inventory gives a verb that the cap cannot hold or that the reference does not build. BREACH = YES alone exceeds the bible cap; open = only with the OPEN rows. Every breach is an owner ruling, not a manifest decision.
+
+| Unit | Room | Cap I/L/D | I counted | L handled | L ambient | D rows | Heroes | Flag |
+|---|---|---|---|---|---|---|---|---|
+| 3.1 | ENTRY | 1/0/8 | 2 (+0 OPEN) | 0 | 3 (ledger 3) | 7 | 1 | BREACH |
+| 3.2 | REC ROOM | 2/1/14 | 3 (+1 OPEN) | 2 | 3 (ledger 3) | 13 | 1 | BREACH |
+| 3.3 | KITCHEN | 1/1/12 | 1 (+1 OPEN) | 0 | 3 (ledger 3) | 16 | 1 | open |
+| 3.4 | DORMS | 1/1/10 | 2 (+1 OPEN) | 2 | 3 (ledger 3) | 10 | 1 | BREACH |
+| 3.5 | YARD | 0/1/8 | 0 (+2 OPEN) | 0 | 3 (ledger 3) | 10 | 0 | open |
+| 3.6 | SHED | 1/1/6 | 1 (+0 OPEN) | 0 | 3 (ledger 3) | 6 | 1 | ok |
+| 3.7 | CORRIDOR | 1/0/6 | 1 (+1 OPEN) | 0 | 3 (ledger 3) | 2 | 0 | open |
+| 3.8 | TAPE LIBRARY | 2/2/16 | 3 (+5 OPEN) | 2 | 3 (ledger 3) | 6 | 0 | BREACH |
+| 3.9 | BENCH ROOM | 3/1/8 | 8 (+4 OPEN) | 0 | 2 (ledger 2) | 5 | 1 | BREACH |
+| 3.10 | CLIMATE | 1/1/6 | 1 (+1 OPEN) | 0 | 3 (ledger 3) | 6 | 1 | open |
+| 3.11 | TRANSMITTER HALL | 2/1/10 | 3 (+2 OPEN) | 0 | 3 (ledger 3) | 5 | 1 | BREACH |
+| 3.12 | DEAD ROOM | 1/1/3 | 1 (+2 OPEN) | 0 | 3 (ledger 3) | 3 | 1 | open |
+| 3.13 | FIRE CORRIDOR | 1/1/5 | 0 (+1 OPEN) | 0 | 3 (ledger 3) | 4 | 0 | ok |
+| 3.14 | STAGE HALL | 0/1/6 | 0 (+0 OPEN) | 0 | 3 (ledger 3) | 5 | 0 | ok |
+| 3.15 | STUDIO A | 3/2/18 | 3 (+3 OPEN) | 0 | 4 (ledger 4) | 13 | 1 | open |
+| 3.16 | PATCH BAY | 3/2/12 | 3 (+4 OPEN) | 1 | 3 (ledger 3) | 5 | 1 | open |
+| 3.17 | CONTROL | 1/2/6 | 0 (+1 OPEN) | 2 | 3 (ledger 3) | 7 | 0 | ok |
+| 3.18 | MASTER CONTROL | 3/2/12 | 2 (+3 OPEN) | 0 | 3 (ledger 3) | 8 | 1 | open |
+| 3.19 | GREEN ROOM | 2/2/10 | 1 (+1 OPEN) | 1 | 3 (ledger 3) | 8 | 0 | ok |
+| 3.20 | SCENE DOCK | 3/3/14 | 3 (+3 OPEN) | 2 | 3 (ledger 3) | 7 | 0 | open |
+
+Drift audit (QA-56): every drift hook in this manifest sits on a DRESSING row (pegs, mat, bracket, doilies, chalkboard, jars, doors, laundry, hasp, notice board, a spine, a needle, sandbags, the mark's tape, a loom, stamps, clip angles, saucer rings, a flat). BENCH ROOM, TRANSMITTER HALL and DEAD ROOM carry none [RB].
+
+---
+
+## 5 · OPEN (owner rulings needed; never invented here)
+
+| Id | Question |
+|---|---|
+| 0-A | Door leaf height 2.2 m (reference) vs 2.6 m greybox slab [RBR 0-A] |
+| 0-D | Sodium exterior spill at windows (art bible s8) vs one sodium fixture in the dock (lighting bible) [RBR 0-D] |
+| 0-F | Does the tower's red join the red=watched grammar [RBR 0-F] |
+| 0-H | Key scale: prop_kit key_prop is ~0.3 m long; real keys are 0.06-0.08 m |
+| 0-I | Whether data-placed families (camera rigs, monitors, stations, doors) count toward a room's I cap; this manifest counts stations, excludes doors, rigs and monitors |
+| 3.1-A | Interactable count: cap 1/0/8 vs RI s2 (podium sign, charter/bulletin/umbrella inspect) [RBR 3.1-A] |
+| 3.1-B | Which door the amber fixture hangs over [RBR 3.1-B] |
+| 3.1-D | The impossible-tapes crate is an event-gated second I in a 1-cap room |
+| 3.2-A | Interactable count: cap 2/1/14 vs RI s3 (TV, chairs, shrine, albums, board game, rack) and the event docks VESS'S CUT + D06 note [RBR 3.2-A] |
+| 3.2-C | Reference screen centre Z 160 uu vs a floor console's ~100 uu [RBR 3.2-C] |
+| 3.2-D | Wall clock reference at room centre: which wall [RBR 3.2-D] |
+| 3.2-E | Windows in the rec room (none in data) [RBR 3.2-E] |
+| 3.2-F | Tier of RI-only lore hosts outside the D-series (board game rhyme, photo albums G3): handled, ambient, or dressing |
+| 3.3-A | Interactable count: cap 1/1/12 vs RI s4; the T3 kitchen sub-panel is routing-critical and absent from the reference [RBR 3.3-A] |
+| 3.3-B | The kettle's glow: stove element vs electric indicator [RBR 3.3-B] |
+| 3.3-C | Kettle glow at NIGHT and after Merle's death [RBR 3.3-C] |
+| 3.3-D | 'Framed TV listings, hallway': no hallway exists in Rooms.csv [RBR 3.3-D] |
+| 3.4-A | Interactable count: cap 1/1/10 vs bed + dresser + D05 + D07 + curtain [RBR 3.4-A] |
+| 3.4-B | Dresser height 0.56 m (reference) vs ~0.85 m real [RBR 3.4-B] |
+| 3.4-C | 'Five doors' in a single 8 x 5 box with no partitions: door frames, lockers, or partition flats [RBR 3.4-C] |
+| 3.4-D | The +Y window needs a wall cut Doors.csv does not carry [RBR 3.4-D] |
+| 3.5-A | Yard perimeter: four 3 m stamped walls vs an implied fence and open ground [RBR 3.5-A] |
+| 3.5-B | Beacon steady (room bible) vs pulse (walkthrough, game master T4.7, RI s1) [RBR 3.5-B] |
+| 3.5-C | The yard by day: no canon description [RBR 3.5-C] |
+| 3.5-D | Gravel lot floodlight: RI T2 operable, not in data, breaches I = 0 [RBR 3.5-D] |
+| 3.5-E | Tower height 7.5 m (reference) vs a real UHF mast [RBR 3.5-E] |
+| 3.5-F | Rita's car and the 58 CLUB sign: dressing only under I = 0 [RBR 3.5-F] |
+| 3.5-G | W2 secret viewing pickup behind the burn barrel breaches I = 0; W-series text keys unidentified |
+| 3.5-H | Is the club's van ever visible (it blocks Rita's car from T4) |
+| 3.6-A | Shed hasp: 'unlocked, always' (room bible) vs PADLOCKED · EDITH · a key exists (Doors.csv, RI s1 T4 shed) |
+| 3.6-B | Tier of the child's drawings of Chum in Edith's boxes (RI-only) |
+| 3.7-A | S1: 'at the library mouth' in CORRIDOR (room bible) vs Stations.csv LIBRARY LANDING at (-1.2, -11.8) inside TAPE LIBRARY; the corridor's I cap is then unused |
+| 3.7-B | The older wax lane 'bends toward the dead room's door' but the dead room (19, 2.5) is nowhere near the corridor (0, -7.5) |
+| 3.8-A | Compactus ROLLING stacks (RI s6) vs four FIXED shelves in the reference |
+| 3.8-B | A second 16 mm projector in the media alcove (RI s6) or the FILM CABINET itself runs the film (reference) |
+| 3.8-C | D06 HARRIET'S NOTE has three homes: REC ROOM (code), film cabinet (props packet), GREEN ROOM (room bible) |
+| 3.8-D | D01 LELAND'S CATALOG NOTES: LIB compactus + seance reel box (props packet) vs 'D01's shelf' in SCENE DOCK (room bible); not built in the reference |
+| 3.8-E | Interactable count: cap 2/2/16 vs RI s6 (stacks, catalog, ladder, projector, canisters) + S1 + film cabinet |
+| 3.8-F | Where the donations ledger (27 REELS line) sits; it is not the bench's D03 |
+| 3.8-G | Tier of the station log drawer (airdate source 1/4, RI-only) |
+| 3.8-H | Room bible's 'the crate lives deep' (TAPE LIBRARY web): which crate |
+| 3.9-A | What machine THE BENCH is: reference bench-top audio deck vs the ledger's '2in master' (a console quad VTR) |
+| 3.9-B | THE FIRE TAPE DOCK: FIRE CORRIDOR keynote (room bible) vs the 1977 DOCK at the bench (reference) |
+| 3.9-C | Interactable count: cap 3/1/8 vs bench, ledger(+margin), spectrogram, 1977 dock, seance dock, GEN knob, splicing block, oven, TBC, notepad |
+| 3.10-A | Degausser scale: reference 1.2 x 0.9 x 0.8 cabinet vs a tabletop bulk eraser |
+| 3.10-B | Reel racks as an I (RI s7 take) in a 1-cap room already spent on the degausser |
+| 3.10-C | Tier of the desiccated mitten in the silica bin (RI-only) |
+| 3.11-A | Interactable count: cap 2/1/10 vs S4, CRAIK'S BOX, REEL 1977, the dead room door, tool wall (RI), the transmitter itself |
+| 3.11-B | Fire tape format: 2-inch quad reel vs 16 mm can |
+| 3.11-C | Transformer catwalk (RI s17) absent from the data |
+| 3.12-A | THE RADIO: console radio vs a rack (RI 'radio rack') |
+| 3.12-B | Dead room light: 'single flat toplight' (room bible, lighting bible) vs 'no key at all' (art bible s8) |
+| 3.12-C | Patch panel and music stand as Is (RI s18 T5) in a 1-cap room |
+| 3.13-A | Duplicate of 3.9-B from the corridor's side |
+| 3.13-B | 'A door hinge on the dock side': which of the fire corridor's two doors |
+| 3.13-C | What an indoor 'hydrant post' is (standpipe / hose valve) |
+| 3.13-D | Tier of the surviving 1974 audience photo with the circled front row (RI-only) |
+| 3.14-A | Catwalk access: reference ramp from STAGE HALL vs ladders (RI s14) |
+| 3.14-B | The wall clock at (-15.5, 2.5, -24.6) sits on the STUDIO A side of the window wall |
+| 3.15-A | Interactable count: cap 3/2/18 vs little door, casting sheet, pedestals x3, teleprompter, boom winch, card stand |
+| 3.15-B | Scale and asset of the stage body / hung spare Chum (owned by C2) |
+| 3.16-A | D07 binder: DORMS (props packet, code) vs PATCH BAY keynote (room bible) |
+| 3.16-B | Breaker panel: part of THE PANEL (reference) or separate (RI s12); and TRANSMITTER HALL's 'breaker rows' |
+| 3.16-C | 'The credit margin': PATCH BAY keynote (room bible) vs LEDGER MARGIN in the BENCH ROOM (reference) |
+| 3.16-D | Interactable count: cap 3/2/12 vs panel, breaker panel, final breaker, AUX PANEL, fuse drawer |
+| 3.17-A | CONTROL light: cold fluorescent (room bible) vs the reference's amber OmniLight |
+| 3.17-B | D11 home: 'Peak security office copy' (no such room); reference point (2.0, -27.5) is inside MASTER CONTROL by Rooms.csv |
+| 3.17-C | Wall monitors in CONTROL: RI s10 lists them; Monitors.csv has none |
+| 3.18-A | Monitor wall: twelve feeds (SPIKE 2) vs two rows in Monitors.csv |
+| 3.18-B | D08 run sheet: in the D-series yet 'glimpsed angle only' - handled or ambient tier |
+| 3.18-C | 'Glass window to Studio A' from MASTER CONTROL: no opening in Doors.csv and the rooms do not border |
+| 3.18-D | Interactable count: cap 3/2/12 vs monitor wall, switcher, S2, cart rack, uplink panel |
+| 3.18-E | Tier of the operator manuals' green margin note (RI-only) |
+| 3.19-A | GREEN ROOM's keynote hero (HER CHAIR) carries no verb; QA-57 census reading |
+| 3.19-B | Vanity bulbs: canon two dead vs the reference lighting 6 of 10 |
+| 3.19-C | Tier of the framed 1977 call sheet (RI-only) |
+| 3.19-D | A second kettle in the green room (RI s15) vs 'the kettle' as Merle's singular |
+| 3.20-A | THE SEANCE DOCK: SCENE DOCK keynote (room bible) vs the SEANCE REEL dock at the bench (reference) |
+| 3.20-B | Spare Chum unit scale (pilot vs rebuild; the mascot is 3.35 m by canon, the stage puppet hand-sized) |
+| 3.20-C | The warm one: how 'found by hand' works without a prompt (LAW 4, QA-55) |
+| 3.20-D | 'Cold north light through high glass' (art bible s7) vs a windowless dock in the data |
+| R-1 | D02 identity: 'the welcome packet copy Rita carries' (object taxonomy) vs Craik's production notebook (props packet) vs the finale script pickup read_id D02 (code) |
+
+Also open from the room briefs and carried, not restated: 0-B eye height, 0-C FOV, 0-E night brown-out vs OFF, 0-G what L counts, and the EV/kelvin/candela absence (no number exists in canon; C18 ships structure only).
+
+---
+
+## 6 · VERIFICATION (this file and the CSV are generated from one row set)
+
+- rows: 326  rooms: 21  OPEN ids defined: 82  referenced: 82  defined-but-unreferenced: []
+- tiers: DRESSING 148, INTERACTABLE 80, LORE-AMBIENT 60, LORE-HANDLED 12, SURFACE 26
+- Doors.csv rows: 20  Stations.csv rows: 5  Monitors.csv rows: 2
+- checks: tier vocabulary, YES/NO/OPEN vocabulary, a canon citation on every row, ≤1 hero per room, ambient rows ≥ the ledger's sentence count per room, every room-bible keynote phrase present in its room, D01–D11 all homed or OPEN, every OPEN id referenced is defined, every station id present → **PASS**
+- CSV columns: id, unit, room, prop, tier, class, interactable, gate_verb, text_key, dims_m, dims_src, placement_uu, source_candidate, licence, canon, notes_open
+
+CSV column key: `id` unit-index · `unit` PROGRESS.md Phase 3 unit · `room` Rooms.csv name · `tier` §0.2 · `class` sub-kind (hero, station, door, dock, pickup, practical, drift, ambient host, readable Dnn, DYN, EVT) · `interactable` YES/NO/OPEN · `gate_verb` RI gate and verb · `text_key` GameText line or data row · `dims_m` metres · `dims_src` §0.3 · `placement_uu` UE uu with the Godot origin · `source_candidate` §0.4 · `licence` CC0 / Fab Standard / Bespoke · `canon` citations · `notes_open` conflicts and OPEN ids.
