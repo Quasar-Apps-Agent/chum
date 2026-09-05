@@ -9,6 +9,11 @@ Cycles stills to renders/. This is the design-review image; the game keeps
 its baked glb. Design in Cycles, ship baked.
 """
 import bpy
+import mathutils
+## OWNER RULING 2026-09-05: the puppet is authored at 3.35 m now; every 2.6-space
+## position in this script scales by K, and exposure rises 2*log2(K) EV to hold the
+## look against inverse-square falloff at the longer lamp distances.
+K = 3.35 / 2.6
 import math
 import os
 
@@ -176,7 +181,7 @@ for m in bpy.data.materials:
                 pass
 
 # ---- the tally eye, burning -------------------------------------------------------------
-bpy.ops.mesh.primitive_uv_sphere_add(radius=0.017, location=(0.13, -0.4, 2.34))
+bpy.ops.mesh.primitive_uv_sphere_add(radius=0.017 * K, location=(0.13 * K, -0.4 * K, 2.34 * K))
 eye = bpy.context.active_object
 eye.name = "TallyEyeLive"
 em = bpy.data.materials.new("TallyGlow")
@@ -211,7 +216,7 @@ def area(name, loc, rot, power, size, col=(1.0, 0.82, 0.6)):
     ld.color = col
     lo = bpy.data.objects.new(name, ld)
     bpy.context.collection.objects.link(lo)
-    lo.location = loc
+    lo.location = mathutils.Vector(loc) * K
     lo.rotation_euler = rot
     return lo
 
@@ -227,7 +232,7 @@ rl.color = (1.0, 0.1, 0.05)
 rl.shadow_soft_size = 0.05
 rlo = bpy.data.objects.new("TallySpill", rl)
 bpy.context.collection.objects.link(rlo)
-rlo.location = (0.13, -0.47, 2.34)
+rlo.location = (0.13 * K, -0.47 * K, 2.34 * K)
 
 # ---- cameras and the two stills --------------------------------------------------------------
 scene.render.resolution_x = 1216
@@ -248,19 +253,20 @@ def aim(obj, target):
     obj.rotation_quaternion = d.to_track_quat("Z", "Y")
 
 import mathutils
+scene.view_settings.exposure += 2.0 * math.log2(K)   # +0.73 EV: lamps are K x farther
 ## SHOT 1: the head, plate framing
-cam.location = mathutils.Vector((0.06, -2.65, 2.5))
-aim(cam, mathutils.Vector((0.0, -0.05, 2.35)))
-camd.dof.focus_distance = 2.35
+cam.location = mathutils.Vector((0.06, -2.65, 2.5)) * K
+aim(cam, mathutils.Vector((0.0, -0.05, 2.35)) * K)
+camd.dof.focus_distance = 2.35 * K
 camd.dof.aperture_fstop = 4.0
 scene.render.filepath = os.path.join(OUTDIR, "chum_af_head.png")
 bpy.ops.render.render(write_still=True)
 print("RENDERED head")
 
 ## SHOT 1b: the ears, close — sewn edges, tattered panels, the singed left tip
-cam.location = mathutils.Vector((0.08, -1.85, 2.98))
-aim(cam, mathutils.Vector((0.0, 0.0, 2.86)))
-camd.dof.focus_distance = 1.85
+cam.location = mathutils.Vector((0.08, -1.85, 2.98)) * K
+aim(cam, mathutils.Vector((0.0, 0.0, 2.86)) * K)
+camd.dof.focus_distance = 1.85 * K
 camd.dof.aperture_fstop = 4.0
 scene.render.filepath = os.path.join(OUTDIR, "chum_af_ears.png")
 bpy.ops.render.render(write_still=True)
@@ -268,8 +274,8 @@ print("RENDERED ears")
 
 ## SHOT 2: full figure, low angle, the eleven-footer looking down at you
 camd.lens = 50
-cam.location = mathutils.Vector((-1.15, -3.4, 1.15))
-aim(cam, mathutils.Vector((0.0, -0.1, 1.55)))
+cam.location = mathutils.Vector((-1.15, -3.4, 1.15)) * K
+aim(cam, mathutils.Vector((0.0, -0.1, 1.55)) * K)
 camd.dof.focus_distance = 3.4
 camd.dof.aperture_fstop = 4.0
 scene.render.filepath = os.path.join(OUTDIR, "chum_af_full.png")

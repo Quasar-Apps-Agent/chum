@@ -269,6 +269,29 @@ MASCOT; the plate after-fire-chum-dossier.png is the mascot's canon, not
 the stage tell-table (PHASE1-CHUM-BUILD-BRIEF §0.5).
 - [ ] 1.1 Torso: quilted patchwork, seams, char zones, 2048 bake — at
       3.35 m; NO flannel, NO leather patches (owner ruling: stripped)
+      - [x] 1.1a GEOMETRY + SCALE (evidence docs/telemetry/blender-phase1/
+            1.1a_*.png): tools/fetch_scans.py + 10 CC0 scans (Poly Haven /
+            AmbientCG, 2K, credited, gitignored as re-fetchable); FINAL_SCALE
+            3.35/2.6 applied and FROZEN before the bake (tallest point 4.00
+            m = ear tips; body 3.35); BodyCore at voxel 0.02 + smooth pass
+            (no facets) with the PLATE's forward-belly slump; belly rebuilt
+            as an EMBEDDED 20 mm panel (boolean of the proud body — no egg);
+            seven patches as SOLID booleaned mass (rust, olive, navy, ochre,
+            2 brown, plaid — shells GONE; flannel + leather STRIPPED per
+            ruling); bakes on wool_boucle/corduroy/denim/plaid; island
+            margin 0.03; beauty rig rescaled (+0.73 EV). HONEST VERDICT:
+            the QUILT DOES NOT READ — 3000 fur cards + 3600 post-bake guides
+            bury every patch and the scorch layer darkens them to the body's
+            tone; plaid + brownA are BURIED under the belly panel (my
+            placement: inside its footprint, 14 mm proud vs 20); stitch
+            cylinders read as pipes. 1.1 stays unticked
+      - [ ] 1.1b THE QUILT MUST READ: fur cards to singed rims on the
+            shoulder/hip crests only (900, 20–40 mm); post-bake body hair
+            masked off the front; patch/belly scorch 0.5→0.2 and tints up so
+            rust/olive/navy/plaid identify in the beauty; move the two
+            buried patches off the belly; then seams-to-maps + delete the
+            sring/stt stitch cylinders; char zones (bark/rustleak); UE
+            export + locked-EV capture; sodium + beauty re-judged
 - [ ] 1.2 Throat speaker (donor speaker/radio driver, chest mount, cabling)
 - [ ] 1.3 Collar, leather strap, dead brass bell
 - [ ] 1.4 Arms & hands: tendons both sides, articulated fingers

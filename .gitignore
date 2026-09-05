@@ -20,3 +20,10 @@ ue/Restoration/.vs/
 # Python bytecode (UE editor python + tooling)
 __pycache__/
 *.pyc
+
+# 2K CC0 scans are re-fetchable (tools/fetch_scans.py); keep the repo small
+tools/texsrc/**/*_2k.jpg
+tools/texsrc/**/*_2K-JPG_*.jpg
+
+# build output (146 MB with 2K bakes packed); regenerate with tools/build_chum_af.py. LFS deferred (tracker 0.3)
+assets/models/chum_af.glb

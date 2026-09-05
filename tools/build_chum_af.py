@@ -2,8 +2,9 @@
 
 Run:  /Applications/Blender.app/Contents/MacOS/Blender --background --python tools/build_chum_af.py
 
-Builds the eleven-footer as a real sculpted mesh at 2.6 m base height
-(rundown.gd scales the rig to 3.35) and exports assets/models/chum_af.glb.
+Builds the eleven-footer as a real sculpted mesh. Authored numbers are in the
+2.6 m base space; ONE uniform FINAL_SCALE (3.35/2.6) is applied and frozen before
+the bake (OWNER RULING 2026-09-05: true 3.35 m, eye at 3 m, actor scale 1.0).
 Coordinate contract with the game (Godot Y-up, character faces +Z):
 Blender Z-up, front is -Y. Head empty at (0, 0, 2.28); Jaw empty child of
 Head at the hinge; the right eye socket is left empty for the tally eye,
@@ -145,7 +146,7 @@ def join(objs, name):
     j.name = name
     return j
 
-def organic(obj, material, voxel=0.03, lump_str=0.02, fiber_str=0.006, decimate=0.45, fold_str=0.0):
+def organic(obj, material, voxel=0.03, lump_str=0.02, fiber_str=0.006, decimate=0.45, fold_str=0.0, smooth=0):
     """voxel-remesh the fused masses, displace twice (felt lump + fiber), decimate"""
     bpy.ops.object.select_all(action="DESELECT")
     obj.select_set(True)
@@ -166,6 +167,11 @@ def organic(obj, material, voxel=0.03, lump_str=0.02, fiber_str=0.006, decimate=
         d3.strength = fold_str
     dc = obj.modifiers.new("decimate", "DECIMATE")
     dc.ratio = decimate
+    if smooth > 0:
+        ## the decimated surface must never facet at 1 m (BRIEF 1.1 step 1)
+        sm = obj.modifiers.new("smooth", "SMOOTH")
+        sm.factor = 0.5
+        sm.iterations = smooth
     bpy.ops.object.convert(target="MESH")   # apply now: baking needs real topology
     obj = bpy.context.active_object
     obj.data.materials.clear()
@@ -329,25 +335,84 @@ def parent_to(child, parent):
     child.parent = parent
     child.matrix_parent_inverse = parent.matrix_world.inverted()
 
+## the PLATE's patch palette (mascot canon). The stage puppet's flannel and
+## leather deltas are STRIPPED per owner ruling 2026-09-05. Tints over real scans.
+M["PatchOlive"] = mat("PatchOlive", (0.20, 0.28, 0.17), 0.95)
+M["PatchNavy"]  = mat("PatchNavy",  (0.10, 0.12, 0.20), 0.95)
+M["PatchOchre"] = mat("PatchOchre", (0.42, 0.32, 0.16), 0.95)
+M["PatchBrown"] = mat("PatchBrown", (0.16, 0.11, 0.08), 0.95)
+M["PatchPlaid"] = mat("PatchPlaid", (0.55, 0.45, 0.35), 0.95)
+
 # ---- the body: round-bellied, patched, burnt ---------------------------------------
+## PLATE silhouette: belly forward, chest sagging over the collar line (BRIEF 1.1 step 1)
 body = join([
-    sphere((0, 0, 1.40), 0.46, (1.0, 0.92, 1.22)),      # the belly mass
-    sphere((0, 0.02, 1.80), 0.36, (0.98, 0.9, 0.9)),    # chest
-    sphere((0, 0, 0.98), 0.34, (1.05, 0.95, 0.8)),      # pelvis
-    sphere((-0.40, 0, 1.78), 0.16),                     # shoulders
-    sphere((0.40, 0, 1.78), 0.16),
-    sphere((-0.24, 0, 1.0), 0.2, (1, 1, 0.9)),          # hips
+    sphere((0, -0.05, 1.38), 0.47, (1.0, 0.96, 1.20)),   # the belly mass, forward
+    sphere((0, -0.01, 1.78), 0.37, (0.98, 0.92, 0.86)),  # chest, sagging
+    sphere((0, 0.02, 0.98), 0.34, (1.05, 0.95, 0.8)),    # pelvis
+    sphere((-0.40, 0.01, 1.78), 0.16),                   # shoulders
+    sphere((0.40, 0.01, 1.78), 0.16),
+    sphere((-0.24, 0, 1.0), 0.2, (1, 1, 0.9)),           # hips
     sphere((0.24, 0, 1.0), 0.2, (1, 1, 0.9)),
 ], "BodyCore")
-organic(body, M["BurntWool"], 0.035, 0.022, 0.007, 0.4)
+organic(body, M["BurntWool"], 0.02, 0.018, 0.006, 0.4, smooth=4)
 body_fur = fur(body, 3000, 0.035, 0.09, "BodyFur",
                [M["FurDark"], M["FurMid"], M["FurRust"]],
                mask=lambda wp: (wp.y < -0.3 and 1.0 < wp.z < 1.8 and abs(wp.x) < 0.32))
 
-# the accessed belly: darker wool, proud of the body front (-Y)
-belly = sphere((0, -0.33, 1.34), 0.27, (1.0, 0.42, 1.25))
-belly.name = "Belly"
-organic(belly, M["BellyWool"], 0.02, 0.012, 0.005, 0.5)
+## SOLID PATCHES (BRIEF 1.1 step 2): a copy of the fused body pushed proud along
+## its normals, boolean-INTERSECTED with a cutter, then voxel-remeshed — real
+## sewn-on mass that follows the body's curvature. Never a shrinkwrapped shell
+## (they collapsed into slivers; banned).
+def solid_patch(name, material, cutter, proud=0.014, voxel=0.006, decimate=0.5):
+    bpy.ops.object.select_all(action="DESELECT")
+    body.select_set(True)
+    bpy.context.view_layer.objects.active = body
+    bpy.ops.object.duplicate(linked=False)
+    p = bpy.context.active_object
+    p.name = name
+    p.modifiers.clear()
+    dp = p.modifiers.new("proud", "DISPLACE")
+    dp.direction = "NORMAL"
+    dp.mid_level = 0.0
+    dp.strength = proud
+    bo = p.modifiers.new("cut", "BOOLEAN")
+    bo.operation = "INTERSECT"
+    bo.object = cutter
+    bo.solver = "EXACT"
+    bpy.ops.object.convert(target="MESH")
+    p = bpy.context.active_object
+    bpy.data.objects.remove(cutter, do_unlink=True)
+    rm = p.modifiers.new("remesh", "REMESH")
+    rm.mode = "VOXEL"
+    rm.voxel_size = voxel
+    dc = p.modifiers.new("decimate", "DECIMATE")
+    dc.ratio = decimate
+    sm = p.modifiers.new("smooth", "SMOOTH")
+    sm.factor = 0.4
+    sm.iterations = 2
+    bpy.ops.object.convert(target="MESH")
+    p = bpy.context.active_object
+    simple(p, material)
+    BAKES.append(p)
+    print("PATCH", name, "verts", len(p.data.vertices))
+    return p
+
+def rounded_prism(loc, rot_z, w, h, depth=0.36, bevel=0.03):
+    bpy.ops.mesh.primitive_cube_add(size=2.0, location=loc)
+    c = bpy.context.active_object
+    c.scale = (w / 2.0, depth / 2.0, h / 2.0)
+    c.rotation_euler = (0, 0, rot_z)
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    bv = c.modifiers.new("bevel", "BEVEL")
+    bv.width = bevel
+    bv.segments = 4
+    bpy.ops.object.convert(target="MESH")
+    return bpy.context.active_object
+
+# the belly: a sewn-in oval PANEL of the body, 20 mm proud (PLATE: a lighter tan
+# oval with a dark border; the stage's resewn scar is OPEN, not built)
+belly_cut = sphere((0, -0.36, 1.34), 0.30, (1.0, 0.55, 1.28))
+belly = solid_patch("Belly", M["BellyWool"], belly_cut, proud=0.02, voxel=0.008, decimate=0.5)
 
 # ---- legs and weighted paw feet ------------------------------------------------------
 for sx, nm in ((-1, "LegL"), (1, "LegR")):
@@ -468,32 +533,19 @@ spk = cyl((0, -0.37, 1.74), 0.09, 0.05, rot=(math.radians(78), 0, 0))
 spk.name = "ThroatSpeaker"
 simple(spk, M["CharDark"])
 
-# ---- patches, shrinkwrapped to the lumpy body --------------------------------------------
-def patch(name, material, loc, rot_z, size):
-    bpy.ops.mesh.primitive_plane_add(size=size, location=loc)
-    p = bpy.context.active_object
-    p.name = name
-    p.rotation_euler = (math.radians(90), 0, rot_z)   # stand the plane up, facing -Y
-    sub = p.modifiers.new("sub", "SUBSURF")
-    sub.levels = 3
-    sub.render_levels = 3
-    sw = p.modifiers.new("wrap", "SHRINKWRAP")
-    sw.target = body
-    sw.wrap_method = "TARGET_PROJECT"
-    sw.wrap_mode = "ABOVE_SURFACE"
-    sw.offset = 0.01
-    so = p.modifiers.new("thick", "SOLIDIFY")
-    so.thickness = 0.014
-    bpy.ops.object.convert(target="MESH")
-    p = bpy.context.active_object
-    simple(p, material)
-    BAKES.append(p)
-    return p
-
-patch("PatchRust",    M["PatchRust"],    (-0.25, -0.38, 1.64), 0.3, 0.22)
-patch("PatchGreen",   M["PatchGreen"],   (0.28, -0.34, 1.5), -0.2, 0.18)
-patch("PatchFlannel", M["PatchFlannel"], (0.12, -0.36, 1.84), 0.15, 0.18)   # the school-gray flannel
-patch("PatchLeather", M["PatchLeather"], (-0.24, -0.26, 0.92), 0.4, 0.16)   # the leather, low
+# ---- patches: the PLATE's quilt as SOLID sewn-on mass (BRIEF 1.1 step 2) ----------
+## Count/placement read from the PLATE: rust-red left shoulder, olive right
+## chest, navy flank, tan/ochre, small dark browns, one checked cloth. The
+## stage's "fourteen" is OPEN. Flannel + leather: STRIPPED (owner ruling).
+for _pn, _pm, _loc, _rz, _w, _h in (
+        ("PatchRust",   M["PatchRust"],  (-0.27, -0.36, 1.66),  0.30, 0.24, 0.22),
+        ("PatchOlive",  M["PatchOlive"], ( 0.29, -0.33, 1.52), -0.20, 0.21, 0.19),
+        ("PatchNavy",   M["PatchNavy"],  (-0.38, -0.20, 1.20),  0.55, 0.19, 0.17),
+        ("PatchOchre",  M["PatchOchre"], ( 0.31, -0.29, 1.26),  0.10, 0.17, 0.15),
+        ("PatchBrownA", M["PatchBrown"], (-0.12, -0.42, 1.08),  0.05, 0.13, 0.11),
+        ("PatchBrownB", M["PatchBrown"], ( 0.15, -0.38, 1.88), -0.10, 0.12, 0.10),
+        ("PatchPlaid",  M["PatchPlaid"], ( 0.05, -0.44, 1.62),  0.00, 0.15, 0.13)):
+    solid_patch(_pn, _pm, rounded_prism(_loc, _rz, _w, _h))
 
 # ---- THE HEAD (dossier-matched, iteration 2) -----------------------------------------
 head = empty("Head", (0, 0, 2.28))
@@ -1063,6 +1115,17 @@ SCANS = {
     "wool":    ("Fabric031/Fabric031_1K-JPG_Color.jpg", "Fabric031/Fabric031_1K-JPG_NormalGL.jpg", "Fabric031/Fabric031_1K-JPG_Roughness.jpg"),
     "weave":   ("Fabric030/Fabric030_1K-JPG_Color.jpg", "Fabric030/Fabric030_1K-JPG_NormalGL.jpg", "Fabric030/Fabric030_1K-JPG_Roughness.jpg"),
     "leather": ("Leather030/Leather030_1K-JPG_Color.jpg", "Leather030/Leather030_1K-JPG_NormalGL.jpg", "Leather030/Leather030_1K-JPG_Roughness.jpg"),
+    ## Phase 1 scans (tools/fetch_scans.py; CC0; credited in texsrc/CREDITS.md)
+    "boucle":    ("wool_boucle/wool_boucle_Diffuse_2k.jpg", "wool_boucle/wool_boucle_nor_gl_2k.jpg", "wool_boucle/wool_boucle_Rough_2k.jpg"),
+    "teddy":     ("curly_teddy_natural/curly_teddy_natural_Diffuse_2k.jpg", "curly_teddy_natural/curly_teddy_natural_nor_gl_2k.jpg", "curly_teddy_natural/curly_teddy_natural_Rough_2k.jpg"),
+    "hessian":   ("hessian_230/hessian_230_Diffuse_2k.jpg", "hessian_230/hessian_230_nor_gl_2k.jpg", "hessian_230/hessian_230_Rough_2k.jpg"),
+    "corduroy":  ("ribbed_corduroy/ribbed_corduroy_Diffuse_2k.jpg", "ribbed_corduroy/ribbed_corduroy_nor_gl_2k.jpg", "ribbed_corduroy/ribbed_corduroy_Rough_2k.jpg"),
+    "denim":     ("denim_fabric_06/denim_fabric_06_Diffuse_2k.jpg", "denim_fabric_06/denim_fabric_06_nor_gl_2k.jpg", "denim_fabric_06/denim_fabric_06_Rough_2k.jpg"),
+    "plate":     ("metal_plate_02/metal_plate_02_Diffuse_2k.jpg", "metal_plate_02/metal_plate_02_nor_gl_2k.jpg", "metal_plate_02/metal_plate_02_Rough_2k.jpg"),
+    "plaid":     ("Fabric080/Fabric080_2K-JPG_Color.jpg", "Fabric080/Fabric080_2K-JPG_NormalGL.jpg", "Fabric080/Fabric080_2K-JPG_Roughness.jpg"),
+    "greenwool": ("Fabric018/Fabric018_2K-JPG_Color.jpg", "Fabric018/Fabric018_2K-JPG_NormalGL.jpg", "Fabric018/Fabric018_2K-JPG_Roughness.jpg"),
+    "bark":      ("Bark015/Bark015_2K-JPG_Color.jpg", "Bark015/Bark015_2K-JPG_NormalGL.jpg", "Bark015/Bark015_2K-JPG_Roughness.jpg"),
+    "rustleak":  ("Rust009/Rust009_2K-JPG_Color.jpg", "Rust009/Rust009_2K-JPG_NormalGL.jpg", "Rust009/Rust009_2K-JPG_Roughness.jpg"),
 }
 SCORCH_MASK = os.path.join(TEXSRC, "Metal058A/Metal058A_1K-JPG_Color.jpg")
 _img_cache = {}
@@ -1234,13 +1297,18 @@ def burlap_nodes(matr, tint_srgb, scorch, scan_key, scale):
 
 
 BAKE_TINTS = {
-    "BurntWool": ((0.13, 0.1, 0.07), 0.88, "wool", 9.0),
+    "BurntWool": ((0.13, 0.1, 0.07), 0.88, "boucle", 7.0),   # fused, matted wool (BRIEF 1.1)
     "EarFelt": ((0.075, 0.058, 0.042), 0.92, "wool", 7.0),
-    "BellyWool": ((0.22, 0.18, 0.13), 0.6, "wool", 10.0),
-    "PatchRust": ((0.45, 0.2, 0.14), 0.5, "weave", 14.0),
+    "BellyWool": ((0.26, 0.21, 0.14), 0.6, "boucle", 8.0),
+    "PatchRust": ((0.45, 0.2, 0.14), 0.5, "boucle", 12.0),
     "PatchGreen": ((0.22, 0.32, 0.22), 0.5, "weave", 14.0),
-    "PatchFlannel": ((0.48, 0.48, 0.5), 0.35, "weave", 16.0),
-    "PatchLeather": ((0.35, 0.28, 0.22), 0.2, "leather", 12.0),
+    "PatchOlive": ((0.75, 0.85, 0.65), 0.5, "corduroy", 14.0),   # near-neutral: the scan carries the green
+    "PatchNavy": ((0.8, 0.85, 1.0), 0.5, "denim", 14.0),
+    "PatchOchre": ((0.55, 0.42, 0.22), 0.5, "boucle", 12.0),
+    "PatchBrown": ((0.2, 0.14, 0.1), 0.55, "weave", 14.0),
+    "PatchPlaid": ((0.85, 0.8, 0.75), 0.5, "plaid", 12.0),
+    "PatchFlannel": ((0.48, 0.48, 0.5), 0.35, "weave", 16.0),   # stage delta — unused on the mascot
+    "PatchLeather": ((0.35, 0.28, 0.22), 0.2, "leather", 12.0), # stage delta — unused on the mascot
     "CharDark": ((0.12, 0.1, 0.085), 0.82, "wool", 10.0),
     "PanelA": ((0.17, 0.13, 0.09), 0.72, "wool", 11.0),
     "PanelB": ((0.2, 0.16, 0.11), 0.66, "wool", 12.0),
@@ -1264,7 +1332,7 @@ def bake_all():
         bpy.context.view_layer.objects.active = obj
         bpy.ops.object.mode_set(mode="EDIT")
         bpy.ops.mesh.select_all(action="SELECT")
-        bpy.ops.uv.smart_project(angle_limit=1.15, island_margin=0.02)
+        bpy.ops.uv.smart_project(angle_limit=1.15, island_margin=0.03)   # BRIEF 1.1 step 7: kill the black-glass margins
         bpy.ops.object.mode_set(mode="OBJECT")
         matr = bpy.data.materials.new(obj.name + "_baked_src")
         burlap_nodes(matr, tint, scorch, scan_key, wscale)
@@ -1303,6 +1371,38 @@ def bake_all():
         obj.data.materials.clear()
         obj.data.materials.append(final)
         print("BAKED", obj.name, res)
+
+# ---- THE SCALE LAW: one uniform scale, frozen BEFORE the bake --------------------------
+## OWNER RULING 2026-09-05: the puppet is authored at the true 3.35 m with the
+## tally eye at 3.0 m, actor scale 1.0. Every number above is in the 2.6 m base
+## space the build was written in; this applies 3.35/2.6 to the whole assembly
+## and freezes it into the mesh data — never per-bone. Before the bake, so the
+## box-projected scans keep their physical repeat (a 3.35 m coat carries more
+## weave than a 2.6 m one — that is scale truth).
+import mathutils
+FINAL_SCALE = 3.35 / 2.6
+_S = mathutils.Matrix.Scale(FINAL_SCALE, 4)
+_all = list(bpy.context.scene.objects)
+_target = {o: _S @ o.matrix_world.copy() for o in _all}
+def _assign(o):
+    o.matrix_world = _target[o]
+    for c in o.children:
+        _assign(c)
+for _r in [o for o in _all if o.parent is None]:
+    _assign(_r)
+for o in _all:
+    if o.type in ("MESH", "CURVE", "EMPTY"):
+        bpy.ops.object.select_all(action="DESELECT")
+        o.select_set(True)
+        bpy.context.view_layer.objects.active = o
+        try:
+            if o.type != "EMPTY" and o.data.users > 1:
+                bpy.ops.object.make_single_user(type="SELECTED_OBJECTS", obdata=True)
+            bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+        except RuntimeError as _ex:
+            print("SCALE-APPLY skipped", o.name, _ex)
+_bz = max((o.matrix_world @ mathutils.Vector(c)).z for o in _all if o.type == "MESH" for c in o.bound_box)
+print("FINAL_SCALE %.4f applied; tallest mesh point z=%.3f m" % (FINAL_SCALE, _bz))
 
 bake_all()
 
@@ -1365,14 +1465,14 @@ for hnm, hcount, hlen, hmat, hmask in BUILD_HAIR_PLAN:
         vg = hob.vertex_groups.new(name="furdensity")
         mw = hob.matrix_world
         for v in hob.data.vertices:
-            vg.add([v.index], 0.0 if hmask(mw @ v.co) else 1.0, "REPLACE")
+            vg.add([v.index], 0.0 if hmask((mw @ v.co) / FINAL_SCALE) else 1.0, "REPLACE")   # masks are written in 2.6 space
     bpy.context.view_layer.objects.active = hob
     hob.modifiers.new("hair", "PARTICLE_SYSTEM")
     ps = hob.particle_systems[-1]
     st = ps.settings
     st.type = "HAIR"
     st.count = hcount
-    st.hair_length = hlen
+    st.hair_length = hlen * FINAL_SCALE
     st.material = hmat_index
     st.child_type = "INTERPOLATED"
     st.child_percent = 6
@@ -1422,7 +1522,7 @@ if fz_ob:
     st = ps.settings
     st.type = "HAIR"
     st.count = 700
-    st.hair_length = 0.011
+    st.hair_length = 0.011 * FINAL_SCALE
     st.material = fzi
     st.child_type = "INTERPOLATED"
     st.child_percent = 4

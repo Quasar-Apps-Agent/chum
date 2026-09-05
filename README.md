@@ -1342,3 +1342,27 @@ those heads are twenty-nine centimetres. So unit 2.1 will put one felt
 head, one mitten and one glove on a single sodium sheet beside the
 Merle plate and Chum's wool before a single cast unit is built, and
 the owner will rule on the look once, with the material in hand.
+
+## Commit 107 · UNIT 1.1a · THE MASS IS RIGHT; THE QUILT IS NOT YET VISIBLE
+Phase 1 opens with a fetch tool and ten scans pulled live from the CC0
+libraries — looped bouclé wool, a scanned teddy plush for the singed
+rims, hessian for the muslin core, corduroy, denim, plaid, a rusted
+plate, bark for char crackle, rust leaks for soot — every one credited
+and left out of the repository because the tool can bring them back.
+Then the ruling made real: one uniform scale of 3.35 over 2.6 applied
+to the whole assembly and frozen into the mesh before the bake, so
+the wool repeats stay physically honest; the ear tips stand at four
+metres and the body at 3.35. The belly is no longer an egg floating
+in front of the chest; it is a twenty-millimetre panel booleaned out
+of the body's own proud surface, matted wool following the slump the
+plate shows. The seven patches are solid sewn-on mass — rust, olive,
+navy, ochre, two browns, one plaid — cut from the body the same way,
+and the two stage-puppet deltas the owner struck are gone. No
+shrinkwrapped shell remains anywhere on the torso; nothing facets.
+And then the look, judged by eye: the quilt does not read. Three
+thousand fur cards and thirty-six hundred hair guides bury every patch
+under a uniform plush, and the bake's scorch layer darkens the patches
+to the body's own tone, so no colour identifies. Two patches are
+buried under the belly panel by my own placement. The stitch
+cylinders read as pipes. So 1.1 stays open, 1.1a is the mass, and
+1.1b is the moment the quilt appears.
