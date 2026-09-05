@@ -151,12 +151,22 @@ through Phase 0.)
             system is ported yet, so both report N/A, not green; they go
             live with Phase 4/5. Explorer/still bots as real AI pawns are a
             refinement — coverage is already exercised by the fixtures
-- [ ] 0.8b-6 AUDIT FIXES (High) from ue/PORT-AUDIT-1.md §9, before Phase 1
-      builds on the state: S6 Strike() resolves lost=ITEM_ORDER[items_lost]
-      and reports it; S7 SaveToSlot() in the non-full strike branch before
-      the broadcast; R1 ReportNoise applies _on_noise's four gates; R6 drop
-      the UE-ONLY 3s StrikeCooldown (not in rundown.gd); P4 Rita eye height
-      1.60 m (main.tscn:67). Verified by the existing fixtures + parser
+- [x] 0.8b-6 AUDIT FIXES (High), ported verbatim from the GDScript the
+      audit cites: S6 Strike() resolves lost=ITEM_ORDER[items_lost] before
+      the increment and broadcasts captured(take, full, lost, respawn) +
+      daily_added; S7 SaveToSlot() at the strike (game_state.gd:502); R1
+      ReportNoise(pos, loudness) applies _on_noise's four gates (dead room
+      deaf, night only, not during premiere, within loudness*3 m) and the
+      noise bus passes loudness through; P4 Rita eye 1.60 m (camera Z 72).
+      R6/S8 per the audit's own wording: the 3s cooldown, post-strike
+      teleport and bInRetake reset are DOCUMENTED as harness stand-ins in
+      the headers, removed when 0.8b-5's retake presentation lands. Proven:
+      invariants + failbot + state_af — lost items WATCH/PEN/PHOTOGRAPH in
+      order, I22 attributed through the gates with a loud test noise, savor
+      at >=3, RUN ENDED take=4, I01/I02/I22 PASS, UE-R1 PASS, exit 0.
+      THE HARNESS CAUGHT A REGRESSION OF MINE FIRST: a new evidence line
+      "STRIKE recorded ..." collided with the parser's STRIKE token (I01
+      FAIL x4, a false soft-lock) — renamed to RETAKE, guard comment added
 - [x] 0.10 PHASE GATE: parity slice — one room, Chum encounter, saves,
       QA subset green, THE-LAWS spot-audit, captured & reviewed — OPENED BY
       OWNER RULING 2026-09-05 (ue/GATE-0.10.md §5): spot-audit accepted as

@@ -70,7 +70,10 @@ public:
 	// RundownTestTarget (lets the brain run under simulate/harness)
 	AActor* ResolveTarget() const;
 
-	void ReportNoise(const FVector& WorldPos); // the noise bus entry point
+	// the noise bus entry point — _on_noise's four gates (rundown.gd:128-134):
+	// deaf in the dead room; only at night; not during the premiere; heard
+	// only within loudness*3.0 m
+	void ReportNoise(const FVector& WorldPos, float Loudness = 4.0f);
 	int32 StrikesNow() const;
 
 	virtual void Tick(float DeltaSeconds) override;
@@ -92,6 +95,9 @@ private:
 	TMap<int32, float> FoldCool;
 	FVector HeardPos = FVector::ZeroVector;
 	float HeardT = -100.0f;
+	// HARNESS STAND-INS, NOT IN rundown.gd:305-322 (PORT-AUDIT-1 R6/S8): the 3s
+	// cooldown and the post-strike teleport stand in for the retake
+	// presentation's player respawn. Remove both when 0.8b-5 lands it.
 	float StrikeCooldown = 0.0f;
 	bool bSpawnLogged = false;
 	// AF layer

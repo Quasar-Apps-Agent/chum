@@ -28,7 +28,7 @@ ARitaCharacter::ARitaCharacter()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(RootComponent);
-	Camera->SetRelativeLocation(FVector(0, 0, 60.0f)); // eye ~1.48m above ground
+	Camera->SetRelativeLocation(FVector(0, 0, 72.0f)); // eye 1.60 m over the floor (main.tscn:67): 160 - 88 capsule half-height
 	Camera->bUsePawnControlRotation = true;
 }
 

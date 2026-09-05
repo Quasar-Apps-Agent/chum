@@ -62,7 +62,7 @@ void ARundown::BeginPlay()
 	if (State)
 	{
 		// noise_event -> ReportNoise, exactly as rundown.gd connects it
-		State->OnNoise.AddLambda([this](const FVector& P, float /*R*/) { ReportNoise(P); });
+		State->OnNoise.AddLambda([this](const FVector& P, float R) { ReportNoise(P, R); });
 		// full sheet ends the run — the retake-level fail-forward the harness
 		// checks (UE-R1). The canonical I06 (premiere auto-fix) waits on the finale.
 		State->OnRunEnded.AddLambda([this](int32 Take)
@@ -148,8 +148,12 @@ AActor* ARundown::ResolveTarget() const
 	return Tagged.Num() > 0 ? Tagged[0] : nullptr;
 }
 
-void ARundown::ReportNoise(const FVector& WorldPos)
+void ARundown::ReportNoise(const FVector& WorldPos, float Loudness)
 {
+	// rundown.gd:128-134, verbatim gates (PORT-AUDIT-1 R1)
+	if (State && State->InDeadRoom(WorldPos)) { return; }          // the dead room eats sound (LAW 11)
+	if (!State || !State->bIsNight || State->bPremiereLive) { return; }
+	if (FVector::Dist(WorldPos, GetActorLocation()) / M >= Loudness * 3.0f) { return; }
 	HeardPos = WorldPos;
 	HeardT = GetWorld()->GetTimeSeconds();
 }
@@ -247,7 +251,9 @@ void ARundown::Tick(float DeltaSeconds)
 		if (!bHeardFired && TestClock >= 3.5f)
 		{
 			bHeardFired = true;
-			ReportNoise(SegmentAnchors[2] + FVector(50.0f, 50.0f, 0.0f));
+			// a LOUD test noise (reach 30 m): the anchor is ~13.9 m away, beyond a
+			// 4.0 noise's 12 m reach — the gate must be passed, not bypassed
+			ReportNoise(SegmentAnchors[2] + FVector(50.0f, 50.0f, 0.0f), 10.0f);
 			OnPhaseChanged(false);
 		}
 	}

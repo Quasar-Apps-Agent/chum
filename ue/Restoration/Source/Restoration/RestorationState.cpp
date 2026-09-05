@@ -156,6 +156,14 @@ void URestorationState::SeedPaper()
 	}
 }
 
+FString URestorationState::ItemOrder(int32 Index)
+{
+	static const TCHAR* Names[7] = { TEXT("WATCH"), TEXT("PEN"), TEXT("PHOTOGRAPH"),
+	                                 TEXT("LIGHTER"), TEXT("COMPACT"), TEXT("KEYS"), TEXT("LOUPE") };
+	return (Index >= 0 && Index < 7) ? FString(Names[Index]) : FString();
+}
+
+// game_state.gd:482-506, order of effects verbatim (PORT-AUDIT-1 S6/S7)
 void URestorationState::Strike(AActor* Player)
 {
 	if (bInRetake)
@@ -165,10 +173,10 @@ void URestorationState::Strike(AActor* Player)
 	bInRetake = true;
 	Strikes += 1;
 	const int32 Take = Strikes;
-	// ITEM_ORDER has 7 entries; the LOUPE (index 6) is the New Game+ relic,
-	// so the clamp is 7, not 6 (§6 finding).
+	FString Lost;
 	if (ItemsLost < 7)
 	{
+		Lost = ItemOrder(ItemsLost); // resolved BEFORE the increment (S6)
 		ItemsLost += 1;
 	}
 	const bool bFull = Strikes >= 4 || Mode == 2 /*ONE_TAKE*/;
@@ -178,7 +186,7 @@ void URestorationState::Strike(AActor* Player)
 		SaveToSlot();
 		OnSheetChanged.Broadcast(Strikes);
 		OnRunEnded.Broadcast(Take);
-		bInRetake = false;
+		bInRetake = false; // HARNESS STAND-IN (S8): Godot holds it until the retake presentation clears it
 		return;
 	}
 	DailySeq += 1;
@@ -186,10 +194,17 @@ void URestorationState::Strike(AActor* Player)
 	D.Id = DailySeq;
 	D.Take = Take;
 	Dailies.Add(D);
+	OnDailyAdded.Broadcast(DailySeq, Take);
+	SaveToSlot(); // a strike is a save point (game_state.gd:502) — S7
 	OnSheetChanged.Broadcast(Strikes);
-	UE_LOG(LogRestoState, Log, TEXT("STRIKE recorded: take %d, dailies %d, items_lost %d"),
-	       Take, Dailies.Num(), ItemsLost);
-	bInRetake = false;
+	OnCaptured.Broadcast(Take, bFull, Lost, RespawnPoint());
+	// PARSER-COLLISION GUARD: never write "STRIKE " or "WARN " to the decision
+	// log from anywhere but the brain — the invariant parser counts those
+	// tokens (a "STRIKE recorded" line here once doubled every strike and
+	// failed I01 x4). Harness evidence uses its own token, RETAKE.
+	LogLine(FString::Printf(TEXT("RETAKE take=%d lost=%s dailies=%d items_lost=%d"),
+	                        Take, *Lost, Dailies.Num(), ItemsLost));
+	bInRetake = false; // HARNESS STAND-IN (S8), see above
 }
 
 bool URestorationState::SaveToSlot(const FString& Slot) const

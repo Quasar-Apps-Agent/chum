@@ -113,6 +113,8 @@ public:
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnRunEnded, int32 /*Take*/);
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnSheetChanged, int32 /*Strikes*/);
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnNoise, const FVector& /*Pos*/, float /*Radius*/);
+DECLARE_MULTICAST_DELEGATE_FourParams(FOnCaptured, int32 /*Take*/, bool /*SheetFull*/, const FString& /*LostItem*/, const FVector& /*Respawn*/);
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnDailyAdded, int32 /*Id*/, int32 /*Take*/);
 
 UCLASS()
 class RESTORATION_API URestorationState : public UGameInstanceSubsystem
@@ -196,6 +198,8 @@ public:
 	FOnSheetChanged OnSheetChanged;
 	FOnSheetChanged OnNightChanged;
 	FOnNoise OnNoise; // noise_event → ARundown::ReportNoise (relocation)
+	FOnCaptured OnCaptured;     // captured(take, sheet_full, lost_item, respawn)
+	FOnDailyAdded OnDailyAdded; // daily_added(id, take)
 
 	// set_night: the day/night driver. Morning advances the day, caps the
 	// tape at 5, completes the prototype at day >= 3.
@@ -224,6 +228,8 @@ public:
 	}
 
 	void Strike(AActor* Player);
+	// ITEM_ORDER: WATCH PEN PHOTOGRAPH LIGHTER COMPACT KEYS LOUPE (7, canon)
+	static FString ItemOrder(int32 Index);
 
 	bool SaveToSlot(const FString& Slot = TEXT("restoration")) const;
 	bool LoadFromSlot(const FString& Slot = TEXT("restoration"));

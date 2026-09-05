@@ -1292,3 +1292,27 @@ Phase 1 is After-Fire Chum, for real, at the bar the owner set the day
 he said the head looked like garbage. The build brief and the rig spec
 are already written. The lanes are running. Everything the owner asked
 for on the day the plan was written is now in motion.
+
+## Commit 105 · UNIT 0.8b-6 · THE AUDIT'S THREE, AND THE ONE THE HARNESS CAUGHT
+The cloud read my port against the GDScript it claims to port and
+found three drifts that touched a law or a saved value. All three are
+gone, ported this time from the lines the audit cited rather than from
+memory. A strike now resolves WHICH item Rita loses — the watch first,
+then the pen, the photograph, the lighter, the compact, the keys, and
+last the loupe that becomes the relic — and says so on the captured
+signal, with a save written at the strike because the reference treats
+a strike as a save point. The hunter's ear now has the reference's four
+gates: deaf inside the dead room, awake only at night, closed during
+the premiere, and reaching only as far as loudness times three metres
+— so the fixture's noise had to be made honestly loud to be heard
+across fourteen metres, and the gate was passed rather than bypassed.
+Rita's eye sits at 1.60 metres, the number in main.tscn. The cooldown
+and the teleport after a strike are named for what they are, harness
+stand-ins with a removal date. And then the part worth the ledger:
+the first run of the fixtures FAILED. A line I added to prove the lost
+item — "STRIKE recorded" — carried the parser's own token, so every
+strike counted twice and the second had no warning before it. I01
+failed four times and the invariants run reported a soft-lock that did
+not exist. The harness convicted my change before it reached main,
+which is the only reason the harness was built. The line is RETAKE
+now, with a guard comment above it. Phase 0 is finished, honestly.
