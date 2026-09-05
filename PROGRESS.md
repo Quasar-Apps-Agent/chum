@@ -267,8 +267,10 @@ CHUM-RIG-AND-ANIMATION-SPEC OPEN-1 and PHASE1-CHUM-BUILD-BRIEF §1.7).
 (2) STRIP the two stage-puppet deltas (flannel, leather patches) from the
 MASCOT; the plate after-fire-chum-dossier.png is the mascot's canon, not
 the stage tell-table (PHASE1-CHUM-BUILD-BRIEF §0.5).
-- [ ] 1.1 Torso: quilted patchwork, seams, char zones, 2048 bake — at
-      3.35 m; NO flannel, NO leather patches (owner ruling: stripped)
+- [x] 1.1 Torso: quilted patchwork, seams, char zones, 2048 bake — at
+      3.35 m; NO flannel, NO leather patches (owner ruling: stripped).
+      DONE across 1.1a/b/c — the quilt reads in Cycles at 4 m and 1 m and in
+      Unreal at gameplay distance and 1.5 m
       - [x] 1.1a GEOMETRY + SCALE (evidence docs/telemetry/blender-phase1/
             1.1a_*.png): tools/fetch_scans.py + 10 CC0 scans (Poly Haven /
             AmbientCG, 2K, credited, gitignored as re-fetchable); FINAL_SCALE
@@ -302,12 +304,34 @@ the stage tell-table (PHASE1-CHUM-BUILD-BRIEF §0.5).
             scorched. Beauty: every patch identifiable on a fused matted
             torso, no halo. Sodium: three-way response in one frame. Head:
             no regression (its near-black is authored tint, not the bug)
-      - [~] 1.1c SEAMS, CHAR, ENGINE — Blender half DONE (evidence
+      - [x] 1.1c SEAMS, CHAR, ENGINE — DONE. Blender half (evidence
             docs/telemetry/blender-phase1/1.1c_*.png; four rebuilds: seam
             on pointiness FAILED, on Bevel-edge FAILED (soft remeshed rims),
             on an ANALYTIC rim from each cutter WORKED once the dash wave was
             fed object METRES — the x12 scan mapping had baked a 0.9 mm
-            period flat); engine half running: running stitches along every patch
+            period flat). ENGINE half (evidence docs/telemetry/ue-baselines/
+            1.1c_ue_*.png): export --all-meshes (160 MB FBX, 82 textures),
+            import at (206,200,395) uu = 3.95 m to the ear tips (scale
+            contract holds), 34 of 48 mesh slots wired, quilt identifiable
+            under the dark locked-EV rig at gameplay distance; seams hold
+            at 1.5 m under a metered 6 cd fill. THREE PIPELINE FAULTS FOUND
+            AND FIXED AT SOURCE: fixup skipped every texture that already
+            existed (the puppet stayed on 0.3's crushed bakes) -> always
+            re-import; the importer assigned WorldGridMaterial (the checker)
+            to six new patch slots and a bare factory instance rendered
+            WHITE despite correct params -> the fixup now clones a working
+            importer instance per slot and wires by slot name;
+            stage_and_capture's new_level() failed silently with Greybox as
+            the startup map, staged the rig INTO the Greybox, and its class
+            -filtered strip DELETED EVERY WALL then saved — three times ->
+            verified level + full strip + guarded save in both the capture
+            and the stamper; Greybox re-stamped from the CSVs (20/119/7/5)
+            and the repair PROVEN by the wall fixture failing I02 again and
+            the standard fixture passing. Known deltas (not blockers): fur
+            cards read as opaque flakes under Lumen (1.4/1.8 + the masked
+            master's alpha); rim spot pools on the floor (rig placed for a
+            shorter figure); baked roughness unused by the Phong master —
+            a real M_Wool/ORM master is 1.7's job: running stitches along every patch
             edge as maps (seam mask into burlap_nodes; normal + darker
             albedo + rougher) and DELETE the sring/stt shoulder stitch
             cylinders (they read as pipes); char ZONES per PLATE (right

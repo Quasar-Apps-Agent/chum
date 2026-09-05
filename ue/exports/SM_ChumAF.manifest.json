@@ -93,20 +93,35 @@
   "diff": "Leather030_1K-JPG_Color.jpg",
   "nrm": "Leather030_1K-JPG_NormalGL.jpg"
  },
- "PatchFlannel.001": {
-  "diff": "PatchFlannel_diff",
-  "rgh": "PatchFlannel_rgh",
-  "nrm": "PatchFlannel_nrm"
+ "PatchBrown.001": {
+  "diff": "PatchBrownA_diff",
+  "rgh": "PatchBrownA_rgh",
+  "nrm": "PatchBrownA_nrm"
  },
- "PatchGreen.001": {
-  "diff": "PatchGreen_diff",
-  "rgh": "PatchGreen_rgh",
-  "nrm": "PatchGreen_nrm"
+ "PatchBrown.002": {
+  "diff": "PatchBrownB_diff",
+  "rgh": "PatchBrownB_rgh",
+  "nrm": "PatchBrownB_nrm"
  },
- "PatchLeather.001": {
-  "diff": "PatchLeather_diff",
-  "rgh": "PatchLeather_rgh",
-  "nrm": "PatchLeather_nrm"
+ "PatchNavy.002": {
+  "diff": "PatchNavy_diff",
+  "rgh": "PatchNavy_rgh",
+  "nrm": "PatchNavy_nrm"
+ },
+ "PatchOchre.001": {
+  "diff": "PatchOchre_diff",
+  "rgh": "PatchOchre_rgh",
+  "nrm": "PatchOchre_nrm"
+ },
+ "PatchOlive.001": {
+  "diff": "PatchOlive_diff",
+  "rgh": "PatchOlive_rgh",
+  "nrm": "PatchOlive_nrm"
+ },
+ "PatchPlaid.001": {
+  "diff": "PatchPlaid_diff",
+  "rgh": "PatchPlaid_rgh",
+  "nrm": "PatchPlaid_nrm"
  },
  "PatchRust.001": {
   "diff": "PatchRust_diff",

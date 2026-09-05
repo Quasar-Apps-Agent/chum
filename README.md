@@ -1390,3 +1390,36 @@ The sodium check shows albedo, roughness and weave answering one lamp
 in one frame. Still owed in 1.1c: the running stitches along every
 edge, the shoulder pipes gone, char in zones rather than everywhere,
 and the whole torso through Unreal's locked-EV rig. Then 1.1 ticks.
+
+## Commit 109 · UNIT 1.1 · THE TORSO, THROUGH THE ENGINE
+The engine half of the torso took the day's last hours and paid for
+them in pipeline. The export was clean — a hundred and sixty
+megabytes, eighty-two maps, the puppet imported at three point nine
+five metres to the ear tips, the scale contract holding to the
+centimetre — and the first capture was wrong three separate ways.
+The quilt was invisible: the fixup had been skipping every texture
+whose name already existed, so the whole puppet was still wearing the
+crushed bakes of unit 0.3. Two patches were checkerboards: the
+importer had put Unreal's default grid on six slots it never made
+instances for, and when the fixup made instances of its own, with the
+right parent and the right maps, they rendered white — something the
+importer sets inside its Phong master that a bare instance lacks, so
+the fixup now clones a working instance instead of building one. And
+the floating door text of the Greybox stood behind him, because the
+capture's new-level call had failed silently with the Greybox loaded
+as the startup map, spawned its rig into the wrong world, deleted
+every wall as a "template mesh," and saved — three captures, three
+times. The world every invariant fixture stands in had been gutted
+without a sound. It was re-stamped from its own tables, twenty rooms
+and a hundred and nineteen walls, and the repair was proven the only
+honest way: the wall fixture fails I02 again, and the clean one
+passes. The stage and the stamper now verify the level they are in
+and strip it bare before they touch it. After all of that: the seven
+patches render their bakes under the dark locked-EV rig, the quilt
+identifies at gameplay distance, and the sewn borders hold at a metre
+and a half under a fill metered to the key. Roughness is baked but
+unused until a real wool master exists; the fur cards read as flakes
+under Lumen; the rim light pools on the floor beside a figure taller
+than it was placed for. Named, not hidden. Unit 1.1 is done: from a
+plush toy to the plate's quilt, in Cycles and in Unreal, at four
+metres and at one.

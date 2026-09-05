@@ -25,13 +25,20 @@ rooms = list(csv.DictReader(open(os.path.join(DATA, "Rooms.csv"))))
 doors = list(csv.DictReader(open(os.path.join(DATA, "Doors.csv"))))
 stations = list(csv.DictReader(open(os.path.join(DATA, "Stations.csv"))))
 
-les.new_level("/Game/Greybox")
-## strip template daylight for the club's dim interior
+## 1.1c: new_level() can fail silently when this very map is the startup map;
+## verify the loaded world, then strip EVERYTHING so the stamp is total
+## (a capture rig once got saved into this level — never again).
+_ok = les.new_level("/Game/Greybox")
+if not _ok and unreal.EditorAssetLibrary.does_asset_exist("/Game/Greybox"):
+    les.load_level("/Game/Greybox")
+_world = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
+if _world is None or _world.get_name() != "Greybox":
+    unreal.log_error("GREYBOX-STAGE-FAIL: loaded level is %s" % (_world.get_name() if _world else None))
+    unreal.SystemLibrary.quit_editor()
+    raise SystemExit("stage refused")
 for a in list(eas.get_all_level_actors()):
-    if a.get_class().get_name() in ("DirectionalLight", "SkyAtmosphere",
-                                    "ExponentialHeightFog", "VolumetricCloud",
-                                    "StaticMeshActor"):
-        eas.destroy_actor(a)
+    eas.destroy_actor(a)
+unreal.log_warning("GREYBOX-CLEAN: %d actors before stamping" % len(eas.get_all_level_actors()))
 
 CUBE = eal.load_asset("/Engine/BasicShapes/Cube")
 

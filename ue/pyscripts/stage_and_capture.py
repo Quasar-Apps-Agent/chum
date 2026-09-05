@@ -17,16 +17,24 @@ OUT = os.environ.get("UE_CAPTURE_OUT", os.path.join(ROOT, "renders", "ue_capture
 les = unreal.get_editor_subsystem(unreal.LevelEditorSubsystem)
 eas = unreal.get_editor_subsystem(unreal.EditorActorSubsystem)
 
-les.new_level("/Game/Dev/L_AutoCapture")
+## 1.1c finding: with /Game/Greybox as the startup map, new_level() failed
+## silently and the rig was staged INTO the Greybox. Verify, or refuse.
+_ok = les.new_level("/Game/Dev/L_AutoCapture")
+if not _ok and unreal.EditorAssetLibrary.does_asset_exist("/Game/Dev/L_AutoCapture"):
+    les.load_level("/Game/Dev/L_AutoCapture")
+_world = unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world()
+if _world is None or _world.get_name() != "L_AutoCapture":
+    unreal.log_error("CAPTURE-STAGE-FAIL: loaded level is %s, not L_AutoCapture — refusing to stage"
+                     % (_world.get_name() if _world else None))
+    unreal.SystemLibrary.quit_editor()
+    raise SystemExit("stage refused")
 
-## UE_CAPTURE_DARK=1: strip the template's daylight — the lighting bible's
-## world is a dim interior; our own rig does the modelling
-if os.environ.get("UE_CAPTURE_DARK") == "1":
-    for a in list(eas.get_all_level_actors()):
-        cn = a.get_class().get_name()
-        if cn in ("DirectionalLight", "SkyLight", "SkyAtmosphere",
-                  "ExponentialHeightFog", "VolumetricCloud", "StaticMeshActor"):
-            eas.destroy_actor(a)
+## a clean stage: nothing survives from the template or a previous capture
+## (the template daylight goes with it — our own rig does the modelling).
+## Full strip, unconditional: a class-filtered strip once ran inside the
+## Greybox and deleted every wall (1.1c).
+for _a in list(eas.get_all_level_actors()):
+    eas.destroy_actor(_a)
 
 ## floor
 floor = eas.spawn_actor_from_object(
@@ -79,16 +87,27 @@ if frame == "head":
 elif frame == "torso":
     ## 1.1c: the belly and patches at ~1.3 m — the seam maps must hold here
     b_origin = unreal.Vector(b_origin.x, b_origin.y,
-                             b_origin.z - b_extent.z * 0.15)
-    size = size * 0.2
+                             b_origin.z - b_extent.z * 0.10)
+    size = size * 0.26   # ~1.5 m: belly, rims and three patches in frame
 dist = max(size * 3.2, 120.0)
 cam_loc = unreal.Vector(b_origin.x - dist * 0.72, b_origin.y - dist * 0.6,
                         b_origin.z + size * 0.25)
 cam = eas.spawn_actor_from_class(unreal.CameraActor, cam_loc)
 look = unreal.MathLibrary.find_look_at_rotation(cam_loc, b_origin)
 cam.set_actor_rotation(look, False)
+## 1.1c: the torso closeup gets its own warm fill at the camera — the rig's
+## key models the head and leaves the torso in shadow at 1.5 m. Look-dev
+## practice for a closeup; full/head frames stay comparable with 0.3.
+if frame == "torso":
+    fill = eas.spawn_actor_from_class(unreal.PointLight, cam_loc)
+    fill.light_component.set_intensity(6.0 if dark else 20.0)   # on the order of the 1.6-lux key at a locked EV; 900 cd blew the frame to white
+    fill.light_component.set_editor_property("intensity_units", unreal.LightUnits.CANDELAS)
+    fill.light_component.set_light_color(unreal.LinearColor(1.0, 0.85, 0.65, 1.0))
+    fill.light_component.set_editor_property("attenuation_radius", 600.0)
+    fill.light_component.set_editor_property("cast_shadows", False)
 
-les.save_current_level()
+if unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world().get_name() == "L_AutoCapture":
+    les.save_current_level()   # never save any other level from here
 
 ## screenshot after the renderer has had frames to warm up, then quit
 state = {"ticks": 0, "shot": False, "handle": None}
