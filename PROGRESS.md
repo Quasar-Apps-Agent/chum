@@ -151,9 +151,18 @@ through Phase 0.)
             system is ported yet, so both report N/A, not green; they go
             live with Phase 4/5. Explorer/still bots as real AI pawns are a
             refinement — coverage is already exercised by the fixtures
-- [ ] 0.10 PHASE GATE: parity slice — one room, Chum encounter, saves,
-      QA subset green, THE-LAWS spot-audit, captured & reviewed
-      - [~] PACKAGE ASSEMBLED, AWAITING OWNER REVIEW — ue/GATE-0.10.md
+- [ ] 0.8b-6 AUDIT FIXES (High) from ue/PORT-AUDIT-1.md §9, before Phase 1
+      builds on the state: S6 Strike() resolves lost=ITEM_ORDER[items_lost]
+      and reports it; S7 SaveToSlot() in the non-full strike branch before
+      the broadcast; R1 ReportNoise applies _on_noise's four gates; R6 drop
+      the UE-ONLY 3s StrikeCooldown (not in rundown.gd); P4 Rita eye height
+      1.60 m (main.tscn:67). Verified by the existing fixtures + parser
+- [x] 0.10 PHASE GATE: parity slice — one room, Chum encounter, saves,
+      QA subset green, THE-LAWS spot-audit, captured & reviewed — OPENED BY
+      OWNER RULING 2026-09-05 (ue/GATE-0.10.md §5): spot-audit accepted as
+      drafted; scale 3.35 m / eye 3 m; stage deltas stripped; LAW 9 -> Phase
+      4 UI. The 3 High audit drifts are 0.8b-6 above, not carried silently
+      - [x] PACKAGE ASSEMBLED, REVIEWED — ue/GATE-0.10.md
             (clause map + 11-law spot-audit, LAW 9 flagged), ue/GATE-0.10-
             EVIDENCE.md (all 9 fixtures re-run at HEAD, verbatim lines),
             renders/gate_0.10_greybox_chum{,_back}.png (scale-true puppet
@@ -241,7 +250,15 @@ for each rule asserted; where canon is silent write OPEN, never invent.
       its boxes into PHASE 4. Not a cloud unit any more
 
 ## PHASE 1 — After-Fire Chum (Blender factory → UE acceptance)
-- [ ] 1.1 Torso: quilted patchwork, seams, char zones, 2048 bake
+OWNER RULINGS 2026-09-05 (bind every unit below): (1) SCALE — author the
+puppet at the TRUE 3.35 m body with the tally eye at 3.0 m, actor scale
+1.0, one uniform scale frozen before export, never per-bone (resolves
+CHUM-RIG-AND-ANIMATION-SPEC OPEN-1 and PHASE1-CHUM-BUILD-BRIEF §1.7).
+(2) STRIP the two stage-puppet deltas (flannel, leather patches) from the
+MASCOT; the plate after-fire-chum-dossier.png is the mascot's canon, not
+the stage tell-table (PHASE1-CHUM-BUILD-BRIEF §0.5).
+- [ ] 1.1 Torso: quilted patchwork, seams, char zones, 2048 bake — at
+      3.35 m; NO flannel, NO leather patches (owner ruling: stripped)
 - [ ] 1.2 Throat speaker (donor speaker/radio driver, chest mount, cabling)
 - [ ] 1.3 Collar, leather strap, dead brass bell
 - [ ] 1.4 Arms & hands: tendons both sides, articulated fingers
@@ -306,6 +323,10 @@ discipline, QA-56 drift=dressing-only, QA-57 one hero object max.)
 - [ ] 3.FINAL PHASE GATE: full-studio walkthrough captures + soaks
 
 ## PHASE 4 — Puzzles & Functionality
+- [ ] 4.ACCESS LAW 9 — implement docs/production/UE-ACCESS-SPEC-LAW9.md
+      (booth, captions, assist, remap, pause, the achievement deferral
+      rule) with the Phase 4 UI. OWNER RULING 2026-09-05: here, not before
+      the gate. Its 12 GATE RULING NEEDED items are this unit's first step
 - [ ] 4.0 [CLOUD-OK] ENUMERATE mechanics from the canon docs into boxes here
 - [ ] 4.WEB reaction-matrix wiring audit (every action echoes in ≥2
       systems/people, per the QUEUE order in the canon doc)

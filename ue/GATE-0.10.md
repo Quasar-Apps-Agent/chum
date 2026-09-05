@@ -1,7 +1,7 @@
 # GATE 0.10 · PHASE 0 → PHASE 1 · PARITY SLICE — OWNER REVIEW PACKAGE
 
-**Status: AWAITING OWNER REVIEW. Assembled by the loop; nothing here is
-self-certified.** The gate ticks in PROGRESS.md only when the owner has
+**Status: OPENED by owner ruling, 2026-09-05 — see §5. Assembled by the
+loop; certified by the owner.** The gate ticks in PROGRESS.md only when the owner has
 looked at the capture, read the scorecards, and signed the spot-audit.
 
 The plan's gate reads: *parity slice — one room, Chum encounter, saves, QA
@@ -123,3 +123,17 @@ Known open Phase-0 items that do NOT block the gate but need eyes: the
 0.8b-5 UI half (retake screen, screening, visible countdown, lighting
 states). They are the first things the owner will see, so they wait for
 the owner.
+
+## 5 · RULINGS (owner, 2026-09-05)
+
+| Decision | Ruling | Binds |
+|---|---|---|
+| Spot-audit (§2) | Accepted as drafted by the ruling that opens the gate | — |
+| 1b Scale | **3.35 m body, tally eye at 3.0 m, actor scale 1.0** (the two specs' recommendation) | every Phase 1 unit; rig spec OPEN-1 closed |
+| 1d Stage deltas | **Strip** flannel and leather patches from the mascot; the plate is canon | 1.1 torso onward |
+| LAW 9 placement | **Later, with the Phase 4 UI** — tracker box 4.ACCESS | Phase 4 |
+| 0.10 | **Open.** Phase 1 begins. | — |
+
+Carried honestly, not silently: the port audit's three High drifts (S6, S7,
+R1) plus R6 and P4 are unit 0.8b-6, queued above the gate so the loop takes
+them before any Phase 1 unit builds on the state.
