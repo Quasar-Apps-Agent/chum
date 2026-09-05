@@ -166,36 +166,36 @@ Cloud routines take the FIRST unclaimed box here, on branch
 lane merges green PRs at session start and ticks these boxes. Ordered by
 what the Mac lane needs soonest. Every unit: cite the canon doc+section
 for each rule asserted; where canon is silent write OPEN, never invent.
-- [ ] C17 [CLOUD-OK] PORT AUDIT: diff the UE C++ (ue/Restoration/Source/
+- [x] C17 [CLOUD-OK] (merged PR #15) PORT AUDIT: diff the UE C++ (ue/Restoration/Source/
       Restoration/*.h,.cpp) against scripts/game_state.gd, rundown.gd,
       harriet.gd, player.gd, bench/capture scripts — every constant,
       default, order-of-effects and signal; list drift as a checklist like
       ue/PORT-NOTES-STATE.md §6 did. Deliverable: ue/PORT-AUDIT-1.md
-- [ ] C8 [CLOUD-OK] PORT-NOTES BROADCAST: transcribe scripts/broadcast.gd +
+- [x] C8 [CLOUD-OK] (merged PR #16) PORT-NOTES BROADCAST: transcribe scripts/broadcast.gd +
       coverage_director.gd (ON AIR/BREAK clock surface, window holds,
       coverage labels cov_monitor/move/still, every signal + listener).
       Deliverable: ue/PORT-NOTES-BROADCAST.md
-- [ ] C9 [CLOUD-OK] PORT-NOTES RETAKE: the retake presentation + dailies
+- [x] C9 [CLOUD-OK] (merged PR #17) PORT-NOTES RETAKE: the retake presentation + dailies
       (game_state pick_daily/burn_daily/mint_shortcut_daily, carried_id/
       take, the retake screen script, toasts verbatim, timings).
       Deliverable: ue/PORT-NOTES-RETAKE.md
-- [ ] C10 [CLOUD-OK] PORT-NOTES SCREENING: screening + assist + Merle
+- [x] C10 [CLOUD-OK] (merged PR #18) PORT-NOTES SCREENING: screening + assist + Merle
       (screening_active/done, merle.gd, assist rule, Day-1 flow).
       Deliverable: ue/PORT-NOTES-SCREENING.md
-- [ ] C11 [CLOUD-OK] PORT-NOTES FINALE: premiere incidents (INCIDENT/
+- [x] C11 [CLOUD-OK] (merged PR #19) PORT-NOTES FINALE: premiere incidents (INCIDENT/
       RESOLVED t=, the 41s club auto-fix rule = I06), cascade + liveness
       (I07), start_finale/mark_ending/endings, LOCKDOWN. Deliverable:
       ue/PORT-NOTES-FINALE.md — makes I06/I07 implementable
-- [ ] C2 [CLOUD-OK] CAST DOSSIER: per character from docs/canon cast plates
+- [x] C2 [CLOUD-OK] (merged PR #20) CAST DOSSIER: per character from docs/canon cast plates
       + walkthrough + chum motion & sound: silhouette, materials, scale
       truth, motion hooks, rooms, beats, LAW constraints (LAW 4 warm one,
       LAW 5 silence, LAW 7 signatures). Deliverable: docs/production/
       CAST-DOSSIER.md
-- [ ] C6 [CLOUD-OK] PROP MANIFEST from restoration-object-taxonomy.md +
+- [x] C6 [CLOUD-OK] (merged PR #21) PROP MANIFEST from restoration-object-taxonomy.md +
       room bible + ambient lore ledger: every prop, taxonomy class, room(s),
       interactable?, real-world dims (scale truth), CC0/Fab source
       candidate. Deliverable: docs/production/PROP-MANIFEST.md (+ .csv)
-- [ ] C3 [CLOUD-OK] ROOM BRIEFS 3.6–3.10 (format: docs/production/
+- [x] C3 [CLOUD-OK] (merged PR #22) ROOM BRIEFS 3.6–3.10 (format: docs/production/
       ROOM-BRIEFS-3.1-3.5.md once it lands; else the room bible + lighting
       bible + taxonomy + lore ledger). Deliverable: docs/production/
       ROOM-BRIEFS-3.6-3.10.md
@@ -235,9 +235,10 @@ for each rule asserted; where canon is silent write OPEN, never invent.
       restoration-comparative-study.md adoptions (units 5.6–5.8), as
       implementable UE specs. Deliverable: docs/production/
       STREAMER-CLIP-DEMO-SPEC.md
-- [ ] C1 [CLOUD-OK] = unit 4.0 below (Phase 4 mechanics enumeration).
-      Deliverable: docs/production/PHASE4-MECHANICS-ENUMERATION.md; the
-      Mac lane then splices the boxes into PHASE 4
+- [ ] C1 [MAC] = unit 4.0 below (Phase 4 mechanics enumeration). CLOUD:
+      SKIP — six drafts already exist on the old routine's branches (PRs
+      #9–#14, pre-lane era); the Mac lane picks the best one and splices
+      its boxes into PHASE 4. Not a cloud unit any more
 
 ## PHASE 1 — After-Fire Chum (Blender factory → UE acceptance)
 - [ ] 1.1 Torso: quilted patchwork, seams, char zones, 2048 bake
