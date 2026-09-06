@@ -95,6 +95,8 @@ M = {
     "ArmCore":      mat("ArmCore",      (0.22, 0.17, 0.12), 0.95),        # hessian-lined dark core under the torn window
     "Claw":         mat("Claw",         (0.20, 0.15, 0.11), 0.45),        # horn: crackle scan, chipped tips
     "Bandage":      mat("Bandage",      (0.55, 0.48, 0.36), 0.9),         # the elbow wrap ribbon (hessian)
+    # unit 1.5: legs
+    "Plinth":       mat("Plinth",       (0.20, 0.19, 0.18), 0.65, 0.7),   # the weighted base: dark scratched plate (OPEN: metal vs wood)
     "CopperRing": mat("CopperRing", (0.13, 0.08, 0.045), 0.7, 0.85),
     "GrilleDark": mat("GrilleDark", (0.17, 0.16, 0.14), 0.5, 0.75),
     "ToothBone":  mat("ToothBone",  (0.63, 0.56, 0.44), 0.75),
@@ -361,6 +363,97 @@ def cable(name, pts, r, material):
     ob.data.materials.append(material)
     return ob
 
+def bite(obj, cutter, heal=2):
+    """boolean DIFFERENCE on a remeshed manifold, healed with a smooth pass"""
+    bpy.ops.object.select_all(action="DESELECT")
+    obj.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+    bo = obj.modifiers.new("bite", "BOOLEAN")
+    bo.operation = "DIFFERENCE"
+    bo.object = cutter
+    bo.solver = "EXACT"
+    hs = obj.modifiers.new("heal", "SMOOTH")
+    hs.factor = 0.5
+    hs.iterations = heal
+    bpy.ops.object.convert(target="MESH")
+    out = bpy.context.active_object
+    bpy.data.objects.remove(cutter, do_unlink=True)
+    return out
+
+
+def ribbon(name, center, radius, width, thick, material, rot, n=22, jitter=0.05, turns=1.0):
+    """a flat bandage strip wound around a limb: a jittered ring with a
+    rectangular profile, converted to mesh here (the profile is deleted)"""
+    import mathutils
+    R = mathutils.Euler(rot, "XYZ").to_matrix()
+    cu = bpy.data.curves.new(name, "CURVE")
+    cu.dimensions = "3D"
+    cu.resolution_u = 8
+    sp = cu.splines.new("NURBS")
+    sp.points.add(n - 1)
+    for i in range(n):
+        a = 2.0 * math.pi * turns * i / (n - 1)
+        rr = radius * (1.0 + jitter * math.sin(2.3 * a + 0.7) + 0.5 * jitter * math.cos(5.1 * a))
+        lp = mathutils.Vector((rr * math.cos(a), rr * math.sin(a), 0.6 * width * (i / (n - 1) - 0.5)))
+        wp = R @ lp
+        sp.points[i].co = (center[0] + wp.x, center[1] + wp.y, center[2] + wp.z, 1.0)
+    sp.use_endpoint_u = True
+    sp.order_u = 3
+    prof = bpy.data.curves.new(name + "Prof", "CURVE")
+    prof.dimensions = "2D"
+    prof.fill_mode = "NONE"
+    ps = prof.splines.new("POLY")
+    ps.points.add(3)
+    for i, (px, py) in enumerate(((-width / 2, -thick / 2), (width / 2, -thick / 2),
+                                  (width / 2, thick / 2), (-width / 2, thick / 2))):
+        ps.points[i].co = (px, py, 0.0, 1.0)
+    ps.use_cyclic_u = True
+    prof_ob = bpy.data.objects.new(name + "Prof", prof)
+    col.objects.link(prof_ob)
+    cu.bevel_mode = "OBJECT"
+    cu.bevel_object = prof_ob
+    cu.use_fill_caps = True
+    ob = bpy.data.objects.new(name, cu)
+    col.objects.link(ob)
+    ob.data.materials.append(material)
+    bpy.ops.object.select_all(action="DESELECT")
+    ob.select_set(True)
+    bpy.context.view_layer.objects.active = ob
+    bpy.ops.object.convert(target="MESH")
+    ob = bpy.context.active_object
+    bpy.ops.object.shade_smooth()
+    bpy.data.objects.remove(prof_ob, do_unlink=True)
+    return ob
+
+
+def rod(name, a, b, r, material, n=16):
+    """a machined rod between two points: a bevelled cylinder, smooth-shaded"""
+    import mathutils
+    va, vb = mathutils.Vector(a), mathutils.Vector(b)
+    d = vb - va
+    bpy.ops.mesh.primitive_cylinder_add(radius=r, depth=d.length, vertices=n,
+                                        location=tuple((va + vb) / 2.0))
+    ob = bpy.context.active_object
+    ob.rotation_euler = d.to_track_quat("Z", "Y").to_euler()
+    bv = ob.modifiers.new("soft", "BEVEL")
+    bv.width = r * 0.35
+    bv.segments = 2
+    bpy.ops.object.convert(target="MESH")
+    ob = bpy.context.active_object
+    ob.name = name
+    simple(ob, material)
+    bpy.ops.object.shade_smooth()
+    return ob
+
+
+def claw(name, loc, r, h, rot, parent):
+    c = cone(loc, r, h, rot=rot)
+    organic(c, M["Claw"], 0.0045, 0.0, 0.002, 0.6, smooth=2)   # horn: remeshed, the tip chipped by the voxel
+    c.name = name
+    parent_to(c, parent)
+    return c
+
+
 def parent_to(child, parent):
     child.parent = parent
     child.matrix_parent_inverse = parent.matrix_world.inverted()
@@ -478,29 +571,114 @@ belly_cut = sphere((0, -0.36, 1.34), 0.30, (1.0, 0.55, 1.28))
 belly = solid_patch("Belly", M["BellyWool"], belly_cut, proud=0.02, voxel=0.008, decimate=0.5)
 SEAM_GEOM["Belly"] = ("ellipse", (0.0, -0.36 * K_SCALE, 1.34 * K_SCALE), 0.30 * K_SCALE, 0.30 * 1.28 * K_SCALE)
 
-# ---- legs and weighted paw feet ------------------------------------------------------
+# ---- legs and weighted paw feet (unit 1.5: control rods, torn fur windows, weighted feet) ----
+## BRIEF 1.5. A column each side, knees nearly stiff; the viewer-RIGHT shin
+## (sx=+1, LegR) torn open over a hessian core showing the internal rod
+## assembly — two rods, a knee bracket and an ankle bracket, bolts — PLATE
+## detail 5. Rods are INSIDE the leg on both sides (the left is covered). The
+## paw is one remeshed mass with three toe lobes, a flattened sole, a pale
+## worn patch on the viewer-left foot's top, and a weighted plinth under each
+## paw. Pivots per the rig spec: Hip (thigh), calf, foot, ball; LegL maps to _r.
+## Collision: UCX_ boxes for the feet and plinths (PIPELINE §STANDARDS).
+UCX = []
 for sx, nm in ((-1, "LegL"), (1, "LegR")):
+    side = "r" if sx < 0 else "l"
     hip = empty("Hip" + nm[-1], (0.20 * sx, 0, 0.92))
+    calf_piv = empty(f"calf_{side}", (0.20 * sx, 0, 0.46))
+    parent_to(calf_piv, hip)
+    foot_piv = empty(f"foot_{side}", (0.20 * sx, -0.02, 0.20))
+    parent_to(foot_piv, calf_piv)
+    ball_piv = empty(f"ball_{side}", (0.20 * sx, -0.30, 0.09))
+    parent_to(ball_piv, foot_piv)
+    ## the column: thigh, knee, shin, ankle — a real knee and ankle in the chain
     leg = join([
-        sphere((0.20 * sx, 0, 0.78), 0.155, (1, 1, 1.25)),
-        sphere((0.20 * sx, 0, 0.46), 0.135, (1, 1, 1.2)),
-        sphere((0.20 * sx, -0.02, 0.2), 0.125),
-        sphere((0.20 * sx, -0.09, 0.11), 0.185, (1.05, 1.45, 0.62)),   # the weighted foot
-        sphere((0.13 * sx, -0.3, 0.09), 0.062),                        # toe lobes
-        sphere((0.20 * sx, -0.32, 0.09), 0.062),
-        sphere((0.27 * sx, -0.3, 0.09), 0.062),
+        sphere((0.20 * sx, 0, 0.80), 0.155, (1, 1, 1.25)),
+        sphere((0.20 * sx, 0, 0.60), 0.140, (1, 1, 1.1)),
+        sphere((0.205 * sx, 0.01, 0.46), 0.128),                        # knee
+        sphere((0.20 * sx, -0.005, 0.33), 0.122, (1, 1, 1.15)),
+        sphere((0.20 * sx, -0.02, 0.20), 0.112),                        # ankle
     ], nm)
-    organic(leg, M["BurntWool"], 0.025, 0.018, 0.006, 0.45)
+    organic(leg, M["BurntWool"], 0.02, 0.016, 0.006, 0.45)
+    leg = bite(leg, sphere((0.20 * sx, 0.11, 0.47), 0.07, (1.4, 1.0, 0.6)))   # the back-of-knee fold
+    leg.name = nm
+    ## the internal rod assembly (both sides): two rods knee-to-ankle through
+    ## the thigh, a knee bracket and an ankle bracket, bolts as geometry
+    for ri, rx in enumerate((-0.035, 0.035)):
+        rd = rod(f"{nm}Rod{ri}", (0.20 * sx + rx, -0.080, 0.62), (0.20 * sx + rx, -0.088, 0.17), 0.012, M["IronRust"])   # in the cavity, in front of the core (pass 1 buried them)
+        parent_to(rd, hip)
+    for bi, bz in enumerate((0.50, 0.23)):
+        br = rounded_prism((0.20 * sx, -0.088, bz), 0.0, 0.12, 0.05, depth=0.04, bevel=0.007)
+        br.name = f"{nm}Bracket{bi}"
+        simple(br, M["IronRust"])
+        parent_to(br, hip if bi == 0 else foot_piv)
+        for bx in (-0.045, 0.045):
+            bo = sphere((0.20 * sx + bx, -0.110, bz), 0.011)
+            bo.name = f"{nm}Bolt{bi}{'L' if bx < 0 else 'R'}"
+            simple(bo, M["IronRust"])
+            bpy.ops.object.shade_smooth()
+            parent_to(bo, hip if bi == 0 else foot_piv)
+    if sx > 0:
+        ## the torn window on the viewer-right shin: a hessian-lined core
+        ## inside, the cloth bitten away at the front — 0.36 m tall at base
+        core = join([sphere((0.20 * sx, 0.0, 0.50), 0.062), sphere((0.20 * sx, -0.005, 0.32), 0.06),
+                     sphere((0.20 * sx, -0.01, 0.20), 0.058)], nm + "Core")
+        organic(core, M["ArmCore"], 0.012, 0.010, 0.004, 0.5)
+        parent_to(core, hip)
+        leg = bite(leg, sphere((0.22 * sx, -0.16, 0.37), 0.15, (0.75, 0.60, 1.40)), heal=3)
+        leg.name = nm
+        _lwin = lambda wp: (wp.y < -0.05 and 0.18 < wp.z < 0.58 and wp.x * sx > 0.10)
+    else:
+        _lwin = None
     parent_to(leg, hip)
-    leg_fur = fur(leg, 700, 0.03, 0.07, nm + "Fur", [M["FurDark"], M["FurMid"]],
-                  mask=lambda wp: wp.z < 0.08)
+    print("LEG", nm, "verts", len(leg.data.vertices))
+    leg_fur = fur(leg, 600, 0.03, 0.07, nm + "Fur", [M["FurDark"], M["FurMid"]], mask=_lwin)
     if leg_fur:
         parent_to(leg_fur, hip)
-    # leg control rod, exposed (dossier detail 5)
-    rod = cyl((0.31 * sx, 0.05, 0.45), 0.016, 0.62)
-    rod.name = nm + "Rod"
-    simple(rod, M["RodMetal"])
-    parent_to(rod, hip)
+    ## the paw: one mass — the weighted foot, three toe lobes, a pad — remeshed
+    ## fine, the sole flattened by a bite; fur cards only above the rim
+    paw = join([
+        sphere((0.20 * sx, -0.09, 0.11), 0.185, (1.05, 1.45, 0.62)),
+        sphere((0.13 * sx, -0.30, 0.085), 0.064),
+        sphere((0.20 * sx, -0.32, 0.085), 0.066),
+        sphere((0.27 * sx, -0.30, 0.085), 0.064),
+        sphere((0.20 * sx, -0.14, 0.06), 0.13, (1.1, 1.3, 0.5)),         # the pad
+    ], nm + "Paw")
+    organic(paw, M["BurntWool"], 0.012, 0.010, 0.004, 0.5)
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.20 * sx, -0.10, -0.20 + 0.038))
+    _sole = bpy.context.active_object
+    _sole.scale = (0.8, 1.0, 0.4)
+    paw = bite(paw, _sole, heal=1)
+    paw.name = nm + "Paw"
+    parent_to(paw, foot_piv)
+    print("PAW", nm, "verts", len(paw.data.vertices))
+    paw_fur = fur(paw, 260, 0.03, 0.06, nm + "PawFur", [M["FurDark"], M["FurMid"]], mask=lambda wp: wp.z < 0.10)
+    if paw_fur:
+        parent_to(paw_fur, foot_piv)
+    if sx < 0:
+        ## the pale worn patch on the viewer-left foot's top (PLATE): worn-through pile
+        wornp = sphere((0.20 * sx, -0.14, 0.195), 0.085, (1.0, 1.15, 0.22))
+        organic(wornp, M["BellyWool"], 0.008, 0.006, 0.003, 0.6)
+        wornp.name = nm + "WornPatch"
+        parent_to(wornp, foot_piv)
+    ## the weighted base: a flat plinth under the paw, edge-worn
+    plinth = rounded_prism((0.20 * sx, -0.13, 0.017), 0.0, 0.44, 0.034, depth=0.56, bevel=0.009)
+    plinth.name = nm + "Plinth"
+    simple(plinth, M["Plinth"])
+    parent_to(plinth, foot_piv)
+    ## collision: one convex box per paw and per plinth (UCX_<mesh>_NN)
+    for ci, (cl, csz, host) in enumerate((((0.20 * sx, -0.12, 0.12), (0.40, 0.56, 0.20), paw),
+                                          ((0.20 * sx, -0.13, 0.017), (0.44, 0.56, 0.034), plinth))):
+        bpy.ops.mesh.primitive_cube_add(size=1.0, location=cl)
+        ucx = bpy.context.active_object
+        ucx.scale = csz
+        ## Unreal matches UCX_<RenderNodeName>_NN against the FBX node it
+        ## belongs to (pass 1: UCX_SM_ChumAF_ matched nothing, imported as geometry)
+        ucx.name = f"UCX_{host.name}_00"
+        ucx.hide_render = True
+        ucx.display_type = "WIRE"
+        parent_to(ucx, foot_piv)
+        UCX.append(ucx)
+print("UCX collision boxes", len(UCX))
 
 # ---- arms: tendon-driven, clawed (unit 1.4: tendons both sides, articulated fingers) ----
 ## BRIEF 1.4. Viewer-left arm (sx=-1, ArmL) is bare to the tendons through a
@@ -510,93 +688,6 @@ for sx, nm in ((-1, "LegL"), (1, "LegR")):
 ## its own piece on a knuckle pivot named to the rig spec: finger_[a-d]_0N_[r|l]
 ## and hand_[r|l] — ArmL maps to _r (CHUM-RIG-AND-ANIMATION-SPEC §upperarm).
 ## Tendons are sagging bevel curves (static in animation, MOTION §AFTER-FIRE).
-def bite(obj, cutter, heal=2):
-    """boolean DIFFERENCE on a remeshed manifold, healed with a smooth pass"""
-    bpy.ops.object.select_all(action="DESELECT")
-    obj.select_set(True)
-    bpy.context.view_layer.objects.active = obj
-    bo = obj.modifiers.new("bite", "BOOLEAN")
-    bo.operation = "DIFFERENCE"
-    bo.object = cutter
-    bo.solver = "EXACT"
-    hs = obj.modifiers.new("heal", "SMOOTH")
-    hs.factor = 0.5
-    hs.iterations = heal
-    bpy.ops.object.convert(target="MESH")
-    out = bpy.context.active_object
-    bpy.data.objects.remove(cutter, do_unlink=True)
-    return out
-
-def ribbon(name, center, radius, width, thick, material, rot, n=22, jitter=0.05, turns=1.0):
-    """a flat bandage strip wound around a limb: a jittered ring with a
-    rectangular profile, converted to mesh here (the profile is deleted)"""
-    import mathutils
-    R = mathutils.Euler(rot, "XYZ").to_matrix()
-    cu = bpy.data.curves.new(name, "CURVE")
-    cu.dimensions = "3D"
-    cu.resolution_u = 8
-    sp = cu.splines.new("NURBS")
-    sp.points.add(n - 1)
-    for i in range(n):
-        a = 2.0 * math.pi * turns * i / (n - 1)
-        rr = radius * (1.0 + jitter * math.sin(2.3 * a + 0.7) + 0.5 * jitter * math.cos(5.1 * a))
-        lp = mathutils.Vector((rr * math.cos(a), rr * math.sin(a), 0.6 * width * (i / (n - 1) - 0.5)))
-        wp = R @ lp
-        sp.points[i].co = (center[0] + wp.x, center[1] + wp.y, center[2] + wp.z, 1.0)
-    sp.use_endpoint_u = True
-    sp.order_u = 3
-    prof = bpy.data.curves.new(name + "Prof", "CURVE")
-    prof.dimensions = "2D"
-    prof.fill_mode = "NONE"
-    ps = prof.splines.new("POLY")
-    ps.points.add(3)
-    for i, (px, py) in enumerate(((-width / 2, -thick / 2), (width / 2, -thick / 2),
-                                  (width / 2, thick / 2), (-width / 2, thick / 2))):
-        ps.points[i].co = (px, py, 0.0, 1.0)
-    ps.use_cyclic_u = True
-    prof_ob = bpy.data.objects.new(name + "Prof", prof)
-    col.objects.link(prof_ob)
-    cu.bevel_mode = "OBJECT"
-    cu.bevel_object = prof_ob
-    cu.use_fill_caps = True
-    ob = bpy.data.objects.new(name, cu)
-    col.objects.link(ob)
-    ob.data.materials.append(material)
-    bpy.ops.object.select_all(action="DESELECT")
-    ob.select_set(True)
-    bpy.context.view_layer.objects.active = ob
-    bpy.ops.object.convert(target="MESH")
-    ob = bpy.context.active_object
-    bpy.ops.object.shade_smooth()
-    bpy.data.objects.remove(prof_ob, do_unlink=True)
-    return ob
-
-def rod(name, a, b, r, material, n=16):
-    """a machined rod between two points: a bevelled cylinder, smooth-shaded"""
-    import mathutils
-    va, vb = mathutils.Vector(a), mathutils.Vector(b)
-    d = vb - va
-    bpy.ops.mesh.primitive_cylinder_add(radius=r, depth=d.length, vertices=n,
-                                        location=tuple((va + vb) / 2.0))
-    ob = bpy.context.active_object
-    ob.rotation_euler = d.to_track_quat("Z", "Y").to_euler()
-    bv = ob.modifiers.new("soft", "BEVEL")
-    bv.width = r * 0.35
-    bv.segments = 2
-    bpy.ops.object.convert(target="MESH")
-    ob = bpy.context.active_object
-    ob.name = name
-    simple(ob, material)
-    bpy.ops.object.shade_smooth()
-    return ob
-
-def claw(name, loc, r, h, rot, parent):
-    c = cone(loc, r, h, rot=rot)
-    organic(c, M["Claw"], 0.0045, 0.0, 0.002, 0.6, smooth=2)   # horn: remeshed, the tip chipped by the voxel
-    c.name = name
-    parent_to(c, parent)
-    return c
-
 for sx, nm in ((-1, "ArmL"), (1, "ArmR")):
     side = "r" if sx < 0 else "l"
     shoulder = empty("Shoulder" + nm[-1], (0.47 * sx, 0, 1.72))
@@ -1660,6 +1751,8 @@ scan_dress(M["ArmCore"], "hessian_230/hessian_230_Diffuse_2k.jpg",
            "hessian_230/hessian_230_nor_gl_2k.jpg", 0.7, 9.0, 1.0)
 scan_dress(M["Bandage"], "hessian_230/hessian_230_Diffuse_2k.jpg",
            "hessian_230/hessian_230_nor_gl_2k.jpg", 1.7, 12.0, 1.0)
+scan_dress(M["Plinth"], "metal_plate_02/metal_plate_02_Diffuse_2k.jpg",
+           "metal_plate_02/metal_plate_02_nor_gl_2k.jpg", 0.9, 4.0, 1.0)   # unit 1.5: the weighted base, dark scratched plate
 scan_dress(M["Claw"], "Bark015/Bark015_2K-JPG_Color.jpg",
            "Bark015/Bark015_2K-JPG_NormalGL.jpg", 0.9, 14.0, 0.9)
 ## the mouth grille stays SHADOW machinery: same scan, a third the value —

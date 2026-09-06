@@ -81,8 +81,29 @@ elif "--all-meshes" in argv:
         except RuntimeError as _ex:
             print("UE-CURVE-SKIP", _c.name, _ex)
     print("UE-CURVES converted", len(_curves))
+    ## UCX_ collision boxes are hidden from render on purpose (1.5) — they
+    ## must still travel; the importer takes them by name
     objs = [o for o in bpy.data.objects
-            if o.type == "MESH" and not o.hide_render]
+            if o.type == "MESH" and (not o.hide_render or o.name.startswith("UCX_"))]
+    print("UE-UCX", len([o for o in objs if o.name.startswith("UCX_")]), "collision boxes in the export")
+    ## the importer matches UCX_ names against one node and drops the rest
+    ## (1.5: four conventions, zero hulls) — so the boxes ALSO go out as data:
+    ## <out>.collision.json, world centre and full size in metres, and the
+    ## import script builds box collision from it
+    import json as _json
+    _boxes = []
+    for _u in objs:
+        if not _u.name.startswith("UCX_"):
+            continue
+        _mw = _u.matrix_world
+        _loc = _mw.translation
+        _dim = [abs(v) for v in _u.dimensions]   # dimensions are in local scale; boxes are axis-aligned
+        _boxes.append({"name": _u.name, "center_m": [_loc.x, _loc.y, _loc.z], "size_m": [_dim[0], _dim[1], _dim[2]]})
+    _cpath = os.path.splitext(out)[0] + ".collision.json"
+    _cpath = _cpath.replace(".fbx", "")
+    with open(_cpath, "w") as _cf:
+        _json.dump(_boxes, _cf, indent=1)
+    print("UE-COLLISION-JSON", len(_boxes), _cpath)
     if not os.path.isabs(out):
         out = os.path.join(ROOT, out)
     ## packed images (the bakes) have no disk file, so FBX COPY silently

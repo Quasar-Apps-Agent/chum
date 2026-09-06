@@ -100,6 +100,10 @@ def belly_mask(wp):
 def sole_mask(wp):
     return wp.z < 0.08
 
+def sole_window_mask(wp):
+    ## 1.5: the viewer-right shin window (build +X) must show its rods
+    return wp.z < 0.08 or (wp.x > 0.14 and wp.y < -0.07 and 0.24 < wp.z < 0.76)
+
 HAIR_PLAN = [
     ("Skull", 2600, 0.05, FUR_DARK, face_mask),
     ("EarL", 1400, 0.05, FUR_RUST, ear_front_mask),
@@ -109,7 +113,7 @@ HAIR_PLAN = [
     ("ArmL", 700, 0.045, FUR_DARK, None),
     ("ArmR", 700, 0.045, FUR_DARK, None),
     ("LegL", 800, 0.05, FUR_DARK, sole_mask),
-    ("LegR", 800, 0.05, FUR_DARK, sole_mask),
+    ("LegR", 800, 0.05, FUR_DARK, sole_window_mask),
     ("Tail", 600, 0.055, FUR_RUST, None),
 ]
 
@@ -334,3 +338,15 @@ for _hn, _hx in (("handr", 0.66), ("handl", -0.66)):
     scene.render.filepath = os.path.join(OUTDIR, "chum_af_%s.png" % _hn)
     bpy.ops.render.render(write_still=True)
     print("RENDERED", _hn)
+
+## SHOT 8 (1.5): the legs from the front-right, low — the shin window with its
+## rods, both paws, the plinths; ~1.6 m
+camd.lens = 50
+cam.location = mathutils.Vector((0.95, -1.75, 0.55)) * K
+_tgt = mathutils.Vector((0.12, -0.10, 0.36)) * K
+aim(cam, _tgt)
+camd.dof.focus_distance = (cam.location - _tgt).length
+camd.dof.aperture_fstop = 5.6
+scene.render.filepath = os.path.join(OUTDIR, "chum_af_legs.png")
+bpy.ops.render.render(write_still=True)
+print("RENDERED legs")

@@ -1513,3 +1513,33 @@ place; the hands measure smaller than the brief's open span and the
 digit count is the build's, both marked OPEN for the owner with the
 lever-arm question. Unit 1.4 is done. Next is 1.5: the legs, the
 control rods, the torn fur windows, the weighted feet.
+
+## Commit 113 · UNIT 1.5 · THE LEGS, THE RODS, THE WEIGHTED FEET
+The legs were columns of spheres with a rod bolted to the outside of
+each. The plate says the rods are inside — "internal rods linked to
+knee and ankle" — seen through a tear. So each leg is rebuilt with a
+knee and an ankle in the chain and a fold bitten into the back of the
+knee, and both legs carry the assembly inside them: two rods, a knee
+bracket, an ankle bracket, bolts as geometry. The viewer-right shin is
+torn open over a hessian core. The first pass buried the rods in that
+core; now the core is slimmer and the rods stand in the cavity in
+front of it, and the beauty rig's pile parts over the window so they
+show — half a metre of tear at his true height. The paws are one mass
+each now, three toe lobes and a pad remeshed together, the sole
+flattened by a bite, fur cards only above the rim, a pale worn patch
+baked onto the viewer-left foot where the pile has gone. Under each
+paw a plinth, the weighted base, a dark scratched plate. The pivots
+are named to the rig spec. Then the first collision on the puppet,
+which cost the evening: four boxes named for the engine's convention,
+which were dropped at export because the exporter skipped anything
+hidden from render, then dropped at import under every naming
+convention the combined-mesh importer might honour — the file, the
+node, the host — zero hulls, four times. So the export now writes the
+boxes as data beside the mesh, centre and size in metres, and the
+import builds box collision from them in the engine's own space, the
+Y flip verified against the mesh bounds. Four boxes on the mesh,
+simple-as-complex. Named, not hidden: rods and brackets are bevelled
+rods and blocks, not donor pipe cuts; the plinth is metal where the
+footfall canon says wood-through-floor — OPEN for the owner, with the
+question of which shin is torn. Unit 1.5 is done. Next is 1.6, the
+tail.

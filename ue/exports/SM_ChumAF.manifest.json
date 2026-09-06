@@ -1,5 +1,5 @@
 {
- "BurntWool.004": {
+ "BurntWool.006": {
   "diff": "ArmL_diff",
   "rgh": "ArmL_rgh",
   "nrm": "ArmL_nrm"
@@ -52,27 +52,27 @@
   ],
   "nrm": "Rope002_2K-JPG_NormalGL.jpg"
  },
- "BurntWool.005": {
+ "BurntWool.007": {
   "diff": "ArmR_diff",
   "rgh": "ArmR_rgh",
   "nrm": "ArmR_nrm"
  },
- "BurntWool.007": {
+ "BurntWool.009": {
   "diff": "ArmRFingerA_diff",
   "rgh": "ArmRFingerA_rgh",
   "nrm": "ArmRFingerA_nrm"
  },
- "BurntWool.008": {
+ "BurntWool.010": {
   "diff": "ArmRFingerB_diff",
   "rgh": "ArmRFingerB_rgh",
   "nrm": "ArmRFingerB_nrm"
  },
- "BurntWool.009": {
+ "BurntWool.011": {
   "diff": "ArmRFingerC_diff",
   "rgh": "ArmRFingerC_rgh",
   "nrm": "ArmRFingerC_nrm"
  },
- "BurntWool.006": {
+ "BurntWool.008": {
   "diff": "ArmRHand_diff",
   "rgh": "ArmRHand_rgh",
   "nrm": "ArmRHand_nrm"
@@ -192,7 +192,7 @@
   ],
   "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
  },
- "BurntWool.012": {
+ "BurntWool.014": {
   "diff": "JawMesh_diff",
   "rgh": "JawMesh_rgh",
   "nrm": "JawMesh_nrm"
@@ -203,9 +203,33 @@
   "nrm": "LegL_nrm"
  },
  "BurntWool.003": {
+  "diff": "LegLPaw_diff",
+  "rgh": "LegLPaw_rgh",
+  "nrm": "LegLPaw_nrm"
+ },
+ "Plinth": {
+  "diff": "Plinth_tint",
+  "tint": [
+   0.0298,
+   0.0271,
+   0.0245
+  ],
+  "nrm": "metal_plate_02_nor_gl_2k.jpg"
+ },
+ "BellyWool.002": {
+  "diff": "LegLWornPatch_diff",
+  "rgh": "LegLWornPatch_rgh",
+  "nrm": "LegLWornPatch_nrm"
+ },
+ "BurntWool.004": {
   "diff": "LegR_diff",
   "rgh": "LegR_rgh",
   "nrm": "LegR_nrm"
+ },
+ "BurntWool.005": {
+  "diff": "LegRPaw_diff",
+  "rgh": "LegRPaw_rgh",
+  "nrm": "LegRPaw_nrm"
  },
  "LipLeather": {
   "diff": "LipLeather_tint",
@@ -260,12 +284,12 @@
   "rgh": "PatchRust_rgh",
   "nrm": "PatchRust_nrm"
  },
- "BurntWool.011": {
+ "BurntWool.013": {
   "diff": "Skull_diff",
   "rgh": "Skull_rgh",
   "nrm": "Skull_nrm"
  },
- "BurntWool.010": {
+ "BurntWool.012": {
   "diff": "Tail_diff",
   "rgh": "Tail_rgh",
   "nrm": "Tail_nrm"

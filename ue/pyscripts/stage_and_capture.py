@@ -107,6 +107,10 @@ elif frame in ("handr", "handl"):
     b_origin = unreal.Vector(b_origin.x + _hs * b_extent.x * 0.72, b_origin.y,
                              b_origin.z - b_extent.z * 0.50)
     size = size * 0.19
+elif frame == "legs":
+    ## 1.5: the legs, feet and plinths at ~1.6 m, front-on
+    b_origin = unreal.Vector(b_origin.x, b_origin.y, b_origin.z - b_extent.z * 0.68)
+    size = size * 0.30
 elif frame == "torso":
     ## 1.1c: the belly and patches at ~1.3 m — the seam maps must hold here
     b_origin = unreal.Vector(b_origin.x, b_origin.y,
@@ -117,7 +121,7 @@ dist = max(size * 3.2, 120.0)
 ## the throat speaker (centre chest, facing -Y after the 180 yaw) is framed
 import math as _math
 ## 1.2: bracketed at 200/240/280 — 280 is the front (speaker centred). Default it for the chest.
-_bear = os.environ.get("UE_CAPTURE_BEARING") or ("280" if frame in ("chest", "collar", "handr", "handl") else None)
+_bear = os.environ.get("UE_CAPTURE_BEARING") or ("280" if frame in ("chest", "collar", "handr", "handl", "legs") else None)
 if _bear:
     _bx, _by = _math.cos(_math.radians(float(_bear))), _math.sin(_math.radians(float(_bear)))
 else:
@@ -130,12 +134,12 @@ cam.set_actor_rotation(look, False)
 ## 1.1c: the torso closeup gets its own warm fill at the camera — the rig's
 ## key models the head and leaves the torso in shadow at 1.5 m. Look-dev
 ## practice for a closeup; full/head frames stay comparable with 0.3.
-if frame in ("torso", "chest", "collar", "handr", "handl"):
+if frame in ("torso", "chest", "collar", "handr", "handl", "legs"):
     fill = eas.spawn_actor_from_class(unreal.PointLight, cam_loc)
     ## 1.3 finding: 6 cd at a metre is four times the 1.6-lux key — the plaid
     ## whites out and brass clips to pale yellow. The collar frame meters BELOW
     ## the key; torso/chest keep their baselines. UE_CAPTURE_FILL overrides.
-    _fill_default = {"collar": 1.5, "handr": 1.5, "handl": 1.5}.get(frame, 6.0)
+    _fill_default = {"collar": 1.5, "handr": 1.5, "handl": 1.5, "legs": 1.5}.get(frame, 6.0)
     _fill_cd = float(os.environ.get("UE_CAPTURE_FILL") or _fill_default)
     fill.light_component.set_intensity(_fill_cd if dark else 20.0)   # 900 cd blew the frame to white
     unreal.log_warning("CAPTURE-FILL %s %.2f cd" % (frame, _fill_cd))
