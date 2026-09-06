@@ -92,7 +92,10 @@ def ear_front_mask(wp):
     return wp.y < -0.005
 
 def belly_mask(wp):
-    return wp.y < -0.3 and 1.0 < wp.z < 1.8 and abs(wp.x) < 0.32
+    # the belly panel, and (1.3) the THROAT: the collar band and the bell must
+    # show — the plate's chest is cloth around the grille, not pile
+    return (wp.y < -0.3 and 1.0 < wp.z < 1.8 and abs(wp.x) < 0.32) or \
+           (wp.y < -0.18 and wp.z > 2.28 and abs(wp.x) < 0.36)
 
 def sole_mask(wp):
     return wp.z < 0.08
@@ -306,3 +309,15 @@ camd.dof.aperture_fstop = 5.6
 scene.render.filepath = os.path.join(OUTDIR, "chum_af_chest.png")
 bpy.ops.render.render(write_still=True)
 print("RENDERED chest")
+
+## SHOT 5 (1.3): the collar and the dead bell at ~0.9 m, front-on and a little
+## below — the band's rivets, the buckle side, the slot and the void inside
+camd.lens = 85
+cam.location = mathutils.Vector((0.18, -1.05, 1.92)) * K
+_tgt = mathutils.Vector((0.0, -0.36, 1.97)) * K
+aim(cam, _tgt)
+camd.dof.focus_distance = (cam.location - _tgt).length
+camd.dof.aperture_fstop = 5.6
+scene.render.filepath = os.path.join(OUTDIR, "chum_af_collar.png")
+bpy.ops.render.render(write_still=True)
+print("RENDERED collar")

@@ -192,8 +192,13 @@ if os.path.exists(manifest_path):
         _n = find_tex(_entry.get("nrm", "")) if _entry.get("nrm") else None
         if _d is not None:
             mel.set_material_instance_texture_parameter_value(_mi, "DiffuseColorMap", _d)
+            ## 1.3 finding: IMPORTER-MADE instances (RodMetal, BronzeBand...) carry
+            ## the map but no DiffuseColorMapWeight, so the Phong master lerps to
+            ## its flat DiffuseColor — pale rivet balls, a tan bronze band. Weight 1.
+            mel.set_material_instance_scalar_parameter_value(_mi, "DiffuseColorMapWeight", 1.0)
         if _n is not None:
             mel.set_material_instance_texture_parameter_value(_mi, "NormalMap", _n)
+            mel.set_material_instance_scalar_parameter_value(_mi, "NormalMapWeight", 1.0)
         ## tints arrive pre-multiplied in the texture (export writes <mat>_tint.png):
         ## the Phong master LERPs DiffuseColor -> map by DiffuseColorMapWeight=1,
         ## so a colour parameter cannot tint a map here (1.2 finding)

@@ -1449,3 +1449,36 @@ donor grille is a slotted plate where the plate says woven wire —
 OPEN for the owner, marked in the tracker. The 1.1 full baseline is
 re-archived under the corrected rim. Unit 1.2 is done. Next is 1.3:
 the collar, the leather strap, the dead brass bell.
+
+## Commit 111 · UNIT 1.3 · THE COLLAR AND THE DEAD BELL
+The plate's collar is a broad dark band with a riveted edge and a
+buckle, and a round brass bell at the throat with a slot and a loop.
+The build had a torus sunk into the neck and a brass ball. Now: a
+bevelled leather band sitting on the pile the way a costume collar
+does, seventy-two segments, aged stitched leather from a CC0 scan,
+sixteen rivets, a buckle with its prong and a strap tail at the back.
+And a sleigh bell, hollow, its mouth cut through the wall between two
+round ends so the black inside shows — modelled as its own object,
+because the clapperless void is the tell and the plate says the bell
+never sounds. A crown loop, a stitched tab through it, the socket. The
+crown is blackened. That line took four passes: split by faces it was a
+paint line, then a castellation, then a finer castellation, because
+every per-face line on a sphere is stairs. So the soot went into the
+brass's own graph as a noise-ragged tide in local height, and the bell
+became the first object baked AS ITSELF — its own nodes to maps, metal
+zeroed for the colour pass and restored on the export material — so
+Cycles and Unreal carry one ragged line. The collar was invisible at
+first under the head's pile; the beauty rig now keeps the throat bare
+above the grille, which is what the plate shows anyway. In the engine
+the unit found a Phase 0 bug: the importer's own instances carried
+their tint maps at weight zero, so rivets rendered as pale balls and
+the jaw's bronze chin strap as tan plates in every frame since the
+gate. The fixup sets the weights; both are dark now. Named, not hidden:
+the Unreal closeup frames auto-expose hot, so brass clips to yellow
+and the baked crown reads faintly there — the locked-EV full frame is
+the reference, and a per-frame fill override is in for the day the rig
+is metered properly; the tally-spill test waits for the in-game rig.
+OPEN for the owner: the bell's diameter (the plate's proportion, 0.13
+m, is used) and whether the mascot's bell carries the stage pry mark
+(it does, a bright scratch at the seam; cheap to remove). Unit 1.3 is
+done. Next is 1.4.

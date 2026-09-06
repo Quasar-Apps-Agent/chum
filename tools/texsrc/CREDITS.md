@@ -20,3 +20,5 @@ results ship in the glb.
 - vintage_radio_transceiver — Poly Haven MODEL, CC0 — https://polyhaven.com/a/vintage_radio_transceiver (1k blend + 8 textures; donor part)
 - Rope002 — AmbientCG, CC0 — https://ambientcg.com/view?id=Rope002 (2K JPG)
 - Metal063 — AmbientCG, CC0 — https://ambientcg.com/view?id=Metal063 (2K JPG)
+- fabric_leather_02 — Poly Haven, CC0 — https://polyhaven.com/a/fabric_leather_02 (2k jpg: Diffuse, nor_gl, Rough, Displacement, AO)
+- Metal008 — AmbientCG, CC0 — https://ambientcg.com/view?id=Metal008 (2K JPG)

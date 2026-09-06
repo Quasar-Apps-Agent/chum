@@ -22,6 +22,7 @@ scene = bpy.context.scene
 col = bpy.context.collection
 
 BAKES = []
+BAKES_ASIS = []   # objects baked with their OWN node tree (metals with painted wear), not the burlap graph
 
 # ---- materials --------------------------------------------------------------------
 def srgb_to_linear(x):
@@ -82,6 +83,12 @@ M = {
     "FurDark":    mat("FurDark",    (0.1, 0.08, 0.06), 1.0),
     "BronzeBand": mat("BronzeBand", (0.13, 0.078, 0.038), 0.68, 0.8),
     "BronzeChar": mat("BronzeChar", (0.1, 0.07, 0.045), 0.85, 0.45),
+    # unit 1.3: the collar strap, the dead brass bell
+    "StrapLeather": mat("StrapLeather", (0.22, 0.13, 0.08), 0.62),
+    "BellBrass":    mat("BellBrass",    (0.58, 0.44, 0.20), 0.42, 0.9),
+    "BellCrown":    mat("BellCrown",    (0.16, 0.12, 0.07), 0.80, 0.6),   # blackened crown (FABRIC §5 T5)
+    "BellVoid":     mat("BellVoid",     (0.02, 0.02, 0.02), 1.0),         # the clapperless interior
+    "BellScratch":  mat("BellScratch",  (0.95, 0.80, 0.45), 0.18, 1.0),   # the bright pry mark (DESIGN delta 5)
     "CopperRing": mat("CopperRing", (0.13, 0.08, 0.045), 0.7, 0.85),
     "GrilleDark": mat("GrilleDark", (0.17, 0.16, 0.14), 0.5, 0.75),
     "ToothBone":  mat("ToothBone",  (0.63, 0.56, 0.44), 0.75),
@@ -546,12 +553,156 @@ if tail_fur:
     parent_to(tail_fur, tail_pivot)
 
 # ---- collar and the bell ----------------------------------------------------------------
-collar = torus((0, 0, 2.02), 0.27, 0.038, rot=(math.radians(6), 0, 0))
+## unit 1.3 (BRIEF 1.3; PLATE: a broad dark band with a riveted edge, a buckle
+## and strap, a round slotted bell front centre, roughly grille-sized).
+## The collar is a flat BAND, not a torus: a bevelled outer shell minus the
+## neck cylinder, 50 mm wide, 12 mm thick at base, 6 deg forward tilt kept.
+COLLAR_C = (0.0, 0.0, 2.04)
+COLLAR_R = 0.30          # sits ON the pile like a costume collar (the old torus sank to 0.232 and vanished)
+COLLAR_T = 0.012
+COLLAR_W = 0.05
+COLLAR_TILT = math.radians(6)
+
+def _tilt(x, y, z):
+    """band-local (x, y, z-offset) -> world, tilted forward about X at COLLAR_C"""
+    ct, st = math.cos(COLLAR_TILT), math.sin(COLLAR_TILT)
+    return (COLLAR_C[0] + x, COLLAR_C[1] + y * ct - z * st, COLLAR_C[2] + y * st + z * ct)
+
+bpy.ops.mesh.primitive_cylinder_add(radius=COLLAR_R + COLLAR_T, depth=COLLAR_W,
+                                    location=COLLAR_C, vertices=72)   # cyl() is 12-sided: a band, not a nut
+_outer = bpy.context.active_object
+_outer.rotation_euler = (COLLAR_TILT, 0, 0)
+bpy.ops.object.select_all(action="DESELECT")
+_outer.select_set(True)
+bpy.context.view_layer.objects.active = _outer
+_bv = _outer.modifiers.new("soft", "BEVEL")
+_bv.width = 0.004
+_bv.segments = 3
+bpy.ops.mesh.primitive_cylinder_add(radius=COLLAR_R, depth=COLLAR_W * 1.4,
+                                    location=COLLAR_C, vertices=72)
+_inner = bpy.context.active_object
+_inner.rotation_euler = (COLLAR_TILT, 0, 0)
+bpy.ops.object.select_all(action="DESELECT")
+_outer.select_set(True)
+bpy.context.view_layer.objects.active = _outer
+_hb = _outer.modifiers.new("hollow", "BOOLEAN")
+_hb.operation = "DIFFERENCE"
+_hb.object = _inner
+_hb.solver = "EXACT"
+bpy.ops.object.convert(target="MESH")
+collar = bpy.context.active_object
 collar.name = "Collar"
-simple(collar, M["LeatherCol"])
-bell = sphere((0, -0.27, 1.94), 0.06)
+bpy.data.objects.remove(_inner, do_unlink=True)
+simple(collar, M["StrapLeather"])
+bpy.ops.object.shade_smooth()
+print("COLLAR band verts", len(collar.data.vertices))
+
+## the riveted edge: 16 rivets along the band's lower edge, real geometry
+for _rv in range(16):
+    _ra = 2.0 * math.pi * _rv / 16 + 0.1
+    _rr = COLLAR_R + COLLAR_T + 0.002
+    _riv = sphere(_tilt(_rr * math.cos(_ra), _rr * math.sin(_ra), -COLLAR_W * 0.30), 0.0075)
+    _riv.name = f"CollarRivet{_rv}"
+    simple(_riv, M["RodMetal"])
+    bpy.ops.object.shade_smooth()
+
+## the buckle and the strap tail, back-right where the band overlaps itself
+_ba = math.radians(70)
+_bn = COLLAR_R + COLLAR_T + 0.006
+buckle = torus(_tilt(_bn * math.cos(_ba), _bn * math.sin(_ba), 0.0), 0.026, 0.0045,
+               rot=(math.pi / 2, 0, _ba + math.pi / 2), scale=(1.0, 1.0, 0.75))
+buckle.name = "CollarBuckle"
+simple(buckle, M["RodMetal"])
+bpy.ops.object.shade_smooth()
+_prong = cyl(_tilt(_bn * math.cos(_ba), _bn * math.sin(_ba), 0.0), 0.003, 0.05,
+             rot=(0, 0, 0))
+_prong.name = "CollarProng"
+simple(_prong, M["RodMetal"])
+_ta = _ba + 0.34
+_tn = COLLAR_R + COLLAR_T + 0.004
+strap_tail = rounded_prism(_tilt(_tn * math.cos(_ta), _tn * math.sin(_ta), 0.0),
+                           _ta + math.pi / 2, 0.10, 0.03, depth=0.006, bevel=0.002)
+strap_tail.name = "CollarStrapTail"
+simple(strap_tail, M["StrapLeather"])
+
+## the dead brass bell: a sleigh bell, hollow, slotted across the lower front
+## with the two round ends, NO clapper — the void is modelled black (the tell).
+## Size per PLATE proportion (BRIEF 1.3 §5): r 0.05 at base -> 0.129 m at 3.35.
+BELL_R = 0.05
+BELL_C = (0.0, -0.37, 1.91)   # in front of the throat ring, 11 mm clear of its bevel
+bpy.ops.mesh.primitive_uv_sphere_add(radius=BELL_R, location=BELL_C, segments=64, ring_count=40)
+bell = bpy.context.active_object   # fine enough that the soot line is ragged, not castellated (pass 4)
 bell.name = "Bell"
-simple(bell, M["Brass"])
+_bcut = [
+    sphere(BELL_C, BELL_R - 0.006),                                                 # the hollow
+    ## the slot: a real mouth THROUGH the wall — the shell's front at this
+    ## height is 47 mm out; a cutter at 30 mm sat inside the hollow (pass 3)
+    cyl((BELL_C[0], BELL_C[1] - 0.046, BELL_C[2] - 0.016), 0.0065, 0.076,
+        rot=(0, math.pi / 2, 0), scale=(1.0, 1.0, 3.0)),                           # 13 mm tall, 39 mm deep
+    sphere((BELL_C[0] - 0.034, BELL_C[1] - 0.038, BELL_C[2] - 0.016), 0.011),     # slot ends
+    sphere((BELL_C[0] + 0.034, BELL_C[1] - 0.038, BELL_C[2] - 0.016), 0.011),
+]
+bpy.ops.object.select_all(action="DESELECT")
+bell.select_set(True)
+bpy.context.view_layer.objects.active = bell
+for _i, _c in enumerate(_bcut):
+    _m = bell.modifiers.new(f"cut{_i}", "BOOLEAN")
+    _m.operation = "DIFFERENCE"
+    _m.object = _c
+    _m.solver = "EXACT"
+bpy.ops.object.convert(target="MESH")
+bell = bpy.context.active_object
+for _c in _bcut:
+    bpy.data.objects.remove(_c, do_unlink=True)
+bell.data.materials.clear()
+bell.data.materials.append(M["BellBrass"])
+bell.data.materials.append(M["BellVoid"])
+## mesh coordinates are LOCAL (the sphere's origin is BELL_C): inside = the
+## face looks at the origin. The blackened crown is NOT a face split (passes
+## 4-5: every per-face line on a sphere is castellated) — it is painted in
+## BellBrass's own graph and BAKED, so both engines get the same ragged line.
+_nin = 0
+for _f in bell.data.polygons:
+    if _f.center.dot(_f.normal) <= 0.0:
+        _f.material_index = 1; _nin += 1
+    _f.use_smooth = True
+## the void becomes its own object so the bell is single-material for the bake
+bpy.ops.object.select_all(action="DESELECT")
+bell.select_set(True)
+bpy.context.view_layer.objects.active = bell
+bpy.ops.object.mode_set(mode="EDIT")
+bpy.ops.mesh.select_all(action="DESELECT")
+bell.active_material_index = 1
+bpy.ops.object.material_slot_select()
+bpy.ops.mesh.separate(type="SELECTED")
+bpy.ops.object.mode_set(mode="OBJECT")
+bell_void = [o for o in bpy.context.selected_objects if o != bell][0]
+bell_void.name = "BellVoid"
+simple(bell_void, M["BellVoid"])
+bell.data.materials.clear()
+bell.data.materials.append(M["BellBrass"])
+BAKES_ASIS.append(bell)
+print("BELL verts", len(bell.data.vertices), "void verts", len(bell_void.data.vertices))
+
+## the one bright scratch at the crown seam (pried and recrimped, DESIGN delta 5)
+bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0.012, BELL_C[1] - 0.041, BELL_C[2] + 0.027))
+_scr = bpy.context.active_object
+_scr.name = "BellScratch"
+_scr.scale = (0.016, 0.003, 0.0016)
+_scr.rotation_euler = (math.radians(35), 0, math.radians(-12))
+simple(_scr, M["BellScratch"])
+
+## the crown loop, the leather tab that hangs it from the band, the socket
+bell_loop = torus((BELL_C[0], BELL_C[1], BELL_C[2] + BELL_R + 0.010), 0.014, 0.0045,
+                  rot=(math.pi / 2, 0, 0))
+bell_loop.name = "BellLoop"
+simple(bell_loop, M["BellCrown"])
+bpy.ops.object.shade_smooth()
+bell_tab = rounded_prism((BELL_C[0], BELL_C[1], BELL_C[2] + BELL_R + 0.024), 0.0,
+                         0.024, 0.036, depth=0.006, bevel=0.002)
+bell_tab.name = "BellTab"
+simple(bell_tab, M["StrapLeather"])
+empty("SOCKET_Bell", BELL_C)   # clapperless (PIPELINE §STANDARDS)
 
 # ---- THE THROAT SPEAKER (unit 1.2; PLATE detail 2, MOTION §AFTER-FIRE) -------------
 ## "a salvaged studio monitor revoiced into the chest" — a REAL donor driver:
@@ -1326,6 +1477,52 @@ scan_dress(M["RingSteel"], "Metal063/Metal063_2K-JPG_Color.jpg",
            "Metal063/Metal063_2K-JPG_NormalGL.jpg", 1.6, 8.0, 1.0)
 scan_dress(M["CableRubber"], "Rope002/Rope002_2K-JPG_Color.jpg",
            "Rope002/Rope002_2K-JPG_NormalGL.jpg", 1.4, 40.0, 1.0)
+## unit 1.3: aged stitched leather on the strap (Poly Haven fabric_leather_02),
+## scratched bronze on the bell, a third the value on the blackened crown
+scan_dress(M["StrapLeather"], "fabric_leather_02/fabric_leather_02_Diffuse_2k.jpg",
+           "fabric_leather_02/fabric_leather_02_nor_gl_2k.jpg", 2.4, 6.0, 1.0)
+scan_dress(M["BellBrass"], "Metal008/Metal008_2K-JPG_Color.jpg",
+           "Metal008/Metal008_2K-JPG_NormalGL.jpg", 2.0, 9.0, 0.9)
+scan_dress(M["BellCrown"], "Metal008/Metal008_2K-JPG_Color.jpg",
+           "Metal008/Metal008_2K-JPG_NormalGL.jpg", 0.7, 9.0, 0.9)
+## the blackened crown (FABRIC §5 T5): a noise-ragged tide line in local Z,
+## above ~33 mm (scaled) — brass below, soot above; roughness follows
+_bn = M["BellBrass"].node_tree
+_bp = _bn.nodes["Principled BSDF"]
+_bsrc = _bp.inputs["Base Color"].links[0].from_socket
+_bco = _bn.nodes.new("ShaderNodeTexCoord")
+_bsep = _bn.nodes.new("ShaderNodeSeparateXYZ")
+_bn.links.new(_bco.outputs["Object"], _bsep.inputs["Vector"])
+_bnz = _bn.nodes.new("ShaderNodeTexNoise")
+_bnz.inputs["Scale"].default_value = 55.0
+_bnz.inputs["Detail"].default_value = 5.0
+_bn.links.new(_bco.outputs["Object"], _bnz.inputs["Vector"])
+_bma = _bn.nodes.new("ShaderNodeMath")
+_bma.operation = "MULTIPLY_ADD"          # z + (noise - 0.5) * 0.016
+_bma.inputs[1].default_value = 0.016
+_bn.links.new(_bnz.outputs["Fac"], _bma.inputs[0])
+_bn.links.new(_bsep.outputs["Z"], _bma.inputs[2])
+_bmr = _bn.nodes.new("ShaderNodeMapRange")
+_bmr.inputs["From Min"].default_value = 0.0335 + 0.008 - 0.004
+_bmr.inputs["From Max"].default_value = 0.0335 + 0.008 + 0.004
+_bn.links.new(_bma.outputs["Value"], _bmr.inputs["Value"])
+_bmix = _bn.nodes.new("ShaderNodeMixRGB")
+_bmix.blend_type = "MIX"
+_bn.links.new(_bmr.outputs["Result"], _bmix.inputs["Fac"])
+_bn.links.new(_bsrc, _bmix.inputs["Color1"])
+_bmix.inputs["Color2"].default_value = (0.030, 0.024, 0.018, 1.0)
+_bn.links.new(_bmix.outputs["Color"], _bp.inputs["Base Color"])
+_brg = _bn.nodes.new("ShaderNodeMapRange")   # roughness 0.42 -> 0.85 into the soot
+_brg.inputs["To Min"].default_value = 0.42
+_brg.inputs["To Max"].default_value = 0.85
+_bn.links.new(_bmr.outputs["Result"], _brg.inputs["Value"])
+_bn.links.new(_brg.outputs["Result"], _bp.inputs["Roughness"])
+## the void and the scratch carry a scan too, so the engine's Phong master
+## (map weight 1, colour lerped away) gets a real texture instead of white
+scan_dress(M["BellVoid"], "Metal008/Metal008_2K-JPG_Color.jpg",
+           "Metal008/Metal008_2K-JPG_NormalGL.jpg", 0.12, 9.0, 0.5)
+scan_dress(M["BellScratch"], "Metal008/Metal008_2K-JPG_Color.jpg",
+           "Metal008/Metal008_2K-JPG_NormalGL.jpg", 3.2, 9.0, 0.3)
 
 
 def burlap_nodes(matr, tint_srgb, scorch, scan_key, scale, seam=0.0, zones=None, origin=(0.0, 0.0, 0.0), seam_geom=None):
@@ -1775,6 +1972,55 @@ def bake_all():
         obj.data.materials.clear()
         obj.data.materials.append(final)
         print("BAKED", obj.name, res)
+    ## as-is bakes (1.3): the object's own graph, baked to maps. Metallic is
+    ## zeroed for the diffuse pass (Cycles' colour pass of a metal is black)
+    ## and restored as a constant on the export material.
+    for obj in BAKES_ASIS:
+        src = obj.data.materials[0]
+        mname = src.name.split(".")[0]
+        res = 1024
+        bpy.ops.object.select_all(action="DESELECT")
+        obj.select_set(True)
+        bpy.context.view_layer.objects.active = obj
+        bpy.ops.object.mode_set(mode="EDIT")
+        bpy.ops.mesh.select_all(action="SELECT")
+        bpy.ops.uv.smart_project(angle_limit=1.15, island_margin=0.03)
+        bpy.ops.object.mode_set(mode="OBJECT")
+        nt = src.node_tree
+        pb = nt.nodes["Principled BSDF"]
+        metal = float(pb.inputs["Metallic"].default_value)
+        pb.inputs["Metallic"].default_value = 0.0
+        imgs = {}
+        for kind, cs in (("diff", "sRGB"), ("nrm", "Non-Color"), ("rgh", "Non-Color")):
+            img = bpy.data.images.new(f"{obj.name}_{kind}", res, res, alpha=False)
+            img.colorspace_settings.name = cs
+            imgs[kind] = img
+        tex_node = nt.nodes.new("ShaderNodeTexImage")
+        for kind, btype, extra in (("diff", "DIFFUSE", {"pass_filter": {"COLOR"}}),
+                                   ("nrm", "NORMAL", {}),
+                                   ("rgh", "ROUGHNESS", {})):
+            tex_node.image = imgs[kind]
+            nt.nodes.active = tex_node
+            bpy.ops.object.bake(type=btype, margin=6, **extra)
+        final = bpy.data.materials.new(mname)
+        final.use_nodes = True
+        fnt = final.node_tree
+        fb = fnt.nodes["Principled BSDF"]
+        fb.inputs["Metallic"].default_value = metal
+        td = fnt.nodes.new("ShaderNodeTexImage")
+        td.image = imgs["diff"]
+        fnt.links.new(td.outputs["Color"], fb.inputs["Base Color"])
+        tr = fnt.nodes.new("ShaderNodeTexImage")
+        tr.image = imgs["rgh"]
+        fnt.links.new(tr.outputs["Color"], fb.inputs["Roughness"])
+        tn = fnt.nodes.new("ShaderNodeTexImage")
+        tn.image = imgs["nrm"]
+        nm = fnt.nodes.new("ShaderNodeNormalMap")
+        fnt.links.new(tn.outputs["Color"], nm.inputs["Color"])
+        fnt.links.new(nm.outputs["Normal"], fb.inputs["Normal"])
+        obj.data.materials.clear()
+        obj.data.materials.append(final)
+        print("BAKED-ASIS", obj.name, res, "metallic", metal)
 
 # ---- THE SCALE LAW: one uniform scale, frozen BEFORE the bake --------------------------
 ## OWNER RULING 2026-09-05: the puppet is authored at the true 3.35 m with the
