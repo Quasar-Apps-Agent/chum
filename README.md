@@ -1591,3 +1591,25 @@ reference keeps its 2.6 m glb. Named, not hidden: the diagnostic
 closeups auto-expose and now run pale where the metals went dark;
 the locked-EV full frame is the reference. Tranche 1 of 1.7 is done;
 the rest waits on rulings. Next is 1.8: the head retrofit.
+
+## Commit 116 · UNIT 1.8, TRANCHE 1 · THE EYE THAT BURNS ONLY ON CAPTURE
+The engine's dark baseline had called the lens "a pale blind eye"
+since Phase 0, because the tally core lived only in the beauty rig,
+spawned at render time. Now it is part of the asset: a small remeshed
+lamp element inside the salvaged barrel, emissive in Blender, and in
+the engine an unlit material with one scalar the game will drive —
+zero by default, a lit instance for the capture rig. Dark, the lens
+is a dead barrel. Lit, a red core burns through it without washing
+out, and at gameplay distance the red point is there: the game's
+only mobile red, on the mesh at last, with its socket at the core's
+centre. The teeth are no longer scaled cubes: remeshed slats, tips
+chipped by the voxel, though the crackle scan read as wood grain and
+the next build wears stained ivory instead. Every shipped frame now
+renders the jaw shut, per the capture canon that a jaw open with no
+hand at the lever is wrong; one frame opens it and says so in its
+name, for judging the maw. The sodium tool gained a head frame at the
+plate's distance. Named, not hidden: the core clipped to white at the
+centre in Cycles and its strength is lowered for the next build;
+the staples are still seventy cylinders, the face panels still thin
+shells, the chin bands and jaw bars still primitives, the fur atlas
+still the Phase 0 one — those are tranche 2. Next.

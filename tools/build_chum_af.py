@@ -98,6 +98,7 @@ M = {
     # unit 1.5: legs
     "Plinth":       mat("Plinth",       (0.20, 0.19, 0.18), 0.65, 0.7),   # the weighted base: dark scratched plate (OPEN: metal vs wood)
     "TailWool":     mat("TailWool",     (0.13, 0.10, 0.07), 0.97),        # unit 1.6: the tail's own bake (rust tip zone)
+    "TallyCore":    mat("TallyCore",    (1.0, 0.03, 0.01), 0.4),          # unit 1.8: the emissive core behind the lens (M_TallyCore in UE)
     "CopperRing": mat("CopperRing", (0.13, 0.08, 0.045), 0.7, 0.85),
     "GrilleDark": mat("GrilleDark", (0.17, 0.16, 0.14), 0.5, 0.75),
     "ToothBone":  mat("ToothBone",  (0.63, 0.56, 0.44), 0.75),
@@ -1445,7 +1446,22 @@ bm2.free()
 _ls = 2.75
 lens_ob.scale = (_ls, _ls, _ls)
 lens_ob.location = (0.13 - 0.008 * _ls, -0.2425, 2.34 - 0.034 * _ls)
-empty("SOCKET_EyeTally", tuple(lens_ob.location), parent=head)   # 1.7: PIPELINE §STANDARDS socket, the lens centre
+## 1.8 step 5: the tally core — a small remeshed lamp element inside the
+## barrel (BEAUTY used to spawn one at render time); emissive in Blender,
+## M_TallyCore in the engine driven 0 <-> lit; the socket sits at its centre
+TALLY_CORE = (0.13, -0.40, 2.34)
+_tcore = sphere(TALLY_CORE, 0.017)
+organic(_tcore, M["TallyCore"], 0.004, 0.0, 0.0, 0.6, smooth=1)
+_tcore.name = "TallyCore"
+parent_to(_tcore, head)
+_tnt = M["TallyCore"].node_tree
+_tbs = _tnt.nodes["Principled BSDF"]
+for _k, _v in (("Emission Color", (1.0, 0.025, 0.008, 1.0)), ("Emission Strength", 6.0)):   # 20 clipped the core to white (1.8 pass 1); it must burn RED
+    try:
+        _tbs.inputs[_k].default_value = _v
+    except Exception:
+        pass
+empty("SOCKET_EyeTally", TALLY_CORE, parent=head)   # 1.7/1.8: PIPELINE §STANDARDS socket, at the core's centre
 parent_to(lens_ob, head)
 for _lmat in lens_ob.data.materials:
     if _lmat and _lmat.use_nodes:
@@ -1567,8 +1583,11 @@ for i, ta in enumerate(tooth_angs):
     ob = bpy.context.active_object
     ob.scale = (random.uniform(0.013, 0.019), 0.011, tl)
     ob.rotation_euler = (math.radians(random.uniform(-4, 4)), 0, math.radians(random.uniform(-7, 7)))
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    ## 1.8 step 3: a remeshed slat, not a scaled cube — the voxel chips the
+    ## tip and rounds the edges; bone reads from the crackle scan
+    organic(ob, M["ToothBone"], 0.0035, 0.0015, 0.0008, 0.5, smooth=1)
     ob.name = f"ToothU{i}"
-    simple(ob, M["ToothBone"])
     parent_to(ob, head)
 ## the machinery glimpsed inside: dark slats just proud of the void's face
 for gi in range(7):
@@ -1665,8 +1684,10 @@ for i, ta in enumerate((236, 265, 292, 318)):
     ob = bpy.context.active_object
     ob.scale = (random.uniform(0.012, 0.017), 0.011, tl)
     ob.rotation_euler = (math.radians(random.uniform(-4, 4)), 0, math.radians(random.uniform(-8, 8)))
+    bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+    organic(ob, M["ToothBone"], 0.0035, 0.0015, 0.0008, 0.5, smooth=1)
     ob.name = f"ToothL{i}"
-    simple(ob, M["ToothBone"])
+    pass  # material set by organic()
     parent_to(ob, jaw)
 ## the riveted chin strap (manual jaw hinge assembly)
 for ci in range(9):
@@ -1790,6 +1811,8 @@ scan_dress(M["Bandage"], "hessian_230/hessian_230_Diffuse_2k.jpg",
            "hessian_230/hessian_230_nor_gl_2k.jpg", 1.7, 12.0, 1.0)
 scan_dress(M["Plinth"], "metal_plate_02/metal_plate_02_Diffuse_2k.jpg",
            "metal_plate_02/metal_plate_02_nor_gl_2k.jpg", 0.9, 4.0, 1.0)   # unit 1.5: the weighted base, dark scratched plate
+scan_dress(M["ToothBone"], "Metal058A/Metal058A_1K-JPG_Color.jpg",
+           "Metal058A/Metal058A_1K-JPG_NormalGL.jpg", 1.7, 22.0, 0.4)   # 1.8: stained old ivory (the crackle read as wood grain)
 scan_dress(M["Claw"], "Bark015/Bark015_2K-JPG_Color.jpg",
            "Bark015/Bark015_2K-JPG_NormalGL.jpg", 0.9, 14.0, 0.9)
 ## the mouth grille stays SHADOW machinery: same scan, a third the value —

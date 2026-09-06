@@ -387,5 +387,15 @@
   ],
   "nrm": "Metal063_2K-JPG_NormalGL.jpg",
   "orm": "RingSteel_orm"
+ },
+ "ToothBone": {
+  "diff": "ToothBone_tint",
+  "tint": [
+   0.8513,
+   0.6572,
+   0.3904
+  ],
+  "nrm": "Bark015_2K-JPG_NormalGL.jpg",
+  "orm": "ToothBone_orm"
  }
 }

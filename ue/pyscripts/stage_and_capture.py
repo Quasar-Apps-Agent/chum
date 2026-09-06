@@ -72,6 +72,15 @@ ppv.set_editor_property("settings", pps)
 ## the subject (UE_CAPTURE_YAW turns it to face the camera)
 subj_asset = unreal.EditorAssetLibrary.load_asset(ASSET)
 subj = eas.spawn_actor_from_object(subj_asset, unreal.Vector(0, 0, 0))
+## 1.8: UE_CAPTURE_TALLY=1 lights the tally core (the game drives the same
+## scalar); the dark portrait stays the baseline
+if os.environ.get("UE_CAPTURE_TALLY") == "1":
+    _lit = unreal.EditorAssetLibrary.load_asset("/Game/Core/MI_TallyCore_Lit")
+    _smc = subj.static_mesh_component
+    for _i, _sl in enumerate(subj_asset.get_editor_property("static_materials")):
+        if "TallyCore" in str(_sl.get_editor_property("material_slot_name")) and _lit:
+            _smc.set_material(_i, _lit)
+            unreal.log_warning("CAPTURE-TALLY lit on slot %d" % _i)
 try:
     yaw = float(os.environ.get("UE_CAPTURE_YAW", "0"))
 except ValueError:

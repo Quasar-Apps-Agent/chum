@@ -290,6 +290,30 @@ if os.path.exists(manifest_path):
     eal.save_asset(MESH)
     unreal.log_warning("FIXUP-ORM %d of %d slots on M_ChumAF_Base" % (_ormed, len(_slots2)))
 
+## 1.8: the tally core — an emissive material with a scalar the game drives
+## 0 (dark) <-> lit; MI_TallyCore_Lit is the capture rig's lit variant
+m_tally = make_material("M_TallyCore")
+if not mel.get_num_material_expressions(m_tally):
+    m_tally.set_editor_property("shading_model", unreal.MaterialShadingModel.MSM_UNLIT)
+    _tc = mel.create_material_expression(m_tally, unreal.MaterialExpressionConstant3Vector, -700, 0)
+    _tc.set_editor_property("constant", unreal.LinearColor(1.0, 0.03, 0.008, 1.0))
+    _ti = mel.create_material_expression(m_tally, unreal.MaterialExpressionScalarParameter, -700, 250)
+    _ti.set_editor_property("parameter_name", "TallyIntensity")
+    _ti.set_editor_property("default_value", 0.0)
+    _tm = mel.create_material_expression(m_tally, unreal.MaterialExpressionMultiply, -450, 100)
+    mel.connect_material_expressions(_tc, "", _tm, "A")
+    mel.connect_material_expressions(_ti, "", _tm, "B")
+    mel.connect_material_property(_tm, "", unreal.MaterialProperty.MP_EMISSIVE_COLOR)
+    mel.recompile_material(m_tally)
+    eal.save_asset("/Game/Core/M_TallyCore")
+    unreal.log_warning("FIXUP-TALLY M_TallyCore built (TallyIntensity 0 default)")
+if not eal.does_asset_exist("/Game/Core/MI_TallyCore_Lit"):
+    _tl = at.create_asset("MI_TallyCore_Lit", "/Game/Core", unreal.MaterialInstanceConstant,
+                          unreal.MaterialInstanceConstantFactoryNew())
+    mel.set_material_instance_parent(_tl, m_tally)
+    mel.set_material_instance_scalar_parameter_value(_tl, "TallyIntensity", 40.0)
+    eal.save_asset("/Game/Core/MI_TallyCore_Lit")
+
 ## swap onto the mesh slots
 sm = eal.load_asset(MESH)
 mats = sm.get_editor_property("static_materials")
@@ -301,6 +325,10 @@ for i, sl in enumerate(mats):
         sm.set_material(i, m_maw)
         swapped += 1
         unreal.log_warning("FIXUP-SLOT %d MawBlack -> M_MawBlack" % i)
+    elif "TallyCore" in nm or "TallyCore" in str(sl.get_editor_property("material_slot_name")):
+        sm.set_material(i, m_tally)
+        swapped += 1
+        unreal.log_warning("FIXUP-SLOT %d TallyCore -> M_TallyCore" % i)
     elif "FurCards" in nm:
         sm.set_material(i, m_fur)
         swapped += 1

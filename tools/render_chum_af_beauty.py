@@ -27,9 +27,12 @@ bpy.ops.wm.open_mainfile(filepath=BLEND)
 scene = bpy.context.scene
 
 ## the jaw hangs open the way the plate holds it
+## 1.8 step 7 / PLAN CAPTURE CANON: the jaw opens ONLY with the hand at the
+## lever; shipped frames render it SHUT. A single labelled design frame
+## (chum_af_maw_design.png) opens it to judge the teeth — design-only.
 jaw_open = bpy.data.objects.get("Jaw")
 if jaw_open:
-    jaw_open.rotation_euler = (0.2, 0, 0)
+    jaw_open.rotation_euler = (0.0, 0, 0)
 
 # ---- Cycles on the GPU -----------------------------------------------------------
 scene.render.engine = "CYCLES"
@@ -198,9 +201,12 @@ for m in bpy.data.materials:
                 pass
 
 # ---- the tally eye, burning -------------------------------------------------------------
-bpy.ops.mesh.primitive_uv_sphere_add(radius=0.017 * K, location=(0.13 * K, -0.4 * K, 2.34 * K))
-eye = bpy.context.active_object
-eye.name = "TallyEyeLive"
+if bpy.data.objects.get("TallyCore") is None:   # 1.8: the asset carries its own core now
+    bpy.ops.mesh.primitive_uv_sphere_add(radius=0.017 * K, location=(0.13 * K, -0.4 * K, 2.34 * K))
+    eye = bpy.context.active_object
+    eye.name = "TallyEyeLive"
+else:
+    eye = bpy.data.objects["TallyCore"]
 em = bpy.data.materials.new("TallyGlow")
 em.use_nodes = True
 nt = em.node_tree
@@ -371,3 +377,19 @@ camd.dof.aperture_fstop = 5.6
 scene.render.filepath = os.path.join(OUTDIR, "chum_af_tail.png")
 bpy.ops.render.render(write_still=True)
 print("RENDERED tail")
+
+## DESIGN FRAME (1.8): the maw open 0.55 rad to judge the teeth and lips —
+## NOT a shipped pose (no hand at the lever); filename says so
+if jaw_open:
+    jaw_open.rotation_euler = (0.55, 0, 0)
+camd.lens = 85
+cam.location = mathutils.Vector((0.10, -1.45, 2.22)) * K
+_tgt = mathutils.Vector((0.0, -0.30, 2.12)) * K
+aim(cam, _tgt)
+camd.dof.focus_distance = (cam.location - _tgt).length
+camd.dof.aperture_fstop = 5.6
+scene.render.filepath = os.path.join(OUTDIR, "chum_af_maw_design.png")
+bpy.ops.render.render(write_still=True)
+print("RENDERED maw_design")
+if jaw_open:
+    jaw_open.rotation_euler = (0.0, 0, 0)

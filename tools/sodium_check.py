@@ -54,6 +54,14 @@ if "--subject" in argv:
     cam = bpy.data.objects.new("DockCam", camd)
     cam.location = (ctr.x + size * 0.5, ctr.y - size * 1.05, ctr.z + size * 0.28)
     dd = cam.location - ctr
+    ## 1.8 step 8: --frame head reuses BEAUTY's shot-1 framing (2.6 m base
+    ## numbers scaled by the frozen 3.35/2.6) so staples, teeth and metals
+    ## are judged at the plate's distance under the one lamp
+    if "--frame" in argv and argv[argv.index("--frame") + 1] == "head":
+        _K = 3.35 / 2.6
+        cam.location = mathutils.Vector((0.06 * _K, -2.65 * _K, 2.5 * _K))
+        dd = cam.location - mathutils.Vector((0.0, -0.05 * _K, 2.35 * _K))
+        camd.lens = 85
     cam.rotation_mode = "QUATERNION"
     cam.rotation_quaternion = dd.to_track_quat("Z", "Y")
     bpy.context.collection.objects.link(cam)
