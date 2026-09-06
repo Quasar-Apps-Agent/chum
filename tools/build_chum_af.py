@@ -515,10 +515,11 @@ body_fur = fur(body, 900, 0.02, 0.04, "BodyFur",
 ## its normals, boolean-INTERSECTED with a cutter, then voxel-remeshed — real
 ## sewn-on mass that follows the body's curvature. Never a shrinkwrapped shell
 ## (they collapsed into slivers; banned).
-def solid_patch(name, material, cutter, proud=0.014, voxel=0.006, decimate=0.5):
+def solid_patch(name, material, cutter, proud=0.014, voxel=0.006, decimate=0.5, host=None):
+    host = host or body
     bpy.ops.object.select_all(action="DESELECT")
-    body.select_set(True)
-    bpy.context.view_layer.objects.active = body
+    host.select_set(True)
+    bpy.context.view_layer.objects.active = host
     bpy.ops.object.duplicate(linked=False)
     p = bpy.context.active_object
     p.name = name
@@ -1170,24 +1171,14 @@ if skull_fuzz:
     parent_to(skull_fuzz, head)
 
 def head_patch(name, material, loc, rot_z, size):
-    bpy.ops.mesh.primitive_plane_add(size=size, location=loc)
-    hp = bpy.context.active_object
-    hp.name = name
-    hp.rotation_euler = (math.radians(90), 0, rot_z)
-    sub = hp.modifiers.new("sub", "SUBSURF")
-    sub.levels = 3
-    sw = hp.modifiers.new("wrap", "SHRINKWRAP")
-    sw.target = skull
-    sw.wrap_method = "NEAREST_SURFACEPOINT"
-    sw.wrap_mode = "ABOVE_SURFACE"
-    sw.offset = 0.007
-    so = hp.modifiers.new("thick", "SOLIDIFY")
-    so.thickness = 0.01
-    bpy.ops.object.convert(target="MESH")
-    hp = bpy.context.active_object
-    simple(hp, material)
-    ## NOT baked: thin shrinkwrap shells bake garbage-bright (the white-shard
-    ## artifact); their raw panel tones are already the plate's quilt palette
+    """1.8 step 1: a SOLID panel embedded in the skull (the belly/ear method),
+    baked with its own tint — the thin shrinkwrap shells baked garbage and
+    were excluded (LEDGER 066). The cutter is a flattened box, deep in Y."""
+    bpy.ops.mesh.primitive_cube_add(size=1.0, location=loc)
+    cut = bpy.context.active_object
+    cut.scale = (size * 0.56, 0.10, size * 0.56)
+    cut.rotation_euler = (0, 0, rot_z)
+    hp = solid_patch(name, material, cut, proud=0.012, voxel=0.005, decimate=0.5, host=skull)
     parent_to(hp, head)
     return hp
 
@@ -2300,6 +2291,18 @@ def add_tint_zone(matr, origin, center, rad, rgb_srgb):
     mix.inputs["Color2"].default_value = (*[srgb_to_linear(c) for c in rgb_srgb], 1.0)
     nt.links.new(mix.outputs["Color"], bsdf.inputs["Base Color"])
 
+## 1.8 step 2: stitch/staple families PROJECTED into their host's maps by a
+## selected-to-active pass after the burlap bake, then deleted. Keys are host
+## object names; values are name prefixes of the detail objects.
+DETAIL_INTO = {
+    "Skull": ("SeamC", "SeamL", "SeamR", "SeamBL", "SeamBR", "CrownSeamStitches", "XT", "BorderStitch"),
+    "EarL": ("EarLEdgeStitches",),
+    "EarR": ("EarREdgeStitches",),
+}
+def _detail_objects(host_name):
+    prefs = DETAIL_INTO.get(host_name, ())
+    return [o for o in bpy.data.objects if o.type == "MESH" and any(o.name.startswith(pf) for pf in prefs)]
+
 def bake_all():
     scene = bpy.context.scene
     scene.render.engine = "CYCLES"
@@ -2349,6 +2352,33 @@ def bake_all():
             tex_node.image = imgs[kind]
             nt.nodes.active = tex_node
             bpy.ops.object.bake(type=btype, margin=6, **extra)
+        ## 1.8 step 2: project the stitch families into the same maps. Rays
+        ## from the host surface out to the cage catch the cylinders; pixels
+        ## with no hit keep the burlap bake. Then the cylinders are deleted.
+        details = _detail_objects(obj.name)
+        if details:
+            bpy.ops.object.select_all(action="DESELECT")
+            for d in details:
+                d.select_set(True)
+            obj.select_set(True)
+            bpy.context.view_layer.objects.active = obj
+            for kind, btype, extra in (("diff", "DIFFUSE", {"pass_filter": {"COLOR"}}),
+                                       ("nrm", "NORMAL", {}),
+                                       ("rgh", "ROUGHNESS", {})):
+                tex_node.image = imgs[kind]
+                nt.nodes.active = tex_node
+                try:
+                    bpy.ops.object.bake(type=btype, margin=6, use_selected_to_active=True,
+                                        cage_extrusion=0.045, max_ray_distance=0.06, use_clear=False, **extra)
+                except RuntimeError as _bex:
+                    print("DETAIL-BAKE-FAIL", obj.name, kind, _bex)
+                    break
+            print("DETAIL-BAKED", obj.name, len(details), "stitch objects ->", "maps; deleting")
+            for d in details:
+                bpy.data.objects.remove(d, do_unlink=True)
+            bpy.ops.object.select_all(action="DESELECT")
+            obj.select_set(True)
+            bpy.context.view_layer.objects.active = obj
         # the export material: baked maps into a clean Principled
         final = bpy.data.materials.new(mname)   # keep the canonical name
         final.use_nodes = True

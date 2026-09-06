@@ -147,15 +147,11 @@
   "nrm": "BodyCore_nrm",
   "orm": "BurntWool_001_orm"
  },
- "StitchSteel": {
-  "diff": "StitchSteel_tint",
-  "tint": [
-   0.0728,
-   0.063,
-   0.0511
-  ],
-  "nrm": "Metal058A_1K-JPG_NormalGL.jpg",
-  "orm": "StitchSteel_orm"
+ "CharDark.002": {
+  "diff": "BurnField_diff",
+  "rgh": "BurnField_rgh",
+  "nrm": "BurnField_nrm",
+  "orm": "CharDark_002_orm"
  },
  "BronzeBand": {
   "diff": "BronzeBand_tint",
@@ -198,6 +194,30 @@
   "rgh": "EarR_rgh",
   "nrm": "EarR_nrm",
   "orm": "EarFelt_002_orm"
+ },
+ "PanelC.001": {
+  "diff": "FacePanelCL_diff",
+  "rgh": "FacePanelCL_rgh",
+  "nrm": "FacePanelCL_nrm",
+  "orm": "PanelC_001_orm"
+ },
+ "PanelA.002": {
+  "diff": "FacePanelCR_diff",
+  "rgh": "FacePanelCR_rgh",
+  "nrm": "FacePanelCR_nrm",
+  "orm": "PanelA_002_orm"
+ },
+ "PanelA.001": {
+  "diff": "FacePanelFL_diff",
+  "rgh": "FacePanelFL_rgh",
+  "nrm": "FacePanelFL_nrm",
+  "orm": "PanelA_001_orm"
+ },
+ "PanelB.001": {
+  "diff": "FacePanelFR_diff",
+  "rgh": "FacePanelFR_rgh",
+  "nrm": "FacePanelFR_nrm",
+  "orm": "PanelB_001_orm"
  },
  "BronzeChar": {
   "diff": "BronzeChar_tint",
@@ -275,6 +295,16 @@
   "nrm": "Leather030_1K-JPG_NormalGL.jpg",
   "orm": "LipLeather_orm"
  },
+ "StitchSteel": {
+  "diff": "StitchSteel_tint",
+  "tint": [
+   0.0728,
+   0.063,
+   0.0511
+  ],
+  "nrm": "Metal058A_1K-JPG_NormalGL.jpg",
+  "orm": "StitchSteel_orm"
+ },
  "LeatherCol": {
   "diff": "LeatherCol_tint",
   "tint": [
@@ -332,6 +362,24 @@
   "rgh": "Skull_rgh",
   "nrm": "Skull_nrm",
   "orm": "BurntWool_012_orm"
+ },
+ "CharDark.001": {
+  "diff": "SkullPatchChar_diff",
+  "rgh": "SkullPatchChar_rgh",
+  "nrm": "SkullPatchChar_nrm",
+  "orm": "CharDark_001_orm"
+ },
+ "PatchRust.002": {
+  "diff": "SkullPatchRust_diff",
+  "rgh": "SkullPatchRust_rgh",
+  "nrm": "SkullPatchRust_nrm",
+  "orm": "PatchRust_002_orm"
+ },
+ "PanelB.002": {
+  "diff": "SkullPatchTan_diff",
+  "rgh": "SkullPatchTan_rgh",
+  "nrm": "SkullPatchTan_nrm",
+  "orm": "PanelB_002_orm"
  },
  "TailWool.001": {
   "diff": "Tail_diff",
@@ -391,11 +439,11 @@
  "ToothBone": {
   "diff": "ToothBone_tint",
   "tint": [
-   0.8513,
-   0.6572,
-   0.3904
+   0.603,
+   0.4655,
+   0.2765
   ],
-  "nrm": "Bark015_2K-JPG_NormalGL.jpg",
+  "nrm": "Metal058A_1K-JPG_NormalGL.jpg",
   "orm": "ToothBone_orm"
  }
 }

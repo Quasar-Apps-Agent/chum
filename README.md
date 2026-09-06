@@ -1613,3 +1613,26 @@ centre in Cycles and its strength is lowered for the next build;
 the staples are still seventy cylinders, the face panels still thin
 shells, the chin bands and jaw bars still primitives, the fur atlas
 still the Phase 0 one — those are tranche 2. Next.
+
+## Commit 117 · UNIT 1.8, TRANCHE 2A · SEWING INTO THE MAPS
+The plan's rule since 1.1 has been that sewing is a map, not a thing;
+the head had kept seventy stitch and staple cylinders because they
+were made before the rule. Now the face's quilt panels are solid
+patches embedded in the skull — eight of them, cut from a copy of the
+skull the way the belly was cut from the body — and they bake with
+their own panel tints where the old thin shells had baked garbage and
+been left out. And thirty-eight stitch objects — the crown seam, the
+face seams, the X-ticks, the border, the ear edge stitches — are
+projected into their hosts' maps by a second bake that fires rays
+from the skull out to a cage and catches the cylinders, colour,
+normal and roughness, then deletes them. The skull's normal map shows
+the row of pills over the crown and the runs down the cheeks. The
+lip staples stay geometry; they break the silhouette. The engine
+half found the third hang of the weekend, the same server, and the
+fix is now structural: every engine run uses the file-based cache
+instead of Zen. The first capture paid for it by rebuilding the
+global shaders for thirty-six minutes; the next three took a minute
+each. The tally still burns red through the barrel, dark and lit.
+Named, not hidden: the chin bands, jaw bars, hinge bolts and lens
+ring are still primitives, and the fur atlas is still Phase 0's —
+tranche 2B. Next.
