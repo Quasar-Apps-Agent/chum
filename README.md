@@ -1636,3 +1636,29 @@ each. The tally still burns red through the barrel, dark and lit.
 Named, not hidden: the chin bands, jaw bars, hinge bolts and lens
 ring are still primitives, and the fur atlas is still Phase 0's —
 tranche 2B. Next.
+
+## Commit 118 · UNIT 1.8, TRANCHE 2B · BEVELLED, WORN, AND THE CAUSE OF THE HANGS
+The last of the head's primitives are gone: the chin bands are
+bevelled plates, the hinge bolts bevelled rods with proud heads, the
+jaw bars and the lens mount hand-bent rings with a wobble. Their
+metals carry curvature edge wear — a bevel against the true normal,
+brightening and polishing the edges — baked per piece so the engine's
+maps carry the wear, after a bug where nine chin bands sharing one
+material baked the second onward as dielectric, because the as-is
+bake zeroed the shared metallic for the colour pass and never gave it
+back. The fur atlas is regenerated denser, shorter, clumped, with
+singed tips, and the engine's card material breaks its roughness
+with the tuft alpha. The head portrait burns red through the barrel
+in the engine, dark and lit. Then the weekend's real finding: the
+hangs were never the derived-data server. The repo lives in the
+iCloud-synced Desktop with the disk near full, and iCloud had evicted
+four and a half thousand project files to the cloud, including the
+engine's memory-mapped asset-registry cache; every commandlet was
+waiting on a download over a flapping network. Pulling four gigabytes
+back cured one import in under a minute — and iCloud re-evicted it
+all within twenty-five minutes. The full-figure captures for this
+tranche never landed. Named, not hidden, and put to the owner in the
+tracker: move the repo out of the Desktop, or stop the syncing, and
+give the disk room. Unit 1.8 is done; the Mac lane pauses here until
+the machine is fixed. Phase 1 stands at 1.1–1.6 and 1.8 closed, 1.7
+waiting on rulings.

@@ -48,9 +48,22 @@ if tex is not None:
     mel.connect_material_property(ts, "RGB", unreal.MaterialProperty.MP_BASE_COLOR)
     mel.connect_material_property(ts, "A", unreal.MaterialProperty.MP_OPACITY_MASK)
     unreal.log_warning("FIXUP-FUR atlas wired")
-r = mel.create_material_expression(m_fur, unreal.MaterialExpressionConstant, -400, 300)
-r.set_editor_property("r", 0.9)
-mel.connect_material_property(r, "", unreal.MaterialProperty.MP_ROUGHNESS)
+## 1.8 step 6: roughness breaks with the tuft alpha (dense core matte,
+## wisps glossier) so the pile breaks light more than one way
+if tex is not None and mel.get_num_material_expressions(m_fur) < 6:
+    _ra = mel.create_material_expression(m_fur, unreal.MaterialExpressionConstant, -450, 320)
+    _ra.set_editor_property("r", 0.92)
+    _rb = mel.create_material_expression(m_fur, unreal.MaterialExpressionConstant, -450, 380)
+    _rb.set_editor_property("r", 0.55)
+    _lerp = mel.create_material_expression(m_fur, unreal.MaterialExpressionLinearInterpolate, -300, 340)
+    mel.connect_material_expressions(_ra, "", _lerp, "A")
+    mel.connect_material_expressions(_rb, "", _lerp, "B")
+    mel.connect_material_expressions(ts, "A", _lerp, "Alpha")
+    mel.connect_material_property(_lerp, "", unreal.MaterialProperty.MP_ROUGHNESS)
+else:
+    r = mel.create_material_expression(m_fur, unreal.MaterialExpressionConstant, -400, 300)
+    r.set_editor_property("r", 0.9)
+    mel.connect_material_property(r, "", unreal.MaterialProperty.MP_ROUGHNESS)
 mel.recompile_material(m_fur)
 eal.save_asset("/Game/Core/M_FurCards")
 

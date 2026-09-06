@@ -41,7 +41,19 @@ ramp.color_ramp.elements[1].color = (0.085, 0.03, 0.011, 1)
 mid = ramp.color_ramp.elements.new(0.6)
 mid.color = (0.032, 0.019, 0.011, 1)
 nt.links.new(hi.outputs["Random"], ramp.inputs["Fac"])
-nt.links.new(ramp.outputs["Color"], em.inputs["Color"])
+## 1.8 step 6: singed tips — the strand's intercept darkens toward the tip
+_tip = nt.nodes.new("ShaderNodeValToRGB")
+_tip.color_ramp.elements[0].position = 0.55
+_tip.color_ramp.elements[0].color = (1.0, 1.0, 1.0, 1)
+_tip.color_ramp.elements[1].position = 1.0
+_tip.color_ramp.elements[1].color = (0.18, 0.12, 0.08, 1)
+nt.links.new(hi.outputs["Intercept"], _tip.inputs["Fac"])
+_sing = nt.nodes.new("ShaderNodeMixRGB")
+_sing.blend_type = "MULTIPLY"
+_sing.inputs["Fac"].default_value = 1.0
+nt.links.new(ramp.outputs["Color"], _sing.inputs["Color1"])
+nt.links.new(_tip.outputs["Color"], _sing.inputs["Color2"])
+nt.links.new(_sing.outputs["Color"], em.inputs["Color"])
 em.inputs["Strength"].default_value = 1.0
 nt.links.new(em.outputs[0], out_n.inputs["Surface"])
 
@@ -53,8 +65,8 @@ for ci in range(4):
     ps = p.particle_systems[-1]
     st = ps.settings
     st.type = "HAIR"
-    st.count = 60 + ci * 22
-    st.hair_length = 1.45
+    st.count = 88 + ci * 24    # 1.8 step 6: denser
+    st.hair_length = 1.05      # 1.8 step 6: shorter, singed pile
     st.material = 1
     st.child_type = "INTERPOLATED"
     st.child_percent = 5
@@ -62,7 +74,7 @@ for ci in range(4):
         st.rendered_child_count = 5
     except Exception:
         pass
-    st.clump_factor = 0.82
+    st.clump_factor = 0.92     # 1.8 step 6: matted clumps
     st.child_length = 0.85
     try:
         st.child_length_threshold = 0.45

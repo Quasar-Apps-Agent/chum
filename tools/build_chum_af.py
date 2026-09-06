@@ -456,6 +456,25 @@ def claw(name, loc, r, h, rot, parent):
     return c
 
 
+def ring_curve(name, center, radius, r_bevel, material, n=18, jitter=0.03):
+    cu = bpy.data.curves.new(name, "CURVE")
+    cu.dimensions = "3D"
+    cu.bevel_depth = r_bevel
+    cu.bevel_resolution = 5
+    cu.resolution_u = 8
+    sp = cu.splines.new("NURBS")
+    sp.points.add(n - 1)
+    for i in range(n):
+        a = 2.0 * math.pi * i / n
+        rr = radius * (1.0 + jitter * math.sin(3.7 * a + 1.3) + 0.5 * jitter * math.cos(7.1 * a))
+        sp.points[i].co = (center[0] + rr * math.cos(a), center[1], center[2] + rr * math.sin(a), 1.0)
+    sp.use_cyclic_u = True
+    sp.order_u = 3
+    ob = bpy.data.objects.new(name, cu)
+    col.objects.link(ob)
+    ob.data.materials.append(material)
+    return ob
+
 def parent_to(child, parent):
     child.parent = parent
     child.matrix_parent_inverse = parent.matrix_world.inverted()
@@ -1091,25 +1110,6 @@ if _acc is not None and _acc.use_nodes:
 
 ## the mount ring: a bevelled poly-curve with a hand-made wobble (never a
 ## perfect torus — PLAN §R.1), riveted, in oxidised steel
-def ring_curve(name, center, radius, r_bevel, material, n=18, jitter=0.03):
-    cu = bpy.data.curves.new(name, "CURVE")
-    cu.dimensions = "3D"
-    cu.bevel_depth = r_bevel
-    cu.bevel_resolution = 5
-    cu.resolution_u = 8
-    sp = cu.splines.new("NURBS")
-    sp.points.add(n - 1)
-    for i in range(n):
-        a = 2.0 * math.pi * i / n
-        rr = radius * (1.0 + jitter * math.sin(3.7 * a + 1.3) + 0.5 * jitter * math.cos(7.1 * a))
-        sp.points[i].co = (center[0] + rr * math.cos(a), center[1], center[2] + rr * math.sin(a), 1.0)
-    sp.use_cyclic_u = True
-    sp.order_u = 3
-    ob = bpy.data.objects.new(name, cu)
-    col.objects.link(ob)
-    ob.data.materials.append(material)
-    return ob
-
 spk_ring = ring_curve("ThroatRing", (0, -0.372, 1.74), 0.108, 0.011, M["RingSteel"])
 for _rv in range(6):
     _ra = math.radians(60 * _rv + 20)
@@ -1404,10 +1404,17 @@ parent_to(melt, head)
 
 # RIGHT EYE: the tally lens assembly, sitting PROUD of the face cloth like the
 # plate's camera lens — the face surface is at y≈-0.35, so the ring fronts at ~-0.39
-oring = torus((0.13, -0.37, 2.34), 0.085, 0.024, rot=(math.radians(80), 0, 0))
-oring.name = "LensRing"
-simple(oring, M["CopperRing"])
+## 1.8 step 4: the mount is a hand-bent ring with a wobble, not a torus
+oring = ring_curve("LensRing", (0.13, -0.37, 2.34), 0.085, 0.024, M["CopperRing"], n=24, jitter=0.02)
+oring.rotation_euler = (math.radians(-10), 0, 0)
+bpy.ops.object.select_all(action="DESELECT")
+oring.select_set(True)
+bpy.context.view_layer.objects.active = oring
+bpy.ops.object.convert(target="MESH")
+oring = bpy.context.active_object
+bpy.ops.object.shade_smooth()
 parent_to(oring, head)
+BAKES_ASIS.append(oring)
 ## the barrel is a REAL salvaged camera lens — Poly Haven Camera_01 (CC0),
 ## appended, cut down to the barrel alone (front glass removed so the tally
 ## core burns visibly inside), scaled up and seated in the sewn copper mount
@@ -1686,13 +1693,15 @@ for ci in range(9):
     cx = 0.24 * math.cos(ca)
     cz = 2.1 + 0.075 * math.sin(ca)
     cyy = -(0.4 - 0.1 * abs(math.cos(ca)))
-    bpy.ops.mesh.primitive_cube_add(size=1, location=(cx, cyy, cz - 0.035))
-    ob = bpy.context.active_object
-    ob.scale = (0.05, 0.016, 0.024)
+    ## 1.8 step 4: a bevelled plate, not a scaled cube; baked as-is so the
+    ## curvature edge wear in BronzeBand reaches the engine's maps
+    ob = rounded_prism((cx, cyy, cz - 0.035), 0.0, 0.05, 0.024, depth=0.016, bevel=0.0035)
     ob.rotation_euler = (0, math.radians(math.degrees(ca) * 0.06), 0)
     ob.name = f"ChinBand{ci}"
     simple(ob, M["BronzeBand"])
+    bpy.ops.object.shade_smooth()
     parent_to(ob, jaw)
+    BAKES_ASIS.append(ob)
     if ci % 2 == 0:
         rv = sphere((cx, cyy - 0.012, cz - 0.035), 0.008)
         rv.name = f"ChinRivet{ci}"
@@ -1700,19 +1709,27 @@ for ci in range(9):
         parent_to(rv, jaw)
 ## hinge bolts at the mouth corners
 for sx in (-1, 1):
-    bolt = cyl((0.28 * sx, -0.3, 2.17), 0.02, 0.05, rot=(0, math.radians(90), 0))
-    bolt.name = f"HingeBolt{sx}"
-    simple(bolt, M["CopperRing"])
+    ## a bevelled bolt with a proud hex-ish head (rod + a shorter fat rod)
+    bolt = rod(f"HingeBolt{sx}", (0.255 * sx, -0.3, 2.17), (0.305 * sx, -0.3, 2.17), 0.018, M["CopperRing"], n=12)
     parent_to(bolt, head)
+    BAKES_ASIS.append(bolt)
+    bhead = rod(f"HingeBoltHead{sx}", (0.298 * sx, -0.3, 2.17), (0.314 * sx, -0.3, 2.17), 0.024, M["CopperRing"], n=6)
+    parent_to(bhead, head)
 for bz, brad in ((2.1, 0.17), (2.06, 0.14)):
-    bar = torus((0, -0.24, bz), brad, 0.011, rot=(math.radians(84), 0, 0))
-    bar.name = f"JawBar{bz}"
-    simple(bar, M["RodMetal"])
+    ## the jaw bars: hand-bent rings with a wobble, not tori (PLAN §R.1)
+    bar = ring_curve(f"JawBar{bz}", (0, -0.24, bz), brad, 0.011, M["RodMetal"], n=24, jitter=0.025)
+    bar.rotation_euler = (math.radians(-6), 0, 0)
+    bpy.ops.object.select_all(action="DESELECT")
+    bar.select_set(True)
+    bpy.context.view_layer.objects.active = bar
+    bpy.ops.object.convert(target="MESH")
+    bar = bpy.context.active_object
+    bpy.ops.object.shade_smooth()
     parent_to(bar, jaw)
-lever = cyl((0.09, -0.16, 1.95), 0.014, 0.3, rot=(math.radians(20), 0, 0))
-lever.name = "JawLever"
-simple(lever, M["RodMetal"])
+    BAKES_ASIS.append(bar)
+lever = rod("JawLever", (0.09, -0.21, 1.81), (0.09, -0.11, 2.09), 0.014, M["RodMetal"])
 parent_to(lever, jaw)
+BAKES_ASIS.append(lever)
 
 # ---- THE BAKE: procedural burlap, scorch, and grime, baked to textures -----------------
 # Every fabric part gets a real Cycles material — woven fiber, dye mottling,
@@ -1808,6 +1825,37 @@ scan_dress(M["Claw"], "Bark015/Bark015_2K-JPG_Color.jpg",
            "Bark015/Bark015_2K-JPG_NormalGL.jpg", 0.9, 14.0, 0.9)
 ## the mouth grille stays SHADOW machinery: same scan, a third the value —
 ## at 2.2 it rendered as cream pickets inside the maw
+def edge_wear(mm, radius=0.004, bright=(0.85, 0.72, 0.5), amount=0.8):
+    """1.8 step 4: curvature edge wear — a Bevel node against the true normal
+    gives the edges; albedo mixes toward bright bare metal there and the
+    roughness drops. Bakes into the as-is maps for the engine."""
+    nt = mm.node_tree
+    bsdf = nt.nodes["Principled BSDF"]
+    src = bsdf.inputs["Base Color"].links[0].from_socket
+    bev = nt.nodes.new("ShaderNodeBevel")
+    bev.inputs["Radius"].default_value = radius
+    bev.samples = 6
+    geo = nt.nodes.new("ShaderNodeNewGeometry")
+    dot = nt.nodes.new("ShaderNodeVectorMath")
+    dot.operation = "DOT_PRODUCT"
+    nt.links.new(bev.outputs["Normal"], dot.inputs[0])
+    nt.links.new(geo.outputs["Normal"], dot.inputs[1])
+    mr = nt.nodes.new("ShaderNodeMapRange")       # dot 1.0 (flat) -> 0 wear; 0.85 -> full
+    mr.inputs["From Min"].default_value = 0.995
+    mr.inputs["From Max"].default_value = 0.85
+    mr.inputs["To Max"].default_value = amount
+    nt.links.new(dot.outputs["Value"], mr.inputs["Value"])
+    mix = nt.nodes.new("ShaderNodeMixRGB")
+    nt.links.new(mr.outputs["Result"], mix.inputs["Fac"])
+    nt.links.new(src, mix.inputs["Color1"])
+    mix.inputs["Color2"].default_value = (*bright, 1.0)
+    nt.links.new(mix.outputs["Color"], bsdf.inputs["Base Color"])
+    rg = nt.nodes.new("ShaderNodeMapRange")
+    rg.inputs["To Min"].default_value = float(bsdf.inputs["Roughness"].default_value)
+    rg.inputs["To Max"].default_value = 0.25
+    nt.links.new(mr.outputs["Result"], rg.inputs["Value"])
+    nt.links.new(rg.outputs["Result"], bsdf.inputs["Roughness"])
+
 scan_dress(M["GrilleDark"], "Metal058A/Metal058A_1K-JPG_Color.jpg",
            "Metal058A/Metal058A_1K-JPG_NormalGL.jpg", 0.7, 5.0, 0.8)
 for _mk in ("LeatherCol", "PatchLeather"):
@@ -1817,6 +1865,8 @@ for _mk in ("LeatherCol", "PatchLeather"):
 scan_dress(M["LipLeather"], "Leather030/Leather030_1K-JPG_Color.jpg",
            "Leather030/Leather030_1K-JPG_NormalGL.jpg", 1.1, 10.0, 1.0)
 ## unit 1.2: oxidised steel on the throat ring, steel-rope on the cabling
+for _wm, _br in (("BronzeBand", (0.80, 0.62, 0.38)), ("CopperRing", (0.90, 0.60, 0.42)), ("RodMetal", (0.75, 0.72, 0.68))):
+    edge_wear(M[_wm], radius=0.004, bright=_br, amount=0.75)   # 1.8 step 4
 scan_dress(M["RingSteel"], "Metal063/Metal063_2K-JPG_Color.jpg",
            "Metal063/Metal063_2K-JPG_NormalGL.jpg", 1.6, 8.0, 1.0)
 scan_dress(M["CableRubber"], "Rope002/Rope002_2K-JPG_Color.jpg",
@@ -2428,6 +2478,10 @@ def bake_all():
             tex_node.image = imgs[kind]
             nt.nodes.active = tex_node
             bpy.ops.object.bake(type=btype, margin=6, **extra)
+        ## restore the SHARED source's metallic (1.8 2B: nine chin bands share
+        ## BronzeBand; the second onward baked with metallic 0 and shipped dielectric)
+        pb.inputs["Metallic"].default_value = metal
+        nt.nodes.remove(tex_node)
         final = bpy.data.materials.new(mname)
         final.use_nodes = True
         fnt = final.node_tree

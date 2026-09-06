@@ -153,33 +153,65 @@
   "nrm": "BurnField_nrm",
   "orm": "CharDark_002_orm"
  },
- "BronzeBand": {
-  "diff": "BronzeBand_tint",
-  "tint": [
-   0.0337,
-   0.0153,
-   0.0065
-  ],
-  "nrm": "Metal058A_1K-JPG_NormalGL.jpg",
-  "orm": "BronzeBand_orm"
+ "BronzeBand.001": {
+  "diff": "ChinBand0_diff",
+  "rgh": "ChinBand0_rgh",
+  "nrm": "ChinBand0_nrm",
+  "orm": "BronzeBand_001_orm"
+ },
+ "BronzeBand.002": {
+  "diff": "ChinBand1_diff",
+  "rgh": "ChinBand1_rgh",
+  "nrm": "ChinBand1_nrm",
+  "orm": "BronzeBand_002_orm"
+ },
+ "BronzeBand.003": {
+  "diff": "ChinBand2_diff",
+  "rgh": "ChinBand2_rgh",
+  "nrm": "ChinBand2_nrm",
+  "orm": "BronzeBand_003_orm"
+ },
+ "BronzeBand.004": {
+  "diff": "ChinBand3_diff",
+  "rgh": "ChinBand3_rgh",
+  "nrm": "ChinBand3_nrm",
+  "orm": "BronzeBand_004_orm"
+ },
+ "BronzeBand.005": {
+  "diff": "ChinBand4_diff",
+  "rgh": "ChinBand4_rgh",
+  "nrm": "ChinBand4_nrm",
+  "orm": "BronzeBand_005_orm"
+ },
+ "BronzeBand.006": {
+  "diff": "ChinBand5_diff",
+  "rgh": "ChinBand5_rgh",
+  "nrm": "ChinBand5_nrm",
+  "orm": "BronzeBand_006_orm"
+ },
+ "BronzeBand.007": {
+  "diff": "ChinBand6_diff",
+  "rgh": "ChinBand6_rgh",
+  "nrm": "ChinBand6_nrm",
+  "orm": "BronzeBand_007_orm"
+ },
+ "BronzeBand.008": {
+  "diff": "ChinBand7_diff",
+  "rgh": "ChinBand7_rgh",
+  "nrm": "ChinBand7_nrm",
+  "orm": "BronzeBand_008_orm"
+ },
+ "BronzeBand.009": {
+  "diff": "ChinBand8_diff",
+  "rgh": "ChinBand8_rgh",
+  "nrm": "ChinBand8_nrm",
+  "orm": "BronzeBand_009_orm"
  },
  "CopperRing": {
-  "diff": "CopperRing_tint",
-  "tint": [
-   0.0337,
-   0.0158,
-   0.0077
-  ],
   "nrm": "Metal058A_1K-JPG_NormalGL.jpg",
   "orm": "CopperRing_orm"
  },
  "RodMetal": {
-  "diff": "RodMetal_tint",
-  "tint": [
-   0.1608,
-   0.1424,
-   0.1172
-  ],
   "nrm": "Metal041B_2K-JPG_NormalGL.jpg",
   "orm": "RodMetal_orm"
  },
@@ -239,6 +271,36 @@
   "nrm": "Metal058A_1K-JPG_NormalGL.jpg",
   "orm": "GrilleDark_orm"
  },
+ "CopperRing.002": {
+  "diff": "HingeBolt-1_diff",
+  "rgh": "HingeBolt-1_rgh",
+  "nrm": "HingeBolt-1_nrm",
+  "orm": "CopperRing_002_orm"
+ },
+ "CopperRing.003": {
+  "diff": "HingeBolt1_diff",
+  "rgh": "HingeBolt1_rgh",
+  "nrm": "HingeBolt1_nrm",
+  "orm": "CopperRing_003_orm"
+ },
+ "RodMetal.002": {
+  "diff": "JawBar2.06_diff",
+  "rgh": "JawBar2.06_rgh",
+  "nrm": "JawBar2.06_nrm",
+  "orm": "RodMetal_002_orm"
+ },
+ "RodMetal.001": {
+  "diff": "JawBar2.1_diff",
+  "rgh": "JawBar2.1_rgh",
+  "nrm": "JawBar2.1_nrm",
+  "orm": "RodMetal_001_orm"
+ },
+ "RodMetal.003": {
+  "diff": "JawLever_diff",
+  "rgh": "JawLever_rgh",
+  "nrm": "JawLever_nrm",
+  "orm": "RodMetal_003_orm"
+ },
  "BurntWool.013": {
   "diff": "JawMesh_diff",
   "rgh": "JawMesh_rgh",
@@ -284,6 +346,12 @@
   "rgh": "LegRPaw_rgh",
   "nrm": "LegRPaw_nrm",
   "orm": "BurntWool_005_orm"
+ },
+ "CopperRing.001": {
+  "diff": "LensRing_diff",
+  "rgh": "LensRing_rgh",
+  "nrm": "LensRing_nrm",
+  "orm": "CopperRing_001_orm"
  },
  "LipLeather": {
   "diff": "LipLeather_tint",
