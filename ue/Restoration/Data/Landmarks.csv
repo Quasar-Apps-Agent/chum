@@ -1,0 +1,96 @@
+name,room,x,z,kind,script
+REC ROOM / ENTRY,REC ROOM|ENTRY,-0.8,4.0,CompoundDoor,scripts/door.gd
+ENTRY / YARD,ENTRY|YARD,-0.8,10.0,CompoundDoor,scripts/door.gd
+YARD / SHED,YARD|SHED,8.5,13.4,CompoundDoor,scripts/door.gd
+TRANSMITTER HALL / DEAD ROOM,TRANSMITTER HALL|DEAD ROOM,18.4,0.0,CompoundDoor,scripts/door.gd
+TAPE LIBRARY / FIRE CORRIDOR,TAPE LIBRARY|FIRE CORRIDOR,-6.0,-16.7,CompoundDoor,scripts/door.gd
+STAGE HALL / STUDIO A,STAGE HALL|STUDIO A,-12.8,-24.0,CompoundDoor,scripts/door.gd
+STUDIO A / SCENE DOCK,STUDIO A|SCENE DOCK,-16.3,-36.0,CompoundDoor,scripts/door.gd
+S5 LOG · REC ROOM,REC ROOM,-4.2,3.2,LogStation,scripts/log_station.gd
+S1 LOG · LIBRARY LANDING,TAPE LIBRARY,-1.2,-11.8,LogStation,scripts/log_station.gd
+S2 LOG · MASTER CONTROL,MASTER CONTROL,7.0,-31.0,LogStation,scripts/log_station.gd
+S3 LOG · GREEN ROOM,GREEN ROOM,-24.5,-28.6,LogStation,scripts/log_station.gd
+S4 LOG · TRANSMITTER THRESHOLD,TRANSMITTER HALL,14.5,-11.4,LogStation,scripts/log_station.gd
+CAM 1 · CORRIDOR,REC ROOM,2.4,-3.82,MonitorRig,scripts/monitor_rig.gd
+CAM 2 · STACKS,BENCH ROOM,7.2,-13.18,MonitorRig,scripts/monitor_rig.gd
+THE BENCH,BENCH ROOM,9.0,-17.6,CaptureBench,scripts/capture_bench.gd
+BenchTV,BENCH ROOM,9.0,-18.82,BenchTV,scripts/bench_tv.gd
+GenKnob,BENCH ROOM,10.2,-18.5,GenKnob,scripts/gen_knob.gd
+1977 DOCK,BENCH ROOM,7.8,-18.4,FireTapeDock,scripts/fire_tape_dock.gd
+SEANCE REEL,BENCH ROOM,7.8,-17.2,SeanceDock,scripts/seance_dock.gd
+REEL · 1977,TRANSMITTER HALL,17.0,-10.0,FireTapePickup,scripts/fire_tape_pickup.gd
+WOOL SPIKE 001,BENCH ROOM,10.8,-14.3,Node3D,scripts/world_builder.gd
+PropKit.tape_shelf,TAPE LIBRARY,-3.2,-13.2,PropKit.tape_shelf,scripts/prop_kit.gd
+PropKit.tape_shelf,TAPE LIBRARY,3.2,-13.2,PropKit.tape_shelf,scripts/prop_kit.gd
+PropKit.tape_shelf,TAPE LIBRARY,-3.2,-18.8,PropKit.tape_shelf,scripts/prop_kit.gd
+PropKit.tape_shelf,TAPE LIBRARY,3.2,-18.8,PropKit.tape_shelf,scripts/prop_kit.gd
+PropKit.transmitter_cabinet,TRANSMITTER HALL,20.4,-2.0,PropKit.transmitter_cabinet,scripts/prop_kit.gd
+PropKit.transmitter_cabinet,TRANSMITTER HALL,20.4,-4.5,PropKit.transmitter_cabinet,scripts/prop_kit.gd
+PropKit.transmitter_cabinet,TRANSMITTER HALL,20.4,-7.0,PropKit.transmitter_cabinet,scripts/prop_kit.gd
+PropKit.transmitter_cabinet,TRANSMITTER HALL,20.4,-9.5,PropKit.transmitter_cabinet,scripts/prop_kit.gd
+PropKit.tower,YARD,-9.0,14.5,PropKit.tower,scripts/prop_kit.gd
+PropKit.felt_run,DEAD ROOM,19.0,4.8,PropKit.felt_run,scripts/prop_kit.gd
+PropKit.felt_run,DEAD ROOM,17.2,2.5,PropKit.felt_run,scripts/prop_kit.gd
+PropKit.felt_run,DEAD ROOM,20.8,2.5,PropKit.felt_run,scripts/prop_kit.gd
+PropKit.kitchen_block,KITCHEN,8.0,-2.15,PropKit.kitchen_block,scripts/prop_kit.gd
+PropKit.kettle,KITCHEN,9.4,-2.1,PropKit.kettle,scripts/prop_kit.gd
+PropKit.vanity,GREEN ROOM,-27.1,-27.0,PropKit.vanity,scripts/prop_kit.gd
+PropKit.couch,GREEN ROOM,-25.0,-29.4,PropKit.couch,scripts/prop_kit.gd
+PropKit.scene_flat,SCENE DOCK,-20.1,-38.2,PropKit.scene_flat,scripts/prop_kit.gd
+PropKit.scene_flat,SCENE DOCK,-19.96,-39.6,PropKit.scene_flat,scripts/prop_kit.gd
+PropKit.scene_flat,SCENE DOCK,-19.82,-41.0,PropKit.scene_flat,scripts/prop_kit.gd
+PropKit.dorm_bed,DORMS,-12.0,1.6,PropKit.dorm_bed,scripts/prop_kit.gd
+PropKit.dorm_bed,DORMS,-6.2,1.6,PropKit.dorm_bed,scripts/prop_kit.gd
+PropKit.locker_run,DORMS,-7.2,-2.2,PropKit.locker_run,scripts/prop_kit.gd
+PropKit.cubby_wall,STUDIO A,-19.0,-33.7,PropKit.cubby_wall,scripts/prop_kit.gd
+THE LITTLE DOOR,STUDIO A,-12.6,-33.35,CompoundDoor,scripts/door.gd
+CHUM'S MARK,STUDIO A,-15.5,-31.2,Label3D,scripts/world_builder.gd
+CAM 1,STUDIO A,-15.5,-26.5,PropKit.camera_pedestal,scripts/prop_kit.gd
+CAM 2,STUDIO A,-19.5,-27.5,PropKit.camera_pedestal,scripts/prop_kit.gd
+CAM 3,STUDIO A,-11.5,-27.5,PropKit.camera_pedestal,scripts/prop_kit.gd
+WallClock,CONTROL,0.0,-24.5,WallClock,scripts/wall_clock.gd
+WallClock,STUDIO A,-15.5,-24.6,WallClock,scripts/wall_clock.gd
+WallClock,MASTER CONTROL,5.5,-26.6,WallClock,scripts/wall_clock.gd
+WallClock,REC ROOM,0.0,0.0,WallClock,scripts/wall_clock.gd
+CASTING SHEET,STUDIO A,-20.9,-30.0,CastingSheetProp,scripts/casting_sheet_prop.gd
+RITA'S BED,DORMS,-9.0,1.5,BedProp,scripts/bed_prop.gd
+Dresser,DORMS,-11.5,-1.8,Dresser,scripts/dresser.gd
+PATCHBAY,PATCH BAY,-5.5,-31.8,PatchbayConsole,scripts/patchbay_console.gd
+RESPOND,REC ROOM,-0.9,3.55,CueSign,scripts/cue_sign.gd
+HOLD,REC ROOM,0.9,3.55,CueSign,scripts/cue_sign.gd
+THE GLADHOUSE · CLUB PRINT,REC ROOM,-4.78,1.0,BenchTV,scripts/bench_tv.gd
+PROJECTOR,REC ROOM,-1.4,1.0,ScreeningEvent,scripts/screening_event.gd
+KEY BOARD · EDITH,KITCHEN,10.6,-2.3,KeyItem,scripts/key_item.gd
+KEY BOARD · TRAINING,KITCHEN,10.2,-2.3,KeyItem,scripts/key_item.gd
+FOR THE QUIET ROOM · QUIET ROOM,YARD|SHED,10.0,14.0,KeyItem,scripts/key_item.gd
+DEGAUSSER,CLIMATE,14.25,-17.6,Degausser,scripts/degausser.gd
+FILM CABINET,TAPE LIBRARY,-5.4,-19.0,FilmCabinet,scripts/film_cabinet.gd
+HarrietNote,REC ROOM,2.8,2.2,HarrietNote,scripts/harriet_note.gd
+ToneEmitter,TRANSMITTER HALL,16.75,-6.5,ToneEmitter,scripts/tone_emitter.gd
+CLIPBOARD,SCENE DOCK,-19.5,-38.0,DockTask,scripts/dock_task.gd
+UNIT 1,SCENE DOCK,-18.0,-40.0,DockChum,scripts/dock_chum.gd
+UNIT 2,SCENE DOCK,-16.0,-40.0,DockChum,scripts/dock_chum.gd
+UNIT 3,SCENE DOCK,-14.0,-40.0,DockChum,scripts/dock_chum.gd
+UNIT 4,SCENE DOCK,-18.0,-41.7,DockChum,scripts/dock_chum.gd
+UNIT 5,SCENE DOCK,-16.0,-41.7,DockChum,scripts/dock_chum.gd
+UNIT 6,SCENE DOCK,-14.0,-41.7,DockChum,scripts/dock_chum.gd
+SPECTROGRAM,BENCH ROOM,10.6,-17.2,SpectroDock,scripts/spectro_dock.gd
+AssetRack,BENCH ROOM,9.0,-18.82,AssetRack,scripts/asset_rack.gd
+ACCESSION LEDGER,BENCH ROOM,8.2,-16.2,DecisionLedger,scripts/decision_ledger.gd
+CART RACK · CART,MASTER CONTROL,4.0,-31.5,AssetPickup,scripts/asset_pickup.gd
+CRAIK'S BOX · SCRIPT,TRANSMITTER HALL,16.2,-10.0,AssetPickup,scripts/asset_pickup.gd
+PROPS CRATE · CARD,SCENE DOCK,-13.0,-41.5,AssetPickup,scripts/asset_pickup.gd
+VESS'S ROOM,DORMS,-6.5,1.8,VessBinder,scripts/vess_binder.gd
+LEDGER MARGIN,BENCH ROOM,7.4,-15.2,CreditEntry,scripts/credit_entry.gd
+MERLE,KITCHEN,8.0,-1.0,Merle,scripts/merle.gd
+Harriet,REC ROOM,1.2,2.6,Harriet,scripts/harriet.gd
+VessProp,REC ROOM,-3.7,-1.2,VessProp,scripts/vess.gd
+CoatPegs,ENTRY,2.7,7.0,CoatPegs,scripts/coat_pegs.gd
+"D04 · THE CLIPPING · 1974, behind glass",REC ROOM,-4.2,-1.5,ReadableProp,scripts/readable_prop.gd
+D05 · WELCOME PACKET · mimeograph purple,DORMS,-11.9,-1.0,ReadableProp,scripts/readable_prop.gd
+"D09 · FIRE MARSHAL REPORT · 1977, photocopy",CONTROL,0.0,-24.5,ReadableProp,scripts/readable_prop.gd
+"D10 · A FAN LETTER · ruled paper, careful loops",SCENE DOCK,-12.2,-40.6,ReadableProp,scripts/readable_prop.gd
+D11 · PEAK ASSET DOSSIER · CHUM-AF-1974-P,MASTER CONTROL,2.0,-27.5,ReadableProp,scripts/readable_prop.gd
+DELIVERY,ENTRY,0.0,6.0,ImpossibleCrate,scripts/impossible_crate.gd
+FloorManager,TAPE LIBRARY,-4.5,-19.4,FloorManager,scripts/floor_manager.gd
+VESS'S CUT,REC ROOM,-2.6,1.0,RejectedEdit,scripts/rejected_edit.gd
