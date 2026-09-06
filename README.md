@@ -1482,3 +1482,34 @@ OPEN for the owner: the bell's diameter (the plate's proportion, 0.13
 m, is used) and whether the mascot's bell carries the stage pry mark
 (it does, a bright scratch at the seam; cheap to remove). Unit 1.3 is
 done. Next is 1.4.
+
+## Commit 112 · UNIT 1.4 · THE ARMS, THE TENDONS, THE TWO HANDS
+The plate gives him two different arms and the build had given him
+two of the same. Now the viewer-left arm is torn open front and
+outside, a boolean bite over a dark hessian core, and four steel
+cables run shoulder to wrist across it, sagging a little between
+rusted guide blocks — bevel curves now, not cylinders, and static by
+canon: no swing, no secondary. The clothed arm carries three of its
+own, surfacing between the guides. Each elbow gets a crease bitten
+into the cloth and a bandage wound around it as a flat ribbon with a
+rectangular profile, converted to mesh in the build. The arms taper
+to a wrist. Then the hands, which took three passes. The mitt: a sewn
+wool palm and three fingers, first built as three balls each — they
+read as bead chains — then as one remeshed sausage per finger, curled,
+baked with the seams, claws seated inside the tips. The iron hand: a
+plate palm with a wrist bolt and four rod digits of three phalanges
+with knuckle bolts, first hung as four straight parallel rods off a
+plank — a rake — then curled progressively with a little splay, which
+still read straight because the curl was all in depth, so the palm is
+turned thirty-five degrees toward the body and now the digits both
+spread and bend from the front. The warm rust read as turned wood;
+the iron is cooler now. Every phalanx sits on its own knuckle pivot
+named to the rig spec, so 1.9 can skin or drive them without renaming.
+In the engine, the hand frames came out mirrored because the capture
+yaws the actor: fixed and recaptured. Named, not hidden: the guide
+blocks are bevelled boxes — the latch donor is fetched, not yet cut;
+the lever-grip articulation proof waits for 1.11 with the pivots in
+place; the hands measure smaller than the brief's open span and the
+digit count is the build's, both marked OPEN for the owner with the
+lever-arm question. Unit 1.4 is done. Next is 1.5: the legs, the
+control rods, the torn fur windows, the weighted feet.

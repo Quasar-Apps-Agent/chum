@@ -22,3 +22,5 @@ results ship in the glb.
 - Metal063 — AmbientCG, CC0 — https://ambientcg.com/view?id=Metal063 (2K JPG)
 - fabric_leather_02 — Poly Haven, CC0 — https://polyhaven.com/a/fabric_leather_02 (2k jpg: Diffuse, nor_gl, Rough, Displacement, AO)
 - Metal008 — AmbientCG, CC0 — https://ambientcg.com/view?id=Metal008 (2K JPG)
+- Metal041B — AmbientCG, CC0 — https://ambientcg.com/view?id=Metal041B (2K JPG)
+- gate_latch_01 — Poly Haven MODEL, CC0 — https://polyhaven.com/a/gate_latch_01 (1k blend + 4 textures; donor part)

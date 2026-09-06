@@ -89,6 +89,12 @@ M = {
     "BellCrown":    mat("BellCrown",    (0.16, 0.12, 0.07), 0.80, 0.6),   # blackened crown (FABRIC §5 T5)
     "BellVoid":     mat("BellVoid",     (0.02, 0.02, 0.02), 1.0),         # the clapperless interior
     "BellScratch":  mat("BellScratch",  (0.95, 0.80, 0.45), 0.18, 1.0),   # the bright pry mark (DESIGN delta 5)
+    # unit 1.4: arms and hands
+    "TendonCable":  mat("TendonCable",  (0.30, 0.29, 0.27), 0.55, 0.9),   # salvaged steel cable (Rope002)
+    "IronRust":     mat("IronRust",     (0.25, 0.22, 0.20), 0.72, 0.6),   # the skeletal hand, guides, knuckles (Metal041B)
+    "ArmCore":      mat("ArmCore",      (0.22, 0.17, 0.12), 0.95),        # hessian-lined dark core under the torn window
+    "Claw":         mat("Claw",         (0.20, 0.15, 0.11), 0.45),        # horn: crackle scan, chipped tips
+    "Bandage":      mat("Bandage",      (0.55, 0.48, 0.36), 0.9),         # the elbow wrap ribbon (hessian)
     "CopperRing": mat("CopperRing", (0.13, 0.08, 0.045), 0.7, 0.85),
     "GrilleDark": mat("GrilleDark", (0.17, 0.16, 0.14), 0.5, 0.75),
     "ToothBone":  mat("ToothBone",  (0.63, 0.56, 0.44), 0.75),
@@ -338,6 +344,23 @@ def empty(name, loc, parent=None):
         e.matrix_parent_inverse = parent.matrix_world.inverted()
     return e
 
+def cable(name, pts, r, material):
+    cu = bpy.data.curves.new(name, "CURVE")
+    cu.dimensions = "3D"
+    cu.bevel_depth = r
+    cu.bevel_resolution = 4
+    cu.resolution_u = 12
+    sp = cu.splines.new("NURBS")
+    sp.points.add(len(pts) - 1)
+    for i, p in enumerate(pts):
+        sp.points[i].co = (p[0], p[1], p[2], 1.0)
+    sp.use_endpoint_u = True
+    sp.order_u = 3
+    ob = bpy.data.objects.new(name, cu)
+    col.objects.link(ob)
+    ob.data.materials.append(material)
+    return ob
+
 def parent_to(child, parent):
     child.parent = parent
     child.matrix_parent_inverse = parent.matrix_world.inverted()
@@ -479,63 +502,244 @@ for sx, nm in ((-1, "LegL"), (1, "LegR")):
     simple(rod, M["RodMetal"])
     parent_to(rod, hip)
 
-# ---- arms: tendon-driven, clawed ------------------------------------------------------
+# ---- arms: tendon-driven, clawed (unit 1.4: tendons both sides, articulated fingers) ----
+## BRIEF 1.4. Viewer-left arm (sx=-1, ArmL) is bare to the tendons through a
+## torn cloth window over a hessian-lined dark core and ends in a skeletal iron
+## hand with FOUR segmented digits (PLATE); viewer-right (ArmR) is cloth with a
+## fur mitt of THREE sewn fingers (BUILD; OPEN digit count). Every phalanx is
+## its own piece on a knuckle pivot named to the rig spec: finger_[a-d]_0N_[r|l]
+## and hand_[r|l] — ArmL maps to _r (CHUM-RIG-AND-ANIMATION-SPEC §upperarm).
+## Tendons are sagging bevel curves (static in animation, MOTION §AFTER-FIRE).
+def bite(obj, cutter, heal=2):
+    """boolean DIFFERENCE on a remeshed manifold, healed with a smooth pass"""
+    bpy.ops.object.select_all(action="DESELECT")
+    obj.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+    bo = obj.modifiers.new("bite", "BOOLEAN")
+    bo.operation = "DIFFERENCE"
+    bo.object = cutter
+    bo.solver = "EXACT"
+    hs = obj.modifiers.new("heal", "SMOOTH")
+    hs.factor = 0.5
+    hs.iterations = heal
+    bpy.ops.object.convert(target="MESH")
+    out = bpy.context.active_object
+    bpy.data.objects.remove(cutter, do_unlink=True)
+    return out
+
+def ribbon(name, center, radius, width, thick, material, rot, n=22, jitter=0.05, turns=1.0):
+    """a flat bandage strip wound around a limb: a jittered ring with a
+    rectangular profile, converted to mesh here (the profile is deleted)"""
+    import mathutils
+    R = mathutils.Euler(rot, "XYZ").to_matrix()
+    cu = bpy.data.curves.new(name, "CURVE")
+    cu.dimensions = "3D"
+    cu.resolution_u = 8
+    sp = cu.splines.new("NURBS")
+    sp.points.add(n - 1)
+    for i in range(n):
+        a = 2.0 * math.pi * turns * i / (n - 1)
+        rr = radius * (1.0 + jitter * math.sin(2.3 * a + 0.7) + 0.5 * jitter * math.cos(5.1 * a))
+        lp = mathutils.Vector((rr * math.cos(a), rr * math.sin(a), 0.6 * width * (i / (n - 1) - 0.5)))
+        wp = R @ lp
+        sp.points[i].co = (center[0] + wp.x, center[1] + wp.y, center[2] + wp.z, 1.0)
+    sp.use_endpoint_u = True
+    sp.order_u = 3
+    prof = bpy.data.curves.new(name + "Prof", "CURVE")
+    prof.dimensions = "2D"
+    prof.fill_mode = "NONE"
+    ps = prof.splines.new("POLY")
+    ps.points.add(3)
+    for i, (px, py) in enumerate(((-width / 2, -thick / 2), (width / 2, -thick / 2),
+                                  (width / 2, thick / 2), (-width / 2, thick / 2))):
+        ps.points[i].co = (px, py, 0.0, 1.0)
+    ps.use_cyclic_u = True
+    prof_ob = bpy.data.objects.new(name + "Prof", prof)
+    col.objects.link(prof_ob)
+    cu.bevel_mode = "OBJECT"
+    cu.bevel_object = prof_ob
+    cu.use_fill_caps = True
+    ob = bpy.data.objects.new(name, cu)
+    col.objects.link(ob)
+    ob.data.materials.append(material)
+    bpy.ops.object.select_all(action="DESELECT")
+    ob.select_set(True)
+    bpy.context.view_layer.objects.active = ob
+    bpy.ops.object.convert(target="MESH")
+    ob = bpy.context.active_object
+    bpy.ops.object.shade_smooth()
+    bpy.data.objects.remove(prof_ob, do_unlink=True)
+    return ob
+
+def rod(name, a, b, r, material, n=16):
+    """a machined rod between two points: a bevelled cylinder, smooth-shaded"""
+    import mathutils
+    va, vb = mathutils.Vector(a), mathutils.Vector(b)
+    d = vb - va
+    bpy.ops.mesh.primitive_cylinder_add(radius=r, depth=d.length, vertices=n,
+                                        location=tuple((va + vb) / 2.0))
+    ob = bpy.context.active_object
+    ob.rotation_euler = d.to_track_quat("Z", "Y").to_euler()
+    bv = ob.modifiers.new("soft", "BEVEL")
+    bv.width = r * 0.35
+    bv.segments = 2
+    bpy.ops.object.convert(target="MESH")
+    ob = bpy.context.active_object
+    ob.name = name
+    simple(ob, material)
+    bpy.ops.object.shade_smooth()
+    return ob
+
+def claw(name, loc, r, h, rot, parent):
+    c = cone(loc, r, h, rot=rot)
+    organic(c, M["Claw"], 0.0045, 0.0, 0.002, 0.6, smooth=2)   # horn: remeshed, the tip chipped by the voxel
+    c.name = name
+    parent_to(c, parent)
+    return c
+
 for sx, nm in ((-1, "ArmL"), (1, "ArmR")):
+    side = "r" if sx < 0 else "l"
     shoulder = empty("Shoulder" + nm[-1], (0.47 * sx, 0, 1.72))
-    ## the limb: shoulder mass, upper arm, a distinct elbow, forearm, wrist
+    ## the limb: shoulder mass, upper arm, a distinct elbow, forearm, a wrist that tapers
     arm = join([
         sphere((0.47 * sx, 0, 1.68), 0.135),
-        sphere((0.51 * sx, -0.02, 1.46), 0.11, (1, 1, 1.2)),
-        sphere((0.55 * sx, -0.03, 1.26), 0.1),                          # elbow
-        sphere((0.58 * sx, -0.05, 1.08), 0.09, (1, 1, 1.15)),
-        sphere((0.6 * sx, -0.06, 0.97), 0.085),                         # wrist
+        sphere((0.50 * sx, -0.01, 1.52), 0.112, (1, 1, 1.15)),
+        sphere((0.53 * sx, -0.02, 1.37), 0.098),
+        sphere((0.55 * sx, -0.03, 1.26), 0.094),                         # elbow
+        sphere((0.565 * sx, -0.04, 1.16), 0.086),
+        sphere((0.58 * sx, -0.05, 1.05), 0.076, (1, 1, 1.1)),
+        sphere((0.60 * sx, -0.06, 0.97), 0.064),                         # wrist
     ], nm)
-    organic(arm, M["BurntWool"], 0.022, 0.016, 0.006, 0.45)
+    organic(arm, M["BurntWool"], 0.015, 0.014, 0.005, 0.45)
+    ## the inner-elbow crease: one bite where the cloth folds
+    arm = bite(arm, sphere((0.51 * sx, 0.075, 1.27), 0.062, (1.3, 1.0, 0.7)))
+    arm.name = nm
+    if sx < 0:
+        ## the torn window (PLATE: viewer-left bare to the tendons): a dark
+        ## hessian-lined core inside, the cloth bitten away front-outer
+        core = join([
+            sphere((0.50 * sx, -0.01, 1.50), 0.07),
+            sphere((0.545 * sx, -0.025, 1.30), 0.06),
+            sphere((0.575 * sx, -0.045, 1.10), 0.052),
+        ], nm + "Core")
+        organic(core, M["ArmCore"], 0.012, 0.010, 0.004, 0.5)
+        parent_to(core, shoulder)
+        arm = bite(arm, sphere((0.63 * sx, -0.12, 1.31), 0.15, (0.75, 0.6, 1.45)), heal=3)
+        arm.name = nm
+        _win = lambda wp: (wp.y < -0.06 and 1.06 < wp.z < 1.56 and wp.x * sx > 0.52)
+    else:
+        _win = None
     parent_to(arm, shoulder)
-    arm_fur = fur(arm, 650, 0.025, 0.06, nm + "Fur", [M["FurDark"], M["FurMid"], M["FurRust"]])
+    print("ARM", nm, "verts", len(arm.data.vertices))
+    arm_fur = fur(arm, 650, 0.025, 0.06, nm + "Fur", [M["FurDark"], M["FurMid"], M["FurRust"]], mask=_win)
     if arm_fur:
         parent_to(arm_fur, shoulder)
-    ## the hand: palm, three two-lobed fingers, claw sheaths
-    hand_parts = [sphere((0.62 * sx, -0.07, 0.9), 0.115, (1.0, 0.8, 1.05))]
-    finger_x = (0.53, 0.62, 0.71)
-    for fi, fx in enumerate(finger_x):
-        hand_parts.append(sphere((fx * sx, -0.1, 0.8), 0.052))
-        hand_parts.append(sphere((fx * sx + 0.012 * sx, -0.13, 0.73), 0.045))
-    hand = join(hand_parts, nm + "Hand")
-    organic(hand, M["BurntWool"], 0.016, 0.012, 0.005, 0.5)
-    parent_to(hand, shoulder)
-    for fi, fx in enumerate(finger_x):
-        c = cone((fx * sx + 0.02 * sx, -0.16, 0.675), 0.019, 0.1, rot=(math.radians(197), 0, 0))
-        c.name = f"{nm}Claw{fi}"
-        simple(c, M["CharDark"])
-        parent_to(c, shoulder)
-    ## the shoulder seam: was a torus ring + five stitch cylinders (they read
-    ## as pipes at 1 m); seams are MAPS now (BRIEF 1.1 step 3, PLAN §R.2) —
-    ## see burlap_nodes(seam=...). Geometry stitches deleted in 1.1c.
-    ## the elbow wrap: a fabric bandage band, tied
-    wrap = torus((0.55 * sx, -0.03, 1.26), 0.105, 0.03, rot=(math.radians(10), math.radians(70 * sx), 0))
-    wrap.name = nm + "ElbowWrap"
-    simple(wrap, M["BellyWool"])
+
+    ## tendons: 4 on the bare side, 3 on the clothed side (surfacing between
+    ## guides), sagging between the guide blocks; steel cable, static
+    n_t = 4 if sx < 0 else 3
+    yb = -0.115 if sx < 0 else -0.10
+    for k in range(n_t):
+        off = (k - (n_t - 1) / 2.0) * 0.022
+        sag = 0.012 * math.sin(1.7 * k + 0.4)
+        pts = [(0.47 * sx + 0.5 * off * sx, -0.07, 1.66),
+               (0.515 * sx + off * sx, yb - 0.005, 1.50),
+               (0.575 * sx + off * sx, yb - 0.02 - sag, 1.30),
+               (0.60 * sx + off * sx, yb - 0.008, 1.12),
+               (0.615 * sx + 0.7 * off * sx, -0.095, 0.99)]
+        t = cable(f"{nm}Tendon{k}", pts, 0.0065, M["TendonCable"])
+        parent_to(t, shoulder)
+    ## guide blocks: rusted ferrule blocks the cables run through (donor cut
+    ## from gate_latch_01 is fetched for a later pass; blocks are bevelled now)
+    for gi, gz in enumerate((1.55, 1.26, 1.0)):
+        gx = 0.545 * sx + (0.03 * sx if gz < 1.3 else 0.0)
+        g = rounded_prism((gx, yb - 0.006, gz), math.radians(8 * sx), 0.085, 0.03, depth=0.026, bevel=0.006)
+        g.name = f"{nm}Guide{gi}"
+        simple(g, M["IronRust"])
+        parent_to(g, shoulder)
+
+    ## the elbow wrap: a bandage ribbon, not a torus (BRIEF 1.4 step 4)
+    wrap = ribbon(nm + "ElbowWrap", (0.55 * sx, -0.03, 1.26), 0.10, 0.034, 0.004, M["Bandage"],
+                  (math.radians(10), math.radians(70 * sx), 0), turns=1.15)
     parent_to(wrap, shoulder)
-    ## tendon cables with metal guide staples: dense on the left (the dossier
-    ## plate's exposed side), a single survivor on the right
-    tendon_count = 3 if sx < 0 else 1
-    for k in range(tendon_count):
-        toff = 0.02 * k
-        t1 = cyl((0.49 * sx + toff * sx, -0.105 - toff, 1.49), 0.008, 0.4, rot=(math.radians(6), math.radians(11 * sx), 0))
-        t1.name = f"{nm}TendonA{k}"
-        simple(t1, M["CableDark"])
-        parent_to(t1, shoulder)
-        t2 = cyl((0.565 * sx + toff * sx, -0.115 - toff, 1.11), 0.008, 0.32, rot=(math.radians(9), math.radians(9 * sx), 0))
-        t2.name = f"{nm}TendonB{k}"
-        simple(t2, M["CableDark"])
-        parent_to(t2, shoulder)
-    for gz in (1.55, 1.26, 1.0):
-        guide = torus((0.545 * sx + (0.03 * sx if gz < 1.3 else 0.0), -0.115, gz), 0.028, 0.007,
-                      rot=(math.radians(90), 0, math.radians(10 * sx)))
-        guide.name = f"{nm}Guide{gz}"
-        simple(guide, M["RodMetal"])
-        parent_to(guide, shoulder)
+
+    ## the hand pivot (rig spec hand_r/l at the wrist)
+    hand_piv = empty(f"hand_{side}", (0.60 * sx, -0.06, 0.97))
+    parent_to(hand_piv, shoulder)
+    if sx > 0:
+        ## THE MITT: sewn wool palm and three fingers of three phalanges, each
+        ## on its knuckle pivot; bakes carry the seams (BRIEF 1.4 step 3, 5)
+        palm = sphere((0.62 * sx, -0.075, 0.90), 0.105, (1.0, 0.72, 1.0))
+        organic(palm, M["BurntWool"], 0.010, 0.008, 0.004, 0.6)
+        palm.name = nm + "Hand"
+        parent_to(palm, hand_piv)
+        for fi, (fx, fl) in enumerate(((0.535, "a"), (0.62, "b"), (0.705, "c"))):
+            ## a relaxed curl: each phalanx bends further toward the palm; the
+            ## finger is ONE remeshed sausage (separate balls read as beads,
+            ## pass 1) with its three knuckle pivots chained for 1.9's skinning
+            prev = hand_piv
+            pos = (fx * sx, -0.10, 0.815)
+            lobes = []
+            r0 = 0.046
+            for k in range(3):
+                th = math.radians(14 + 21 * k + 4 * math.sin(fi * 2.1 + k))
+                L = 0.066 - 0.005 * k
+                rk = r0 * (1.0 - 0.12 * k)
+                piv = empty(f"finger_{fl}_0{k + 1}_{side}", pos)
+                parent_to(piv, prev)
+                _sp = math.radians((fi - 1.0) * 6.0) * sx
+                nxt = (pos[0] + L * math.sin(_sp), pos[1] - L * math.sin(th), pos[2] - L * math.cos(th) * math.cos(_sp))
+                mid = tuple((pos[i] + nxt[i]) / 2.0 for i in range(3))
+                lobes.append(sphere(mid, rk, (1.0, 1.0 + 0.5 * math.sin(th), 1.0 + 0.5 * math.cos(th))))
+                if k == 0:
+                    first_piv = piv
+                pos = nxt
+                prev = piv
+            fin = join(lobes, f"{nm}Finger{fl.upper()}")
+            organic(fin, M["BurntWool"], 0.008, 0.006, 0.003, 0.6)
+            parent_to(fin, first_piv)
+            claw(f"{nm}Claw{fl}", (pos[0] + 0.006 * sx, pos[1] - 0.012, pos[2] - 0.016), 0.017, 0.095,
+                 (math.radians(215), 0, 0), prev)   # base seated INSIDE the last lobe (pass 2 floated)
+    else:
+        ## THE SKELETAL HAND: an iron palm plate, four rod digits of three
+        ## phalanges with knuckle bolts, claws (PLATE: four on this side)
+        palm = rounded_prism((0.62 * sx, -0.075, 0.90), math.radians(-12 * sx), 0.17, 0.12, depth=0.02, bevel=0.009)
+        palm.name = nm + "Hand"
+        simple(palm, M["IronRust"])
+        parent_to(palm, hand_piv)
+        wb = sphere((0.61 * sx, -0.07, 0.955), 0.026)   # the wrist bolt
+        wb.name = nm + "WristBolt"
+        simple(wb, M["IronRust"])
+        bpy.ops.object.shade_smooth()
+        parent_to(wb, hand_piv)
+        for fi, (fx, fl) in enumerate(((0.535, "a"), (0.59, "b"), (0.645, "c"), (0.70, "d"))):
+            prev = hand_piv
+            pos = (fx * sx, -0.10, 0.845)
+            for k in range(3):
+                ## a relaxed curl, a little different on every digit (pass 1
+                ## hung four straight parallel rods: a rake, not a hand)
+                th = math.radians(12 + 24 * k + 5 * math.sin(fi * 1.7 + k * 0.9))
+                L = 0.070 - 0.008 * k
+                r = 0.014 - 0.002 * k
+                _sp = math.radians((fi - 1.5) * 5.0) * sx   # a little splay, outer digits most
+                nxt = (pos[0] + L * math.sin(_sp), pos[1] - L * math.sin(th), pos[2] - L * math.cos(th) * math.cos(_sp))
+                piv = empty(f"finger_{fl}_0{k + 1}_{side}", pos)
+                parent_to(piv, prev)
+                kn = sphere(pos, r * 1.5)
+                kn.name = f"{nm}Knuckle{fl.upper()}{k + 1}"
+                simple(kn, M["IronRust"])
+                bpy.ops.object.shade_smooth()
+                parent_to(kn, piv)
+                rd = rod(f"{nm}Finger{fl.upper()}{k + 1}", pos, nxt, r, M["IronRust"])
+                parent_to(rd, piv)
+                pos = nxt
+                prev = piv
+            claw(f"{nm}Claw{fl}", (pos[0] + 0.004 * sx, pos[1] - 0.008, pos[2] - 0.024), 0.014, 0.085,
+                 (math.radians(215), 0, 0), prev)
+        print("SKELETAL HAND built on", nm)
+    ## the palm turned 35 deg toward the body: from the front the curl reads
+    ## AND the digits stay spread (pass 2: a forward curl was invisible)
+    hand_piv.rotation_euler = (0.0, 0.0, math.radians(-35.0 * sx))
 
 # ---- tail, dragging low ----------------------------------------------------------------
 tail_pivot = empty("TailPivot", (0.04, 0.36, 0.76))
@@ -788,23 +992,6 @@ for _rv in range(6):
 
 ## cabling (BRIEF 1.2 step 3): from the grille's edge, under the collar, into
 ## the cloth at the shoulder slit where the plug sits — never floating
-def cable(name, pts, r, material):
-    cu = bpy.data.curves.new(name, "CURVE")
-    cu.dimensions = "3D"
-    cu.bevel_depth = r
-    cu.bevel_resolution = 4
-    cu.resolution_u = 12
-    sp = cu.splines.new("NURBS")
-    sp.points.add(len(pts) - 1)
-    for i, p in enumerate(pts):
-        sp.points[i].co = (p[0], p[1], p[2], 1.0)
-    sp.use_endpoint_u = True
-    sp.order_u = 3
-    ob = bpy.data.objects.new(name, cu)
-    col.objects.link(ob)
-    ob.data.materials.append(material)
-    return ob
-
 cable("ThroatCableA", [(0.09, -0.36, 1.80), (0.16, -0.34, 1.90), (0.24, -0.28, 1.95),
                        (0.30, -0.21, 1.94), (0.31, -0.19, 1.93)], 0.008, M["CableRubber"])
 cable("ThroatCableB", [(0.07, -0.37, 1.67), (0.17, -0.36, 1.76), (0.26, -0.31, 1.88),
@@ -1458,10 +1645,23 @@ def scan_dress(mm, col_rel, nrm_rel, val_mult=2.2, scale=5.0, nstr=0.8):
     dnt.links.new(dnm.outputs["Normal"], db.inputs["Normal"])
 
 
-for _mk in ("BronzeBand", "BronzeChar", "CopperRing", "StitchSteel",
-            "RodMetal", "Brass"):
+for _mk in ("BronzeBand", "BronzeChar", "CopperRing", "StitchSteel", "Brass"):
     scan_dress(M[_mk], "Metal058A/Metal058A_1K-JPG_Color.jpg",
                "Metal058A/Metal058A_1K-JPG_NormalGL.jpg", 2.2, 5.0, 0.8)
+## unit 1.4: real rust on the rod metal (rivets, prongs) and the iron hand;
+## steel cable on the tendons; hessian for the core and the bandage; crackle horn
+scan_dress(M["RodMetal"], "Metal041B/Metal041B_2K-JPG_Color.jpg",
+           "Metal041B/Metal041B_2K-JPG_NormalGL.jpg", 1.6, 7.0, 1.0)
+scan_dress(M["IronRust"], "Metal041B/Metal041B_2K-JPG_Color.jpg",
+           "Metal041B/Metal041B_2K-JPG_NormalGL.jpg", 1.3, 7.0, 1.0)   # 1.8 warm read as turned wood (1.4 pass 2)
+scan_dress(M["TendonCable"], "Rope002/Rope002_2K-JPG_Color.jpg",
+           "Rope002/Rope002_2K-JPG_NormalGL.jpg", 1.7, 40.0, 1.0)
+scan_dress(M["ArmCore"], "hessian_230/hessian_230_Diffuse_2k.jpg",
+           "hessian_230/hessian_230_nor_gl_2k.jpg", 0.7, 9.0, 1.0)
+scan_dress(M["Bandage"], "hessian_230/hessian_230_Diffuse_2k.jpg",
+           "hessian_230/hessian_230_nor_gl_2k.jpg", 1.7, 12.0, 1.0)
+scan_dress(M["Claw"], "Bark015/Bark015_2K-JPG_Color.jpg",
+           "Bark015/Bark015_2K-JPG_NormalGL.jpg", 0.9, 14.0, 0.9)
 ## the mouth grille stays SHADOW machinery: same scan, a third the value —
 ## at 2.2 it rendered as cream pickets inside the maw
 scan_dress(M["GrilleDark"], "Metal058A/Metal058A_1K-JPG_Color.jpg",

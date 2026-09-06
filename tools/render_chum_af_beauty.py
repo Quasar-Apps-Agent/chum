@@ -321,3 +321,16 @@ camd.dof.aperture_fstop = 5.6
 scene.render.filepath = os.path.join(OUTDIR, "chum_af_collar.png")
 bpy.ops.render.render(write_still=True)
 print("RENDERED collar")
+
+## SHOT 6/7 (1.4): the hands at ~1 m — the sewn mitt (right, +X) and the
+## skeletal iron hand (left, -X); seams, claw chips, cable strand must hold
+for _hn, _hx in (("handr", 0.66), ("handl", -0.66)):
+    camd.lens = 85
+    cam.location = mathutils.Vector((_hx * 1.15, -1.05, 0.95)) * K
+    _tgt = mathutils.Vector((_hx, -0.12, 0.74)) * K
+    aim(cam, _tgt)
+    camd.dof.focus_distance = (cam.location - _tgt).length
+    camd.dof.aperture_fstop = 5.6
+    scene.render.filepath = os.path.join(OUTDIR, "chum_af_%s.png" % _hn)
+    bpy.ops.render.render(write_still=True)
+    print("RENDERED", _hn)

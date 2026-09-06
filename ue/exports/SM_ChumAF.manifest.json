@@ -4,29 +4,75 @@
   "rgh": "ArmL_rgh",
   "nrm": "ArmL_nrm"
  },
+ "Claw": {
+  "diff": "Claw_tint",
+  "tint": [
+   0.0298,
+   0.0176,
+   0.0105
+  ],
+  "nrm": "Bark015_2K-JPG_NormalGL.jpg"
+ },
+ "ArmCore": {
+  "diff": "ArmCore_tint",
+  "tint": [
+   0.0278,
+   0.0172,
+   0.0094
+  ],
+  "nrm": "hessian_230_nor_gl_2k.jpg"
+ },
+ "Bandage": {
+  "diff": "Bandage_tint",
+  "tint": [
+   0.4476,
+   0.3332,
+   0.1811
+  ],
+  "nrm": "hessian_230_nor_gl_2k.jpg"
+ },
+ "IronRust": {
+  "diff": "IronRust_tint",
+  "tint": [
+   0.0661,
+   0.0516,
+   0.043
+  ],
+  "nrm": "Metal041B_2K-JPG_NormalGL.jpg"
+ },
  "FurCards": {
   "diff": "fur_tuft_atlas.png"
  },
- "RodMetal": {
-  "diff": "RodMetal_tint",
+ "TendonCable": {
+  "diff": "TendonCable_tint",
   "tint": [
-   0.2211,
-   0.1958,
-   0.1611
+   0.1245,
+   0.1163,
+   0.1007
   ],
-  "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
+  "nrm": "Rope002_2K-JPG_NormalGL.jpg"
  },
  "BurntWool.005": {
-  "diff": "ArmLHand_diff",
-  "rgh": "ArmLHand_rgh",
-  "nrm": "ArmLHand_nrm"
- },
- "BurntWool.006": {
   "diff": "ArmR_diff",
   "rgh": "ArmR_rgh",
   "nrm": "ArmR_nrm"
  },
  "BurntWool.007": {
+  "diff": "ArmRFingerA_diff",
+  "rgh": "ArmRFingerA_rgh",
+  "nrm": "ArmRFingerA_nrm"
+ },
+ "BurntWool.008": {
+  "diff": "ArmRFingerB_diff",
+  "rgh": "ArmRFingerB_rgh",
+  "nrm": "ArmRFingerB_nrm"
+ },
+ "BurntWool.009": {
+  "diff": "ArmRFingerC_diff",
+  "rgh": "ArmRFingerC_rgh",
+  "nrm": "ArmRFingerC_nrm"
+ },
+ "BurntWool.006": {
   "diff": "ArmRHand_diff",
   "rgh": "ArmRHand_rgh",
   "nrm": "ArmRHand_nrm"
@@ -109,6 +155,15 @@
   ],
   "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
  },
+ "RodMetal": {
+  "diff": "RodMetal_tint",
+  "tint": [
+   0.1608,
+   0.1424,
+   0.1172
+  ],
+  "nrm": "Metal041B_2K-JPG_NormalGL.jpg"
+ },
  "EarFelt.001": {
   "diff": "EarL_diff",
   "rgh": "EarL_rgh",
@@ -137,7 +192,7 @@
   ],
   "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
  },
- "BurntWool.010": {
+ "BurntWool.012": {
   "diff": "JawMesh_diff",
   "rgh": "JawMesh_rgh",
   "nrm": "JawMesh_nrm"
@@ -205,12 +260,12 @@
   "rgh": "PatchRust_rgh",
   "nrm": "PatchRust_nrm"
  },
- "BurntWool.009": {
+ "BurntWool.011": {
   "diff": "Skull_diff",
   "rgh": "Skull_rgh",
   "nrm": "Skull_nrm"
  },
- "BurntWool.008": {
+ "BurntWool.010": {
   "diff": "Tail_diff",
   "rgh": "Tail_rgh",
   "nrm": "Tail_nrm"
