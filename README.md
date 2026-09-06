@@ -1566,3 +1566,28 @@ tracker. Named, not hidden: no core hardware is exposed on the tail —
 the plate reads its segmentation as fur banding, and the owner has
 the question. Unit 1.6 is done. Next is 1.7: the full-figure
 unification and the texture and size budget.
+
+## Commit 115 · UNIT 1.7, TRANCHE 1 · THE PHYSICAL MASTER
+The engine had been rendering him through the importer's Phong
+surface since Phase 0: a flat colour lerped to a map, no roughness,
+no metallic, and every scan normal from the CC0 sets imported as sRGB
+colour. Now the export packs an ORM per material — occlusion, the
+baked roughness or the material's constant, the metallic constant —
+fifty-one of them, and the engine gets a real base master, BaseColor,
+Normal and ORM wired to the physical inputs, with an instance per
+textured slot: forty-nine of sixty-four. The bell is brass, the
+throat ring steel, the cables rubber, the iron hand cast iron — and
+too black, so the rust's metallic drops for the next build. The
+normals are normal maps at last; masks import linear. The two
+missing sockets are on the mesh: the jaw lever's grip for the hand
+IK, the tally lens centre. The numbers, recorded as the brief asks:
+FBX 256 MB; 208 texture files, 171 MB; 154 imported assets; 292,732
+triangles, 26,574 of them fur cards; 285 objects; 70 materials. The
+brief proposes 25 MB, 20 maps and 300 k triangles, and has no canon
+number to lean on — OPEN for the owner, with the material grouping
+that would get there (atlases to a dozen instances), the naming pass,
+the fifteen flat-colour slots still on Phong, and whether the Godot
+reference keeps its 2.6 m glb. Named, not hidden: the diagnostic
+closeups auto-expose and now run pale where the metals went dark;
+the locked-EV full frame is the reference. Tranche 1 of 1.7 is done;
+the rest waits on rulings. Next is 1.8: the head retrofit.

@@ -192,6 +192,48 @@ elif "--all-meshes" in argv:
         except Exception as _ex:
             print("UE-TINT-FAIL", _mname, _ex)
     print("UE-TINTED", _tinted, "scan-dressed materials pre-multiplied")
+    ## 1.7: ORM packing (PIPELINE §STANDARDS "ORM packed"): R = AO (1.0 — the
+    ## bakes carry soot in the albedo), G = roughness (the baked map, else the
+    ## material's constant), B = metallic (the material's constant). Full-res
+    ## where a roughness bake exists, an 8x8 constant otherwise. Linear.
+    import numpy as _np
+    _packed = 0
+    for _mname, _entry in list(manifest.items()):
+        _mat = bpy.data.materials.get(_mname)
+        if _mat is None or not _mat.use_nodes:
+            continue
+        _pb = next((n for n in _mat.node_tree.nodes if n.type == "BSDF_PRINCIPLED"), None)
+        if _pb is None:
+            continue
+        _metal = float(_pb.inputs["Metallic"].default_value)
+        _rough_c = float(_pb.inputs["Roughness"].default_value) if not _pb.inputs["Roughness"].is_linked else 0.55
+        _safe = _mname.replace(".", "_")
+        _rimg = bpy.data.images.get(_entry["rgh"]) if _entry.get("rgh") else None
+        if _rimg is not None and _rimg.size[0] > 0:
+            _w, _h = _rimg.size
+            _src = _np.empty(_w * _h * 4, dtype=_np.float32)
+            _rimg.pixels.foreach_get(_src)
+            _g = _src.reshape(-1, 4)[:, 0]
+        else:
+            _w = _h = 8
+            _g = _np.full(_w * _h, _rough_c, dtype=_np.float32)
+        _orm = _np.empty((_w * _h, 4), dtype=_np.float32)
+        _orm[:, 0] = 1.0
+        _orm[:, 1] = _g
+        _orm[:, 2] = _metal
+        _orm[:, 3] = 1.0
+        _oimg = bpy.data.images.new(_safe + "_orm", _w, _h, alpha=False)
+        _oimg.colorspace_settings.name = "Non-Color"
+        _oimg.pixels.foreach_set(_orm.reshape(-1))
+        _oimg.file_format = "PNG"
+        _oimg.filepath_raw = os.path.join(texdir, _safe + "_orm.png")
+        try:
+            _oimg.save()
+            _entry["orm"] = _safe + "_orm"
+            _packed += 1
+        except Exception as _ex:
+            print("UE-ORM-FAIL", _mname, _ex)
+    print("UE-ORM", _packed, "materials packed (R=AO G=rough B=metal)")
     mpath = os.path.splitext(out)[0] + ".manifest.json"
     with open(mpath, "w") as fh:
         json.dump(manifest, fh, indent=1)

@@ -91,7 +91,7 @@ M = {
     "BellScratch":  mat("BellScratch",  (0.95, 0.80, 0.45), 0.18, 1.0),   # the bright pry mark (DESIGN delta 5)
     # unit 1.4: arms and hands
     "TendonCable":  mat("TendonCable",  (0.30, 0.29, 0.27), 0.55, 0.9),   # salvaged steel cable (Rope002)
-    "IronRust":     mat("IronRust",     (0.25, 0.22, 0.20), 0.72, 0.6),   # the skeletal hand, guides, knuckles (Metal041B)
+    "IronRust":     mat("IronRust",     (0.25, 0.22, 0.20), 0.72, 0.3),   # rust is barely metallic; 0.6 went black under the physical master (1.7)   # the skeletal hand, guides, knuckles (Metal041B)
     "ArmCore":      mat("ArmCore",      (0.22, 0.17, 0.12), 0.95),        # hessian-lined dark core under the torn window
     "Claw":         mat("Claw",         (0.20, 0.15, 0.11), 0.45),        # horn: crackle scan, chipped tips
     "Bandage":      mat("Bandage",      (0.55, 0.48, 0.36), 0.9),         # the elbow wrap ribbon (hessian)
@@ -1445,6 +1445,7 @@ bm2.free()
 _ls = 2.75
 lens_ob.scale = (_ls, _ls, _ls)
 lens_ob.location = (0.13 - 0.008 * _ls, -0.2425, 2.34 - 0.034 * _ls)
+empty("SOCKET_EyeTally", tuple(lens_ob.location), parent=head)   # 1.7: PIPELINE §STANDARDS socket, the lens centre
 parent_to(lens_ob, head)
 for _lmat in lens_ob.data.materials:
     if _lmat and _lmat.use_nodes:
@@ -1589,6 +1590,7 @@ lgrip = sphere((0.115, -0.372, 2.14), 0.021, (1.0, 0.8, 0.7))
 lgrip.name = "MouthLeverGrip"
 simple(lgrip, M["LeatherCol"])
 parent_to(lgrip, head)
+empty("SOCKET_JawLever", (0.115, -0.372, 2.14), parent=head)   # 1.7: the hand IK effector (rig spec)
 
 # whiskers: kinked straw bundles rooted on the muzzle, per the plate.
 # Each is two chained segments with a bend; the left side burned shorter.

@@ -2,7 +2,8 @@
  "BurntWool.006": {
   "diff": "ArmL_diff",
   "rgh": "ArmL_rgh",
-  "nrm": "ArmL_nrm"
+  "nrm": "ArmL_nrm",
+  "orm": "BurntWool_006_orm"
  },
  "Claw": {
   "diff": "Claw_tint",
@@ -11,7 +12,8 @@
    0.0176,
    0.0105
   ],
-  "nrm": "Bark015_2K-JPG_NormalGL.jpg"
+  "nrm": "Bark015_2K-JPG_NormalGL.jpg",
+  "orm": "Claw_orm"
  },
  "ArmCore": {
   "diff": "ArmCore_tint",
@@ -20,7 +22,8 @@
    0.0172,
    0.0094
   ],
-  "nrm": "hessian_230_nor_gl_2k.jpg"
+  "nrm": "hessian_230_nor_gl_2k.jpg",
+  "orm": "ArmCore_orm"
  },
  "Bandage": {
   "diff": "Bandage_tint",
@@ -29,7 +32,8 @@
    0.3332,
    0.1811
   ],
-  "nrm": "hessian_230_nor_gl_2k.jpg"
+  "nrm": "hessian_230_nor_gl_2k.jpg",
+  "orm": "Bandage_orm"
  },
  "IronRust": {
   "diff": "IronRust_tint",
@@ -38,10 +42,12 @@
    0.0516,
    0.043
   ],
-  "nrm": "Metal041B_2K-JPG_NormalGL.jpg"
+  "nrm": "Metal041B_2K-JPG_NormalGL.jpg",
+  "orm": "IronRust_orm"
  },
  "FurCards": {
-  "diff": "fur_tuft_atlas.png"
+  "diff": "fur_tuft_atlas.png",
+  "orm": "FurCards_orm"
  },
  "TendonCable": {
   "diff": "TendonCable_tint",
@@ -50,37 +56,44 @@
    0.1163,
    0.1007
   ],
-  "nrm": "Rope002_2K-JPG_NormalGL.jpg"
+  "nrm": "Rope002_2K-JPG_NormalGL.jpg",
+  "orm": "TendonCable_orm"
  },
  "BurntWool.007": {
   "diff": "ArmR_diff",
   "rgh": "ArmR_rgh",
-  "nrm": "ArmR_nrm"
+  "nrm": "ArmR_nrm",
+  "orm": "BurntWool_007_orm"
  },
  "BurntWool.009": {
   "diff": "ArmRFingerA_diff",
   "rgh": "ArmRFingerA_rgh",
-  "nrm": "ArmRFingerA_nrm"
+  "nrm": "ArmRFingerA_nrm",
+  "orm": "BurntWool_009_orm"
  },
  "BurntWool.010": {
   "diff": "ArmRFingerB_diff",
   "rgh": "ArmRFingerB_rgh",
-  "nrm": "ArmRFingerB_nrm"
+  "nrm": "ArmRFingerB_nrm",
+  "orm": "BurntWool_010_orm"
  },
  "BurntWool.011": {
   "diff": "ArmRFingerC_diff",
   "rgh": "ArmRFingerC_rgh",
-  "nrm": "ArmRFingerC_nrm"
+  "nrm": "ArmRFingerC_nrm",
+  "orm": "BurntWool_011_orm"
  },
  "BurntWool.008": {
   "diff": "ArmRHand_diff",
   "rgh": "ArmRHand_rgh",
-  "nrm": "ArmRHand_nrm"
+  "nrm": "ArmRHand_nrm",
+  "orm": "BurntWool_008_orm"
  },
  "BellBrass.001": {
   "diff": "Bell_diff",
   "rgh": "Bell_rgh",
-  "nrm": "Bell_nrm"
+  "nrm": "Bell_nrm",
+  "orm": "BellBrass_001_orm"
  },
  "BellCrown": {
   "diff": "BellCrown_tint",
@@ -89,7 +102,8 @@
    0.0094,
    0.0042
   ],
-  "nrm": "Metal008_2K-JPG_NormalGL.jpg"
+  "nrm": "Metal008_2K-JPG_NormalGL.jpg",
+  "orm": "BellCrown_orm"
  },
  "BellScratch": {
   "diff": "BellScratch_tint",
@@ -98,7 +112,8 @@
    1.9322,
    0.5461
   ],
-  "nrm": "Metal008_2K-JPG_NormalGL.jpg"
+  "nrm": "Metal008_2K-JPG_NormalGL.jpg",
+  "orm": "BellScratch_orm"
  },
  "StrapLeather": {
   "diff": "StrapLeather_tint",
@@ -107,7 +122,8 @@
    0.0368,
    0.0173
   ],
-  "nrm": "fabric_leather_02_nor_gl_2k.jpg"
+  "nrm": "fabric_leather_02_nor_gl_2k.jpg",
+  "orm": "StrapLeather_orm"
  },
  "BellVoid": {
   "diff": "BellVoid_tint",
@@ -116,17 +132,20 @@
    0.0002,
    0.0002
   ],
-  "nrm": "Metal008_2K-JPG_NormalGL.jpg"
+  "nrm": "Metal008_2K-JPG_NormalGL.jpg",
+  "orm": "BellVoid_orm"
  },
  "BellyWool.001": {
   "diff": "Belly_diff",
   "rgh": "Belly_rgh",
-  "nrm": "Belly_nrm"
+  "nrm": "Belly_nrm",
+  "orm": "BellyWool_001_orm"
  },
  "BurntWool.001": {
   "diff": "BodyCore_diff",
   "rgh": "BodyCore_rgh",
-  "nrm": "BodyCore_nrm"
+  "nrm": "BodyCore_nrm",
+  "orm": "BurntWool_001_orm"
  },
  "StitchSteel": {
   "diff": "StitchSteel_tint",
@@ -135,7 +154,8 @@
    0.063,
    0.0511
   ],
-  "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
+  "nrm": "Metal058A_1K-JPG_NormalGL.jpg",
+  "orm": "StitchSteel_orm"
  },
  "BronzeBand": {
   "diff": "BronzeBand_tint",
@@ -144,7 +164,8 @@
    0.0153,
    0.0065
   ],
-  "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
+  "nrm": "Metal058A_1K-JPG_NormalGL.jpg",
+  "orm": "BronzeBand_orm"
  },
  "CopperRing": {
   "diff": "CopperRing_tint",
@@ -153,7 +174,8 @@
    0.0158,
    0.0077
   ],
-  "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
+  "nrm": "Metal058A_1K-JPG_NormalGL.jpg",
+  "orm": "CopperRing_orm"
  },
  "RodMetal": {
   "diff": "RodMetal_tint",
@@ -162,17 +184,20 @@
    0.1424,
    0.1172
   ],
-  "nrm": "Metal041B_2K-JPG_NormalGL.jpg"
+  "nrm": "Metal041B_2K-JPG_NormalGL.jpg",
+  "orm": "RodMetal_orm"
  },
  "EarFelt.001": {
   "diff": "EarL_diff",
   "rgh": "EarL_rgh",
-  "nrm": "EarL_nrm"
+  "nrm": "EarL_nrm",
+  "orm": "EarFelt_001_orm"
  },
  "EarFelt.002": {
   "diff": "EarR_diff",
   "rgh": "EarR_rgh",
-  "nrm": "EarR_nrm"
+  "nrm": "EarR_nrm",
+  "orm": "EarFelt_002_orm"
  },
  "BronzeChar": {
   "diff": "BronzeChar_tint",
@@ -181,7 +206,8 @@
    0.0132,
    0.0077
   ],
-  "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
+  "nrm": "Metal058A_1K-JPG_NormalGL.jpg",
+  "orm": "BronzeChar_orm"
  },
  "GrilleDark": {
   "diff": "GrilleDark_tint",
@@ -190,22 +216,26 @@
    0.0154,
    0.0122
   ],
-  "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
+  "nrm": "Metal058A_1K-JPG_NormalGL.jpg",
+  "orm": "GrilleDark_orm"
  },
  "BurntWool.013": {
   "diff": "JawMesh_diff",
   "rgh": "JawMesh_rgh",
-  "nrm": "JawMesh_nrm"
+  "nrm": "JawMesh_nrm",
+  "orm": "BurntWool_013_orm"
  },
  "BurntWool.002": {
   "diff": "LegL_diff",
   "rgh": "LegL_rgh",
-  "nrm": "LegL_nrm"
+  "nrm": "LegL_nrm",
+  "orm": "BurntWool_002_orm"
  },
  "BurntWool.003": {
   "diff": "LegLPaw_diff",
   "rgh": "LegLPaw_rgh",
-  "nrm": "LegLPaw_nrm"
+  "nrm": "LegLPaw_nrm",
+  "orm": "BurntWool_003_orm"
  },
  "Plinth": {
   "diff": "Plinth_tint",
@@ -214,22 +244,26 @@
    0.0271,
    0.0245
   ],
-  "nrm": "metal_plate_02_nor_gl_2k.jpg"
+  "nrm": "metal_plate_02_nor_gl_2k.jpg",
+  "orm": "Plinth_orm"
  },
  "BellyWool.002": {
   "diff": "LegLWornPatch_diff",
   "rgh": "LegLWornPatch_rgh",
-  "nrm": "LegLWornPatch_nrm"
+  "nrm": "LegLWornPatch_nrm",
+  "orm": "BellyWool_002_orm"
  },
  "BurntWool.004": {
   "diff": "LegR_diff",
   "rgh": "LegR_rgh",
-  "nrm": "LegR_nrm"
+  "nrm": "LegR_nrm",
+  "orm": "BurntWool_004_orm"
  },
  "BurntWool.005": {
   "diff": "LegRPaw_diff",
   "rgh": "LegRPaw_rgh",
-  "nrm": "LegRPaw_nrm"
+  "nrm": "LegRPaw_nrm",
+  "orm": "BurntWool_005_orm"
  },
  "LipLeather": {
   "diff": "LipLeather_tint",
@@ -238,7 +272,8 @@
    0.0072,
    0.0043
   ],
-  "nrm": "Leather030_1K-JPG_NormalGL.jpg"
+  "nrm": "Leather030_1K-JPG_NormalGL.jpg",
+  "orm": "LipLeather_orm"
  },
  "LeatherCol": {
   "diff": "LeatherCol_tint",
@@ -247,52 +282,62 @@
    0.051,
    0.0261
   ],
-  "nrm": "Leather030_1K-JPG_NormalGL.jpg"
+  "nrm": "Leather030_1K-JPG_NormalGL.jpg",
+  "orm": "LeatherCol_orm"
  },
  "PatchBrown.001": {
   "diff": "PatchBrownA_diff",
   "rgh": "PatchBrownA_rgh",
-  "nrm": "PatchBrownA_nrm"
+  "nrm": "PatchBrownA_nrm",
+  "orm": "PatchBrown_001_orm"
  },
  "PatchBrown.002": {
   "diff": "PatchBrownB_diff",
   "rgh": "PatchBrownB_rgh",
-  "nrm": "PatchBrownB_nrm"
+  "nrm": "PatchBrownB_nrm",
+  "orm": "PatchBrown_002_orm"
  },
  "PatchNavy.002": {
   "diff": "PatchNavy_diff",
   "rgh": "PatchNavy_rgh",
-  "nrm": "PatchNavy_nrm"
+  "nrm": "PatchNavy_nrm",
+  "orm": "PatchNavy_002_orm"
  },
  "PatchOchre.001": {
   "diff": "PatchOchre_diff",
   "rgh": "PatchOchre_rgh",
-  "nrm": "PatchOchre_nrm"
+  "nrm": "PatchOchre_nrm",
+  "orm": "PatchOchre_001_orm"
  },
  "PatchOlive.001": {
   "diff": "PatchOlive_diff",
   "rgh": "PatchOlive_rgh",
-  "nrm": "PatchOlive_nrm"
+  "nrm": "PatchOlive_nrm",
+  "orm": "PatchOlive_001_orm"
  },
  "PatchPlaid.001": {
   "diff": "PatchPlaid_diff",
   "rgh": "PatchPlaid_rgh",
-  "nrm": "PatchPlaid_nrm"
+  "nrm": "PatchPlaid_nrm",
+  "orm": "PatchPlaid_001_orm"
  },
  "PatchRust.001": {
   "diff": "PatchRust_diff",
   "rgh": "PatchRust_rgh",
-  "nrm": "PatchRust_nrm"
+  "nrm": "PatchRust_nrm",
+  "orm": "PatchRust_001_orm"
  },
  "BurntWool.012": {
   "diff": "Skull_diff",
   "rgh": "Skull_rgh",
-  "nrm": "Skull_nrm"
+  "nrm": "Skull_nrm",
+  "orm": "BurntWool_012_orm"
  },
  "TailWool.001": {
   "diff": "Tail_diff",
   "rgh": "Tail_rgh",
-  "nrm": "Tail_nrm"
+  "nrm": "Tail_nrm",
+  "orm": "TailWool_001_orm"
  },
  "Camera_01_lens_body": {
   "diff": "Camera_01_lens_body_tint",
@@ -302,17 +347,20 @@
    0.24
   ],
   "rgh": "Camera_01_lens_body_roughness.png",
-  "nrm": "Camera_01_lens_body_nor_gl.png"
+  "nrm": "Camera_01_lens_body_nor_gl.png",
+  "orm": "Camera_01_lens_body_orm"
  },
  "Camera_01_body": {
   "diff": "Camera_01_body_diff.png",
   "rgh": "Camera_01_body_roughness.png",
-  "nrm": "Camera_01_body_nor_gl.png"
+  "nrm": "Camera_01_body_nor_gl.png",
+  "orm": "Camera_01_body_orm"
  },
  "Camera_01_strap": {
   "diff": "Camera_01_strap_diff.png",
   "rgh": "Camera_01_strap_roughness.png",
-  "nrm": "Camera_01_strap_nor_gl.png"
+  "nrm": "Camera_01_strap_nor_gl.png",
+  "orm": "Camera_01_strap_orm"
  },
  "CableRubber": {
   "diff": "CableRubber_tint",
@@ -321,12 +369,14 @@
    0.0055,
    0.0049
   ],
-  "nrm": "Rope002_2K-JPG_NormalGL.jpg"
+  "nrm": "Rope002_2K-JPG_NormalGL.jpg",
+  "orm": "CableRubber_orm"
  },
  "vintage_radio_transceiver_accessories": {
   "diff": "vintage_radio_transceiver_accessories_diff.png",
   "rgh": "vintage_radio_transceiver_accessories_rough.png",
-  "nrm": "vintage_radio_transceiver_accessories_nor_gl.png"
+  "nrm": "vintage_radio_transceiver_accessories_nor_gl.png",
+  "orm": "vintage_radio_transceiver_accessories_orm"
  },
  "RingSteel": {
   "diff": "RingSteel_tint",
@@ -335,6 +385,7 @@
    0.1908,
    0.1608
   ],
-  "nrm": "Metal063_2K-JPG_NormalGL.jpg"
+  "nrm": "Metal063_2K-JPG_NormalGL.jpg",
+  "orm": "RingSteel_orm"
  }
 }

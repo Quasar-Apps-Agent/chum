@@ -93,10 +93,20 @@ if os.path.exists(manifest_path):
         for p in eal.list_assets("/Game/Imported/Tex", recursive=True, include_folder=False):
             ad = eal.find_asset_data(p)
             nm = str(ad.asset_name)
-            if nm.endswith("_nrm"):
+            ## 1.7: every scan normal (NormalGL / nor_gl) imported as sRGB colour
+            ## until now; ORM and the scan roughness/metal maps are linear masks
+            _low = nm.lower()
+            if nm.endswith("_nrm") or "normalgl" in _low or "nor_gl" in _low or _low.endswith("_normal"):
                 tx = eal.load_asset(p)
                 tx.set_editor_property("compression_settings",
                                        unreal.TextureCompressionSettings.TC_NORMALMAP)
+                tx.set_editor_property("srgb", False)
+                eal.save_asset(p)
+            elif (nm.endswith("_orm") or nm.endswith("_rgh") or "roughness" in _low or "_rough" in _low
+                  or "metalness" in _low or "_metal" in _low or "displacement" in _low or _low.endswith("_ao")):
+                tx = eal.load_asset(p)
+                tx.set_editor_property("compression_settings",
+                                       unreal.TextureCompressionSettings.TC_MASKS)
                 tx.set_editor_property("srgb", False)
                 eal.save_asset(p)
 
@@ -210,6 +220,75 @@ if os.path.exists(manifest_path):
     if made:
         eal.save_asset(MESH)
     unreal.log_warning("FIXUP-SLOTWIRED %d of %d mesh slots (%d instances created, %d tints applied)" % (slotwired, len(_slots), made, tinted))
+
+## 1.7: THE BASE MASTER — BaseColor / Normal / ORM, wired to the physical
+## inputs (roughness and metallic finally used; the importer's Phong master
+## lerped a flat colour and had neither). Instances per manifest entry that
+## carries an ORM; slots without one keep their importer material for now.
+if os.path.exists(manifest_path):
+    m_base = make_material("M_ChumAF_Base")
+    if not mel.get_num_material_expressions(m_base):
+        _bc = mel.create_material_expression(m_base, unreal.MaterialExpressionTextureSampleParameter2D, -600, -200)
+        _bc.set_editor_property("parameter_name", "BaseColor")
+        _bc.set_editor_property("sampler_type", unreal.MaterialSamplerType.SAMPLERTYPE_COLOR)
+        _nm = mel.create_material_expression(m_base, unreal.MaterialExpressionTextureSampleParameter2D, -600, 100)
+        _nm.set_editor_property("parameter_name", "Normal")
+        _nm.set_editor_property("sampler_type", unreal.MaterialSamplerType.SAMPLERTYPE_NORMAL)
+        _orm = mel.create_material_expression(m_base, unreal.MaterialExpressionTextureSampleParameter2D, -600, 400)
+        _orm.set_editor_property("parameter_name", "ORM")
+        _orm.set_editor_property("sampler_type", unreal.MaterialSamplerType.SAMPLERTYPE_LINEAR_COLOR)
+        _dflt_bc = _dflt_n = _dflt_o = None
+        for _p in eal.list_assets("/Game/Imported/Tex", recursive=True, include_folder=False):
+            _an = str(eal.find_asset_data(_p).asset_name)
+            if _dflt_bc is None and _an.endswith("_diff"):
+                _dflt_bc = eal.load_asset(_p)
+            if _dflt_n is None and _an.endswith("_nrm"):
+                _dflt_n = eal.load_asset(_p)
+            if _dflt_o is None and _an.endswith("_orm"):
+                _dflt_o = eal.load_asset(_p)
+        if _dflt_bc: _bc.set_editor_property("texture", _dflt_bc)
+        if _dflt_n: _nm.set_editor_property("texture", _dflt_n)
+        if _dflt_o: _orm.set_editor_property("texture", _dflt_o)
+        mel.connect_material_property(_bc, "RGB", unreal.MaterialProperty.MP_BASE_COLOR)
+        mel.connect_material_property(_nm, "RGB", unreal.MaterialProperty.MP_NORMAL)
+        mel.connect_material_property(_orm, "R", unreal.MaterialProperty.MP_AMBIENT_OCCLUSION)
+        mel.connect_material_property(_orm, "G", unreal.MaterialProperty.MP_ROUGHNESS)
+        mel.connect_material_property(_orm, "B", unreal.MaterialProperty.MP_METALLIC)
+        mel.recompile_material(m_base)
+        eal.save_asset("/Game/Core/M_ChumAF_Base")
+        unreal.log_warning("FIXUP-MASTER M_ChumAF_Base built (BaseColor/Normal/ORM)")
+    _sm2 = eal.load_asset(MESH)
+    _slots2 = _sm2.get_editor_property("static_materials")
+    _norm2 = {k.replace(".", "_"): v for k, v in manifest.items()}
+    _ormed = 0
+    for _i, _sl in enumerate(_slots2):
+        _slotname = str(_sl.get_editor_property("material_slot_name"))
+        _cands = [_slotname]
+        _c = _slotname
+        while re.search(r"_\d+$", _c):
+            _c = re.sub(r"_\d+$", "", _c)
+            _cands.append(_c)
+        _entry = next((_norm2[c] for c in _cands if c in _norm2), None)
+        if _entry is None or not _entry.get("orm") or not _entry.get("diff"):
+            continue
+        _d = find_tex(_entry["diff"]); _n = find_tex(_entry.get("nrm", "")) if _entry.get("nrm") else None; _o = find_tex(_entry["orm"])
+        if _d is None or _o is None:
+            continue
+        _dst = "/Game/Imported/MIB_" + _slotname
+        if eal.does_asset_exist(_dst):
+            eal.delete_asset(_dst)
+        _mi = at.create_asset("MIB_" + _slotname, "/Game/Imported", unreal.MaterialInstanceConstant,
+                              unreal.MaterialInstanceConstantFactoryNew())
+        mel.set_material_instance_parent(_mi, m_base)
+        mel.set_material_instance_texture_parameter_value(_mi, "BaseColor", _d)
+        if _n is not None:
+            mel.set_material_instance_texture_parameter_value(_mi, "Normal", _n)
+        mel.set_material_instance_texture_parameter_value(_mi, "ORM", _o)
+        eal.save_asset(_dst)
+        _sm2.set_material(_i, _mi)
+        _ormed += 1
+    eal.save_asset(MESH)
+    unreal.log_warning("FIXUP-ORM %d of %d slots on M_ChumAF_Base" % (_ormed, len(_slots2)))
 
 ## swap onto the mesh slots
 sm = eal.load_asset(MESH)
