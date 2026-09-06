@@ -97,6 +97,7 @@ M = {
     "Bandage":      mat("Bandage",      (0.55, 0.48, 0.36), 0.9),         # the elbow wrap ribbon (hessian)
     # unit 1.5: legs
     "Plinth":       mat("Plinth",       (0.20, 0.19, 0.18), 0.65, 0.7),   # the weighted base: dark scratched plate (OPEN: metal vs wood)
+    "TailWool":     mat("TailWool",     (0.13, 0.10, 0.07), 0.97),        # unit 1.6: the tail's own bake (rust tip zone)
     "CopperRing": mat("CopperRing", (0.13, 0.08, 0.045), 0.7, 0.85),
     "GrilleDark": mat("GrilleDark", (0.17, 0.16, 0.14), 0.5, 0.75),
     "ToothBone":  mat("ToothBone",  (0.63, 0.56, 0.44), 0.75),
@@ -832,18 +833,52 @@ for sx, nm in ((-1, "ArmL"), (1, "ArmR")):
     ## AND the digits stay spread (pass 2: a forward curl was invisible)
     hand_piv.rotation_euler = (0.0, 0.0, math.radians(-35.0 * sx))
 
-# ---- tail, dragging low ----------------------------------------------------------------
+# ---- tail, dragging low (unit 1.6: segmented core, fur, rust tip) ----------------------
+## BRIEF 1.6. ONE continuous tapered curve mesh (joined spheres arrived in
+## Unreal as three separate lumps), remeshed; matted wool from its own bake
+## with a rust tip as a colour zone; fur cards on the dorsal ridge and the
+## tip only. Rigid mass by canon — no secondary, ever (MOTION §AFTER-FIRE).
+## Length ≈ 1.0 m at base → 1.3 m at 3.35. Hardware stays hidden (OPEN).
 tail_pivot = empty("TailPivot", (0.04, 0.36, 0.76))
-tail = join([
-    sphere((0.06, 0.4, 0.72), 0.085),
-    sphere((0.16, 0.62, 0.5), 0.075),
-    sphere((0.28, 0.78, 0.3), 0.065),
-    sphere((0.4, 0.88, 0.14), 0.055),
-    sphere((0.5, 0.94, 0.08), 0.05),
-], "Tail")
-organic(tail, M["BurntWool"], 0.02, 0.014, 0.005, 0.5)
+TAIL_PTS = [(0.04, 0.36, 0.76), (0.10, 0.50, 0.63), (0.18, 0.64, 0.47), (0.28, 0.76, 0.31),
+            (0.38, 0.86, 0.17), (0.48, 0.93, 0.085), (0.57, 0.98, 0.06)]
+TAIL_R = [0.095, 0.092, 0.084, 0.074, 0.062, 0.05, 0.04]
+_tc = bpy.data.curves.new("Tail", "CURVE")
+_tc.dimensions = "3D"
+_tc.bevel_depth = 1.0          # the point radius carries the taper
+_tc.bevel_resolution = 6
+_tc.resolution_u = 10
+_tc.use_fill_caps = True
+_ts = _tc.splines.new("NURBS")
+_ts.points.add(len(TAIL_PTS) - 1)
+for _i, (_p, _r) in enumerate(zip(TAIL_PTS, TAIL_R)):
+    _ts.points[_i].co = (_p[0], _p[1], _p[2], 1.0)
+    _ts.points[_i].radius = _r
+_ts.use_endpoint_u = True
+_ts.order_u = 3
+tail = bpy.data.objects.new("Tail", _tc)
+col.objects.link(tail)
+bpy.ops.object.select_all(action="DESELECT")
+tail.select_set(True)
+bpy.context.view_layer.objects.active = tail
+bpy.ops.object.convert(target="MESH")
+tail = bpy.context.active_object
+organic(tail, M["TailWool"], 0.015, 0.014, 0.005, 0.45)
+tail.name = "Tail"
 parent_to(tail, tail_pivot)
-tail_fur = fur(tail, 500, 0.03, 0.075, "TailFur", [M["FurDark"], M["FurMid"], M["FurRust"]])
+print("TAIL verts", len(tail.data.vertices))
+
+def _tail_axis_z(y):
+    """the tail's centreline height at a given y (base space), for the dorsal mask"""
+    for (x0, y0, z0), (x1, y1, z1) in zip(TAIL_PTS, TAIL_PTS[1:]):
+        if y0 <= y <= y1:
+            t = (y - y0) / max(1e-6, (y1 - y0))
+            return z0 + t * (z1 - z0)
+    return TAIL_PTS[0][2] if y < TAIL_PTS[0][1] else TAIL_PTS[-1][2]
+
+## fur cards: the dorsal ridge (above the centreline) and the last quarter
+tail_fur = fur(tail, 520, 0.03, 0.07, "TailFur", [M["FurDark"], M["FurMid"], M["FurRust"]],
+               mask=lambda wp: not (wp.z > _tail_axis_z(wp.y) + 0.015 or wp.y > 0.86))
 if tail_fur:
     parent_to(tail_fur, tail_pivot)
 
@@ -2181,6 +2216,7 @@ BAKE_TINTS = {
     "PatchPlaid": ((0.85, 0.8, 0.75), 0.2, "plaid", 12.0),
     "PatchFlannel": ((0.48, 0.48, 0.5), 0.35, "weave", 16.0),   # stage delta — unused on the mascot
     "PatchLeather": ((0.35, 0.28, 0.22), 0.2, "leather", 12.0), # stage delta — unused on the mascot
+    "TailWool": ((0.13, 0.1, 0.07), 0.55, "fleece", 7.0),   # 1.6: the body's wool, its own bake for the rust tip
     "CharDark": ((0.12, 0.1, 0.085), 0.82, "wool", 10.0),
     "PanelA": ((0.17, 0.13, 0.09), 0.72, "wool", 11.0),
     "PanelB": ((0.2, 0.16, 0.11), 0.66, "wool", 12.0),
@@ -2195,10 +2231,49 @@ CHAR_ZONES = [((0.42 * _K, -0.10 * _K, 1.80 * _K), 0.28 * _K),
               ((-0.30 * _K, -0.15 * _K, 1.02 * _K), 0.32 * _K)]
 BAKE_EXTRA = {
     "BurntWool": {"zones": CHAR_ZONES},
+    ## 1.6: the tail's rust tip — a colour zone (world metres), applied after
+    ## the burlap graph by add_tint_zone(); PLATE: a lighter rust/ochre tip
+    "TailWool": {"rust": ((0.52 * _K, 0.95 * _K, 0.07 * _K), 0.30 * _K, (0.58, 0.30, 0.12))},
     "BellyWool": {"seam": 1.0},
     "PatchRust": {"seam": 1.0}, "PatchOlive": {"seam": 1.0}, "PatchNavy": {"seam": 1.0},
     "PatchOchre": {"seam": 1.0}, "PatchBrown": {"seam": 1.0}, "PatchPlaid": {"seam": 1.0},
 }
+
+def add_tint_zone(matr, origin, center, rad, rgb_srgb):
+    """mix the baked albedo toward a colour inside a soft world-space sphere
+    (1.6: the tail's rust tip); origin is the object's world translation"""
+    nt = matr.node_tree
+    bsdf = next(n for n in nt.nodes if n.type == "BSDF_PRINCIPLED")
+    src = bsdf.inputs["Base Color"].links[0].from_socket
+    coord = nt.nodes.new("ShaderNodeTexCoord")
+    wmap = nt.nodes.new("ShaderNodeMapping")
+    wmap.inputs["Location"].default_value = tuple(origin)
+    nt.links.new(coord.outputs["Object"], wmap.inputs["Vector"])
+    sub = nt.nodes.new("ShaderNodeVectorMath")
+    sub.operation = "SUBTRACT"
+    nt.links.new(wmap.outputs["Vector"], sub.inputs[0])
+    sub.inputs[1].default_value = tuple(center)
+    ln = nt.nodes.new("ShaderNodeVectorMath")
+    ln.operation = "LENGTH"
+    nt.links.new(sub.outputs["Vector"], ln.inputs[0])
+    nz = nt.nodes.new("ShaderNodeTexNoise")
+    nz.inputs["Scale"].default_value = 9.0
+    nt.links.new(coord.outputs["Object"], nz.inputs["Vector"])
+    ragged = nt.nodes.new("ShaderNodeMath")     # length + (noise-0.5)*0.35*rad
+    ragged.operation = "MULTIPLY_ADD"
+    ragged.inputs[1].default_value = 0.35 * rad
+    nt.links.new(nz.outputs["Fac"], ragged.inputs[0])
+    nt.links.new(ln.outputs["Value"], ragged.inputs[2])
+    mr = nt.nodes.new("ShaderNodeMapRange")
+    mr.inputs["From Min"].default_value = rad * 1.15
+    mr.inputs["From Max"].default_value = rad * 0.55
+    nt.links.new(ragged.outputs["Value"], mr.inputs["Value"])
+    mix = nt.nodes.new("ShaderNodeMixRGB")
+    mix.blend_type = "MIX"
+    nt.links.new(mr.outputs["Result"], mix.inputs["Fac"])
+    nt.links.new(src, mix.inputs["Color1"])
+    mix.inputs["Color2"].default_value = (*[srgb_to_linear(c) for c in rgb_srgb], 1.0)
+    nt.links.new(mix.outputs["Color"], bsdf.inputs["Base Color"])
 
 def bake_all():
     scene = bpy.context.scene
@@ -2229,7 +2304,10 @@ def bake_all():
             extra["seam"] = 1.0
             extra["seam_geom"] = SEAM_GEOM[obj.name]
         print("BAKE", obj.name, "origin", tuple(round(v, 3) for v in extra["origin"]), "extra", {k: v for k, v in extra.items() if k != "origin"})
+        rust = extra.pop("rust", None)
         burlap_nodes(matr, tint, scorch, scan_key, wscale, **extra)
+        if rust:
+            add_tint_zone(matr, extra["origin"], *rust)
         obj.data.materials.clear()
         obj.data.materials.append(matr)
         nt = matr.node_tree

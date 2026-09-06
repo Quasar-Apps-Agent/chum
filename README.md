@@ -1543,3 +1543,26 @@ rods and blocks, not donor pipe cuts; the plinth is metal where the
 footfall canon says wood-through-floor — OPEN for the owner, with the
 question of which shin is torn. Unit 1.5 is done. Next is 1.6, the
 tail.
+
+## Commit 114 · UNIT 1.6 · THE TAIL
+Five spheres joined and remeshed had reached the engine as three
+lumps trailing behind him. The tail is one thing now: a tapered curve,
+its radius carried on the control points from nine centimetres at the
+rump to four at the tip, turned to mesh and remeshed as a single mass
+curving out low behind the viewer-right leg and hanging to the floor,
+a metre and a third at his height. It bakes on its own, the body's
+wool with the plate's lighter rust tip painted as a colour zone — a
+soft, noise-ragged sphere in world space mixed into the albedo after
+the burlap graph, the same trick that fixed the bell's crown — so the
+tip differs in the bake itself, not in a hue the sodium would kill.
+Fur cards and the beauty rig's hair grow on the dorsal ridge and the
+tip only; the matted flanks show the bake. Rigid by canon: nothing on
+him bounces. The rear frame in Unreal shows one continuous tail,
+grounded, no gaps. The evening's cost was the engine, twice: the
+commandlet hung at startup on a derived-data server wedged by an
+earlier kill, with the Mac down to sixteen gigabytes free; killing
+the server and clearing its lock cured it, and the note is in the
+tracker. Named, not hidden: no core hardware is exposed on the tail —
+the plate reads its segmentation as fur banding, and the owner has
+the question. Unit 1.6 is done. Next is 1.7: the full-figure
+unification and the texture and size budget.

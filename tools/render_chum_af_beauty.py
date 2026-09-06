@@ -100,6 +100,16 @@ def belly_mask(wp):
 def sole_mask(wp):
     return wp.z < 0.08
 
+def tail_mask(wp):
+    ## 1.6: hair only on the dorsal ridge and the tip; the matted flanks show the bake
+    y = wp.y / 1.2885
+    pts = [(0.36, 0.76), (0.50, 0.63), (0.64, 0.47), (0.76, 0.31), (0.86, 0.17), (0.93, 0.085), (0.98, 0.06)]
+    z_axis = pts[-1][1]
+    for (y0, z0), (y1, z1) in zip(pts, pts[1:]):
+        if y0 <= y <= y1:
+            z_axis = z0 + (y - y0) / (y1 - y0) * (z1 - z0)
+    return not (wp.z / 1.2885 > z_axis + 0.015 or y > 0.86)
+
 def sole_window_mask(wp):
     ## 1.5: the viewer-right shin window (build +X) must show its rods
     return wp.z < 0.08 or (wp.x > 0.14 and wp.y < -0.07 and 0.24 < wp.z < 0.76)
@@ -114,7 +124,7 @@ HAIR_PLAN = [
     ("ArmR", 700, 0.045, FUR_DARK, None),
     ("LegL", 800, 0.05, FUR_DARK, sole_mask),
     ("LegR", 800, 0.05, FUR_DARK, sole_window_mask),
-    ("Tail", 600, 0.055, FUR_RUST, None),
+    ("Tail", 600, 0.055, FUR_DARK, tail_mask),
 ]
 
 for nm, count, length, mat, mask in HAIR_PLAN:
@@ -350,3 +360,14 @@ camd.dof.aperture_fstop = 5.6
 scene.render.filepath = os.path.join(OUTDIR, "chum_af_legs.png")
 bpy.ops.render.render(write_still=True)
 print("RENDERED legs")
+
+## SHOT 9 (1.6): the tail from behind-right, low — one continuous mass, the rust tip
+camd.lens = 50
+cam.location = mathutils.Vector((1.55, 2.05, 0.60)) * K
+_tgt = mathutils.Vector((0.30, 0.78, 0.28)) * K
+aim(cam, _tgt)
+camd.dof.focus_distance = (cam.location - _tgt).length
+camd.dof.aperture_fstop = 5.6
+scene.render.filepath = os.path.join(OUTDIR, "chum_af_tail.png")
+bpy.ops.render.render(write_still=True)
+print("RENDERED tail")

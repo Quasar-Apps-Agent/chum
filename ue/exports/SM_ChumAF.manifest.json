@@ -192,7 +192,7 @@
   ],
   "nrm": "Metal058A_1K-JPG_NormalGL.jpg"
  },
- "BurntWool.014": {
+ "BurntWool.013": {
   "diff": "JawMesh_diff",
   "rgh": "JawMesh_rgh",
   "nrm": "JawMesh_nrm"
@@ -284,12 +284,12 @@
   "rgh": "PatchRust_rgh",
   "nrm": "PatchRust_nrm"
  },
- "BurntWool.013": {
+ "BurntWool.012": {
   "diff": "Skull_diff",
   "rgh": "Skull_rgh",
   "nrm": "Skull_nrm"
  },
- "BurntWool.012": {
+ "TailWool.001": {
   "diff": "Tail_diff",
   "rgh": "Tail_rgh",
   "nrm": "Tail_nrm"
