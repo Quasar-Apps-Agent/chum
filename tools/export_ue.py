@@ -29,21 +29,26 @@ def arg(name, default=None):
     return default
 
 
-def export(objs, out_path):
+def export(objs, out_path, skeletal=False):
     bpy.ops.object.select_all(action="DESELECT")
     for o in objs:
         o.select_set(True)
         for ch in o.children:
-            if ch.name.startswith("UCX_"):
+            if ch.name.startswith("UCX_") and not skeletal:
                 ch.select_set(True)
+    ## 1.9: a skeletal export carries the armature; the Armature modifier
+    ## must NOT be applied by use_mesh_modifiers (the exporter skips it when
+    ## an armature is exported, but be explicit: deform-only bones, no leaves)
     bpy.ops.export_scene.fbx(
         filepath=out_path,
         use_selection=True,
         apply_unit_scale=True,
         apply_scale_options="FBX_SCALE_NONE",
-        bake_space_transform=True,
-        object_types={"MESH", "EMPTY"},
+        bake_space_transform=not skeletal,
+        object_types={"ARMATURE", "MESH", "EMPTY"} if skeletal else {"MESH", "EMPTY"},
         use_mesh_modifiers=True,
+        use_armature_deform_only=True,
+        armature_nodetype="NULL",
         add_leaf_bones=False,
         bake_anim=False,
         path_mode="COPY",
@@ -85,6 +90,15 @@ elif "--all-meshes" in argv:
     ## must still travel; the importer takes them by name
     objs = [o for o in bpy.data.objects
             if o.type == "MESH" and (not o.hide_render or o.name.startswith("UCX_"))]
+    SKELETAL = "--skeletal" in argv
+    if SKELETAL:
+        _arm = next((o for o in bpy.data.objects if o.type == "ARMATURE"), None)
+        if _arm is None:
+            raise SystemExit("--skeletal needs an armature (run tools/rig_chum_af.py first)")
+        objs = [o for o in objs if not o.name.startswith("UCX_")]   # a skeletal mesh takes a physics asset, not UCX
+        objs.append(_arm)
+        objs += [o for o in bpy.data.objects if o.type == "EMPTY" and o.name.startswith("SOCKET_")]
+        print("UE-SKELETAL armature", _arm.name, "bones", len(_arm.data.bones))
     print("UE-UCX", len([o for o in objs if o.name.startswith("UCX_")]), "collision boxes in the export")
     ## the importer matches UCX_ names against one node and drops the rest
     ## (1.5: four conventions, zero hulls) — so the boxes ALSO go out as data:
@@ -130,6 +144,8 @@ elif "--all-meshes" in argv:
     import json
     manifest = {}
     for o in objs:
+        if o.type != "MESH":
+            continue
         for ms in o.data.materials:
             if not ms or not ms.use_nodes or ms.name in manifest:
                 continue
@@ -238,7 +254,7 @@ elif "--all-meshes" in argv:
     with open(mpath, "w") as fh:
         json.dump(manifest, fh, indent=1)
     print("UE-MANIFEST", mpath, len(manifest), "materials")
-    export(objs, out)
+    export(objs, out, skeletal=SKELETAL)
 else:
     names = (arg("--objects") or "").split(",")
     out = arg("--out")
@@ -247,4 +263,4 @@ else:
     objs = [bpy.data.objects[n] for n in names]
     if not os.path.isabs(out):
         out = os.path.join(ROOT, out)
-    export(objs, out)
+    export(objs, out, skeletal=SKELETAL)

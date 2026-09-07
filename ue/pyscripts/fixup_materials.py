@@ -15,6 +15,25 @@ at = unreal.AssetToolsHelpers.get_asset_tools()
 MESH = os.environ.get("UE_FIXUP_MESH", "/Game/Imported/SM_ChumAF")
 
 
+## 1.9: the same fixup serves SM_ (static) and SK_ (skeletal) meshes. Static
+## meshes expose static_materials + set_material; skeletal meshes expose a
+## materials array that must be written back whole.
+def _slots_of(mesh):
+    if isinstance(mesh, unreal.SkeletalMesh):
+        return list(mesh.get_editor_property("materials"))
+    return mesh.get_editor_property("static_materials")
+
+def _set_slot(mesh, i, mat):
+    if isinstance(mesh, unreal.SkeletalMesh):
+        mats = list(mesh.get_editor_property("materials"))
+        sm_ = mats[i]
+        sm_.set_editor_property("material_interface", mat)
+        mats[i] = sm_
+        mesh.set_editor_property("materials", mats)
+    else:
+        mesh.set_material(i, mat)
+
+
 def make_material(name):
     path = "/Game/Core"
     full = "%s/%s" % (path, name)
@@ -160,7 +179,7 @@ if os.path.exists(manifest_path):
     norm = {k.replace(".", "_"): v for k, v in manifest.items()}
     _sm = eal.load_asset(MESH)
     slotwired = 0
-    _slots = _sm.get_editor_property("static_materials")
+    _slots = _slots_of(_sm)
     ## a known-good IMPORTER-MADE baked instance to clone: a bare factory
     ## instance with the same parent and the same texture params rendered
     ## flat white (1.1c) — the importer sets something inside the Phong master
@@ -207,7 +226,7 @@ if os.path.exists(manifest_path):
             if _new is None:
                 unreal.log_warning("FIXUP-MADE duplicate failed for %s" % _slotname)
                 continue
-            _sm.set_material(_i, _new)
+            _set_slot(_sm, _i, _new)
             _mi = _new
             made += 1
             unreal.log_warning("FIXUP-MADE slot %d %s -> clone of %s" % (_i, _slotname, _good.get_name()))
@@ -271,7 +290,7 @@ if os.path.exists(manifest_path):
         eal.save_asset("/Game/Core/M_ChumAF_Base")
         unreal.log_warning("FIXUP-MASTER M_ChumAF_Base built (BaseColor/Normal/ORM)")
     _sm2 = eal.load_asset(MESH)
-    _slots2 = _sm2.get_editor_property("static_materials")
+    _slots2 = _slots_of(_sm2)
     _norm2 = {k.replace(".", "_"): v for k, v in manifest.items()}
     _ormed = 0
     for _i, _sl in enumerate(_slots2):
@@ -298,7 +317,7 @@ if os.path.exists(manifest_path):
             mel.set_material_instance_texture_parameter_value(_mi, "Normal", _n)
         mel.set_material_instance_texture_parameter_value(_mi, "ORM", _o)
         eal.save_asset(_dst)
-        _sm2.set_material(_i, _mi)
+        _set_slot(_sm2, _i, _mi)
         _ormed += 1
     eal.save_asset(MESH)
     unreal.log_warning("FIXUP-ORM %d of %d slots on M_ChumAF_Base" % (_ormed, len(_slots2)))
@@ -329,21 +348,21 @@ if not eal.does_asset_exist("/Game/Core/MI_TallyCore_Lit"):
 
 ## swap onto the mesh slots
 sm = eal.load_asset(MESH)
-mats = sm.get_editor_property("static_materials")
+mats = _slots_of(sm)
 swapped = 0
 for i, sl in enumerate(mats):
     iface = sl.get_editor_property("material_interface")
     nm = iface.get_name() if iface else ""
     if "MawBlack" in nm:
-        sm.set_material(i, m_maw)
+        _set_slot(sm, i, m_maw)
         swapped += 1
         unreal.log_warning("FIXUP-SLOT %d MawBlack -> M_MawBlack" % i)
     elif "TallyCore" in nm or "TallyCore" in str(sl.get_editor_property("material_slot_name")):
-        sm.set_material(i, m_tally)
+        _set_slot(sm, i, m_tally)
         swapped += 1
         unreal.log_warning("FIXUP-SLOT %d TallyCore -> M_TallyCore" % i)
     elif "FurCards" in nm:
-        sm.set_material(i, m_fur)
+        _set_slot(sm, i, m_fur)
         swapped += 1
         unreal.log_warning("FIXUP-SLOT %d FurCards -> M_FurCards" % i)
 eal.save_asset(MESH)

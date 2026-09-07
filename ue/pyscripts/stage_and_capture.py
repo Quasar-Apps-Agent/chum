@@ -76,8 +76,9 @@ subj = eas.spawn_actor_from_object(subj_asset, unreal.Vector(0, 0, 0))
 ## scalar); the dark portrait stays the baseline
 if os.environ.get("UE_CAPTURE_TALLY") == "1":
     _lit = unreal.EditorAssetLibrary.load_asset("/Game/Core/MI_TallyCore_Lit")
-    _smc = subj.static_mesh_component
-    for _i, _sl in enumerate(subj_asset.get_editor_property("static_materials")):
+    _is_sk = isinstance(subj_asset, unreal.SkeletalMesh)
+    _smc = subj.skeletal_mesh_component if _is_sk else subj.static_mesh_component
+    for _i, _sl in enumerate(subj_asset.get_editor_property("materials") if _is_sk else subj_asset.get_editor_property("static_materials")):
         if "TallyCore" in str(_sl.get_editor_property("material_slot_name")) and _lit:
             _smc.set_material(_i, _lit)
             unreal.log_warning("CAPTURE-TALLY lit on slot %d" % _i)

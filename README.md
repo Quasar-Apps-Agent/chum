@@ -1662,3 +1662,26 @@ tracker: move the repo out of the Desktop, or stop the syncing, and
 give the disk room. Unit 1.8 is done; the Mac lane pauses here until
 the machine is fixed. Phase 1 stands at 1.1–1.6 and 1.8 closed, 1.7
 waiting on rulings.
+
+## Commit 119 · UNIT 1.9, TRANCHE 1 · THE ARMATURE
+He had no skeleton; the reference game moved empties. Now there is a
+hand-built armature, no Rigify, thirty-six bones on the spec's own
+numbers — root on the ground, pelvis, two spines, neck, head, jaw,
+the tally eye on its own bone, the bell, the ears, two tail bones,
+clavicle to hand and thigh to ball on each side, one bone per finger
+for now, three on the mitt and four on the iron hand. The build's
+nested pivot empties turned out to carry wrong world transforms after
+the frozen scale pass, so the rig trusts them for ancestry only and
+takes positions from the spec. Every one of the two hundred and
+fifty-six meshes is bound rigid, weight one, "wool baked stiff",
+with three-centimetre blend bands only where a limb meets its
+neighbour. A posed test bends the mitt at the elbow and tears
+nothing. The exporter learned a skeletal mode, the material fixup and
+the capture rig learned to read a skeletal mesh's material array, and
+the engine imported SK_ChumAF and rendered it identical to the static
+baselines, tally lit. Two things named, not hidden: the engine's FBX
+importer makes no sockets from the socket nodes on a skeletal mesh,
+though all four are in the file — they get added after import in
+tranche 2; and a skeletal mesh takes a physics asset, not the
+collision boxes, which are dropped from the rig build. Then the
+clips: the pour itself.

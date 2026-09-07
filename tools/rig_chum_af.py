@@ -217,6 +217,10 @@ def main():
     bpy.ops.object.mode_set(mode="OBJECT")
     print("RIG bones", len(arm_data.bones))
 
+    ## UCX_ boxes are static-mesh collision; a skeletal mesh takes a physics
+    ## asset (tranche 2) — drop them so they neither bind nor export as geometry
+    for o in [o for o in bpy.data.objects if o.type == "MESH" and o.name.startswith("UCX_")]:
+        bpy.data.objects.remove(o, do_unlink=True)
     ## bind every mesh: vertex groups from the rule, rigid, then the modifier
     bound = 0
     for o in [o for o in bpy.data.objects if o.type == "MESH"]:
