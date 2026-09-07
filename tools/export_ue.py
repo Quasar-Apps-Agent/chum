@@ -43,7 +43,10 @@ def export(objs, out_path, skeletal=False):
         filepath=out_path,
         use_selection=True,
         apply_unit_scale=True,
-        apply_scale_options="FBX_SCALE_NONE",
+        ## skeletal: the unit goes in the file header so the engine converts
+        ## bones too (FBX_SCALE_NONE left a x100 scale on the armature node
+        ## over metre bones — the pelvis evaluated at 126 m, 1.9 finding)
+        apply_scale_options="FBX_SCALE_UNITS" if skeletal else "FBX_SCALE_NONE",
         bake_space_transform=not skeletal,
         object_types={"ARMATURE", "MESH", "EMPTY"} if skeletal else {"MESH", "EMPTY"},
         use_mesh_modifiers=True,
@@ -57,7 +60,40 @@ def export(objs, out_path, skeletal=False):
     print("UE-EXPORTED", out_path)
 
 
-if "--cube" in argv:
+if "--anim" in argv:
+    ## 1.9: one FBX per A_ChumAF_* action — the armature only, animation baked,
+    ## for import onto the SK_ChumAF skeleton (EXPORT keeps bake_anim False
+    ## for meshes; here it is the point)
+    outdir = arg("--outdir", os.path.join(EXPORTS, "anim"))
+    if not os.path.isabs(outdir):
+        outdir = os.path.join(ROOT, outdir)
+    os.makedirs(outdir, exist_ok=True)
+    _arm = next((o for o in bpy.data.objects if o.type == "ARMATURE"), None)
+    if _arm is None:
+        raise SystemExit("--anim needs the rigged/animated blend")
+    if _arm.animation_data is None:
+        _arm.animation_data_create()
+    _n = 0
+    for _act in [a for a in bpy.data.actions if a.name.startswith("A_ChumAF_")]:
+        _arm.animation_data.action = _act
+        _fr = [int(_act.frame_range[0]), int(_act.frame_range[1])]
+        bpy.context.scene.frame_start, bpy.context.scene.frame_end = _fr[0], max(_fr[0] + 1, _fr[1])
+        bpy.ops.object.select_all(action="DESELECT")
+        _arm.select_set(True)
+        bpy.context.view_layer.objects.active = _arm
+        _path = os.path.join(outdir, _act.name + ".fbx")
+        bpy.ops.export_scene.fbx(
+            filepath=_path, use_selection=True, apply_unit_scale=True,
+            apply_scale_options="FBX_SCALE_UNITS", bake_space_transform=False,   # header units, same as the skeletal mesh
+            object_types={"ARMATURE"}, use_armature_deform_only=True, armature_nodetype="NULL",
+            add_leaf_bones=False, bake_anim=True, bake_anim_use_all_actions=False,
+            bake_anim_use_nla_strips=False, bake_anim_force_startend_keying=True,
+            bake_anim_simplify_factor=0.0, path_mode="COPY",
+        )
+        print("UE-ANIM", _act.name, "frames", _fr, "->", _path)
+        _n += 1
+    print("UE-ANIM-EXPORTED", _n, "actions to", outdir)
+elif "--cube" in argv:
     bpy.ops.wm.read_factory_settings(use_empty=True)
     bpy.ops.mesh.primitive_cube_add(size=1.0, location=(0, 0, 0.5))
     cube = bpy.context.active_object

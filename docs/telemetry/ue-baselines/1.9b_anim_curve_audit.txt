@@ -1,0 +1,6 @@
+action frames fcurves linear_keys bezier_keys root_speed_mps head_bob_m
+A_ChumAF_Parked 1 39 39 0 0.000 0.000
+A_ChumAF_Pour_Walk 52 30 333 126 0.808 0.052
+A_ChumAF_Pour_Cross 26 30 165 105 1.615 0.052
+A_ChumAF_Stop 2 9 18 0 0.000 0.000
+A_ChumAF_Start 2 9 18 0 0.000 0.000

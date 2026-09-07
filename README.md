@@ -1685,3 +1685,31 @@ though all four are in the file — they get added after import in
 tranche 2; and a skeletal mesh takes a physics asset, not the
 collision boxes, which are dropped from the rig build. Then the
 clips: the pour itself.
+
+## Commit 120 · UNIT 1.9, TRANCHE 2 · THE POUR, AUTHORED
+The clips exist. A parked statue of one frame; a walk of fifty-two at
+thirty a second, the root moving at eight tenths of a metre a second,
+a proposed stride of one metre forty on seventeen degrees of hip
+swing with the knees under nine, the head leading every plant by
+three frames and the torso arriving on it; the crossing as the walk
+at double speed with nothing added; a stop and a start of two frames
+each. Every key is linear except the two-frame caps at the contacts
+— three hundred and thirty-three to a hundred and twenty-six, and the
+audit file says so. Nothing else is keyed: no tail, no arm swing, no
+breathing. The evening went to the engine's units. The exporter's
+default put a hundredfold scale on the armature node over bones in
+metres; switching to header units and making the armature object
+itself the root, as the engine already treats it, gave a centimetre
+skeleton, and the importer then converts that node and its stride
+while leaving the bone tracks in metres to evaluate through the
+node's scale — so every rescaling attempt, all bones or the root
+alone, broke it, and the settled rule is: do not touch the tracks.
+An unticked editor world evaluates no skeletal pose at all, so the
+frame-sequence capture drives a throwaway level sequence and scrubs
+it; the eight-frame sheet shows the legs plant, swing and plant.
+Named, not hidden: the figure does not travel under the scrub though
+the asset holds a hundred and forty centimetres at the cycle's end —
+root motion gets its proof in play against the brain's speed; the
+geometric head bob measures five centimetres against the brief's
+three, and the stride is a proposal — both for the owner. Sockets,
+the physics asset and the eye's own layer are tranche 3.

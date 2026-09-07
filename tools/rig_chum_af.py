@@ -34,8 +34,11 @@ BONES = {}
 def bone(name, parent, head, tail):
     BONES[name] = (parent, V(*head), V(*tail))
 
-bone("root",     None,       (0, 0, 0),        (0, 0.25, 0))
-bone("pelvis",   "root",     (0, 0, 0.98),     (0, 0, 1.40))
+## the ROOT is the armature OBJECT itself, named "root": the engine turns the
+## armature node into the top bone anyway (1.9 finding: an "sk_chumaf" bone
+## appeared above "root"), and an object-level translation gets the unit
+## scale that bone curves never do — so root motion is keyed on the object
+bone("pelvis",   None,       (0, 0, 0.98),     (0, 0, 1.40))
 bone("spine_01", "pelvis",   (0, 0, 1.40),     (0, 0.02, 1.80))
 bone("spine_02", "spine_01", (0, 0.02, 1.80),  (0, 0, 2.02))
 bone("neck",     "spine_02", (0, 0, 2.02),     (0, 0, 2.28))
@@ -179,7 +182,7 @@ def main():
 
     ## the armature
     arm_data = bpy.data.armatures.new("SK_ChumAF")
-    arm = bpy.data.objects.new("SK_ChumAF", arm_data)
+    arm = bpy.data.objects.new("root", arm_data)   # the object node IS the root bone in the engine
     scene.collection.objects.link(arm)
     bpy.ops.object.select_all(action="DESELECT")
     arm.select_set(True)
@@ -215,7 +218,7 @@ def main():
         b.parent = eb["hand_" + fb[-1]]
         eb[fb] = b
     bpy.ops.object.mode_set(mode="OBJECT")
-    print("RIG bones", len(arm_data.bones))
+    print("RIG bones", len(arm_data.bones), "+ the object node as root")
 
     ## UCX_ boxes are static-mesh collision; a skeletal mesh takes a physics
     ## asset (tranche 2) — drop them so they neither bind nor export as geometry

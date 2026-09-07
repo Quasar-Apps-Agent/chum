@@ -165,11 +165,76 @@ if frame in ("torso", "chest", "collar", "handr", "handl", "legs", "tail"):
 if unreal.get_editor_subsystem(unreal.UnrealEditorSubsystem).get_editor_world().get_name() == "L_AutoCapture":
     les.save_current_level()   # never save any other level from here
 
+## 1.9: UE_CAPTURE_ANIM=<AnimSequence path> plays the clip on the skeletal
+## subject in single-node mode and UE_CAPTURE_SEQ=N takes N evenly spaced
+## frames (<out>_f00.png ...) — the frame-sequence acceptance capture
+## (PLAN §4: >= 8 frames). Root motion stays in the component, so the
+## figure crosses the frame; that is the point of the overlay.
+_anim_path = os.environ.get("UE_CAPTURE_ANIM")
+_seq_n = int(os.environ.get("UE_CAPTURE_SEQ", "0") or 0)
+_anim = None
+_anim_len = 0.0
+_lseq = None
+_lseq_fps = 30
+if _anim_path and isinstance(subj_asset, unreal.SkeletalMesh):
+    _anim = unreal.EditorAssetLibrary.load_asset(_anim_path)
+    if _anim is not None:
+        _anim_len = float(_anim.get_editor_property("sequence_length"))
+        ## an unticked editor world never evaluates a skeletal pose; Sequencer
+        ## does (it is how Movie Render Queue works) — a throwaway level
+        ## sequence binds the subject with an animation section, and the
+        ## capture scrubs its time per frame
+        _at = unreal.AssetToolsHelpers.get_asset_tools()
+        _lseq_path = "/Game/Dev/LS_AutoCapture"
+        if unreal.EditorAssetLibrary.does_asset_exist(_lseq_path):
+            unreal.EditorAssetLibrary.delete_asset(_lseq_path)
+        _lseq = _at.create_asset("LS_AutoCapture", "/Game/Dev", unreal.LevelSequence, unreal.LevelSequenceFactoryNew())
+        _lseq.set_display_rate(unreal.FrameRate(_lseq_fps, 1))
+        _total = int(round(_anim_len * _lseq_fps)) + 1
+        _lseq.set_playback_start(0)
+        _lseq.set_playback_end(_total)
+        _bind = _lseq.add_possessable(subj)
+        _trk = _bind.add_track(unreal.MovieSceneSkeletalAnimationTrack)
+        _sec = _trk.add_section()
+        _sec.set_range(0, _total)
+        _params = _sec.get_editor_property("params")
+        _params.set_editor_property("animation", _anim)
+        _sec.set_editor_property("params", _params)
+        unreal.LevelSequenceEditorBlueprintLibrary.open_level_sequence(_lseq)
+        unreal.LevelSequenceEditorBlueprintLibrary.set_current_time(0)
+        unreal.log_warning("CAPTURE-ANIM %s length=%.3f frames=%d via Sequencer (%d frames @%d)" % (_anim_path, _anim_len, _seq_n, _total, _lseq_fps))
+
 ## screenshot after the renderer has had frames to warm up, then quit
-state = {"ticks": 0, "shot": False, "handle": None}
+state = {"ticks": 0, "shot": False, "handle": None, "seq_i": 0}
+_seq_stride = 20
+
+def _seq_name(i):
+    _b, _e = os.path.splitext(OUT)
+    return "%s_f%02d%s" % (_b, i, _e)
 
 def _tick(dt):
     state["ticks"] += 1
+    if _anim is not None and _seq_n > 0:
+        _i = state["seq_i"]
+        if _i < _seq_n and state["ticks"] >= 90 and (state["ticks"] - 90) % _seq_stride == 0:
+            _t = _anim_len * _i / float(_seq_n)
+            unreal.LevelSequenceEditorBlueprintLibrary.set_current_time(int(round(_t * _lseq_fps)))
+            try:
+                _c = subj.skeletal_mesh_component
+                unreal.log_warning("CAPTURE-SEQ-DIAG actor=%s cam=%s root=%s head=%s pelvis=%s" % (
+                    subj.get_actor_location(), cam.get_actor_location(),
+                    _c.get_socket_location("root"), _c.get_socket_location("head"), _c.get_socket_location("pelvis")))
+            except Exception as _ex:
+                unreal.log_warning("CAPTURE-SEQ-DIAG err %s" % _ex)
+            unreal.AutomationLibrary.take_high_res_screenshot(1600, 900, _seq_name(_i), camera=cam)
+            unreal.log_warning("CAPTURE-SEQ %d t=%.3f %s" % (_i, _t, _seq_name(_i)))
+            state["seq_i"] = _i + 1
+        if state["ticks"] >= 90 + _seq_stride * (_seq_n + 3):
+            unreal.unregister_slate_post_tick_callback(state["handle"])
+            _have = sum(1 for k in range(_seq_n) if os.path.exists(_seq_name(k)))
+            unreal.log_warning("CAPTURE-SEQ-SAVED %d of %d" % (_have, _seq_n))
+            unreal.SystemLibrary.quit_editor()
+        return
     if state["ticks"] == 90 and not state["shot"]:
         state["shot"] = True
         unreal.AutomationLibrary.take_high_res_screenshot(1600, 900, OUT, camera=cam)

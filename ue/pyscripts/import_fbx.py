@@ -23,6 +23,60 @@ else:
 ok_all = True
 for path in paths:
     base = os.path.splitext(os.path.basename(path))[0]
+    if base.startswith("A_"):
+        ## 1.9: an animation onto the existing skeleton (no mesh in the file)
+        _skel_path = os.environ.get("UE_ANIM_SKELETON", "/Game/Imported/SK_ChumAF_Skeleton")
+        _skel = unreal.EditorAssetLibrary.load_asset(_skel_path)
+        if _skel is None:
+            unreal.log_error("IMPORT-FAIL anim skeleton missing %s" % _skel_path)
+            ok_all = False
+            continue
+        aopts = unreal.FbxImportUI()
+        aopts.import_mesh = False
+        aopts.import_as_skeletal = False
+        aopts.import_animations = True
+        aopts.import_materials = False
+        aopts.import_textures = False
+        aopts.skeleton = _skel
+        aopts.mesh_type_to_import = unreal.FBXImportType.FBXIT_ANIMATION
+        aopts.original_import_type = unreal.FBXImportType.FBXIT_ANIMATION
+        aopts.anim_sequence_import_data.set_editor_property("import_bone_tracks", True)
+        ## 1.9: the bone curves arrive in metres against a centimetre skeleton
+        ## (the root translated 1.4 cm per stride); the importer scales them
+        aopts.anim_sequence_import_data.set_editor_property("remove_redundant_keys", False)
+        ## replace_existing has reimported nothing three times running (1.9):
+        ## delete the old sequence so the import is a real import
+        _old = "%s/Anim/%s" % (DEST, base)
+        if unreal.EditorAssetLibrary.does_asset_exist(_old):
+            unreal.EditorAssetLibrary.delete_asset(_old)
+        atask = unreal.AssetImportTask()
+        atask.filename = path
+        atask.destination_path = DEST + "/Anim"
+        atask.destination_name = base
+        atask.automated = True
+        atask.save = True
+        atask.replace_existing = True
+        atask.options = aopts
+        unreal.AssetToolsHelpers.get_asset_tools().import_asset_tasks([atask])
+        _aa = unreal.EditorAssetLibrary.load_asset("%s/Anim/%s" % (DEST, base))
+        if _aa is None:
+            unreal.log_error("IMPORT-FAIL anim load %s" % base)
+            ok_all = False
+        else:
+            try:
+                _len = _aa.get_editor_property("sequence_length")
+            except Exception:
+                _len = -1.0
+            ## 1.9 finding, settled: with header units (FBX_SCALE_UNITS) the
+            ## engine converts the mesh and skeleton to cm, gives the armature
+            ## node (the root) scale 100 so the metre-valued bone tracks below
+            ## it evaluate correctly, AND converts the root node's own
+            ## translation (a 140 cm stride reads 140). No track rescaling —
+            ## every variant tried (x100 all, x100 root) broke it. The diag's
+            ## socket reads in an editor world return the bind pose whatever
+            ## plays; judge motion from the frame sheet.
+            unreal.log_warning("IMPORT-ANIM %s length=%.3fs" % (base, _len))
+        continue
     if not (base.startswith("SM_") or base.startswith("SK_")):
         unreal.log_error("IMPORT-FAIL naming-law %s (need SM_/SK_ prefix)" % base)
         ok_all = False
